@@ -20,8 +20,12 @@ import StudentLayout from "./components/StudentLayout";
 import SyncingOverlay from "./components/SyncingOverlay";
 import SessionExpiredModal from "./components/SessionExpiredModal";
 import { PROGRESS_CONFIG } from "./config/constants";
+import { useStoreCoordination } from "./hooks/useStoreCoordination";
 
 function App() {
+  // Coordinate auth and progress stores
+  useStoreCoordination();
+
   const theme = useThemeStore((state) => state.theme);
   const isSyncingProgress = useAuthStore((state) => state.isSyncingProgress);
   const sessionHasExpired = useAuthStore((state) => state.sessionHasExpired);

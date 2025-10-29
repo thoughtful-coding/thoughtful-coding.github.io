@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import { persist, createJSONStorage, StateStorage } from "zustand/middleware";
-import { useAuthStore } from "./authStore"; // To get idToken for API calls
 import * as apiService from "../lib/apiService"; // Your API service
 import type {
   SectionCompletionInput as ApiSectionCompletionInput, // Renaming to avoid conflict if we redefine locally
@@ -10,6 +9,7 @@ import { ANONYMOUS_USER_ID_PLACEHOLDER } from "../lib/localStorageUtils";
 import { API_GATEWAY_BASE_URL } from "../config";
 import { IsoTimestamp, LessonId, SectionId, UnitId } from "../types/data";
 import { PROGRESS_CONFIG } from "../config/constants";
+import { storeCoordinator } from "./storeCoordination";
 
 export const BASE_PROGRESS_STORE_KEY = PROGRESS_CONFIG.STORAGE_KEY;
 
@@ -77,11 +77,8 @@ const initialProgressData: ProgressStateData = {
 
 const createUserSpecificStorage = (baseKey: string): StateStorage => {
   const getEffectiveKey = (): string => {
-    const authState = useAuthStore.getState();
-    const userId =
-      authState.isAuthenticated && authState.user
-        ? authState.user.userId
-        : ANONYMOUS_USER_ID_PLACEHOLDER;
+    const authState = storeCoordinator.getCurrentAuthState();
+    const userId = authState.userId || ANONYMOUS_USER_ID_PLACEHOLDER;
     return `${userId}_${baseKey}`;
   };
   return {
@@ -141,8 +138,8 @@ export const useProgressStore = create<ProgressState>()(
             `[ProgressStore] Optimistically completed ${unitId}/${lessonId}/${sectionId} locally.`
           );
 
-          const { isAuthenticated } = useAuthStore.getState();
-          if (!isAuthenticated) {
+          const authState = storeCoordinator.getCurrentAuthState();
+          if (!authState.isAuthenticated) {
             console.log("[ProgressStore] Anonymous user. Local update done.");
             return;
           }
@@ -271,10 +268,10 @@ export const useProgressStore = create<ProgressState>()(
         },
         processOfflineQueue: async () => {
           const { isSyncing, offlineActionQueue } = get();
-          const { isAuthenticated } = useAuthStore.getState();
+          const authState = storeCoordinator.getCurrentAuthState();
 
           if (
-            !isAuthenticated ||
+            !authState.isAuthenticated ||
             isSyncing ||
             offlineActionQueue.length === 0 ||
             !navigator.onLine

@@ -2,21 +2,13 @@ import { vi } from "vitest";
 import { act } from "@testing-library/react";
 
 import { useProgressStore } from "../progressStore";
-import { useAuthStore } from "../authStore";
 import * as apiService from "../../lib/apiService";
 import type { LessonId, SectionId, UnitId } from "../../types/data";
 import { UserProgressData } from "../../types/apiServiceTypes";
+import { storeCoordinator } from "../storeCoordination";
 
 // Mock all external dependencies
 vi.mock("../../lib/apiService");
-vi.mock("../authStore", () => ({
-  useAuthStore: {
-    getState: vi.fn(() => ({
-      isAuthenticated: true, // Default to authenticated for most tests
-      user: { userId: "test-user-123" },
-    })),
-  },
-}));
 
 describe("progressStore", () => {
   const unitId = "unit-1" as UnitId;
@@ -42,10 +34,12 @@ describe("progressStore", () => {
 
     // Default mocks for each test
     onLineSpy.mockReturnValue(true); // Default to being online
-    vi.mocked(useAuthStore.getState).mockReturnValue({
+
+    // Set up authenticated state in the store coordinator
+    storeCoordinator.publishAuthState({
       isAuthenticated: true,
-      user: { userId: "test-user-123" },
-    } as any);
+      userId: "test-user-123" as any,
+    });
   });
 
   describe("completeSection", () => {
@@ -98,10 +92,10 @@ describe("progressStore", () => {
 
     it("should only update locally for an anonymous user", async () => {
       // ARRANGE
-      vi.mocked(useAuthStore.getState).mockReturnValue({
+      storeCoordinator.publishAuthState({
         isAuthenticated: false,
-        user: null,
-      } as any);
+        userId: null,
+      });
 
       // ACT
       await act(async () => {

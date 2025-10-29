@@ -10,11 +10,12 @@ import type {
   SectionId,
   UnitId,
 } from "../types/data";
-import { useProgressStore, BASE_PROGRESS_STORE_KEY } from "./progressStore";
+import { BASE_PROGRESS_STORE_KEY } from "./progressStore";
 import {
   ANONYMOUS_USER_ID_PLACEHOLDER,
   clearAllAnonymousData,
 } from "../lib/localStorageUtils";
+import { getProgressSyncOperations } from "../hooks/useStoreCoordination";
 
 export interface UserProfile {
   userId: UserId;
@@ -133,9 +134,8 @@ export const useAuthStore = create<AuthState>()(
             }
 
             // Step 5: Update the progress store with the latest data
-            useProgressStore
-              .getState()
-              .actions.setServerProgress(finalProgress);
+            const progressOps = getProgressSyncOperations();
+            progressOps.setServerProgress(finalProgress);
           } catch (error) {
             console.error("Failed to sync progress after login:", error);
           } finally {
@@ -159,7 +159,8 @@ export const useAuthStore = create<AuthState>()(
           }
 
           set({ ...initialAuthState });
-          useProgressStore.getState().actions.resetAllProgress();
+          const progressOps = getProgressSyncOperations();
+          progressOps.resetAllProgress();
 
           // A reload is still the cleanest way to ensure all components re-render with anonymous data.
           window.location.reload();
