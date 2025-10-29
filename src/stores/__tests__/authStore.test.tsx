@@ -2,16 +2,14 @@ import { vi } from "vitest";
 import { act } from "@testing-library/react";
 
 import { useAuthStore, UserProfile } from "../authStore";
-import { useProgressStore } from "../progressStore";
 import * as apiService from "../../lib/apiService";
 import * as localStorageUtils from "../../lib/localStorageUtils";
-import { ANONYMOUS_USER_ID_PLACEHOLDER } from "../../lib/localStorageUtils";
-import { BASE_PROGRESS_STORE_KEY } from "../progressStore";
+import * as storeCoordination from "../../hooks/useStoreCoordination";
 
 // Mock all external dependencies of the auth store
 vi.mock("../../lib/apiService");
-vi.mock("../progressStore");
 vi.mock("../../lib/localStorageUtils");
+vi.mock("../../hooks/useStoreCoordination");
 
 // Mock window.location.reload
 Object.defineProperty(window, "location", {
@@ -50,7 +48,9 @@ const mockTokens = {
 };
 
 describe("authStore", () => {
-  // Mock functions for the progress store actions
+  // Mock functions for the progress sync operations
+  const extractAnonymousCompletionsMock = vi.fn();
+  const syncProgressAfterLoginMock = vi.fn();
   const setServerProgressMock = vi.fn();
   const resetAllProgressMock = vi.fn();
 
@@ -69,13 +69,13 @@ describe("authStore", () => {
       });
     });
 
-    // Mock the progress store's actions
-    vi.mocked(useProgressStore.getState).mockReturnValue({
-      actions: {
-        setServerProgress: setServerProgressMock,
-        resetAllProgress: resetAllProgressMock,
-      },
-    } as any);
+    // Mock the progress sync operations from coordination hook
+    vi.mocked(storeCoordination.getProgressSyncOperations).mockReturnValue({
+      extractAnonymousCompletions: extractAnonymousCompletionsMock,
+      syncProgressAfterLogin: syncProgressAfterLoginMock,
+      setServerProgress: setServerProgressMock,
+      resetAllProgress: resetAllProgressMock,
+    });
 
     // Mock localStorage
     Storage.prototype.getItem = vi.fn();
@@ -83,11 +83,10 @@ describe("authStore", () => {
   });
 
   it("should log in a user, set the state, and fetch their progress", async () => {
-    // ARRANGE: Mock the API calls
+    // ARRANGE: Mock the API and progress operations
     vi.mocked(apiService.loginWithGoogle).mockResolvedValue(mockTokens);
-    vi.mocked(apiService.getUserProgress).mockResolvedValue({
-      completions: [],
-    });
+    extractAnonymousCompletionsMock.mockReturnValue([]);
+    syncProgressAfterLoginMock.mockResolvedValue({ completion: {} });
 
     // ACT: Call the login action
     await act(async () => {
@@ -99,32 +98,27 @@ describe("authStore", () => {
     expect(state.isAuthenticated).toBe(true);
     expect(state.user).toEqual(mockUserProfile);
     expect(state.accessToken).toBe(mockAccessToken);
-    expect(apiService.getUserProgress).toHaveBeenCalledTimes(1);
-    expect(setServerProgressMock).toHaveBeenCalledWith({ completions: [] });
+    expect(extractAnonymousCompletionsMock).toHaveBeenCalledTimes(1);
+    expect(syncProgressAfterLoginMock).toHaveBeenCalledWith(
+      expect.any(String),
+      []
+    );
     expect(state.isSyncingProgress).toBe(false); // Should be false at the end
   });
 
   it("should migrate anonymous progress when logging in", async () => {
     // ARRANGE:
-    // 1. Mock localStorage to return anonymous progress
-    const anonymousProgress = {
-      state: {
-        completion: {
-          "unit-1": { "lesson-1": { "sec-1": "timestamp" } },
-        },
-      },
-    };
-    const anonymousKey = `${ANONYMOUS_USER_ID_PLACEHOLDER}_${BASE_PROGRESS_STORE_KEY}`;
-    vi.mocked(localStorage.getItem).mockReturnValue(
-      JSON.stringify(anonymousProgress)
-    );
+    const anonymousCompletions = [
+      { unitId: "unit-1", lessonId: "lesson-1", sectionId: "sec-1" },
+    ];
 
-    // 2. Mock the API calls
+    // Mock the API and progress operations
     vi.mocked(apiService.loginWithGoogle).mockResolvedValue(mockTokens);
-    vi.mocked(apiService.updateUserProgress).mockResolvedValue({
-      completions: [
-        { unitId: "unit-1", lessonId: "lesson-1", sectionId: "sec-1" },
-      ],
+    extractAnonymousCompletionsMock.mockReturnValue(anonymousCompletions);
+    syncProgressAfterLoginMock.mockResolvedValue({
+      completion: {
+        "unit-1": { "lesson-1": { "sec-1": "timestamp" } },
+      },
     });
 
     // ACT
@@ -133,17 +127,12 @@ describe("authStore", () => {
     });
 
     // ASSERT
-    // Check that the update (migration) endpoint was called, not the get endpoint
-    expect(apiService.updateUserProgress).toHaveBeenCalledTimes(1);
-    expect(apiService.updateUserProgress).toHaveBeenCalledWith(
+    // Check that extraction and sync were called with the completions
+    expect(extractAnonymousCompletionsMock).toHaveBeenCalledTimes(1);
+    expect(syncProgressAfterLoginMock).toHaveBeenCalledWith(
       expect.any(String),
-      {
-        completions: [
-          { unitId: "unit-1", lessonId: "lesson-1", sectionId: "sec-1" },
-        ],
-      }
+      anonymousCompletions
     );
-    expect(apiService.getUserProgress).not.toHaveBeenCalled();
 
     // Check that anonymous data was cleared
     expect(localStorageUtils.clearAllAnonymousData).toHaveBeenCalledTimes(1);

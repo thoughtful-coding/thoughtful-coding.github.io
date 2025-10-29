@@ -54,6 +54,8 @@ export function useStoreCoordination() {
 export interface ProgressSyncOperations {
   setServerProgress: (serverData: any) => void;
   resetAllProgress: () => void;
+  extractAnonymousCompletions: () => any[];
+  syncProgressAfterLogin: (apiGatewayUrl: string, anonymousCompletions: any[]) => Promise<any>;
 }
 
 /**
@@ -65,5 +67,7 @@ export function getProgressSyncOperations(): ProgressSyncOperations {
   return {
     setServerProgress: progressStore.actions.setServerProgress,
     resetAllProgress: progressStore.actions.resetAllProgress,
+    extractAnonymousCompletions: progressStore.actions.extractAnonymousCompletions,
+    syncProgressAfterLogin: progressStore.actions.syncProgressAfterLogin,
   };
 }

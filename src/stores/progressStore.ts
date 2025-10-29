@@ -60,6 +60,11 @@ interface ProgressActions {
   clearPenalty: () => void;
   setServerProgress: (serverData: UserProgressData) => void;
   processOfflineQueue: () => Promise<void>;
+  extractAnonymousCompletions: () => SectionCompletionInput[];
+  syncProgressAfterLogin: (
+    apiGatewayUrl: string,
+    anonymousCompletions: SectionCompletionInput[]
+  ) => Promise<UserProgressData>;
   _addToOfflineQueue: (action: SectionCompletionInput) => void;
 }
 
@@ -367,6 +372,62 @@ export const useProgressStore = create<ProgressState>()(
             penaltyEndTime: Date.now() + PROGRESS_CONFIG.PENALTY_DURATION_MS,
           }),
         clearPenalty: () => set({ penaltyEndTime: null }),
+        extractAnonymousCompletions: () => {
+          // Read anonymous progress from localStorage and convert to completions array
+          const anonymousProgressKey = `${ANONYMOUS_USER_ID_PLACEHOLDER}_${BASE_PROGRESS_STORE_KEY}`;
+          const anonymousProgressRaw = localStorage.getItem(anonymousProgressKey);
+          const anonymousCompletions: SectionCompletionInput[] = [];
+
+          if (anonymousProgressRaw) {
+            try {
+              const anonymousProgressData = JSON.parse(anonymousProgressRaw);
+              const completionData = anonymousProgressData?.state?.completion;
+              if (completionData) {
+                for (const unitId in completionData) {
+                  for (const lessonId in completionData[unitId]) {
+                    for (const sectionId in completionData[unitId][lessonId]) {
+                      anonymousCompletions.push({
+                        unitId: unitId as UnitId,
+                        lessonId: lessonId as LessonId,
+                        sectionId: sectionId as SectionId,
+                      });
+                    }
+                  }
+                }
+              }
+              console.log(
+                `[ProgressStore] Extracted ${anonymousCompletions.length} anonymous completions.`
+              );
+            } catch (e) {
+              console.error("[ProgressStore] Failed to parse anonymous progress", e);
+            }
+          }
+
+          return anonymousCompletions;
+        },
+        syncProgressAfterLogin: async (apiGatewayUrl, anonymousCompletions) => {
+          // Sync anonymous progress with server after login
+          let finalProgress: UserProgressData;
+
+          if (anonymousCompletions.length > 0) {
+            console.log(
+              `[ProgressStore] Migrating ${anonymousCompletions.length} anonymous completions.`
+            );
+            finalProgress = await apiService.updateUserProgress(
+              apiGatewayUrl,
+              { completions: anonymousCompletions }
+            );
+          } else {
+            console.log("[ProgressStore] No anonymous progress to migrate. Fetching server progress.");
+            finalProgress = await apiService.getUserProgress(apiGatewayUrl);
+          }
+
+          // Update local state with server response
+          get().actions.setServerProgress(finalProgress);
+          console.log("[ProgressStore] Progress synced after login.");
+
+          return finalProgress;
+        },
       },
     }),
     {

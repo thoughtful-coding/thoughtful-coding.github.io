@@ -6,15 +6,8 @@ import type {
   UserId,
   AccessTokenId,
   RefreshTokenId,
-  LessonId,
-  SectionId,
-  UnitId,
 } from "../types/data";
-import { BASE_PROGRESS_STORE_KEY } from "./progressStore";
-import {
-  ANONYMOUS_USER_ID_PLACEHOLDER,
-  clearAllAnonymousData,
-} from "../lib/localStorageUtils";
+import { clearAllAnonymousData } from "../lib/localStorageUtils";
 import { getProgressSyncOperations } from "../hooks/useStoreCoordination";
 
 export interface UserProfile {
@@ -63,36 +56,9 @@ export const useAuthStore = create<AuthState>()(
           if (!apiGatewayUrl)
             throw new Error("API Gateway URL is not configured.");
 
-          // Step 1: Capture any anonymous progress before logging in
-          const anonymousProgressKey = `${ANONYMOUS_USER_ID_PLACEHOLDER}_${BASE_PROGRESS_STORE_KEY}`;
-          const anonymousProgressRaw =
-            localStorage.getItem(anonymousProgressKey);
-          const anonymousCompletions: {
-            unitId: UnitId;
-            lessonId: LessonId;
-            sectionId: SectionId;
-          }[] = [];
-          if (anonymousProgressRaw) {
-            try {
-              const anonymousProgressData = JSON.parse(anonymousProgressRaw);
-              const completionData = anonymousProgressData?.state?.completion;
-              if (completionData) {
-                for (const unitId in completionData) {
-                  for (const lessonId in completionData[unitId]) {
-                    for (const sectionId in completionData[unitId][lessonId]) {
-                      anonymousCompletions.push({
-                        unitId: unitId as UnitId,
-                        lessonId: lessonId as LessonId,
-                        sectionId: sectionId as SectionId,
-                      });
-                    }
-                  }
-                }
-              }
-            } catch (e) {
-              console.error("Failed to parse anonymous progress", e);
-            }
-          }
+          // Step 1: Extract any anonymous progress before logging in
+          const progressOps = getProgressSyncOperations();
+          const anonymousCompletions = progressOps.extractAnonymousCompletions();
 
           // Step 2: Log in and get application tokens
           const { accessToken, refreshToken } =
@@ -116,26 +82,17 @@ export const useAuthStore = create<AuthState>()(
             sessionHasExpired: false,
           });
 
+          // Step 4: Sync progress with server (handles migration if needed)
           try {
-            let finalProgress;
-            if (anonymousCompletions.length > 0) {
-              console.log(
-                `Migrating ${anonymousCompletions.length} anonymous completions.`
-              );
-              finalProgress = await apiService.updateUserProgress(
-                apiGatewayUrl,
-                {
-                  completions: anonymousCompletions,
-                }
-              );
-              clearAllAnonymousData();
-            } else {
-              finalProgress = await apiService.getUserProgress(apiGatewayUrl);
-            }
+            await progressOps.syncProgressAfterLogin(
+              apiGatewayUrl,
+              anonymousCompletions
+            );
 
-            // Step 5: Update the progress store with the latest data
-            const progressOps = getProgressSyncOperations();
-            progressOps.setServerProgress(finalProgress);
+            // Clear anonymous data after successful migration
+            if (anonymousCompletions.length > 0) {
+              clearAllAnonymousData();
+            }
           } catch (error) {
             console.error("Failed to sync progress after login:", error);
           } finally {

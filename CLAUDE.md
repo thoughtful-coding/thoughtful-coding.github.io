@@ -74,16 +74,22 @@ npm run lint         # Run ESLint on the codebase
 
 ### State Management (Zustand)
 
+The application uses Zustand stores for global state management, coordinated through a pub/sub pattern to avoid circular dependencies. The stores follow the "actions namespace" pattern where all mutations are grouped in an `actions` object, and custom selectors provide optimized access to derived state. The `storeCoordinator` (`src/stores/storeCoordination.ts`) acts as a communication hub allowing stores to react to auth state changes without direct imports, while `getProgressSyncOperations()` in `useStoreCoordination.ts` provides a clean interface for auth flows to trigger progress operations.
+
+This architecture enables seamless support for both anonymous and authenticated users: anonymous users have progress stored in localStorage with offline-first behavior, while authenticated users get automatic server synchronization with optimistic updates, offline queue processing, and anonymous-to-authenticated migration on login. All stores use the `persist` middleware with `partialize` to control what data survives page refreshes, and `onRehydrateStorage` callbacks reset transient state like loading flags.
+
 **progressStore** (`src/stores/progressStore.ts`):
 - Tracks section completion per user (nested structure: unitId → lessonId → sectionId → timestamp)
 - User-specific localStorage keys (anonymous users vs authenticated)
 - Offline queue for sync when back online
 - Optimistic updates with server sync for authenticated users
+- Handles anonymous progress extraction and migration during login
 
 **authStore** (`src/stores/authStore.tsx`):
 - Manages Google OAuth authentication
 - Handles token refresh and session expiration
 - Controls sync state and modal displays
+- Delegates progress operations to progressStore through coordination layer
 
 **themeStore** (`src/stores/themeStore.ts`):
 - Manages light/dark/system theme preferences
