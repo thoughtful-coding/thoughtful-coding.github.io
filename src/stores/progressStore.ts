@@ -19,6 +19,16 @@ interface SectionCompletionInput extends ApiSectionCompletionInput {
   // lessonId and sectionId are already in ApiSectionCompletionInput
 }
 
+// Draft content stored locally (not synced to server except firstPassingCode)
+export interface SectionDraftContent {
+  code?: string;                    // User's draft code
+  isModified?: boolean;             // true if user changed from initialCode
+  lastModifiedAt?: number;          // timestamp
+  quizSelections?: any;             // For quiz sections (future)
+  firstPassingCode?: string;        // First passing code for teacher audit (future)
+  firstPassingTimestamp?: number;   // When first passed (future)
+}
+
 const EMPTY_COMPLETED_SECTIONS: { [sectionId: SectionId]: IsoTimestamp } = {};
 
 interface ProgressStateData {
@@ -27,6 +37,13 @@ interface ProgressStateData {
       [lessonId: LessonId]: {
         // lessonId here is the GUID
         [sectionId: SectionId]: IsoTimestamp; // timestamp string
+      };
+    };
+  };
+  drafts: {
+    [unitId: UnitId]: {
+      [lessonId: LessonId]: {
+        [sectionId: SectionId]: SectionDraftContent;
       };
     };
   };
@@ -66,6 +83,20 @@ interface ProgressActions {
     anonymousCompletions: SectionCompletionInput[]
   ) => Promise<UserProgressData>;
   _addToOfflineQueue: (action: SectionCompletionInput) => void;
+  // Draft management (local-only persistence)
+  saveDraft: (
+    unitId: UnitId,
+    lessonId: LessonId,
+    sectionId: SectionId,
+    draft: SectionDraftContent
+  ) => void;
+  getDraft: (
+    unitId: UnitId,
+    lessonId: LessonId,
+    sectionId: SectionId
+  ) => SectionDraftContent | null;
+  extractAnonymousDrafts: () => ProgressStateData["drafts"];
+  mergeDraftsAfterLogin: (anonymousDrafts: ProgressStateData["drafts"]) => void;
 }
 
 interface ProgressState extends ProgressStateData {
@@ -74,6 +105,7 @@ interface ProgressState extends ProgressStateData {
 
 const initialProgressData: ProgressStateData = {
   completion: {},
+  drafts: {},
   penaltyEndTime: null,
   offlineActionQueue: [],
   isSyncing: false,
@@ -364,7 +396,7 @@ export const useProgressStore = create<ProgressState>()(
             };
           }),
         resetAllProgress: () => {
-          set({ ...initialProgressData, completion: {} }); // Ensure completion is also reset
+          set({ ...initialProgressData, completion: {}, drafts: {} }); // Reset completion and drafts
           console.warn("[ProgressStore] Local reset for all progress.");
         },
         startPenalty: () =>
@@ -428,6 +460,78 @@ export const useProgressStore = create<ProgressState>()(
 
           return finalProgress;
         },
+        // Draft management actions
+        saveDraft: (unitId, lessonId, sectionId, draft) => {
+          set((state) => {
+            const newDrafts = JSON.parse(JSON.stringify(state.drafts));
+
+            if (!newDrafts[unitId]) newDrafts[unitId] = {};
+            if (!newDrafts[unitId][lessonId]) newDrafts[unitId][lessonId] = {};
+
+            newDrafts[unitId][lessonId][sectionId] = {
+              ...newDrafts[unitId][lessonId][sectionId],
+              ...draft,
+              lastModifiedAt: Date.now(),
+            };
+
+            return { drafts: newDrafts };
+          });
+        },
+        getDraft: (unitId, lessonId, sectionId) => {
+          const drafts = get().drafts;
+          return drafts[unitId]?.[lessonId]?.[sectionId] || null;
+        },
+        extractAnonymousDrafts: () => {
+          // Read anonymous drafts from localStorage
+          const anonymousProgressKey = `${ANONYMOUS_USER_ID_PLACEHOLDER}_${BASE_PROGRESS_STORE_KEY}`;
+          const anonymousProgressRaw = localStorage.getItem(anonymousProgressKey);
+
+          if (anonymousProgressRaw) {
+            try {
+              const anonymousProgressData = JSON.parse(anonymousProgressRaw);
+              const drafts = anonymousProgressData?.state?.drafts || {};
+              console.log(`[ProgressStore] Extracted anonymous drafts for ${Object.keys(drafts).length} units.`);
+              return drafts;
+            } catch (e) {
+              console.error("[ProgressStore] Failed to parse anonymous drafts", e);
+            }
+          }
+
+          return {};
+        },
+        mergeDraftsAfterLogin: (anonymousDrafts) => {
+          // Merge anonymous drafts with current authenticated drafts
+          // Strategy: If anonymous draft is "worked on" (isModified), use it
+          set((state) => {
+            const mergedDrafts = JSON.parse(JSON.stringify(state.drafts));
+
+            for (const unitId in anonymousDrafts) {
+              if (!mergedDrafts[unitId]) mergedDrafts[unitId] = {};
+
+              for (const lessonId in anonymousDrafts[unitId]) {
+                if (!mergedDrafts[unitId][lessonId]) mergedDrafts[unitId][lessonId] = {};
+
+                for (const sectionId in anonymousDrafts[unitId][lessonId]) {
+                  const anonymousDraft = anonymousDrafts[unitId][lessonId][sectionId];
+                  const authenticatedDraft = mergedDrafts[unitId][lessonId][sectionId];
+
+                  // If anonymous draft is modified, prefer it (user just worked on it)
+                  if (anonymousDraft.isModified) {
+                    mergedDrafts[unitId][lessonId][sectionId] = anonymousDraft;
+                    console.log(`[ProgressStore] Using anonymous draft for ${unitId}/${lessonId}/${sectionId}`);
+                  } else if (!authenticatedDraft) {
+                    // If there's no authenticated draft and anonymous isn't modified, still merge it
+                    mergedDrafts[unitId][lessonId][sectionId] = anonymousDraft;
+                  }
+                  // Otherwise keep authenticated draft
+                }
+              }
+            }
+
+            console.log("[ProgressStore] Drafts merged after login.");
+            return { drafts: mergedDrafts };
+          });
+        },
       },
     }),
     {
@@ -437,6 +541,7 @@ export const useProgressStore = create<ProgressState>()(
       ),
       partialize: (state) => ({
         completion: state.completion,
+        drafts: state.drafts,
         penaltyEndTime: state.penaltyEndTime,
         offlineActionQueue: state.offlineActionQueue,
         lastSyncError: state.lastSyncError,

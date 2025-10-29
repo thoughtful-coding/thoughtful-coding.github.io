@@ -56,6 +56,8 @@ export interface ProgressSyncOperations {
   resetAllProgress: () => void;
   extractAnonymousCompletions: () => any[];
   syncProgressAfterLogin: (apiGatewayUrl: string, anonymousCompletions: any[]) => Promise<any>;
+  extractAnonymousDrafts: () => any;
+  mergeDraftsAfterLogin: (anonymousDrafts: any) => void;
 }
 
 /**
@@ -69,5 +71,7 @@ export function getProgressSyncOperations(): ProgressSyncOperations {
     resetAllProgress: progressStore.actions.resetAllProgress,
     extractAnonymousCompletions: progressStore.actions.extractAnonymousCompletions,
     syncProgressAfterLogin: progressStore.actions.syncProgressAfterLogin,
+    extractAnonymousDrafts: progressStore.actions.extractAnonymousDrafts,
+    mergeDraftsAfterLogin: progressStore.actions.mergeDraftsAfterLogin,
   };
 }

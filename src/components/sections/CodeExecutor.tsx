@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import type {
   ExecutableCode,
   UnitId,
@@ -11,6 +11,7 @@ import { useInteractiveExample } from "../../hooks/useInteractiveExample";
 import InteractiveExampleDisplay from "./InteractiveExampleDisplay";
 import CodeEditor from "../CodeEditor";
 import styles from "./Section.module.css";
+import { useProgressStore } from "../../stores/progressStore";
 
 interface CodeExecutorProps {
   example: ExecutableCode;
@@ -28,8 +29,27 @@ const TurtleDisplay: React.FC<CodeExecutorProps> = ({
   sectionId,
   onTurtleInstanceReady,
 }) => {
-  const [code, setCode] = useState(example.initialCode);
-  const canvasRef = useRef<HTMLDivElement>(null); // 1. Add this back
+  // Use progressStore for persistent code drafts
+  const { saveDraft, getDraft } = useProgressStore((state) => state.actions);
+
+  // Initialize code from draft or use default
+  const initialCode = (() => {
+    const draft = getDraft(unitId, lessonId, sectionId);
+    return draft?.code || example.initialCode;
+  })();
+
+  const [code, setCode] = useState(initialCode);
+  const canvasRef = useRef<HTMLDivElement>(null);
+
+  // Save draft whenever code changes
+  useEffect(() => {
+    const isModified = code !== example.initialCode;
+    saveDraft(unitId, lessonId, sectionId, {
+      code,
+      isModified,
+    });
+  }, [code, unitId, lessonId, sectionId, example.initialCode, saveDraft]);
+
   const { runTurtleCode, stopExecution, isLoading, error } = useTurtleExecution(
     {
       canvasRef,
@@ -86,8 +106,25 @@ const ConsoleDisplay: React.FC<CodeExecutorProps> = ({
   lessonId,
   sectionId,
 }) => {
-  // 1. The code state is now managed here ("lifting state up").
-  const [code, setCode] = useState(example.initialCode);
+  // Use progressStore for persistent code drafts
+  const { saveDraft, getDraft } = useProgressStore((state) => state.actions);
+
+  // Initialize code from draft or use default
+  const initialCode = (() => {
+    const draft = getDraft(unitId, lessonId, sectionId);
+    return draft?.code || example.initialCode;
+  })();
+
+  const [code, setCode] = useState(initialCode);
+
+  // Save draft whenever code changes
+  useEffect(() => {
+    const isModified = code !== example.initialCode;
+    saveDraft(unitId, lessonId, sectionId, {
+      code,
+      isModified,
+    });
+  }, [code, unitId, lessonId, sectionId, example.initialCode, saveDraft]);
 
   const { runCode, isLoading, output, error } = useInteractiveExample({
     unitId,
@@ -95,8 +132,7 @@ const ConsoleDisplay: React.FC<CodeExecutorProps> = ({
     sectionId,
   });
 
-  // 2. Create a new handler function that calls runCode with the current state.
-  // This function has the correct signature: () => Promise<...>
+  // Create a new handler function that calls runCode with the current state
   const handleRunCode = () => {
     return runCode(code);
   };

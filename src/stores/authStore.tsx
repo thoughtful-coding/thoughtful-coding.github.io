@@ -56,9 +56,10 @@ export const useAuthStore = create<AuthState>()(
           if (!apiGatewayUrl)
             throw new Error("API Gateway URL is not configured.");
 
-          // Step 1: Extract any anonymous progress before logging in
+          // Step 1: Extract any anonymous progress and drafts before logging in
           const progressOps = getProgressSyncOperations();
           const anonymousCompletions = progressOps.extractAnonymousCompletions();
+          const anonymousDrafts = progressOps.extractAnonymousDrafts();
 
           // Step 2: Log in and get application tokens
           const { accessToken, refreshToken } =
@@ -82,15 +83,23 @@ export const useAuthStore = create<AuthState>()(
             sessionHasExpired: false,
           });
 
-          // Step 4: Sync progress with server (handles migration if needed)
+          // Step 4: Sync progress and drafts with server/local storage
           try {
+            // Sync completions with server
             await progressOps.syncProgressAfterLogin(
               apiGatewayUrl,
               anonymousCompletions
             );
 
+            // Merge drafts locally (drafts don't sync to server)
+            progressOps.mergeDraftsAfterLogin(anonymousDrafts);
+
             // Clear anonymous data after successful migration
-            if (anonymousCompletions.length > 0) {
+            const hasAnonymousData =
+              anonymousCompletions.length > 0 ||
+              Object.keys(anonymousDrafts).length > 0;
+
+            if (hasAnonymousData) {
               clearAllAnonymousData();
             }
           } catch (error) {

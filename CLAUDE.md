@@ -80,6 +80,7 @@ This architecture enables seamless support for both anonymous and authenticated 
 
 **progressStore** (`src/stores/progressStore.ts`):
 - Tracks section completion per user (nested structure: unitId → lessonId → sectionId → timestamp)
+- Stores draft code and quiz selections locally (doesn't sync to server, migrates on login with smart conflict resolution)
 - User-specific localStorage keys (anonymous users vs authenticated)
 - Offline queue for sync when back online
 - Optimistic updates with server sync for authenticated users

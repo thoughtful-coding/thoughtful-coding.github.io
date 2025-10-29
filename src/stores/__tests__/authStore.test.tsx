@@ -50,7 +50,9 @@ const mockTokens = {
 describe("authStore", () => {
   // Mock functions for the progress sync operations
   const extractAnonymousCompletionsMock = vi.fn();
+  const extractAnonymousDraftsMock = vi.fn();
   const syncProgressAfterLoginMock = vi.fn();
+  const mergeDraftsAfterLoginMock = vi.fn();
   const setServerProgressMock = vi.fn();
   const resetAllProgressMock = vi.fn();
 
@@ -72,7 +74,9 @@ describe("authStore", () => {
     // Mock the progress sync operations from coordination hook
     vi.mocked(storeCoordination.getProgressSyncOperations).mockReturnValue({
       extractAnonymousCompletions: extractAnonymousCompletionsMock,
+      extractAnonymousDrafts: extractAnonymousDraftsMock,
       syncProgressAfterLogin: syncProgressAfterLoginMock,
+      mergeDraftsAfterLogin: mergeDraftsAfterLoginMock,
       setServerProgress: setServerProgressMock,
       resetAllProgress: resetAllProgressMock,
     });
@@ -86,6 +90,7 @@ describe("authStore", () => {
     // ARRANGE: Mock the API and progress operations
     vi.mocked(apiService.loginWithGoogle).mockResolvedValue(mockTokens);
     extractAnonymousCompletionsMock.mockReturnValue([]);
+    extractAnonymousDraftsMock.mockReturnValue({});
     syncProgressAfterLoginMock.mockResolvedValue({ completion: {} });
 
     // ACT: Call the login action
@@ -99,10 +104,12 @@ describe("authStore", () => {
     expect(state.user).toEqual(mockUserProfile);
     expect(state.accessToken).toBe(mockAccessToken);
     expect(extractAnonymousCompletionsMock).toHaveBeenCalledTimes(1);
+    expect(extractAnonymousDraftsMock).toHaveBeenCalledTimes(1);
     expect(syncProgressAfterLoginMock).toHaveBeenCalledWith(
       expect.any(String),
       []
     );
+    expect(mergeDraftsAfterLoginMock).toHaveBeenCalledWith({});
     expect(state.isSyncingProgress).toBe(false); // Should be false at the end
   });
 
@@ -111,10 +118,18 @@ describe("authStore", () => {
     const anonymousCompletions = [
       { unitId: "unit-1", lessonId: "lesson-1", sectionId: "sec-1" },
     ];
+    const anonymousDrafts = {
+      "unit-1": {
+        "lesson-1": {
+          "sec-1": { code: "draft code", isModified: true },
+        },
+      },
+    };
 
     // Mock the API and progress operations
     vi.mocked(apiService.loginWithGoogle).mockResolvedValue(mockTokens);
     extractAnonymousCompletionsMock.mockReturnValue(anonymousCompletions);
+    extractAnonymousDraftsMock.mockReturnValue(anonymousDrafts);
     syncProgressAfterLoginMock.mockResolvedValue({
       completion: {
         "unit-1": { "lesson-1": { "sec-1": "timestamp" } },
@@ -127,12 +142,14 @@ describe("authStore", () => {
     });
 
     // ASSERT
-    // Check that extraction and sync were called with the completions
+    // Check that extraction and sync were called with the completions and drafts
     expect(extractAnonymousCompletionsMock).toHaveBeenCalledTimes(1);
+    expect(extractAnonymousDraftsMock).toHaveBeenCalledTimes(1);
     expect(syncProgressAfterLoginMock).toHaveBeenCalledWith(
       expect.any(String),
       anonymousCompletions
     );
+    expect(mergeDraftsAfterLoginMock).toHaveBeenCalledWith(anonymousDrafts);
 
     // Check that anonymous data was cleared
     expect(localStorageUtils.clearAllAnonymousData).toHaveBeenCalledTimes(1);
