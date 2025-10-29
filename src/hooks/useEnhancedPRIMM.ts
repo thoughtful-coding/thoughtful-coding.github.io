@@ -11,7 +11,6 @@ import { useSectionProgress } from "./useSectionProgress";
 import { useAuthStore } from "../stores/authStore";
 import * as apiService from "../lib/apiService";
 import { ApiError } from "../lib/apiService";
-import { API_GATEWAY_BASE_URL } from "../config";
 
 interface UseEnhancedPRIMMProps {
   unitId: UnitId;
@@ -41,7 +40,6 @@ export const useEnhancedPRIMM = ({
   predictPrompt, // Get the new prop
 }: UseEnhancedPRIMMProps) => {
   const { isAuthenticated } = useAuthStore();
-  const apiGatewayUrl = API_GATEWAY_BASE_URL;
 
   const storageKey = `primmEnhanced_${unitId}_${lessonId}_${sectionId}_${exampleId}`;
 
@@ -104,8 +102,8 @@ export const useEnhancedPRIMM = ({
         updateState({ userExplanationText: text });
       },
       submitForFeedback: async (codeSnippet: string) => {
-        if (!isAuthenticated || !apiGatewayUrl) {
-          setAiFeedbackError("Authentication or configuration error.");
+        if (!isAuthenticated) {
+          setAiFeedbackError("Authentication required.");
           return;
         }
         setIsLoadingAiFeedback(true);
@@ -125,10 +123,7 @@ export const useEnhancedPRIMM = ({
         };
 
         try {
-          const aiResponse = await apiService.submitPrimmEvaluation(
-            apiGatewayUrl,
-            payload
-          );
+          const aiResponse = await apiService.submitPrimmEvaluation(payload);
           updateState({
             aiEvaluationResult: aiResponse,
             currentUiStep: "VIEW_AI_FEEDBACK",
@@ -157,7 +152,6 @@ export const useEnhancedPRIMM = ({
     [
       updateState,
       isAuthenticated,
-      apiGatewayUrl,
       lessonId,
       sectionId,
       exampleId,

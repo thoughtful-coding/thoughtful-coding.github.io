@@ -146,7 +146,6 @@ describe("ReflectionSection", () => {
 
     // Assert
     expect(apiService.submitReflectionInteraction).toHaveBeenCalledWith(
-      expect.any(String),
       "lesson-1",
       "reflect-1",
       expect.objectContaining({
@@ -201,7 +200,6 @@ describe("ReflectionSection", () => {
 
     // Assert
     expect(apiService.submitReflectionInteraction).toHaveBeenCalledWith(
-      expect.any(String),
       "lesson-1",
       "reflect-1",
       expect.objectContaining({

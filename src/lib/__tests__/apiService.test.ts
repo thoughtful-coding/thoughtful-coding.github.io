@@ -52,7 +52,7 @@ describe("apiService", () => {
       });
 
       // ACT
-      const result = await apiService.getUserProgress("http://api.test");
+      const result = await apiService.getUserProgress();
 
       // ASSERT
       expect(result).toEqual(mockProgress);
@@ -76,10 +76,10 @@ describe("apiService", () => {
 
       // ACT & ASSERT
       await expect(
-        apiService.getUserProgress("http://api.test")
+        apiService.getUserProgress()
       ).rejects.toThrow(ApiError);
       await expect(
-        apiService.getUserProgress("http://api.test")
+        apiService.getUserProgress()
       ).rejects.toThrow("Internal Server Error");
     });
   });
@@ -108,7 +108,7 @@ describe("apiService", () => {
       });
 
       // ACT
-      const result = await apiService.getUserProgress("http://api.test");
+      const result = await apiService.getUserProgress();
 
       // ASSERT
       expect(result).toEqual({ data: "success" });
@@ -145,7 +145,7 @@ describe("apiService", () => {
 
       // ACT & ASSERT
       await expect(
-        apiService.getUserProgress("http://api.test")
+        apiService.getUserProgress()
       ).rejects.toThrow("Session expired. Please log in again.");
 
       // Check that the session expired flag was set
@@ -186,7 +186,6 @@ describe("apiService", () => {
       });
 
       const result = await apiService.loginWithGoogle(
-        "http://api.test",
         "google-id-token"
       );
 
@@ -205,7 +204,7 @@ describe("apiService", () => {
       });
 
       await expect(
-        apiService.loginWithGoogle("http://api.test", "invalid-token")
+        apiService.loginWithGoogle("invalid-token")
       ).rejects.toThrow(ApiError);
     });
   });
@@ -222,7 +221,6 @@ describe("apiService", () => {
       });
 
       const result = await apiService.refreshAccessToken(
-        "http://api.test",
         "old-refresh-token"
       );
 
@@ -241,7 +239,7 @@ describe("apiService", () => {
       });
 
       await expect(
-        apiService.refreshAccessToken("http://api.test", "expired-token")
+        apiService.refreshAccessToken("expired-token")
       ).rejects.toThrow(ApiError);
     });
   });
@@ -252,7 +250,7 @@ describe("apiService", () => {
         ok: true,
       });
 
-      await apiService.logoutUser("http://api.test", "refresh-token");
+      await apiService.logoutUser("refresh-token");
 
       expect(mockFetch).toHaveBeenCalledWith("http://api.test/auth/logout", {
         method: "POST",
@@ -269,7 +267,7 @@ describe("apiService", () => {
 
       // Should not throw - logout is best-effort
       await expect(
-        apiService.logoutUser("http://api.test", "token")
+        apiService.logoutUser("token")
       ).resolves.not.toThrow();
     });
   });
@@ -290,7 +288,6 @@ describe("apiService", () => {
       });
 
       const result = await apiService.updateUserProgress(
-        "http://api.test",
         batchInput
       );
 
@@ -311,7 +308,7 @@ describe("apiService", () => {
       getAccessTokenMock.mockReturnValue(null);
 
       await expect(
-        apiService.getUserProgress("http://api.test")
+        apiService.getUserProgress()
       ).rejects.toThrow("No access token available.");
     });
 
@@ -336,7 +333,7 @@ describe("apiService", () => {
         json: () => Promise.resolve({ data: "success" }),
       });
 
-      const result = await apiService.getUserProgress("http://api.test");
+      const result = await apiService.getUserProgress();
 
       expect(result).toEqual({ data: "success" });
       expect(setTokensMock).toHaveBeenCalledWith(newTokens);
@@ -349,7 +346,7 @@ describe("apiService", () => {
       mockFetch.mockResolvedValueOnce({ status: 401, ok: false });
 
       await expect(
-        apiService.getUserProgress("http://api.test")
+        apiService.getUserProgress()
       ).rejects.toThrow("Session expired. Please log in again.");
 
       expect(logoutMock).toHaveBeenCalled();

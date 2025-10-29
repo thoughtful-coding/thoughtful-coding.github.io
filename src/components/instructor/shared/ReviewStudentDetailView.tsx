@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom"; // Import router hooks
 import * as apiService from "../../../lib/apiService";
 import { useAuthStore } from "../../../stores/authStore";
-import { API_GATEWAY_BASE_URL } from "../../../config";
 import type {
   StudentDetailedProgressResponse,
   SectionStatusItem,
@@ -26,11 +25,11 @@ const ReviewStudentDetailView: React.FC = () => {
   const [viewingSubmission, setViewingSubmission] =
     useState<SectionStatusItem | null>(null);
 
-  const { idToken } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
 
   useEffect(() => {
     const fetchProfile = async () => {
-      if (!idToken) {
+      if (!isAuthenticated) {
         setError("Not authenticated.");
         setIsLoading(false);
         return;
@@ -45,8 +44,6 @@ const ReviewStudentDetailView: React.FC = () => {
       setError(null);
       try {
         const profileData = await apiService.getStudentDetailedProgress(
-          idToken,
-          API_GATEWAY_BASE_URL,
           studentId as UserId
         );
         setStudentProfile(profileData);
@@ -63,7 +60,7 @@ const ReviewStudentDetailView: React.FC = () => {
       }
     };
     fetchProfile();
-  }, [studentId, idToken]);
+  }, [studentId, isAuthenticated]);
 
   const handleBack = () => {
     navigate("/instructor-dashboard/students"); // Always navigate back to the main student list page

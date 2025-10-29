@@ -4,7 +4,6 @@ import styles from "./LearningEntriesPage.module.css";
 import { useAuthStore } from "../../stores/authStore";
 import * as apiService from "../../lib/apiService";
 import { ReflectionVersionItem } from "../../types/apiServiceTypes";
-import { API_GATEWAY_BASE_URL } from "../../config";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import RenderFinalLearningEntry from "../../components/instructor/shared/RenderFinalLearningEntry";
 
@@ -14,16 +13,11 @@ const LearningEntriesPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const { isAuthenticated } = useAuthStore();
-  const apiGatewayUrl = API_GATEWAY_BASE_URL;
 
   useEffect(() => {
     // ... data fetching logic remains the same ...
-    if (!isAuthenticated || !apiGatewayUrl) {
-      if (isAuthenticated) {
-        setError("API configuration is missing.");
-      } else {
-        setError("Please log in to view your learning entries.");
-      }
+    if (!isAuthenticated) {
+      setError("Please log in to view your learning entries.");
       setIsLoading(false);
       setFinalEntries([]);
       return;
@@ -34,7 +28,7 @@ const LearningEntriesPage: React.FC = () => {
       setError(null);
       try {
         const response =
-          await apiService.getFinalizedLearningEntries(apiGatewayUrl);
+          await apiService.getFinalizedLearningEntries();
         const sortedEntries = response.entries.sort(
           (a, b) =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -53,7 +47,7 @@ const LearningEntriesPage: React.FC = () => {
     };
 
     fetchEntries();
-  }, [apiGatewayUrl, isAuthenticated]);
+  }, [isAuthenticated]);
 
   if (!isAuthenticated && !isLoading) {
     return (

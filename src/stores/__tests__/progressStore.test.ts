@@ -135,10 +135,9 @@ describe("progressStore", () => {
       });
 
       // ASSERT
-      expect(apiService.updateUserProgress).toHaveBeenCalledWith(
-        expect.any(String),
-        { completions: [queuedAction] }
-      );
+      expect(apiService.updateUserProgress).toHaveBeenCalledWith({
+        completions: [queuedAction],
+      });
       const state = useProgressStore.getState();
       expect(state.offlineActionQueue).toHaveLength(0); // Queue should be cleared
     });

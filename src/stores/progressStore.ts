@@ -6,7 +6,6 @@ import type {
   UserProgressData,
 } from "../types/apiServiceTypes";
 import { ANONYMOUS_USER_ID_PLACEHOLDER } from "../lib/localStorageUtils";
-import { API_GATEWAY_BASE_URL } from "../config";
 import { IsoTimestamp, LessonId, SectionId, UnitId } from "../types/data";
 import { PROGRESS_CONFIG } from "../config/constants";
 import { storeCoordinator } from "./storeCoordination";
@@ -79,7 +78,6 @@ interface ProgressActions {
   processOfflineQueue: () => Promise<void>;
   extractAnonymousCompletions: () => SectionCompletionInput[];
   syncProgressAfterLogin: (
-    apiGatewayUrl: string,
     anonymousCompletions: SectionCompletionInput[]
   ) => Promise<UserProgressData>;
   _addToOfflineQueue: (action: SectionCompletionInput) => void;
@@ -192,27 +190,20 @@ export const useProgressStore = create<ProgressState>()(
 
           if (navigator.onLine) {
             try {
-              const apiGatewayUrl = API_GATEWAY_BASE_URL;
-
-              if (apiGatewayUrl) {
-                console.log(
-                  `[ProgressStore] Syncing: ${unitId}/${lessonId}/${sectionId}`
-                );
-                // The API payload for updateUserProgress might only need lessonId and sectionId,
-                // if the server can derive unitId from lessonId (GUID).
-                // Adjust the payload based on what apiService.updateUserProgress expects.
-                // For this example, assuming it takes SectionCompletionInput which now includes unitId.
-                const serverResponseState = await apiService.updateUserProgress(
-                  apiGatewayUrl,
-                  { completions: [actionToSync] } // Send as batch of one
-                );
-                console.log(
-                  `[ProgressStore] Synced: ${unitId}/${lessonId}/${sectionId}.`
-                );
-                get().actions.setServerProgress(serverResponseState);
-              } else {
-                throw new Error("Missing token/API URL. Queuing action.");
-              }
+              console.log(
+                `[ProgressStore] Syncing: ${unitId}/${lessonId}/${sectionId}`
+              );
+              // The API payload for updateUserProgress might only need lessonId and sectionId,
+              // if the server can derive unitId from lessonId (GUID).
+              // Adjust the payload based on what apiService.updateUserProgress expects.
+              // For this example, assuming it takes SectionCompletionInput which now includes unitId.
+              const serverResponseState = await apiService.updateUserProgress(
+                { completions: [actionToSync] } // Send as batch of one
+              );
+              console.log(
+                `[ProgressStore] Synced: ${unitId}/${lessonId}/${sectionId}.`
+              );
+              get().actions.setServerProgress(serverResponseState);
             } catch (error) {
               console.error(
                 `[ProgressStore] Sync failed for ${unitId}/${lessonId}/${sectionId}:`,
@@ -320,34 +311,27 @@ export const useProgressStore = create<ProgressState>()(
           const queueSnapshot = [...offlineActionQueue];
 
           try {
-            const apiGatewayUrl = API_GATEWAY_BASE_URL;
+            // The items in queueSnapshot are SectionCompletionInput, which include unitId
+            const serverResponseState = await apiService.updateUserProgress(
+              { completions: queueSnapshot }
+            );
+            console.log("[ProgressStore] Synced offline queue to server.");
+            get().actions.setServerProgress(serverResponseState); // This will also filter the queue
 
-            if (apiGatewayUrl) {
-              // The items in queueSnapshot are SectionCompletionInput, which include unitId
-              const serverResponseState = await apiService.updateUserProgress(
-                apiGatewayUrl,
-                { completions: queueSnapshot }
-              );
-              console.log("[ProgressStore] Synced offline queue to server.");
-              get().actions.setServerProgress(serverResponseState); // This will also filter the queue
-
-              // Redundant filter after setServerProgress, but ensures only truly unsynced remain
-              // setServerProgress should ideally handle this fully.
-              // For safety, or if setServerProgress's queue filter is different:
-              set((state) => ({
-                offlineActionQueue: state.offlineActionQueue.filter(
-                  (item) =>
-                    !queueSnapshot.some(
-                      (syncedItem) =>
-                        syncedItem.unitId === item.unitId &&
-                        syncedItem.lessonId === item.lessonId &&
-                        syncedItem.sectionId === item.sectionId
-                    )
-                ),
-              }));
-            } else {
-              throw new Error("Missing token/API URL for offline sync.");
-            }
+            // Redundant filter after setServerProgress, but ensures only truly unsynced remain
+            // setServerProgress should ideally handle this fully.
+            // For safety, or if setServerProgress's queue filter is different:
+            set((state) => ({
+              offlineActionQueue: state.offlineActionQueue.filter(
+                (item) =>
+                  !queueSnapshot.some(
+                    (syncedItem) =>
+                      syncedItem.unitId === item.unitId &&
+                      syncedItem.lessonId === item.lessonId &&
+                      syncedItem.sectionId === item.sectionId
+                  )
+              ),
+            }));
           } catch (error) {
             console.error(
               "[ProgressStore] Failed to sync offline queue:",
@@ -437,7 +421,7 @@ export const useProgressStore = create<ProgressState>()(
 
           return anonymousCompletions;
         },
-        syncProgressAfterLogin: async (apiGatewayUrl, anonymousCompletions) => {
+        syncProgressAfterLogin: async (anonymousCompletions) => {
           // Sync anonymous progress with server after login
           let finalProgress: UserProgressData;
 
@@ -446,12 +430,11 @@ export const useProgressStore = create<ProgressState>()(
               `[ProgressStore] Migrating ${anonymousCompletions.length} anonymous completions.`
             );
             finalProgress = await apiService.updateUserProgress(
-              apiGatewayUrl,
               { completions: anonymousCompletions }
             );
           } else {
             console.log("[ProgressStore] No anonymous progress to migrate. Fetching server progress.");
-            finalProgress = await apiService.getUserProgress(apiGatewayUrl);
+            finalProgress = await apiService.getUserProgress();
           }
 
           // Update local state with server response

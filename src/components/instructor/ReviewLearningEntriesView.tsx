@@ -13,7 +13,6 @@ import type {
 import * as apiService from "../../lib/apiService";
 import * as dataLoader from "../../lib/dataLoader";
 import { useAuthStore } from "../../stores/authStore";
-import { API_GATEWAY_BASE_URL } from "../../config";
 import LoadingSpinner from "../LoadingSpinner";
 import styles from "./InstructorViews.module.css";
 
@@ -41,7 +40,6 @@ const ReviewLearningEntriesView: React.FC<ReviewLearningEntriesViewProps> = ({
   units,
 }) => {
   const { isAuthenticated } = useAuthStore();
-  const apiGatewayUrl = API_GATEWAY_BASE_URL;
 
   const [selectedStudentId, setSelectedStudentId] = useState<UserId | "">("");
   const [finalLearningEntries, setFinalLearningEntries] = useState<
@@ -86,7 +84,7 @@ const ReviewLearningEntriesView: React.FC<ReviewLearningEntriesViewProps> = ({
   }, [units]);
 
   useEffect(() => {
-    if (selectedStudentId && isAuthenticated && apiGatewayUrl) {
+    if (selectedStudentId && isAuthenticated) {
       const fetchStudentFinalEntries = async () => {
         setIsLoadingData(true);
         setError(null);
@@ -98,7 +96,6 @@ const ReviewLearningEntriesView: React.FC<ReviewLearningEntriesViewProps> = ({
           // Call the new API service function
           const response =
             await apiService.getInstructorStudentFinalLearningEntries(
-              apiGatewayUrl,
               selectedStudentId
             );
           setFinalLearningEntries(response.entries); // These are already filtered to be isFinal: true
@@ -122,7 +119,7 @@ const ReviewLearningEntriesView: React.FC<ReviewLearningEntriesViewProps> = ({
       setDisplayableFinalEntries([]);
       setCurrentEntryIndex(null);
     }
-  }, [selectedStudentId, isAuthenticated, apiGatewayUrl]);
+  }, [selectedStudentId, isAuthenticated]);
 
   // Process fetched final entries into a displayable list
   useEffect(() => {

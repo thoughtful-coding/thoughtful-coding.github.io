@@ -105,10 +105,7 @@ describe("authStore", () => {
     expect(state.accessToken).toBe(mockAccessToken);
     expect(extractAnonymousCompletionsMock).toHaveBeenCalledTimes(1);
     expect(extractAnonymousDraftsMock).toHaveBeenCalledTimes(1);
-    expect(syncProgressAfterLoginMock).toHaveBeenCalledWith(
-      expect.any(String),
-      []
-    );
+    expect(syncProgressAfterLoginMock).toHaveBeenCalledWith([]);
     expect(mergeDraftsAfterLoginMock).toHaveBeenCalledWith({});
     expect(state.isSyncingProgress).toBe(false); // Should be false at the end
   });
@@ -145,10 +142,7 @@ describe("authStore", () => {
     // Check that extraction and sync were called with the completions and drafts
     expect(extractAnonymousCompletionsMock).toHaveBeenCalledTimes(1);
     expect(extractAnonymousDraftsMock).toHaveBeenCalledTimes(1);
-    expect(syncProgressAfterLoginMock).toHaveBeenCalledWith(
-      expect.any(String),
-      anonymousCompletions
-    );
+    expect(syncProgressAfterLoginMock).toHaveBeenCalledWith(anonymousCompletions);
     expect(mergeDraftsAfterLoginMock).toHaveBeenCalledWith(anonymousDrafts);
 
     // Check that anonymous data was cleared
@@ -172,10 +166,7 @@ describe("authStore", () => {
     });
 
     // ASSERT
-    expect(apiService.logoutUser).toHaveBeenCalledWith(
-      expect.any(String),
-      "mockRefreshToken"
-    );
+    expect(apiService.logoutUser).toHaveBeenCalledWith("mockRefreshToken");
     const state = useAuthStore.getState();
     expect(state.isAuthenticated).toBe(false);
     expect(state.user).toBeNull();

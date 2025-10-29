@@ -32,7 +32,7 @@ test.describe("PrimmSection tests with regular code", () => {
     await page
       .getByRole("button", { name: "Get AI Feedback", exact: true })
       .click();
-    await expect(page.getByText("Authentication or")).toBeVisible();
+    await expect(page.getByText("Authentication required")).toBeVisible();
 
     await expect(sectionItem).not.toHaveClass(/sectionItemCompleted/);
   });
@@ -78,7 +78,7 @@ test.describe("PrimmSection tests with turtles", () => {
     await page
       .getByRole("button", { name: "Get AI Feedback", exact: true })
       .click();
-    await expect(page.getByText("Authentication or")).toBeVisible();
+    await expect(page.getByText("Authentication required")).toBeVisible();
 
     await expect(sectionItem).not.toHaveClass(/sectionItemCompleted/);
   });

@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import * as apiService from "../lib/apiService";
-import { API_GATEWAY_BASE_URL } from "../config";
 import type {
   UserId,
   AccessTokenId,
@@ -52,10 +51,6 @@ export const useAuthStore = create<AuthState>()(
       ...initialAuthState,
       actions: {
         login: async (googleIdToken: string) => {
-          const apiGatewayUrl = API_GATEWAY_BASE_URL;
-          if (!apiGatewayUrl)
-            throw new Error("API Gateway URL is not configured.");
-
           // Step 1: Extract any anonymous progress and drafts before logging in
           const progressOps = getProgressSyncOperations();
           const anonymousCompletions = progressOps.extractAnonymousCompletions();
@@ -63,7 +58,7 @@ export const useAuthStore = create<AuthState>()(
 
           // Step 2: Log in and get application tokens
           const { accessToken, refreshToken } =
-            await apiService.loginWithGoogle(apiGatewayUrl, googleIdToken);
+            await apiService.loginWithGoogle(googleIdToken);
 
           const decodedToken = JSON.parse(atob(accessToken.split(".")[1]));
           const userProfile: UserProfile = {
@@ -86,10 +81,7 @@ export const useAuthStore = create<AuthState>()(
           // Step 4: Sync progress and drafts with server/local storage
           try {
             // Sync completions with server
-            await progressOps.syncProgressAfterLogin(
-              apiGatewayUrl,
-              anonymousCompletions
-            );
+            await progressOps.syncProgressAfterLogin(anonymousCompletions);
 
             // Merge drafts locally (drafts don't sync to server)
             progressOps.mergeDraftsAfterLogin(anonymousDrafts);
@@ -112,10 +104,9 @@ export const useAuthStore = create<AuthState>()(
         },
         logout: async () => {
           const { refreshToken } = get();
-          const apiGatewayUrl = API_GATEWAY_BASE_URL;
-          if (refreshToken && apiGatewayUrl) {
+          if (refreshToken) {
             try {
-              await apiService.logoutUser(apiGatewayUrl, refreshToken);
+              await apiService.logoutUser(refreshToken);
             } catch (error) {
               console.error(
                 "Logout API call failed, proceeding with client-side logout.",

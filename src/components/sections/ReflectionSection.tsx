@@ -21,7 +21,6 @@ import {
   ReflectionInteractionInput,
   ReflectionVersionItem,
 } from "../../types/apiServiceTypes";
-import { API_GATEWAY_BASE_URL } from "../../config";
 import LoadingSpinner from "../LoadingSpinner";
 import ContentRenderer from "../content_blocks/ContentRenderer";
 
@@ -62,7 +61,6 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = ({
   const [submitError, setSubmitError] = useState<string | null>(null); // For submit/feedback errors
 
   const { isAuthenticated } = useAuthStore();
-  const apiGatewayUrl = API_GATEWAY_BASE_URL;
 
   const { completeSection } = useProgressActions();
   const isSectionMarkedCompleteInStore = useProgressStore((state) =>
@@ -70,7 +68,7 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = ({
   );
 
   const fetchAndUpdateHistory = useCallback(async () => {
-    if (!isAuthenticated || !apiGatewayUrl || !lessonId || !sectionId) {
+    if (!isAuthenticated || !lessonId || !sectionId) {
       setDraftHistory([]);
       return;
     }
@@ -78,7 +76,6 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = ({
     setFetchError(null);
     try {
       const response = await apiService.getReflectionDraftVersions(
-        apiGatewayUrl,
         lessonId,
         sectionId
       );
@@ -101,7 +98,7 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = ({
     } finally {
       setIsLoadingHistory(false);
     }
-  }, [apiGatewayUrl, lessonId, sectionId, isAuthenticated]);
+  }, [lessonId, sectionId, isAuthenticated]);
 
   useEffect(() => {
     fetchAndUpdateHistory();
@@ -139,8 +136,8 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = ({
   };
 
   const handleGetFeedback = useCallback(async () => {
-    if (!isAuthenticated || !apiGatewayUrl) {
-      setSubmitError("User not authenticated or API not configured.");
+    if (!isAuthenticated) {
+      setSubmitError("User not authenticated.");
       return;
     }
     // ... (input validation remains same)
@@ -170,7 +167,6 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = ({
 
     try {
       const newDraftEntry = await apiService.submitReflectionInteraction(
-        apiGatewayUrl,
         lessonId,
         sectionId,
         submissionData
@@ -190,7 +186,6 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = ({
     }
   }, [
     isAuthenticated,
-    apiGatewayUrl,
     lessonId,
     sectionId,
     currentTopic,
@@ -205,8 +200,8 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = ({
   ]);
 
   const handleFinalSubmit = useCallback(async () => {
-    if (!isAuthenticated || !apiGatewayUrl) {
-      setSubmitError("User not authenticated or API not configured.");
+    if (!isAuthenticated) {
+      setSubmitError("User not authenticated.");
       return;
     }
 
@@ -252,7 +247,6 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = ({
 
     try {
       const finalEntryResponse = await apiService.submitReflectionInteraction(
-        apiGatewayUrl,
         lessonId,
         sectionId,
         submissionData
@@ -270,7 +264,6 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = ({
     }
   }, [
     isAuthenticated,
-    apiGatewayUrl,
     unitId,
     lessonId,
     sectionId,

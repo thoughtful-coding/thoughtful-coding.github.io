@@ -80,7 +80,7 @@ describe("ReviewStudentDetailView", () => {
   const navigateMock = vi.fn();
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(useAuthStore).mockReturnValue({ idToken: "test-token" });
+    vi.mocked(useAuthStore).mockReturnValue({ isAuthenticated: true });
     mockedUseParams.mockReturnValue({ studentId: "student-123" });
     mockedUseNavigate.mockReturnValue(navigateMock);
     vi.mocked(apiService.getStudentDetailedProgress).mockResolvedValue(

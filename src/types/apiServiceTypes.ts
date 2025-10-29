@@ -263,3 +263,19 @@ export interface StudentDetailedProgressResponse {
   studentName?: string | null;
   profile: UnitProgressProfile[];
 }
+
+/**
+ * Response from GET /instructor/students/{studentId}/learning-entries
+ * Returns all reflection entries (drafts and final) for a student
+ */
+export interface StudentLearningEntriesResponse {
+  entries: ReflectionVersionItem[];
+}
+
+/**
+ * Response from GET /instructor/students/{studentId}/primm-submissions
+ * Returns all PRIMM submissions for a student
+ */
+export interface StudentPrimmSubmissionsResponse {
+  submissions: StoredPrimmSubmissionItem[];
+}

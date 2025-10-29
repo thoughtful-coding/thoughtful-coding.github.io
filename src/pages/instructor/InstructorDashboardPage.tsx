@@ -8,10 +8,10 @@ import {
 
 import * as apiService from "../../lib/apiService";
 import { useAuthStore, useAuthActions } from "../../stores/authStore";
-import { API_GATEWAY_BASE_URL, BASE_PATH } from "../../config";
 import type { InstructorStudentInfo } from "../../types/apiServiceTypes";
 import type { Unit } from "../../types/data";
 import { fetchUnitsData } from "../../lib/dataLoader";
+import { BASE_PATH } from "../../config";
 
 // Import the page/view components
 import ReviewClassProgressView from "../../components/instructor/ReviewClassProgressView";
@@ -58,7 +58,7 @@ const InstructorDashboardPage: React.FC = () => {
       setError(null);
       try {
         const [studentsResponse, unitsData] = await Promise.all([
-          apiService.getInstructorPermittedStudents(API_GATEWAY_BASE_URL),
+          apiService.getInstructorPermittedStudents(),
           fetchUnitsData(),
         ]);
         setPermittedStudents(studentsResponse.students);

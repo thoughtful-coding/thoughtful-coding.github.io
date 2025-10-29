@@ -181,13 +181,11 @@ describe("useEnhancedPRIMM", () => {
       await result.current.actions.submitForFeedback("print(42)");
     });
 
-    expect(mockedSubmitPrimmEvaluation).toHaveBeenCalledWith(
-      "http://api.test",
-      {
-        lessonId: defaultProps.lessonId,
-        sectionId: defaultProps.sectionId,
-        primmExampleId: defaultProps.exampleId,
-        codeSnippet: "print(42)",
+    expect(mockedSubmitPrimmEvaluation).toHaveBeenCalledWith({
+      lessonId: defaultProps.lessonId,
+      sectionId: defaultProps.sectionId,
+      primmExampleId: defaultProps.exampleId,
+      codeSnippet: "print(42)",
         userPredictionPromptText: defaultProps.predictPrompt,
         userPredictionText: "It prints 42",
         userPredictionConfidence: 2,
@@ -228,9 +226,7 @@ describe("useEnhancedPRIMM", () => {
       await result.current.actions.submitForFeedback("print(42)");
     });
 
-    expect(result.current.aiFeedbackError).toBe(
-      "Authentication or configuration error."
-    );
+    expect(result.current.aiFeedbackError).toBe("Authentication required.");
     expect(mockedSubmitPrimmEvaluation).not.toHaveBeenCalled();
   });
 

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import * as apiService from "../../lib/apiService";
 import { useAuthStore } from "../../stores/authStore";
-import { API_GATEWAY_BASE_URL } from "../../config";
 import type {
   InstructorStudentInfo,
   StudentLessonProgressItem,
@@ -49,7 +48,6 @@ const ReviewClassProgressView: React.FC<ReviewClassProgressViewProps> = ({
   studentsErrorGlobal,
 }) => {
   const { isAuthenticated } = useAuthStore();
-  const apiGatewayUrl = API_GATEWAY_BASE_URL;
 
   const [selectedUnitId, setSelectedUnitId] = useState<UnitId | "">("");
   const [selectedUnitLessons, setSelectedUnitLessons] = useState<
@@ -108,7 +106,6 @@ const ReviewClassProgressView: React.FC<ReviewClassProgressViewProps> = ({
 
         const classProgressResponse =
           await apiService.getInstructorClassUnitProgress(
-            apiGatewayUrl!,
             selectedUnitId,
             []
           );
@@ -200,7 +197,6 @@ const ReviewClassProgressView: React.FC<ReviewClassProgressViewProps> = ({
     selectedUnitId,
     permittedStudents,
     isAuthenticated,
-    apiGatewayUrl,
     units,
   ]);
 

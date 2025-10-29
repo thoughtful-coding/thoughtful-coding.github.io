@@ -17,7 +17,6 @@ import type {
 import * as dataLoader from "../../lib/dataLoader";
 import * as apiService from "../../lib/apiService";
 import { useAuthStore } from "../../stores/authStore";
-import { API_GATEWAY_BASE_URL } from "../../config";
 import LoadingSpinner from "../LoadingSpinner";
 import styles from "./InstructorViews.module.css";
 import RenderReflectionVersions from "./shared/RenderReflectionVersions";
@@ -33,7 +32,6 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
   permittedStudents,
 }) => {
   const { isAuthenticated } = useAuthStore();
-  const apiGatewayUrl = API_GATEWAY_BASE_URL;
 
   const [selectedUnitId, setSelectedUnitId] = useState<UnitId | "">("");
   const [lessonsInSelectedUnit, setLessonsInSelectedUnit] = useState<
@@ -147,14 +145,13 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
 
   const fetchSubmissionsForSelectedAssignment = useCallback(
     async (assignment: DisplayableAssignment) => {
-      if (!isAuthenticated || !apiGatewayUrl || !assignment) return;
+      if (!isAuthenticated || !assignment) return;
       setIsLoadingState((prev) => ({ ...prev, submissions: true }));
       setError(null);
       setSubmissions([]);
       setCurrentSubmissionIndex(0);
       try {
         const response = await apiService.getSubmissionsForAssignment(
-          apiGatewayUrl,
           assignment.unitId,
           assignment.lessonId,
           assignment.sectionId,
@@ -175,7 +172,7 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
         setIsLoadingState((prev) => ({ ...prev, submissions: false }));
       }
     },
-    [isAuthenticated, apiGatewayUrl]
+    [isAuthenticated]
   );
 
   useEffect(() => {

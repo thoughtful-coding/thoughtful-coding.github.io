@@ -97,7 +97,7 @@ describe("ReviewLearningEntriesView", () => {
     await waitFor(() => {
       expect(
         apiService.getInstructorStudentFinalLearningEntries
-      ).toHaveBeenCalledWith(expect.any(String), "student-1");
+      ).toHaveBeenCalledWith("student-1");
     });
 
     // 4. Assert that the entries are rendered (newest first)
