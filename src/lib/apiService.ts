@@ -26,6 +26,87 @@ import {
   RefreshTokenId,
 } from "../types/data";
 
+// --- RESILIENCE CONFIGURATION ---
+
+// Timeout configuration (30 seconds)
+const DEFAULT_TIMEOUT = 30000;
+
+// Retry configuration
+const RETRYABLE_STATUS_CODES = [408, 429, 502, 503, 504];
+const MAX_RETRIES = 3;
+const INITIAL_RETRY_DELAY = 1000; // 1 second
+
+// --- HELPER FUNCTIONS FOR RESILIENCE ---
+
+/**
+ * Wraps a fetch call with timeout logic using AbortController.
+ * @param url - The URL to fetch
+ * @param options - RequestInit options
+ * @param timeout - Timeout in milliseconds (default: 30 seconds)
+ * @returns Promise<Response>
+ */
+async function fetchWithTimeout(
+  url: string,
+  options: RequestInit = {},
+  timeout = DEFAULT_TIMEOUT
+): Promise<Response> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal,
+    });
+    return response;
+  } catch (error) {
+    if (error instanceof Error && error.name === "AbortError") {
+      throw new Error(`Request timeout after ${timeout}ms`);
+    }
+    throw error;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+/**
+ * Wraps a fetch call with retry logic and exponential backoff.
+ * @param url - The URL to fetch
+ * @param options - RequestInit options
+ * @param retries - Number of retries remaining (default: MAX_RETRIES)
+ * @returns Promise<Response>
+ */
+async function fetchWithRetry(
+  url: string,
+  options: RequestInit = {},
+  retries = MAX_RETRIES
+): Promise<Response> {
+  try {
+    const response = await fetchWithTimeout(url, options);
+
+    // Only retry on specific status codes
+    if (
+      !response.ok &&
+      RETRYABLE_STATUS_CODES.includes(response.status) &&
+      retries > 0
+    ) {
+      const delay = INITIAL_RETRY_DELAY * 2 ** (MAX_RETRIES - retries);
+      await new Promise((resolve) => setTimeout(resolve, delay));
+      return fetchWithRetry(url, options, retries - 1);
+    }
+
+    return response;
+  } catch (error) {
+    // Retry on network errors if retries remain
+    if (retries > 0) {
+      const delay = INITIAL_RETRY_DELAY * 2 ** (MAX_RETRIES - retries);
+      await new Promise((resolve) => setTimeout(resolve, delay));
+      return fetchWithRetry(url, options, retries - 1);
+    }
+    throw error;
+  }
+}
+
 // Custom Error class to hold status and parsed response
 export class ApiError extends Error {
   status: number;
@@ -81,7 +162,7 @@ async function fetchWithAuth(
     Authorization: `Bearer ${token}`,
   };
 
-  let response = await fetch(url, options);
+  let response = await fetchWithRetry(url, options);
 
   if (response.status === 401 || response.status === 403) {
     if (isRefreshing) {
@@ -89,7 +170,7 @@ async function fetchWithAuth(
         failedQueue.push({ resolve, reject });
       }).then(() => {
         options.headers!["Authorization"] = `Bearer ${getAccessToken()}`;
-        return fetch(url, options);
+        return fetchWithRetry(url, options);
       });
     }
 
@@ -109,7 +190,7 @@ async function fetchWithAuth(
       processQueue(null, newTokens.accessToken);
 
       options.headers!["Authorization"] = `Bearer ${newTokens.accessToken}`;
-      response = await fetch(url, options);
+      response = await fetchWithRetry(url, options);
     } catch (refreshError) {
       processQueue(refreshError, null);
 
@@ -131,7 +212,7 @@ async function fetchWithAuth(
 export async function loginWithGoogle(
   googleIdToken: string
 ): Promise<{ accessToken: AccessTokenId; refreshToken: RefreshTokenId }> {
-  const response = await fetch(`${API_GATEWAY_BASE_URL}/auth/login`, {
+  const response = await fetchWithRetry(`${API_GATEWAY_BASE_URL}/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ googleIdToken }),
@@ -142,7 +223,7 @@ export async function loginWithGoogle(
 export async function refreshAccessToken(
   refreshToken: string
 ): Promise<{ accessToken: AccessTokenId; refreshToken: RefreshTokenId }> {
-  const response = await fetch(`${API_GATEWAY_BASE_URL}/auth/refresh`, {
+  const response = await fetchWithRetry(`${API_GATEWAY_BASE_URL}/auth/refresh`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ refreshToken }),
@@ -153,7 +234,7 @@ export async function refreshAccessToken(
 export async function logoutUser(
   refreshToken: string
 ): Promise<void> {
-  await fetch(`${API_GATEWAY_BASE_URL}/auth/logout`, {
+  await fetchWithRetry(`${API_GATEWAY_BASE_URL}/auth/logout`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ refreshToken }),
