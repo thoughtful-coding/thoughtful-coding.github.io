@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist, createJSONStorage, StateStorage, devtools } from "zustand/middleware";
+import { immer } from "zustand/middleware/immer";
 import * as apiService from "../lib/apiService"; // Your API service
 import type {
   SectionCompletionInput as ApiSectionCompletionInput, // Renaming to avoid conflict if we redefine locally
@@ -125,8 +126,9 @@ const createUserSpecificStorage = (baseKey: string): StateStorage => {
 
 export const useProgressStore = create<ProgressState>()(
   devtools(
-    persist(
-      (set, get) => ({
+    immer(
+      persist(
+        (set, get) => ({
       ...initialProgressData,
       actions: {
         _addToOfflineQueue: (action) => {
@@ -447,18 +449,15 @@ export const useProgressStore = create<ProgressState>()(
         // Draft management actions
         saveDraft: (unitId, lessonId, sectionId, draft) => {
           set((state) => {
-            const newDrafts = JSON.parse(JSON.stringify(state.drafts));
+            // With immer, we can mutate the draft state directly
+            if (!state.drafts[unitId]) state.drafts[unitId] = {};
+            if (!state.drafts[unitId][lessonId]) state.drafts[unitId][lessonId] = {};
 
-            if (!newDrafts[unitId]) newDrafts[unitId] = {};
-            if (!newDrafts[unitId][lessonId]) newDrafts[unitId][lessonId] = {};
-
-            newDrafts[unitId][lessonId][sectionId] = {
-              ...newDrafts[unitId][lessonId][sectionId],
+            state.drafts[unitId][lessonId][sectionId] = {
+              ...state.drafts[unitId][lessonId][sectionId],
               ...draft,
               lastModifiedAt: Date.now(),
             };
-
-            return { drafts: newDrafts };
           });
         },
         getDraft: (unitId, lessonId, sectionId) => {
@@ -487,25 +486,24 @@ export const useProgressStore = create<ProgressState>()(
           // Merge anonymous drafts with current authenticated drafts
           // Strategy: If anonymous draft is "worked on" (isModified), use it
           set((state) => {
-            const mergedDrafts = JSON.parse(JSON.stringify(state.drafts));
-
+            // With immer, we can mutate the draft state directly
             for (const unitId in anonymousDrafts) {
-              if (!mergedDrafts[unitId]) mergedDrafts[unitId] = {};
+              if (!state.drafts[unitId]) state.drafts[unitId] = {};
 
               for (const lessonId in anonymousDrafts[unitId]) {
-                if (!mergedDrafts[unitId][lessonId]) mergedDrafts[unitId][lessonId] = {};
+                if (!state.drafts[unitId][lessonId]) state.drafts[unitId][lessonId] = {};
 
                 for (const sectionId in anonymousDrafts[unitId][lessonId]) {
                   const anonymousDraft = anonymousDrafts[unitId][lessonId][sectionId];
-                  const authenticatedDraft = mergedDrafts[unitId][lessonId][sectionId];
+                  const authenticatedDraft = state.drafts[unitId][lessonId][sectionId];
 
                   // If anonymous draft is modified, prefer it (user just worked on it)
                   if (anonymousDraft.isModified) {
-                    mergedDrafts[unitId][lessonId][sectionId] = anonymousDraft;
+                    state.drafts[unitId][lessonId][sectionId] = anonymousDraft;
                     console.log(`[ProgressStore] Using anonymous draft for ${unitId}/${lessonId}/${sectionId}`);
                   } else if (!authenticatedDraft) {
                     // If there's no authenticated draft and anonymous isn't modified, still merge it
-                    mergedDrafts[unitId][lessonId][sectionId] = anonymousDraft;
+                    state.drafts[unitId][lessonId][sectionId] = anonymousDraft;
                   }
                   // Otherwise keep authenticated draft
                 }
@@ -513,7 +511,6 @@ export const useProgressStore = create<ProgressState>()(
             }
 
             console.log("[ProgressStore] Drafts merged after login.");
-            return { drafts: mergedDrafts };
           });
         },
       },
@@ -543,7 +540,8 @@ export const useProgressStore = create<ProgressState>()(
           }
         };
       },
-    }),
+    })
+    ),
     { name: "Progress Store" }
   )
 );

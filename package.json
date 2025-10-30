@@ -26,6 +26,7 @@
     "@types/p5": "^1.7.6",
     "@types/pixelmatch": "^5.2.6",
     "@uiw/react-codemirror": "^4.23.12",
+    "immer": "^10.2.0",
     "p5": "^2.0.5",
     "pixelmatch": "^7.1.0",
     "react": "^19.1.0",

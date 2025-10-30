@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist, createJSONStorage, devtools } from "zustand/middleware";
+import { immer } from "zustand/middleware/immer";
 import * as apiService from "../lib/apiService";
 import type {
   UserId,
@@ -47,8 +48,9 @@ const initialAuthState = {
 
 export const useAuthStore = create<AuthState>()(
   devtools(
-    persist(
-      (set, get) => ({
+    immer(
+      persist(
+        (set, get) => ({
       ...initialAuthState,
       actions: {
         login: async (googleIdToken: string) => {
@@ -141,7 +143,8 @@ export const useAuthStore = create<AuthState>()(
         accessToken: state.accessToken,
         refreshToken: state.refreshToken,
       }),
-    }),
+    })
+    ),
     { name: "Auth Store" }
   )
 );
