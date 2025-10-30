@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef } from "react";
 import type {
   ExecutableCode,
   UnitId,
@@ -8,10 +8,10 @@ import type {
 import type { RealTurtleInstance } from "../../lib/turtleRenderer";
 import { useTurtleExecution } from "../../hooks/useTurtleExecution";
 import { useInteractiveExample } from "../../hooks/useInteractiveExample";
+import { useDraftCode } from "../../hooks/useDraftCode";
 import InteractiveExampleDisplay from "./InteractiveExampleDisplay";
 import CodeEditor from "../CodeEditor";
 import styles from "./Section.module.css";
-import { useProgressStore } from "../../stores/progressStore";
 
 interface CodeExecutorProps {
   example: ExecutableCode;
@@ -29,26 +29,9 @@ const TurtleDisplay: React.FC<CodeExecutorProps> = ({
   sectionId,
   onTurtleInstanceReady,
 }) => {
-  // Use progressStore for persistent code drafts
-  const { saveDraft, getDraft } = useProgressStore((state) => state.actions);
-
-  // Initialize code from draft or use default
-  const initialCode = (() => {
-    const draft = getDraft(unitId, lessonId, sectionId);
-    return draft?.code || example.initialCode;
-  })();
-
-  const [code, setCode] = useState(initialCode);
+  // Persistent draft code management
+  const [code, setCode] = useDraftCode(unitId, lessonId, sectionId, example.initialCode);
   const canvasRef = useRef<HTMLDivElement>(null);
-
-  // Save draft whenever code changes
-  useEffect(() => {
-    const isModified = code !== example.initialCode;
-    saveDraft(unitId, lessonId, sectionId, {
-      code,
-      isModified,
-    });
-  }, [code, unitId, lessonId, sectionId, example.initialCode, saveDraft]);
 
   const { runTurtleCode, stopExecution, isLoading, error } = useTurtleExecution(
     {
@@ -106,25 +89,8 @@ const ConsoleDisplay: React.FC<CodeExecutorProps> = ({
   lessonId,
   sectionId,
 }) => {
-  // Use progressStore for persistent code drafts
-  const { saveDraft, getDraft } = useProgressStore((state) => state.actions);
-
-  // Initialize code from draft or use default
-  const initialCode = (() => {
-    const draft = getDraft(unitId, lessonId, sectionId);
-    return draft?.code || example.initialCode;
-  })();
-
-  const [code, setCode] = useState(initialCode);
-
-  // Save draft whenever code changes
-  useEffect(() => {
-    const isModified = code !== example.initialCode;
-    saveDraft(unitId, lessonId, sectionId, {
-      code,
-      isModified,
-    });
-  }, [code, unitId, lessonId, sectionId, example.initialCode, saveDraft]);
+  // Persistent draft code management
+  const [code, setCode] = useDraftCode(unitId, lessonId, sectionId, example.initialCode);
 
   const { runCode, isLoading, output, error } = useInteractiveExample({
     unitId,

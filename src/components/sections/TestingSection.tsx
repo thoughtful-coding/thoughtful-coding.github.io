@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import type { TestingSectionData, UnitId, LessonId } from "../../types/data";
 import type { RealTurtleInstance } from "../../lib/turtleRenderer";
 import styles from "./Section.module.css";
@@ -11,9 +11,9 @@ import {
 } from "../../hooks/useTurtleTesting";
 import { useTurtleExecution } from "../../hooks/useTurtleExecution";
 import { useInteractiveExample } from "../../hooks/useInteractiveExample";
+import { useDraftCode } from "../../hooks/useDraftCode";
 import TurtleTestResults from "./TurtleTestResults";
 import LoadingSpinner from "../LoadingSpinner";
-import { useProgressStore } from "../../stores/progressStore";
 
 interface TestingSectionProps {
   section: TestingSectionData;
@@ -144,29 +144,18 @@ const TestingSection: React.FC<TestingSectionProps> = ({
   lessonId,
   lessonPath,
 }) => {
-  // Use progressStore for persistent code drafts
-  const { saveDraft, getDraft } = useProgressStore((state) => state.actions);
+  // Persistent draft code management
+  const [code, setCode] = useDraftCode(
+    unitId,
+    lessonId,
+    section.id,
+    section.example.initialCode
+  );
 
-  // Initialize code from draft or use default
-  const initialCode = (() => {
-    const draft = getDraft(unitId, lessonId, section.id);
-    return draft?.code || section.example.initialCode;
-  })();
-
-  const [code, setCode] = useState(initialCode);
   const [lastAction, setLastAction] = useState<"run" | "test" | null>(null);
   const turtleCanvasRef = useRef<HTMLDivElement>(null);
   const [turtleInstance, setTurtleInstance] =
     useState<RealTurtleInstance | null>(null);
-
-  // Save draft whenever code changes
-  useEffect(() => {
-    const isModified = code !== section.example.initialCode;
-    saveDraft(unitId, lessonId, section.id, {
-      code,
-      isModified,
-    });
-  }, [code, unitId, lessonId, section.id, section.example.initialCode, saveDraft]);
 
   // Detect if this is a visual turtle test
   const isVisualTurtleTest =
