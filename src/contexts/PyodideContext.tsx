@@ -59,6 +59,8 @@ export const PyodideProvider: React.FC<PyodideProviderProps> = ({
   const [error, setError] = useState<Error | null>(null);
   // Ref to prevent multiple concurrent initialization attempts
   const initPromise = useRef<Promise<PyodideInterface> | null>(null);
+  // Ref to hold the interrupt buffer for timeout handling
+  const interruptBuffer = useRef<Uint8Array | null>(null);
 
   // Function to dynamically load the Pyodide script from CDN if not already present
   const loadPyodideScript = useCallback((): Promise<void> => {
@@ -149,6 +151,21 @@ export const PyodideProvider: React.FC<PyodideProviderProps> = ({
           batched: (msg) => console.error("Pyodide Default stderr:", msg),
         });
 
+        // Set up interrupt buffer for timeout handling (if available)
+        // Note: SharedArrayBuffer requires COOP/COEP headers and may not be available in all environments
+        try {
+          interruptBuffer.current = new Uint8Array(new SharedArrayBuffer(1));
+          pyodideInstance.setInterruptBuffer(interruptBuffer.current);
+          console.log("Interrupt buffer initialized for timeout handling.");
+        } catch (err) {
+          console.warn(
+            "SharedArrayBuffer not available - timeout interruption disabled. " +
+            "Code execution will still work but infinite loops may hang the browser. " +
+            "This is expected in some environments (tests, older browsers)."
+          );
+          interruptBuffer.current = null;
+        }
+
         setPyodide(pyodideInstance); // Successfully loaded: set the instance
         setError(null); // Successfully loaded: clear any previous error
         console.log("Pyodide ready and error state cleared.");
@@ -194,6 +211,7 @@ export const PyodideProvider: React.FC<PyodideProviderProps> = ({
       let stdout = "";
       let stderr = "";
       let result: any = null;
+      let timeoutId: NodeJS.Timeout | null = null;
 
       try {
         // Temporarily redirect stdout/stderr for this specific run
@@ -208,7 +226,28 @@ export const PyodideProvider: React.FC<PyodideProviderProps> = ({
           },
         });
 
+        // Set up timeout to interrupt long-running code
+        if (interruptBuffer.current) {
+          // Reset interrupt buffer to 0 (not interrupted)
+          interruptBuffer.current[0] = 0;
+
+          timeoutId = setTimeout(() => {
+            if (interruptBuffer.current) {
+              console.warn(
+                `Code execution exceeded ${PYODIDE_CONFIG.EXECUTION_TIMEOUT_MS}ms timeout. Interrupting...`
+              );
+              // Set to 2 to trigger a KeyboardInterrupt in Python
+              interruptBuffer.current[0] = 2;
+            }
+          }, PYODIDE_CONFIG.EXECUTION_TIMEOUT_MS);
+        }
+
         const resultProxy = await pyodide.runPythonAsync(code);
+
+        // Clear the timeout if execution completed successfully
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
 
         if (resultProxy !== undefined) {
           result = resultProxy.toString();
@@ -227,11 +266,19 @@ export const PyodideProvider: React.FC<PyodideProviderProps> = ({
           error: null,
         };
       } catch (err: any) {
+        // Clear the timeout on error
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
+
         console.error("Error executing Python code:", err);
 
         // Extract error information from Pyodide exception
         const errorType = err.type || err.name || "PythonError";
         const errorMessage = err.message || String(err);
+
+        // Check if this was a timeout-triggered KeyboardInterrupt
+        const isTimeout = errorType === "KeyboardInterrupt";
 
         // Build traceback from stderr if available, otherwise use error string
         const traceback = stderr || err.toString();
@@ -243,8 +290,10 @@ export const PyodideProvider: React.FC<PyodideProviderProps> = ({
           stderr: stderr, // Keep stderr separate
           result: null,
           error: {
-            type: errorType,
-            message: errorMessage,
+            type: isTimeout ? "TimeoutError" : errorType,
+            message: isTimeout
+              ? `Code execution timed out after ${PYODIDE_CONFIG.EXECUTION_TIMEOUT_MS / 1000} seconds. This usually happens when your code has an infinite loop or takes too long to complete.`
+              : errorMessage,
             traceback: traceback,
           },
         };

@@ -37,6 +37,12 @@ export const PYODIDE_CONFIG = {
    * ID for the dynamically injected Pyodide script tag
    */
   SCRIPT_ELEMENT_ID: "pyodide-script",
+
+  /**
+   * Maximum execution time for Python code in milliseconds
+   * Prevents infinite loops from hanging the browser
+   */
+  EXECUTION_TIMEOUT_MS: 30000, // 30 seconds
 } as const;
 
 /**
