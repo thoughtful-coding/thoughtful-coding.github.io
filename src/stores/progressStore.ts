@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist, createJSONStorage, StateStorage } from "zustand/middleware";
+import { persist, createJSONStorage, StateStorage, devtools } from "zustand/middleware";
 import * as apiService from "../lib/apiService"; // Your API service
 import type {
   SectionCompletionInput as ApiSectionCompletionInput, // Renaming to avoid conflict if we redefine locally
@@ -124,8 +124,9 @@ const createUserSpecificStorage = (baseKey: string): StateStorage => {
 };
 
 export const useProgressStore = create<ProgressState>()(
-  persist(
-    (set, get) => ({
+  devtools(
+    persist(
+      (set, get) => ({
       ...initialProgressData,
       actions: {
         _addToOfflineQueue: (action) => {
@@ -542,7 +543,8 @@ export const useProgressStore = create<ProgressState>()(
           }
         };
       },
-    }
+    }),
+    { name: "Progress Store" }
   )
 );
 
