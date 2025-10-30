@@ -26,6 +26,20 @@ import {
   RefreshTokenId,
 } from "../types/data";
 
+// --- AUTH PROVIDER INTERFACE ---
+
+/**
+ * Interface for authentication operations used by the API service.
+ * This allows for dependency injection and easier testing.
+ */
+export interface AuthProvider {
+  getAccessToken: () => string | null;
+  getRefreshToken: () => string | null;
+  setTokens: (tokens: { accessToken: string; refreshToken: string }) => void;
+  logout: () => void;
+  setSessionExpired: (expired: boolean) => void;
+}
+
 // --- RESILIENCE CONFIGURATION ---
 
 // Timeout configuration (30 seconds)
@@ -146,11 +160,10 @@ const processQueue = (error: any, token: string | null = null) => {
 
 async function fetchWithAuth(
   url: string,
-  options: RequestInit = {}
+  options: RequestInit = {},
+  authProvider: AuthProvider = useAuthStore.getState().actions
 ): Promise<Response> {
-  const { getAccessToken, getRefreshToken, setTokens, logout } =
-    useAuthStore.getState().actions;
-  const token = getAccessToken();
+  const token = authProvider.getAccessToken();
 
   if (!token) {
     return Promise.reject(new ApiError("No access token available.", 401));
@@ -169,15 +182,15 @@ async function fetchWithAuth(
       return new Promise((resolve, reject) => {
         failedQueue.push({ resolve, reject });
       }).then(() => {
-        options.headers!["Authorization"] = `Bearer ${getAccessToken()}`;
+        options.headers!["Authorization"] = `Bearer ${authProvider.getAccessToken()}`;
         return fetchWithRetry(url, options);
       });
     }
 
     isRefreshing = true;
-    const refreshToken = getRefreshToken();
+    const refreshToken = authProvider.getRefreshToken();
     if (!refreshToken) {
-      logout();
+      authProvider.logout();
       isRefreshing = false;
       return Promise.reject(
         new ApiError("Session expired. Please log in again.", 401)
@@ -186,7 +199,7 @@ async function fetchWithAuth(
 
     try {
       const newTokens = await refreshAccessToken(refreshToken);
-      setTokens(newTokens);
+      authProvider.setTokens(newTokens);
       processQueue(null, newTokens.accessToken);
 
       options.headers!["Authorization"] = `Bearer ${newTokens.accessToken}`;
@@ -195,8 +208,7 @@ async function fetchWithAuth(
       processQueue(refreshError, null);
 
       // Show SessionExpiredModal
-      const { setSessionExpired } = useAuthStore.getState().actions;
-      setSessionExpired(true);
+      authProvider.setSessionExpired(true);
 
       return Promise.reject(
         new ApiError("Session expired. Please log in again.", 401)

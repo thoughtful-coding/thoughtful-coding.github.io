@@ -1,7 +1,7 @@
 import { vi } from "vitest";
 import { useAuthStore } from "../../stores/authStore";
 import * as apiService from "../apiService";
-import { ApiError } from "../apiService";
+import { ApiError, type AuthProvider } from "../apiService";
 
 // Mock the authStore to control token state
 vi.mock("../../stores/authStore", () => ({
@@ -20,24 +20,27 @@ const mockFetch = vi.fn();
 vi.stubGlobal("fetch", mockFetch);
 
 describe("apiService", () => {
-  // Mock implementations for authStore actions
+  // Mock implementations for AuthProvider interface
   const getAccessTokenMock = vi.fn();
   const getRefreshTokenMock = vi.fn();
   const setTokensMock = vi.fn();
   const logoutMock = vi.fn();
   const setSessionExpiredMock = vi.fn();
 
+  // Create a mock AuthProvider that implements the interface
+  const mockAuthProvider: AuthProvider = {
+    getAccessToken: getAccessTokenMock,
+    getRefreshToken: getRefreshTokenMock,
+    setTokens: setTokensMock,
+    logout: logoutMock,
+    setSessionExpired: setSessionExpiredMock,
+  };
+
   beforeEach(() => {
     vi.clearAllMocks();
-    // Provide a default implementation for the authStore mock
+    // Provide the mock AuthProvider through the authStore
     vi.mocked(useAuthStore.getState).mockReturnValue({
-      actions: {
-        getAccessToken: getAccessTokenMock,
-        getRefreshToken: getRefreshTokenMock,
-        setTokens: setTokensMock,
-        logout: logoutMock,
-        setSessionExpired: setSessionExpiredMock,
-      },
+      actions: mockAuthProvider,
     } as any);
   });
 
