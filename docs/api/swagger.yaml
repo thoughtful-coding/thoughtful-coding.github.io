@@ -1,8 +1,18 @@
 openapi: 3.0.0
 info:
-  title: Thoughtful Python User Progress API
-  version: v1.1.0 # Version bumped
-  description: API for managing user learning progress, reflections, PRIMM evaluations, and instructor views.
+  title: Thoughtful Python Learning Platform API
+  version: v1.2.0
+  description: |
+    REST API for the Thoughtful Python interactive learning platform supporting student progress tracking,
+    AI-powered learning assessments, and instructor oversight.
+
+    **Authentication:** Google OAuth 2.0 with JWT tokens (access token: 1 hour, refresh token: 30 days)
+
+    **Data Hierarchy:** Unit → Lesson (GUID) → Section
+
+    **Rate Limits:** AI endpoints: 10/min, Other: 100/min per user
+
+    **Pagination:** DynamoDB LastEvaluatedKey pattern (pass opaque object to next request)
 
 servers:
   - url: https://3kyvgl1ck0.execute-api.us-east-2.amazonaws.com/ # Your existing server URL
@@ -24,30 +34,113 @@ components:
     #--------------------------------------------------------------------------
     UnitId:
       type: string
-      description: "The unique identifier for a unit (e.g., 'intro_python')."
       example: "intro_python"
-    LessonId: # GUID
+    LessonId:
       type: string
-      format: uuid # Indicate it's a GUID/UUID
-      description: "The globally unique identifier (GUID/UUID) for a lesson's content."
+      format: uuid
       example: "a1b2c3d4-e5f6-4890-8234-567890abcdef0"
     SectionId:
       type: string
-      description: "The unique identifier for a section within a lesson (e.g., 'python-history')."
       example: "python-history"
     PrimmExampleId:
       type: string
-      description: "Identifier for a specific PRIMM code example within a PRIMM section."
       example: "primm-greeting-output"
     IsoTimestamp:
       type: string
       format: date-time
-      description: "An ISO 8601 timestamp string."
       example: "2025-06-01T10:00:00Z"
     AssessmentLevel:
       type: string
-      description: The assessment level given by the AI.
       enum: [achieves, mostly, developing, insufficient]
+      description: "AI assessment: achieves (fully meets objectives), mostly (minor gaps), developing (needs improvement), insufficient (doesn't demonstrate understanding)"
+
+    #--------------------------------------------------------------------------
+    # Reusable Common Types
+    #--------------------------------------------------------------------------
+    LastEvaluatedKey:
+      type: object
+      nullable: true
+      additionalProperties: true
+      description: "DynamoDB pagination token (opaque, pass as-is to next request)"
+
+    CompletionMap:
+      type: object
+      description: "SectionId → IsoTimestamp"
+      additionalProperties:
+        $ref: "#/components/schemas/IsoTimestamp"
+
+    LessonCompletionMap:
+      type: object
+      description: "LessonId (GUID) → CompletionMap"
+      additionalProperties:
+        $ref: "#/components/schemas/CompletionMap"
+
+    UnitCompletionMap:
+      type: object
+      description: "UnitId → LessonCompletionMap"
+      additionalProperties:
+        $ref: "#/components/schemas/LessonCompletionMap"
+
+    BasicUserInfo:
+      type: object
+      properties:
+        userId:
+          type: string
+          example: "USER#google-oauth2|1234567890"
+        userName:
+          type: string
+          nullable: true
+        userEmail:
+          type: string
+          format: email
+          nullable: true
+
+    PrimmIdentifiers:
+      type: object
+      required: [lessonId, sectionId, primmExampleId]
+      properties:
+        lessonId:
+          $ref: "#/components/schemas/LessonId"
+        sectionId:
+          $ref: "#/components/schemas/SectionId"
+        primmExampleId:
+          $ref: "#/components/schemas/PrimmExampleId"
+
+    #--------------------------------------------------------------------------
+    # Authentication Schemas
+    #--------------------------------------------------------------------------
+    GoogleLoginRequest:
+      type: object
+      required: [googleIdToken]
+      properties:
+        googleIdToken:
+          type: string
+          description: "JWT token from Google OAuth 2.0"
+
+    TokenRefreshRequest:
+      type: object
+      required: [refreshToken]
+      properties:
+        refreshToken:
+          type: string
+
+    LogoutRequest:
+      type: object
+      required: [refreshToken]
+      properties:
+        refreshToken:
+          type: string
+
+    AuthTokenResponse:
+      type: object
+      required: [accessToken, refreshToken]
+      properties:
+        accessToken:
+          type: string
+          description: "Valid for 1 hour"
+        refreshToken:
+          type: string
+          description: "Valid for 30 days"
 
     #--------------------------------------------------------------------------
     # User Progress Schemas
@@ -79,29 +172,14 @@ components:
           minItems: 1
           description: "An array of section completion events."
 
-    UserProgressResponse: # For GET /progress and response of PUT /progress
+    UserProgressResponse:
       type: object
-      description: Represents the complete learning progress for a user.
-      required:
-        - userId
-        - completion
+      required: [userId, completion]
       properties:
         userId:
-          type: string # Assuming UserId is a string (e.g., from Cognito)
-          description: "The unique identifier for the user."
-          example: "USER#google-oauth2|1234567890"
+          type: string
         completion:
-          type: object
-          description: "A map where keys are UnitIds. Each UnitId maps to an object where keys are LessonIds (GUIDs). Each LessonId maps to an object where keys are SectionIds and values are completion timestamps."
-          additionalProperties: # Represents UnitId keys
-            type: object
-            description: "Progress for a unit, keyed by LessonId (GUID)."
-            additionalProperties: # Represents LessonId (GUID) keys
-              type: object
-              description: "Progress for a lesson, keyed by SectionId."
-              additionalProperties: # Represents SectionId keys
-                $ref: "#/components/schemas/IsoTimestamp"
-        # lastUpdatedAt was removed from Pydantic model, so removed here too for consistency
+          $ref: "#/components/schemas/UnitCompletionMap"
 
     #--------------------------------------------------------------------------
     # Reflection Schemas (for Student Submissions & Instructor Views)
@@ -171,17 +249,14 @@ components:
         versions:
           type: array
           items: { $ref: "#/components/schemas/ReflectionVersionItem" }
-        lastEvaluatedKey: # DynamoDB LEK is an object
-          type: object
-          nullable: true
-          additionalProperties: true
+        lastEvaluatedKey:
+          $ref: "#/components/schemas/LastEvaluatedKey"
 
     #--------------------------------------------------------------------------
     # PRIMM Schemas (for Student Submissions & Instructor Views)
     #--------------------------------------------------------------------------
-    PrimmEvaluationRequest: # For POST /primm-feedback
+    PrimmEvaluationRequest:
       type: object
-      description: "Payload for submitting a user's PRIMM activity for AI evaluation."
       required:
         [
           lessonId,
@@ -193,47 +268,51 @@ components:
           userPredictionConfidence,
           userExplanationText,
         ]
-      properties:
-        lessonId: { $ref: "#/components/schemas/LessonId" } # Lesson GUID
-        sectionId: { $ref: "#/components/schemas/SectionId" }
-        primmExampleId: { $ref: "#/components/schemas/PrimmExampleId" }
-        codeSnippet: { type: string }
-        userPredictionPromptText: { type: string }
-        userPredictionText: { type: string }
-        userPredictionConfidence:
-          {
-            type: integer,
-            minimum: 1,
-            maximum: 3,
-            description: "1=Low, 2=Medium, 3=High",
-          }
-        userExplanationText: { type: string } # Renamed from userSelfCorrectionText for generality
-        actualOutputSummary: { type: string, nullable: true }
+      allOf:
+        - $ref: "#/components/schemas/PrimmIdentifiers"
+        - type: object
+          properties:
+            codeSnippet:
+              type: string
+            userPredictionPromptText:
+              type: string
+            userPredictionText:
+              type: string
+            userPredictionConfidence:
+              type: integer
+              minimum: 1
+              maximum: 3
+              description: "1=Low, 2=Medium, 3=High"
+            userExplanationText:
+              type: string
+            actualOutputSummary:
+              type: string
+              nullable: true
 
-    PrimmEvaluationResponse: # Response from POST /primm-feedback
+    PrimmEvaluationResponse:
       type: object
-      description: "AI's evaluation of the user's PRIMM prediction and explanation."
-      required: [
-          aiPredictionAssessment,
-          aiExplanationAssessment,
-          aiOverallComment,
-        ] # As per user's last definition
+      required:
+        [aiPredictionAssessment, aiExplanationAssessment, aiOverallComment]
       properties:
-        aiPredictionAssessment: { $ref: "#/components/schemas/AssessmentLevel" }
-        aiExplanationAssessment: {
-            $ref: "#/components/schemas/AssessmentLevel",
-          } # If can be null, add nullable: true
-        aiOverallComment: { type: string } # If can be null, add nullable: true
+        aiPredictionAssessment:
+          $ref: "#/components/schemas/AssessmentLevel"
+        aiExplanationAssessment:
+          $ref: "#/components/schemas/AssessmentLevel"
+        aiOverallComment:
+          type: string
 
     #--------------------------------------------------------------------------
     # Instructor Portal Schemas
     #--------------------------------------------------------------------------
     InstructorStudentInfo:
-      type: object
-      properties:
-        studentId: { type: string, description: "Student's User ID." } # e.g., USER#cognito-id
-        studentName: { type: string, nullable: true }
-        studentEmail: { type: string, format: email, nullable: true }
+      allOf:
+        - $ref: "#/components/schemas/BasicUserInfo"
+        - type: object
+          properties:
+            studentId:
+              type: string
+              description: "Student's User ID (alias for userId)."
+              example: "USER#google-oauth2|9876543210"
 
     ListOfInstructorStudentsResponse:
       type: object
@@ -242,17 +321,14 @@ components:
           type: array
           items: { $ref: "#/components/schemas/InstructorStudentInfo" }
 
-    StudentUnitCompletionDataItem: # Represents one student's completion map for a given unit
+    StudentUnitCompletionDataItem:
       type: object
       required: [studentId, completedSectionsInUnit]
       properties:
-        studentId: { type: string }
-        completedSectionsInUnit: # Keys are Lesson GUIDs
-          type: object
-          additionalProperties: # Lesson GUID
-            type: object
-            additionalProperties: # Section ID -> Timestamp
-              $ref: "#/components/schemas/IsoTimestamp"
+        studentId:
+          type: string
+        completedSectionsInUnit:
+          $ref: "#/components/schemas/LessonCompletionMap"
 
     ClassUnitProgressResponse: # For GET /instructor/units/{unitId}/class-progress
       type: object
@@ -267,11 +343,12 @@ components:
     StudentLearningEntriesResponse:
       type: object
       properties:
-        entries: # List of ReflectionVersionItem (can include drafts and final)
+        entries:
           type: array
           items: { $ref: "#/components/schemas/ReflectionVersionItem" }
+          description: "List of reflection entries (can include both drafts and final entries)."
         lastEvaluatedKey:
-          { type: object, nullable: true, additionalProperties: true }
+          $ref: "#/components/schemas/LastEvaluatedKey"
 
     # For instructor viewing a student's PRIMM submissions (as stored in DDB)
     StoredPrimmSubmissionItem:
@@ -335,27 +412,227 @@ components:
         submissions:
           type: array
           items: { $ref: "#/components/schemas/StoredPrimmSubmissionItem" }
+          description: "List of PRIMM submissions for the student."
         lastEvaluatedKey:
-          { type: object, nullable: true, additionalProperties: true }
+          $ref: "#/components/schemas/LastEvaluatedKey"
+
+    # For assignment submissions endpoint
+    AssignmentSubmission:
+      type: object
+      description: "Represents a student's submission for an assignment."
+      required: [studentId, submissionTimestamp, submissionDetails]
+      properties:
+        studentId:
+          type: string
+          description: "The student's user ID."
+          example: "USER#google-oauth2|1234567890"
+        studentName:
+          type: string
+          nullable: true
+          description: "Display name of the student."
+          example: "Jane Doe"
+        submissionTimestamp:
+          $ref: "#/components/schemas/IsoTimestamp"
+        submissionDetails:
+          description: "For Reflection: array of ReflectionVersionItem. For PRIMM: single StoredPrimmSubmissionItem."
+          oneOf:
+            - type: array
+              items: { $ref: "#/components/schemas/ReflectionVersionItem" }
+            - $ref: "#/components/schemas/StoredPrimmSubmissionItem"
+
+    ListOfAssignmentSubmissionsResponse:
+      type: object
+      required: [assignmentType, unitId, lessonId, sectionId, submissions]
+      properties:
+        assignmentType:
+          type: string
+          enum: [Reflection, PRIMM]
+          description: "Type of assignment."
+        unitId:
+          $ref: "#/components/schemas/UnitId"
+        lessonId:
+          $ref: "#/components/schemas/LessonId"
+        sectionId:
+          $ref: "#/components/schemas/SectionId"
+        primmExampleId:
+          $ref: "#/components/schemas/PrimmExampleId"
+          nullable: true
+          description: "Only present for PRIMM assignments."
+        submissions:
+          type: array
+          items: { $ref: "#/components/schemas/AssignmentSubmission" }
+          description: "List of student submissions for this assignment."
+
+    SectionStatusItem:
+      type: object
+      required: [sectionId, sectionTitle, sectionKind, status]
+      properties:
+        sectionId:
+          $ref: "#/components/schemas/SectionId"
+        sectionTitle:
+          type: string
+        sectionKind:
+          type: string
+        status:
+          type: string
+          enum: [completed, submitted, not_started]
+        submissionTimestamp:
+          $ref: "#/components/schemas/IsoTimestamp"
+          nullable: true
+        submissionDetails:
+          nullable: true
+          oneOf:
+            - type: array
+              items: { $ref: "#/components/schemas/ReflectionVersionItem" }
+            - $ref: "#/components/schemas/StoredPrimmSubmissionItem"
+
+    LessonProgressProfile:
+      type: object
+      required: [lessonId, lessonTitle, sections]
+      properties:
+        lessonId:
+          $ref: "#/components/schemas/LessonId"
+        lessonTitle:
+          type: string
+        sections:
+          type: array
+          items: { $ref: "#/components/schemas/SectionStatusItem" }
+
+    UnitProgressProfile:
+      type: object
+      required: [unitId, unitTitle, lessons]
+      properties:
+        unitId:
+          $ref: "#/components/schemas/UnitId"
+        unitTitle:
+          type: string
+        lessons:
+          type: array
+          items: { $ref: "#/components/schemas/LessonProgressProfile" }
+
+    StudentDetailedProgressResponse:
+      type: object
+      required: [studentId, profile]
+      properties:
+        studentId:
+          type: string
+        studentName:
+          type: string
+          nullable: true
+        profile:
+          type: array
+          items: { $ref: "#/components/schemas/UnitProgressProfile" }
 
     #--------------------------------------------------------------------------
     # Reusable Error and Response Components
     #--------------------------------------------------------------------------
-    ErrorResponse: # Standard error response
+    ErrorResponse:
       type: object
       required: [message]
       properties:
-        message: { type: string }
-        type:
-          {
-            type: string,
-            nullable: true,
-            description: "Specific error type/code, e.g., for throttling.",
-          }
-        details: { type: object, nullable: true, additionalProperties: true }
+        message:
+          type: string
+        errorCode:
+          type: string
+          nullable: true
+          description: "VALIDATION_ERROR, AUTHENTICATION_FAILED, AUTHORIZATION_FAILED, RESOURCE_NOT_FOUND, RATE_LIMIT_EXCEEDED, AI_SERVICE_UNAVAILABLE, INTERNAL_ERROR"
+        details:
+          type: object
+          nullable: true
+          additionalProperties: true
+
+  parameters:
+    # Pagination parameters (reusable)
+    PaginationLimit:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+        default: 20
+        minimum: 1
+        maximum: 100
+      description: "Maximum number of items to return per page."
+      example: 20
+
+    PaginationKey:
+      name: lastEvaluatedKey
+      in: query
+      required: false
+      schema:
+        type: string
+      description: "URL-encoded JSON string of the LastEvaluatedKey object from the previous response. Used for pagination."
+      example: "%7B%22PK%22%3A%22USER%23123%22%2C%22SK%22%3A%22LESSON%23abc-123%22%7D"
+
+    # Filter parameters
+    LearningEntriesFilter:
+      name: filter
+      in: query
+      required: false
+      schema:
+        type: string
+        enum: [all, final, drafts]
+        default: all
+      description: "Filter entries by finalization status: 'all' (both drafts and final), 'final' (only finalized entries), 'drafts' (only draft versions)."
+      example: "final"
+
+    # Path parameters
+    StudentIdParam:
+      name: studentId
+      in: path
+      required: true
+      schema:
+        type: string
+      description: "The unique identifier of the student user."
+      example: "USER#google-oauth2|1234567890"
+
+    LessonIdParam:
+      name: lessonId
+      in: path
+      required: true
+      schema:
+        $ref: "#/components/schemas/LessonId"
+      description: "The GUID of the lesson."
+
+    SectionIdParam:
+      name: sectionId
+      in: path
+      required: true
+      schema:
+        $ref: "#/components/schemas/SectionId"
+      description: "The ID of the section within the lesson."
+
+    UnitIdParam:
+      name: unitId
+      in: path
+      required: true
+      schema:
+        $ref: "#/components/schemas/UnitId"
+      description: "The unique identifier of the unit."
+
+    # Query parameters for filtering
+    LessonIdQueryParam:
+      name: lessonIdGuid
+      in: query
+      required: false
+      schema:
+        $ref: "#/components/schemas/LessonId"
+      description: "Filter by lesson GUID."
+
+    SectionIdQueryParam:
+      name: sectionId
+      in: query
+      required: false
+      schema:
+        $ref: "#/components/schemas/SectionId"
+      description: "Filter by section ID."
 
   securitySchemes:
-    BearerAuth: { type: http, scheme: bearer, bearerFormat: JWT }
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: "JWT token obtained from the `/auth/login` endpoint. Include in the Authorization header as: `Bearer <token>`"
 
   responses: # Common responses
     BadRequest:
@@ -405,326 +682,406 @@ security:
   - BearerAuth: []
 
 paths:
+  # === Authentication ===
+  /auth/login:
+    post:
+      summary: Login with Google OAuth
+      description: "Validates Google ID token, creates/updates user, returns JWT tokens"
+      operationId: loginWithGoogle
+      tags: ["Authentication"]
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GoogleLoginRequest"
+      responses:
+        "200":
+          description: Successfully authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthTokenResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          description: Invalid or expired Google ID token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  /auth/refresh:
+    post:
+      summary: Refresh Access Token
+      description: "Returns new access + refresh tokens, invalidates old refresh token"
+      operationId: refreshAccessToken
+      tags: ["Authentication"]
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TokenRefreshRequest"
+      responses:
+        "200":
+          description: Successfully refreshed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthTokenResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          description: Invalid or expired refresh token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  /auth/logout:
+    post:
+      summary: Logout User
+      description: "Invalidates refresh token (access tokens remain valid until expiration)"
+      operationId: logoutUser
+      tags: ["Authentication"]
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LogoutRequest"
+      responses:
+        "200":
+          description: Successfully logged out
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
   # === User Progress ===
   /progress:
     get:
-      summary: Get Authenticated User's Full Progress
+      summary: Get User's Full Progress
+      description: "Returns nested map: UnitId → LessonId (GUID) → SectionId → timestamp"
       operationId: getUserProgress
       tags: ["User Progress"]
       responses:
         "200":
-          description: Successfully retrieved user progress.
+          description: Progress retrieved
           content:
-            {
-              application/json:
-                {
-                  schema: { $ref: "#/components/schemas/UserProgressResponse" },
-                },
-            }
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserProgressResponse"
         "401": { $ref: "#/components/responses/Unauthorized" }
         "500": { $ref: "#/components/responses/InternalServerError" }
     put:
-      summary: Update Authenticated User's Progress
-      description: Records section completions. Expects unitId, lessonId (GUID), and sectionId for each completion.
+      summary: Update User's Progress
+      description: "Batch completion updates (idempotent, server-generated timestamps)"
       operationId: updateUserProgress
       tags: ["User Progress"]
       requestBody:
         required: true
         content:
-          {
-            application/json:
-              {
-                schema: { $ref: "#/components/schemas/BatchCompletionsInput" },
-              },
-          }
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BatchCompletionsInput"
       responses:
         "200":
-          description: Progress updated. Returns new full progress state.
+          description: Progress updated
           content:
-            {
-              application/json:
-                {
-                  schema: { $ref: "#/components/schemas/UserProgressResponse" },
-                },
-            }
-        "400": { $ref: "#/components/responses/BadRequest" }
-        "401": { $ref: "#/components/responses/Unauthorized" }
-        "500": { $ref: "#/components/responses/InternalServerError" }
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserProgressResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
 
   # === Student Submissions (Reflections & PRIMM) ===
   /reflections/{lessonId}/sections/{sectionId}:
     parameters:
-      - name: lessonId
-        in: path
-        required: true
-        description: "The GUID of the lesson."
-        schema: { $ref: "#/components/schemas/LessonId" }
-      - name: sectionId
-        in: path
-        required: true
-        description: "The ID of the reflection section."
-        schema: { $ref: "#/components/schemas/SectionId" }
+      - $ref: "#/components/parameters/LessonIdParam"
+      - $ref: "#/components/parameters/SectionIdParam"
     post:
-      summary: Submit or Update a Reflection
+      summary: Submit Reflection Draft or Final
+      description: "isFinal=false: get AI feedback on draft. isFinal=true: create permanent learning entry (requires prior achieves/mostly assessment)"
       operationId: createOrFinalizeReflection
       tags: ["Student Submissions"]
       requestBody:
         required: true
         content:
-          {
-            application/json:
-              {
-                schema:
-                  { $ref: "#/components/schemas/ReflectionInteractionInput" },
-              },
-          }
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReflectionInteractionInput"
       responses:
-        "201": # Or 200 if updating
-          description: Reflection version created/updated.
+        "201":
+          description: Reflection created/finalized
           content:
-            {
-              application/json:
-                {
-                  schema:
-                    { $ref: "#/components/schemas/ReflectionVersionItem" },
-                },
-            }
-        "400": { $ref: "#/components/responses/BadRequest" }
-        "401": { $ref: "#/components/responses/Unauthorized" }
-        "500": { $ref: "#/components/responses/InternalServerError" }
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReflectionVersionItem"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
     get:
-      summary: Get Student's Draft Versions for a Reflection Section
-      description: Retrieves all saved non-final draft versions for a specific reflection section for the authenticated user.
+      summary: Get Draft Versions
+      description: "Non-final draft versions for this reflection section"
       operationId: getStudentReflectionDraftVersions
       tags: ["Student Submissions"]
       responses:
         "200":
-          description: List of reflection draft versions.
+          description: Draft versions list
           content:
-            {
-              application/json:
-                {
-                  schema:
-                    {
-                      $ref: "#/components/schemas/ListOfReflectionDraftsResponse",
-                    },
-                },
-            }
-        "401": { $ref: "#/components/responses/Unauthorized" }
-        "404": { $ref: "#/components/responses/NotFound" }
-        "500": { $ref: "#/components/responses/InternalServerError" }
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListOfReflectionDraftsResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
 
-  /learning-entries: # Student's own final learning entries
+  /learning-entries:
     get:
-      summary: Get Authenticated Student's Finalized Learning Entries
+      summary: Get Student's Finalized Learning Entries
       operationId: getStudentFinalizedLearningEntries
       tags: ["Student Submissions"]
-      parameters: # For pagination
-        - name: limit
-          in: query
-          schema: { type: integer, default: 20 }
-        - name: lastEvaluatedKey
-          in: query
-          schema:
-            {
-              type: string,
-              description: "URL-encoded JSON string of the LastEvaluatedKey object.",
-            }
+      parameters:
+        - $ref: "#/components/parameters/PaginationLimit"
+        - $ref: "#/components/parameters/PaginationKey"
       responses:
         "200":
-          description: List of student's finalized learning entries.
+          description: Finalized entries
           content:
-            application/json: # Reusing ListOfFinalLearningEntriesResponse
+            application/json:
               schema:
-                type: object # Explicitly define here or reference. For now, explicit.
+                type: object
                 properties:
                   entries:
                     type: array
                     items:
-                      { $ref: "#/components/schemas/ReflectionVersionItem" }
+                      $ref: "#/components/schemas/ReflectionVersionItem"
                   lastEvaluatedKey:
-                    { type: object, nullable: true, additionalProperties: true }
-        "401": { $ref: "#/components/responses/Unauthorized" }
-        "500": { $ref: "#/components/responses/InternalServerError" }
+                    $ref: "#/components/schemas/LastEvaluatedKey"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
 
-  /primm-feedback: # Student submitting their PRIMM work for AI eval
+  /primm-feedback:
     post:
-      summary: Submit PRIMM Analysis for AI Evaluation
-      operationId: submitPrimmForEvaluation # Changed from submitPrimmAnalysisForEvaluation
+      summary: Submit PRIMM for AI Evaluation
+      description: "Returns AI assessment of prediction and explanation"
+      operationId: submitPrimmForEvaluation
       tags: ["Student Submissions"]
       requestBody:
         required: true
         content:
-          {
-            application/json:
-              {
-                schema: { $ref: "#/components/schemas/PrimmEvaluationRequest" },
-              },
-          }
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PrimmEvaluationRequest"
       responses:
         "200":
-          description: "AI evaluation received successfully."
+          description: AI evaluation
           content:
-            {
-              application/json:
-                {
-                  schema:
-                    { $ref: "#/components/schemas/PrimmEvaluationResponse" },
-                },
-            }
-        "400": { $ref: "#/components/responses/BadRequest" }
-        "401": { $ref: "#/components/responses/Unauthorized" }
-        "429": { $ref: "#/components/responses/TooManyRequests" }
-        "500": { $ref: "#/components/responses/InternalServerError" }
-        "503": # If AI service is down
-          description: "AI evaluation service unavailable."
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PrimmEvaluationResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+        "503":
+          description: AI service unavailable
           content:
-            {
-              application/json:
-                { schema: { $ref: "#/components/schemas/ErrorResponse" } },
-            }
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 
   # === Instructor Portal Endpoints ===
   /instructor/students:
     get:
-      summary: Get List of Instructor's Permitted Students
+      summary: Get Permitted Students
       operationId: getInstructorStudents
       tags: ["Instructor Portal"]
       responses:
         "200":
-          description: A list of students the instructor can view.
+          description: Students list
           content:
-            {
-              application/json:
-                {
-                  schema:
-                    {
-                      $ref: "#/components/schemas/ListOfInstructorStudentsResponse",
-                    },
-                },
-            }
-        "401": { $ref: "#/components/responses/Unauthorized" }
-        "500": { $ref: "#/components/responses/InternalServerError" }
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListOfInstructorStudentsResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
 
   /instructor/units/{unitId}/class-progress:
     get:
-      summary: Get Class Progress Data for a Unit
-      description: Retrieves raw completion data for all permitted students for a specific unit. Client calculates percentages.
-      operationId: getInstructorClassUnitProgressData # Renamed for clarity
+      summary: Get Class Progress for Unit
+      description: "Raw completion data for all students (client calculates percentages)"
+      operationId: getInstructorClassUnitProgressData
       tags: ["Instructor Portal"]
       parameters:
-        - name: unitId
-          in: path
-          required: true
-          schema: { $ref: "#/components/schemas/UnitId" }
+        - $ref: "#/components/parameters/UnitIdParam"
       responses:
         "200":
-          description: Unit-specific completion data for students.
+          description: Completion data
           content:
-            {
-              application/json:
-                {
-                  schema:
-                    { $ref: "#/components/schemas/ClassUnitProgressResponse" },
-                },
-            }
-        "401": { $ref: "#/components/responses/Unauthorized" }
-        # 403 if instructor tries to access a unit they shouldn't? (Less likely here)
-        "404": { $ref: "#/components/responses/NotFound" } # If unitId is invalid
-        "500": { $ref: "#/components/responses/InternalServerError" }
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClassUnitProgressResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
 
   /instructor/students/{studentId}/learning-entries:
     get:
-      summary: Get a Specific Student's Learning Entries (Reflections)
+      summary: Get Student's Learning Entries
       operationId: getInstructorStudentLearningEntries
       tags: ["Instructor Portal"]
       parameters:
-        - name: studentId
-          in: path
-          required: true
-          schema: { type: string, description: "The User ID of the student." }
-        - name: filter
-          in: query
-          required: false
-          description: "Filter by 'final', 'drafts', or 'all'. Default 'all'."
-          schema: { type: string, enum: [all, final, drafts] }
-        - name: lessonIdGuid # Optional filter by Lesson GUID
-          in: query
-          required: false
-          schema: { $ref: "#/components/schemas/LessonId" }
-        - name: limit
-          in: query
-          schema: { type: integer, default: 20 }
-        - name: lastEvaluatedKey
-          in: query
-          schema:
-            {
-              type: string,
-              description: "URL-encoded JSON string of the LastEvaluatedKey.",
-            }
+        - $ref: "#/components/parameters/StudentIdParam"
+        - $ref: "#/components/parameters/LearningEntriesFilter"
+        - $ref: "#/components/parameters/LessonIdQueryParam"
+        - $ref: "#/components/parameters/PaginationLimit"
+        - $ref: "#/components/parameters/PaginationKey"
       responses:
         "200":
-          description: List of the student's learning entries.
+          description: Learning entries
           content:
-            {
-              application/json:
-                {
-                  schema:
-                    {
-                      $ref: "#/components/schemas/StudentLearningEntriesResponse",
-                    },
-                },
-            }
-        "401": { $ref: "#/components/responses/Unauthorized" }
-        "403": { $ref: "#/components/responses/Forbidden" }
-        "404": { $ref: "#/components/responses/NotFound" }
-        "500": { $ref: "#/components/responses/InternalServerError" }
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudentLearningEntriesResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
 
   /instructor/students/{studentId}/primm-submissions:
     get:
-      summary: Get a Specific Student's PRIMM Submissions
+      summary: Get Student's PRIMM Submissions
       operationId: getInstructorStudentPrimmSubmissions
       tags: ["Instructor Portal"]
       parameters:
-        - name: studentId
-          in: path
-          required: true
-          schema: { type: string }
-        - name: lessonIdGuid # Filter by Lesson GUID
-          in: query
-          required: false
-          schema: { $ref: "#/components/schemas/LessonId" }
-        - name: sectionId # Filter by local Section ID (within a lesson)
-          in: query
-          required: false
-          schema: { $ref: "#/components/schemas/SectionId" }
-        - name: limit
-          in: query
-          schema: { type: integer, default: 20 }
-        - name: lastEvaluatedKey
-          in: query
-          schema:
-            {
-              type: string,
-              description: "URL-encoded JSON string of the LastEvaluatedKey.",
-            }
+        - $ref: "#/components/parameters/StudentIdParam"
+        - $ref: "#/components/parameters/LessonIdQueryParam"
+        - $ref: "#/components/parameters/SectionIdQueryParam"
+        - $ref: "#/components/parameters/PaginationLimit"
+        - $ref: "#/components/parameters/PaginationKey"
       responses:
         "200":
-          description: List of the student's PRIMM submissions.
+          description: PRIMM submissions
           content:
-            {
-              application/json:
-                {
-                  schema:
-                    {
-                      $ref: "#/components/schemas/StudentPrimmSubmissionsResponse",
-                    },
-                },
-            }
-        "401": { $ref: "#/components/responses/Unauthorized" }
-        "403": { $ref: "#/components/responses/Forbidden" }
-        "404": { $ref: "#/components/responses/NotFound" }
-        "500": { $ref: "#/components/responses/InternalServerError" }
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudentPrimmSubmissionsResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  /instructor/units/{unitId}/lessons/{lessonId}/sections/{sectionId}/assignment-submissions:
+    get:
+      summary: Get Assignment Submissions
+      description: "All student submissions for section (Reflection or PRIMM)"
+      operationId: getAssignmentSubmissions
+      tags: ["Instructor Portal"]
+      parameters:
+        - $ref: "#/components/parameters/UnitIdParam"
+        - $ref: "#/components/parameters/LessonIdParam"
+        - $ref: "#/components/parameters/SectionIdParam"
+        - name: assignmentType
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [Reflection, PRIMM]
+        - name: primmExampleId
+          in: query
+          required: false
+          schema:
+            $ref: "#/components/schemas/PrimmExampleId"
+          description: "Required when assignmentType='PRIMM'"
+        - $ref: "#/components/parameters/PaginationLimit"
+        - $ref: "#/components/parameters/PaginationKey"
+      responses:
+        "200":
+          description: Submissions list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListOfAssignmentSubmissionsResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  /instructor/students/{studentId}/detailed-progress:
+    get:
+      summary: Get Student's Detailed Progress
+      description: "Complete progress/submission data across all units, lessons, sections"
+      operationId: getStudentDetailedProgress
+      tags: ["Instructor Portal"]
+      parameters:
+        - $ref: "#/components/parameters/StudentIdParam"
+      responses:
+        "200":
+          description: Detailed progress
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudentDetailedProgressResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
 
   # Deprecated/Removed (or not implemented for now)
   # /instructor/students/{studentId}/units/{unitId}/progress - Handled by client using data from /instructor/units/{unitId}/class-progress
