@@ -103,6 +103,43 @@ This architecture enables seamless support for both anonymous and authenticated 
 - Provides `runPythonCode()` and `loadPackages()` to components
 - Captures stdout/stderr for display
 - Manages loading/initialization states
+- **Code Execution Timeout** (30 seconds): Prevents infinite loops from hanging the browser using interrupt buffers
+- **Beginner-Friendly Error Messages**: Automatically enhances Python errors with helpful hints
+
+**Python Error Enhancement** (`src/lib/pythonErrorEnhancer.ts`):
+- Transforms raw Python tracebacks into beginner-friendly error messages
+- Provides context-specific hints for 13+ common error types
+- Pattern matching for specific error scenarios (e.g., "forgot colon", "wrong type")
+- Automatically integrated into all Python code execution
+
+**Example Enhanced Errors**:
+```
+Original: NameError: name 'x' is not defined
+
+Enhanced:
+NameError: name 'x' is not defined
+
+💡 Python doesn't recognize this name. It might be a typo or a variable you haven't defined yet.
+💡 The variable 'x' hasn't been defined yet. Make sure you:
+• Spell the variable name correctly (Python is case-sensitive!)
+• Define the variable before using it
+• Check if the variable is defined in the right scope
+```
+
+**Supported Error Types**:
+- SyntaxError (missing colons, quotes, indentation)
+- IndentationError (inconsistent spacing)
+- NameError (undefined variables)
+- TypeError (wrong types, wrong number of arguments)
+- ValueError (invalid values for int/float conversion)
+- IndexError (list/string index out of range)
+- KeyError (missing dictionary keys)
+- AttributeError (missing methods/properties)
+- ZeroDivisionError (division by zero)
+- ImportError (module not found)
+- UnboundLocalError (variable used before assignment)
+- RecursionError (infinite recursion)
+- FileNotFoundError (file doesn't exist)
 
 **Turtle Graphics**: Custom turtle implementation using real-turtle library
 - `src/lib/turtleRenderer.ts`: Converts Python turtle commands to JavaScript

@@ -13,6 +13,7 @@ import React, {
 // If not, replace PyodideInterface with 'any' for now.
 import type { PyodideInterface } from "../types/pyodide";
 import { PYODIDE_CONFIG } from "../config/constants";
+import { enhancePythonError } from "../lib/pythonErrorEnhancer";
 
 // Define the structure for Python execution results with proper stream separation
 export interface PythonExecutionResult {
@@ -275,13 +276,18 @@ export const PyodideProvider: React.FC<PyodideProviderProps> = ({
 
         // Extract error information from Pyodide exception
         const errorType = err.type || err.name || "PythonError";
-        const errorMessage = err.message || String(err);
+        const originalErrorMessage = err.message || String(err);
 
         // Check if this was a timeout-triggered KeyboardInterrupt
         const isTimeout = errorType === "KeyboardInterrupt";
 
         // Build traceback from stderr if available, otherwise use error string
         const traceback = stderr || err.toString();
+
+        // Enhance error message with beginner-friendly hints (unless it's a timeout)
+        const errorMessage = isTimeout
+          ? `Code execution timed out after ${PYODIDE_CONFIG.EXECUTION_TIMEOUT_MS / 1000} seconds. This usually happens when your code has an infinite loop or takes too long to complete.`
+          : enhancePythonError(errorType, originalErrorMessage, traceback);
 
         // Return structured error with streams preserved
         return {
@@ -291,9 +297,7 @@ export const PyodideProvider: React.FC<PyodideProviderProps> = ({
           result: null,
           error: {
             type: isTimeout ? "TimeoutError" : errorType,
-            message: isTimeout
-              ? `Code execution timed out after ${PYODIDE_CONFIG.EXECUTION_TIMEOUT_MS / 1000} seconds. This usually happens when your code has an infinite loop or takes too long to complete.`
-              : errorMessage,
+            message: errorMessage,
             traceback: traceback,
           },
         };
