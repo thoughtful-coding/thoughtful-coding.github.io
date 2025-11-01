@@ -12,14 +12,14 @@ const lessonData: Lesson = {
   sections: [
     {
       kind: "Information",
-      id: "python-lists-intro-1",
+      id: "python-lists-intro-info",
       title: "Programming vs. Real World",
       content:
         "Lists, or a collection of items, are a very natural concept that you interact with daily. Use the questions below to help formalize your understanding.",
     },
     {
       kind: "Observation",
-      id: "python-lists-intro-1",
+      id: "python-lists-intro-observation",
       title: "Two item list",
       content:
         "Lists are denoted with via square brackets: `[ ]`. They can hold multiple items of different types. In the example below, they are holding strings representing things you should buy.",
@@ -49,23 +49,6 @@ const lessonData: Lesson = {
           "Incorrect. The print() function is used to display output to the console.",
       },
     } as MultipleChoiceSectionData,
-    {
-      kind: "PRIMM",
-      id: "primm-grocer-lists",
-      title: "Grocery lists",
-      content:
-        "Use the code below to answer the following questions and complete the required tasks.",
-      examples: [
-        {
-          id: "primm-nested-example",
-          code: 'def do_something_0(to_add):\n    gl = ["bread", "apples"]\n    gl.append(to_add)\n\n    for elem in gl:\n        print(f"Buy {elem}!")\n\n    print(f"But the {gl[-1]} is most important!")\n\nif __name__ == "__main__":\n    do_something_0("ice cream")',
-          predictPrompt:
-            'What lines will be printed when this code runs with `answer = "c"`?',
-        },
-      ],
-      conclusion:
-        "When `answer` is 'c', the outer `if` is false, so the outer `else` block executes. Inside that, the inner `if answer == \"b\"` is also false, so its `else` block runs, printing 'Other'. Finally, the 'All done' print statement outside all conditionals always runs.",
-    } as PRIMMSectionData,
     {
       kind: "PRIMM",
       id: "primm-grocer-lists",

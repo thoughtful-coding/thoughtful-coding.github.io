@@ -134,8 +134,8 @@ const ProgressPage: React.FC = () => {
         <div className={styles.lessonsCircles}>
           {unit.lessons.map((lesson, index) => (
             <Link
-              to={`/lesson/${lesson.lessonPath}`}
               key={lesson.lessonId}
+              to={`/python/lesson/${lesson.lessonPath}`}
               className={styles.lessonCircleLink}
               title={`${lesson.title} (${
                 lesson.isCompleted ? "Completed" : "In Progress"
