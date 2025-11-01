@@ -3,11 +3,20 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styles from "./Footer.module.css";
 
-const Footer: React.FC = () => {
+interface FooterProps {
+  variant?: "default" | "instructor";
+}
+
+const Footer: React.FC<FooterProps> = ({ variant = "default" }) => {
   const currentYear = new Date().getFullYear();
 
+  const footerClassName =
+    variant === "instructor"
+      ? `${styles.footer} ${styles.instructorFooter}`
+      : styles.footer;
+
   return (
-    <footer className={styles.footer}>
+    <footer className={footerClassName}>
       <div className={styles.container}>
         <div className={styles.footerContent}>
           <nav className={styles.linkGrid}>

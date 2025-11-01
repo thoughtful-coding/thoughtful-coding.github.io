@@ -7,6 +7,11 @@
   flex-shrink: 0;
 }
 
+.instructorFooter {
+  background-color: #2c3e50;
+  margin-top: 0;
+}
+
 .container {
   width: 100%;
   max-width: 1200px;

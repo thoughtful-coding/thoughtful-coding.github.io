@@ -103,10 +103,6 @@ function App() {
               }
             />
             <Route
-              path="instructor-dashboard/*"
-              element={<InstructorDashboardPage />}
-            />
-            <Route
               path="*"
               element={
                 <div>
@@ -116,6 +112,12 @@ function App() {
             />
           </Route>
         </Route>
+
+        {/* Instructor dashboard (separate from student layout) */}
+        <Route
+          path="/python/instructor-dashboard/*"
+          element={<InstructorDashboardPage />}
+        />
 
         {/* Future: Scratch curriculum would go here */}
         {/* <Route path="/scratch" element={<StudentLayout />}>...</Route> */}

@@ -19,6 +19,7 @@ import ReviewByAssignmentView from "../../components/instructor/ReviewByAssignme
 import ReviewStudentDetailView from "../../components/instructor/shared/ReviewStudentDetailView";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import ReviewByStudentView from "../../components/instructor/ReviewByStudentView";
+import Footer from "../../components/Footer";
 import styles from "./InstructorDashboardPage.module.css";
 import ReviewLearningEntriesView from "../../components/instructor/ReviewLearningEntriesView";
 
@@ -204,6 +205,7 @@ const InstructorDashboardPage: React.FC = () => {
             </p>
           </div>
         </main>
+        <Footer variant="instructor" />
       </div>
     );
   }
@@ -314,6 +316,7 @@ const InstructorDashboardPage: React.FC = () => {
           </Routes>
         )}
       </main>
+      <Footer variant="instructor" />
     </div>
   );
 };
