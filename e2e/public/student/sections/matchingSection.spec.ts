@@ -5,7 +5,7 @@ test.describe("MatchingSection tests", () => {
     page,
   }) => {
     await page.goto(
-      "/thoughtful-python/lesson/xx_learning/lessons/00_learning_primm"
+      "/python/lesson/xx_learning/lessons/00_learning_primm"
     );
 
     const sectionItem = page
@@ -57,7 +57,7 @@ test.describe("MatchingSection tests", () => {
     page,
   }) => {
     await page.goto(
-      "/thoughtful-python/lesson/xx_learning/lessons/00_learning_primm"
+      "/python/lesson/xx_learning/lessons/00_learning_primm"
     );
 
     const sectionItem = page

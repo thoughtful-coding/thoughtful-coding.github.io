@@ -5,7 +5,7 @@ test.describe("PrimmSection tests with regular code", () => {
     page,
   }) => {
     await page.goto(
-      "/thoughtful-python/lesson/xx_learning/lessons/00_learning_primm"
+      "/python/lesson/xx_learning/lessons/00_learning_primm"
     );
 
     const sectionItem = page
@@ -43,7 +43,7 @@ test.describe("PrimmSection tests with turtles", () => {
     page,
   }) => {
     await page.goto(
-      "/thoughtful-python/lesson/04_functions_advanced/lessons/01_func_turtles"
+      "/python/lesson/04_functions_advanced/lessons/01_func_turtles"
     );
 
     const sectionItem = page

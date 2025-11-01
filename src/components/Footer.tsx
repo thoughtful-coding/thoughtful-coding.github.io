@@ -28,7 +28,7 @@ const Footer: React.FC = () => {
 
             <div className={styles.linkColumn}>
               <h3 className={styles.columnTitle}>For Teachers</h3>
-              <Link to="/instructor-dashboard" className={styles.link}>
+              <Link to="/python/instructor-dashboard" className={styles.link}>
                 Teacher Portal
               </Link>
               <a
@@ -54,7 +54,7 @@ const Footer: React.FC = () => {
             <div className={styles.linkColumn}>
               <h3 className={styles.columnTitle}>Open Source</h3>
               <a
-                href="https://github.com/eric-rizzi/thoughtful-python"
+                href="https://github.com/thoughtful-coding/thoughtful-coding"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={styles.link}
@@ -62,7 +62,7 @@ const Footer: React.FC = () => {
                 Front-End Source
               </a>
               <a
-                href="https://gitlab.com/eric.rizzi/aws-src-sample"
+                href="https://github.com/thoughtful-coding/thoughtful-backend"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={styles.link}

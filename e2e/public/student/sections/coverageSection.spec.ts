@@ -5,7 +5,7 @@ test.describe("CoverageSection tests", () => {
     page,
   }) => {
     await page.goto(
-      "/thoughtful-python/lesson/03_functions/lessons/03_func_wrap_up"
+      "/python/lesson/03_functions/lessons/03_func_wrap_up"
     );
 
     const sectionItem = page.getByRole("listitem").filter({
@@ -64,7 +64,7 @@ test.describe("CoverageSection tests", () => {
 
   test("Test get 2/3 if coverage are mostly right", async ({ page }) => {
     await page.goto(
-      "/thoughtful-python/lesson/03_functions/lessons/03_func_wrap_up"
+      "/python/lesson/03_functions/lessons/03_func_wrap_up"
     );
 
     const sectionItem = page.getByRole("listitem").filter({
@@ -125,7 +125,7 @@ test.describe("CoverageSection tests", () => {
 
   test("Test get full coverage for `return` statements", async ({ page }) => {
     await page.goto(
-      "/thoughtful-python/lesson/10_functions_return/lessons/00_return_intro"
+      "/python/lesson/10_functions_return/lessons/00_return_intro"
     );
 
     const sectionItem = page.getByRole("listitem").filter({
@@ -170,7 +170,7 @@ test.describe("CoverageSection tests", () => {
 
   test("Test fixed inputs are read-only and pre-filled", async ({ page }) => {
     await page.goto(
-      "/thoughtful-python/lesson/05_conditionals/lessons/05_cond_bool"
+      "/python/lesson/05_conditionals/lessons/05_cond_bool"
     );
 
     const sectionItem = page.getByRole("listitem").filter({

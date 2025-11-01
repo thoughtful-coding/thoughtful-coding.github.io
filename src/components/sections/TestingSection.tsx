@@ -32,7 +32,7 @@ const resolveImagePath = (imagePath: string, lessonPath?: string): string => {
   // Extract unit directory from lesson path (e.g., "07_loops_advanced/lessons/99_test" -> "07_loops_advanced")
   if (lessonPath) {
     const unitDir = lessonPath.split("/")[0];
-    return `/thoughtful-python/data/${unitDir}/${imagePath}`;
+    return `/data/${unitDir}/${imagePath}`;
   }
 
   // Fallback: return relative path as-is (will likely fail, but better than crashing)

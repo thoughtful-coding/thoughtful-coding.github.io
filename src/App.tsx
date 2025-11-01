@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import UnitPage from "./pages/student/UnitPage";
 import LessonPage from "./pages/student/LessonPage";
@@ -75,18 +75,25 @@ function App() {
         onClose={handleModalClose}
       />
       <Routes>
-        {/* Routes that use the standard student-facing layout */}
-        <Route element={<StudentLayout />}>
-          <Route path="/" element={<Layout />}>
+        {/* Root redirect to default curriculum */}
+        <Route path="/" element={<Navigate to="/python/" replace />} />
+
+        {/* General/shared routes (available across all curricula) */}
+        <Route element={<Layout />}>
+          <Route path="/configure" element={<ConfigurationPage />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+          <Route path="/terms-of-service" element={<TermsOfServicePage />} />
+          <Route path="/faq" element={<FAQPage />} />
+        </Route>
+
+        {/* Python curriculum routes */}
+        <Route path="/python" element={<StudentLayout />}>
+          <Route element={<Layout />}>
             <Route index element={<HomePage />} />
             <Route path="unit/:unitId" element={<UnitPage />} />
             <Route path="lesson/*" element={<LessonPage />} />
             <Route path="editor" element={<CodeEditorPage />} />
             <Route path="learning-entries" element={<LearningEntriesPage />} />
-            <Route path="configure" element={<ConfigurationPage />} />
-            <Route path="privacy-policy" element={<PrivacyPolicyPage />} />
-            <Route path="terms-of-service" element={<TermsOfServicePage />} />
-            <Route path="faq" element={<FAQPage />} />
             <Route
               path="progress"
               element={
@@ -94,6 +101,10 @@ function App() {
                   <ProgressPage />
                 </AuthenticatedRoute>
               }
+            />
+            <Route
+              path="instructor-dashboard/*"
+              element={<InstructorDashboardPage />}
             />
             <Route
               path="*"
@@ -106,9 +117,17 @@ function App() {
           </Route>
         </Route>
 
+        {/* Future: Scratch curriculum would go here */}
+        {/* <Route path="/scratch" element={<StudentLayout />}>...</Route> */}
+
+        {/* Catch-all 404 for unknown routes */}
         <Route
-          path="instructor-dashboard/*"
-          element={<InstructorDashboardPage />}
+          path="*"
+          element={
+            <div>
+              <h2>404 - Page Not Found</h2>
+            </div>
+          }
         />
       </Routes>
     </>

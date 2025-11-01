@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 test.describe("TestingSection `procedure` / `__main__` output tests", () => {
   test("Test can click `Run Code` button", async ({ page }) => {
     await page.goto(
-      "/thoughtful-python/lesson/00_intro/lessons/00_intro_strings"
+      "/python/lesson/00_intro/lessons/00_intro_strings"
     );
 
     const sectionItem = page.getByRole("listitem").filter({
@@ -37,7 +37,7 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
     page,
   }) => {
     await page.goto(
-      "/thoughtful-python/lesson/00_intro/lessons/00_intro_strings"
+      "/python/lesson/00_intro/lessons/00_intro_strings"
     );
 
     const sectionItem = page.getByRole("listitem").filter({
@@ -63,7 +63,7 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
 
   test("Test can click `Run Tests` button and get pass", async ({ page }) => {
     await page.goto(
-      "/thoughtful-python/lesson/00_intro/lessons/00_intro_strings"
+      "/python/lesson/00_intro/lessons/00_intro_strings"
     );
 
     const sectionItem = page.getByRole("listitem").filter({
@@ -92,7 +92,7 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
     page,
   }) => {
     await page.goto(
-      "/thoughtful-python/lesson/00_intro/lessons/00_intro_strings"
+      "/python/lesson/00_intro/lessons/00_intro_strings"
     );
 
     const sectionItem = page.getByRole("listitem").filter({
@@ -122,7 +122,7 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
 
   test("Test can have faulty program and get SyntaxError", async ({ page }) => {
     await page.goto(
-      "/thoughtful-python/lesson/00_intro/lessons/00_intro_strings"
+      "/python/lesson/00_intro/lessons/00_intro_strings"
     );
 
     const sectionItem = page.getByRole("listitem").filter({
@@ -150,7 +150,7 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
 test.describe("TestingSection `procedure` / `function_name` tests", () => {
   test("Test can click `Run Tests` button and get pass", async ({ page }) => {
     await page.goto(
-      "/thoughtful-python/lesson/03_functions/lessons/03_func_wrap_up"
+      "/python/lesson/03_functions/lessons/03_func_wrap_up"
     );
 
     const sectionItem = page.getByRole("listitem").filter({
@@ -181,7 +181,7 @@ test.describe("TestingSection `procedure` / `function_name` tests", () => {
 
   test("Test can click `Run Tests` button and get fail", async ({ page }) => {
     await page.goto(
-      "/thoughtful-python/lesson/03_functions/lessons/03_func_wrap_up"
+      "/python/lesson/03_functions/lessons/03_func_wrap_up"
     );
 
     const sectionItem = page.getByRole("listitem").filter({
@@ -216,7 +216,7 @@ test.describe("TestingSection `procedure` / `function_name` tests", () => {
     page,
   }) => {
     await page.goto(
-      "/thoughtful-python/lesson/03_functions/lessons/03_func_wrap_up"
+      "/python/lesson/03_functions/lessons/03_func_wrap_up"
     );
 
     const sectionItem = page.getByRole("listitem").filter({
@@ -236,7 +236,7 @@ test.describe("TestingSection `function` / `function_name` tests", () => {
     page,
   }) => {
     await page.goto(
-      "/thoughtful-python/lesson/10_functions_return/lessons/00_return_intro"
+      "/python/lesson/10_functions_return/lessons/00_return_intro"
     );
 
     const sectionItem = page.getByRole("listitem").filter({
@@ -267,7 +267,7 @@ test.describe("TestingSection `function` / `function_name` tests", () => {
 
   test("Test can click `Run Tests` button and get fail", async ({ page }) => {
     await page.goto(
-      "/thoughtful-python/lesson/10_functions_return/lessons/00_return_intro"
+      "/python/lesson/10_functions_return/lessons/00_return_intro"
     );
 
     const sectionItem = page.getByRole("listitem").filter({
@@ -302,7 +302,7 @@ test.describe("TestingSection `function` / `function_name` tests", () => {
     page,
   }) => {
     await page.goto(
-      "/thoughtful-python/lesson/10_functions_return/lessons/00_return_intro"
+      "/python/lesson/10_functions_return/lessons/00_return_intro"
     );
 
     const sectionItem = page.getByRole("listitem").filter({
@@ -322,7 +322,7 @@ test.describe("TestingSection for turtles", () => {
     page,
   }) => {
     await page.goto(
-      "/thoughtful-python/lesson/06_loops/lessons/01_loops_challenges"
+      "/python/lesson/06_loops/lessons/01_loops_challenges"
     );
 
     const sectionItem = page.getByRole("listitem").filter({
@@ -363,7 +363,7 @@ test.describe("TestingSection for turtles", () => {
     page,
   }) => {
     await page.goto(
-      "/thoughtful-python/lesson/06_loops/lessons/01_loops_challenges"
+      "/python/lesson/06_loops/lessons/01_loops_challenges"
     );
 
     const sectionItem = page.getByRole("listitem").filter({
@@ -404,7 +404,7 @@ test.describe("TestingSection for turtles", () => {
     page,
   }) => {
     await page.goto(
-      "/thoughtful-python/lesson/06_loops/lessons/01_loops_challenges"
+      "/python/lesson/06_loops/lessons/01_loops_challenges"
     );
 
     const sectionItem = page.getByRole("listitem").filter({
@@ -438,7 +438,7 @@ test.describe("TestingSection for turtles", () => {
     page,
   }) => {
     await page.goto(
-      "/thoughtful-python/lesson/06_loops/lessons/01_loops_challenges"
+      "/python/lesson/06_loops/lessons/01_loops_challenges"
     );
 
     const sectionItem = page.getByRole("listitem").filter({
@@ -472,7 +472,7 @@ test.describe("TestingSection for turtles", () => {
     page,
   }) => {
     await page.goto(
-      "/thoughtful-python/lesson/06_loops/lessons/01_loops_challenges"
+      "/python/lesson/06_loops/lessons/01_loops_challenges"
     );
 
     const sectionItem = page.getByRole("listitem").filter({
@@ -513,7 +513,7 @@ test.describe("TestingSection for turtles", () => {
     page,
   }) => {
     await page.goto(
-      "/thoughtful-python/lesson/06_loops/lessons/01_loops_challenges"
+      "/python/lesson/06_loops/lessons/01_loops_challenges"
     );
 
     const sectionItem = page.getByRole("listitem").filter({

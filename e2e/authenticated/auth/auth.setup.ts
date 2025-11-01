@@ -3,7 +3,7 @@ import { test as setup, expect } from "@playwright/test";
 const authFile = ".playwright/.auth/user.json";
 
 setup("authenticate", async ({ page }) => {
-  await page.goto("/thoughtful-python/");
+  await page.goto("/python/");
 
   // IMPORTANT: Manually complete the Google login in the browser.
   //  The test will pause here until you are logged in and redirected

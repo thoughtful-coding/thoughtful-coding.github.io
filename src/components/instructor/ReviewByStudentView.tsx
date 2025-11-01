@@ -28,7 +28,7 @@ const ReviewByStudentView: React.FC<ReviewByStudentViewProps> = ({
           {permittedStudents.map((student) => (
             <li key={student.studentId} className={styles.assignmentListItem}>
               <Link
-                to={`/instructor-dashboard/students/${student.studentId}`}
+                to={`/python/instructor-dashboard/students/${student.studentId}`}
                 className={styles.studentLink}
                 style={{ display: "block", textDecoration: "none" }}
               >

@@ -16,7 +16,7 @@ const WelcomeModal: React.FC<WelcomeModalProps> = ({ onClose }) => {
     localStorage.setItem(MODAL_SEEN_KEY, "true");
 
     if (role === "instructor") {
-      navigate("/instructor-dashboard");
+      navigate("/python/instructor-dashboard");
     }
 
     // Close the modal for both choices

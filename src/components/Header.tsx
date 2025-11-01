@@ -55,7 +55,7 @@ const Header: React.FC = () => {
   return (
     <header className={styles.header}>
       <div className={styles.headerContent}>
-        <NavLink to="/" className={styles.titleLink}>
+        <NavLink to="/python/" className={styles.titleLink}>
           {" "}
           {/* Wrap title in NavLink */}
           <h1 className={styles.title}>Thoughtful Python</h1>
@@ -63,24 +63,24 @@ const Header: React.FC = () => {
         <nav className={styles.nav}>
           <ul className={styles.navList}>
             <li>
-              <NavLink to="/" className={getNavLinkClass} end>
+              <NavLink to="/python/" className={getNavLinkClass} end>
                 Home
               </NavLink>
             </li>
             <li>
-              <NavLink to="/editor" className={getNavLinkClass}>
+              <NavLink to="/python/editor" className={getNavLinkClass}>
                 Code Editor
               </NavLink>
             </li>
             <li>
               {" "}
               {/* Added <li> wrapper for consistency */}
-              <NavLink to="/progress" className={getNavLinkClass}>
+              <NavLink to="/python/progress" className={getNavLinkClass}>
                 Progress
               </NavLink>
             </li>
             <li>
-              <NavLink to="/learning-entries" className={getNavLinkClass}>
+              <NavLink to="/python/learning-entries" className={getNavLinkClass}>
                 Learning Entries
               </NavLink>
             </li>

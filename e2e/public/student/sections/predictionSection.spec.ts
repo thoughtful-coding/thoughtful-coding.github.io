@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 test.describe("PredictionSection tests", () => {
   test("Test get complete if all predictions are right", async ({ page }) => {
     await page.goto(
-      "/thoughtful-python/lesson/03_functions/lessons/03_func_wrap_up"
+      "/python/lesson/03_functions/lessons/03_func_wrap_up"
     );
 
     const sectionItem = page.getByRole("listitem").filter({
@@ -53,7 +53,7 @@ test.describe("PredictionSection tests", () => {
 
   test("Test get 2/3 if predictions are mostly right", async ({ page }) => {
     await page.goto(
-      "/thoughtful-python/lesson/03_functions/lessons/03_func_wrap_up"
+      "/python/lesson/03_functions/lessons/03_func_wrap_up"
     );
 
     const sectionItem = page.getByRole("listitem").filter({
@@ -106,7 +106,7 @@ test.describe("PredictionSection tests", () => {
     page,
   }) => {
     await page.goto(
-      "/thoughtful-python/lesson/10_functions_return/lessons/00_return_intro"
+      "/python/lesson/10_functions_return/lessons/00_return_intro"
     );
 
     const sectionItem = page.getByRole("listitem").filter({

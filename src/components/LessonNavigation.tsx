@@ -43,7 +43,7 @@ const LessonNavigation: React.FC<LessonNavigationProps> = ({
       {prevLessonPath ? (
         <NavLink
           // Use path relative to basename
-          to={`/lesson/${prevLessonPath}`}
+          to={`/python/lesson/${prevLessonPath}`}
           className={getNavLinkClass(true)}
           aria-label="Previous Lesson"
           onClick={handleNavigation}
@@ -62,7 +62,7 @@ const LessonNavigation: React.FC<LessonNavigationProps> = ({
       {nextLessonPath ? (
         <NavLink
           // Use path relative to basename
-          to={`/lesson/${nextLessonPath}`}
+          to={`/python/lesson/${nextLessonPath}`}
           className={getNavLinkClass(true)}
           aria-label="Next Lesson"
           onClick={handleNavigation}

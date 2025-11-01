@@ -172,7 +172,7 @@ NameError: name 'x' is not defined
    - After completion: Accordion shows all tests (final test expanded), side-by-side hidden
    - Final test in accordion cannot be collapsed and has colored border matching pass/fail state
    - Success/failure message only appears when `isRunningTests = false` and appears below the accordion
-   - Reference images are resolved relative to unit folder: `/thoughtful-python/data/{unitDir}/{imagePath}`
+   - Reference images are resolved relative to unit folder: `/data/{unitDir}/{imagePath}`
 
 **Creating Visual Turtle Tests**:
 ```typescript
@@ -332,7 +332,7 @@ To add a new lesson to the curriculum:
 - Turtle graphics requires special handling with command serialization
 
 ### Vite Configuration
-- Base path: `/thoughtful-python/` (for GitHub Pages deployment)
+- Base path: `/` (deployed at root of thoughtful-coding.github.io)
 - Static copy plugin: Copies lesson data and images to build output
 - CORS headers configured for Pyodide
 - Vitest config merged into vite.config.ts

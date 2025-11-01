@@ -169,7 +169,7 @@ const UnitPage: React.FC = () => {
     return (
       <div className={styles.error}>
         <p>Error loading unit: {error}</p>
-        <Link to="/" className={styles.backLink}>
+        <Link to="/python/" className={styles.backLink}>
           &larr; Back to Learning Paths
         </Link>
       </div>
@@ -180,7 +180,7 @@ const UnitPage: React.FC = () => {
     return (
       <div className={styles.error}>
         <p>Unit data could not be loaded.</p>
-        <Link to="/" className={styles.backLink}>
+        <Link to="/python/" className={styles.backLink}>
           &larr; Back to Learning Paths
         </Link>
       </div>
@@ -189,7 +189,7 @@ const UnitPage: React.FC = () => {
 
   return (
     <div className={styles.unitContainer}>
-      <Link to="/" className={styles.backLink}>
+      <Link to="/python/" className={styles.backLink}>
         &larr; Back to Learning Paths
       </Link>
       <div className={styles.unitHeader}>
@@ -236,7 +236,7 @@ const UnitPage: React.FC = () => {
 
           return (
             <Link
-              to={`/lesson/${lessonReference.path}`}
+              to={`/python/lesson/${lessonReference.path}`}
               key={lessonReference.path}
               className={styles.lessonCardLink}
             >

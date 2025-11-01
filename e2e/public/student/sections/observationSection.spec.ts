@@ -5,7 +5,7 @@ test.describe("ObservationSection tests for regular code", () => {
     page,
   }) => {
     await page.goto(
-      "/thoughtful-python/lesson/xx_learning/lessons/00_learning_primm"
+      "/python/lesson/xx_learning/lessons/00_learning_primm"
     );
 
     const sectionItem = page
@@ -26,7 +26,7 @@ test.describe("ObservationSection tests for regular code", () => {
     page,
   }) => {
     await page.goto(
-      "/thoughtful-python/lesson/xx_learning/lessons/00_learning_primm"
+      "/python/lesson/xx_learning/lessons/00_learning_primm"
     );
 
     const sectionItem = page
@@ -59,7 +59,7 @@ test.describe("ObservationSection tests for regular code", () => {
 test.describe("ObservationSection tests for turtles code", () => {
   test("Test can click the `Run Code` button for Turtle", async ({ page }) => {
     await page.goto(
-      "/thoughtful-python/lesson/04_functions_advanced/lessons/01_func_turtles"
+      "/python/lesson/04_functions_advanced/lessons/01_func_turtles"
     );
 
     const sectionItem = page
@@ -84,7 +84,7 @@ test.describe("ObservationSection tests for turtles code", () => {
     page,
   }) => {
     await page.goto(
-      "/thoughtful-python/lesson/04_functions_advanced/lessons/01_func_turtles"
+      "/python/lesson/04_functions_advanced/lessons/01_func_turtles"
     );
 
     const sectionItem = page
@@ -111,7 +111,7 @@ test.describe("ObservationSection tests for turtles code", () => {
     page,
   }) => {
     await page.goto(
-      "/thoughtful-python/lesson/04_functions_advanced/lessons/01_func_turtles"
+      "/python/lesson/04_functions_advanced/lessons/01_func_turtles"
     );
 
     const sectionItem = page

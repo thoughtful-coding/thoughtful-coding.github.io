@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test.describe("Check can navigate into and out of lessons", () => {
   test("Can go from units -> lessons -> lesson -> home", async ({ page }) => {
-    await page.goto("/thoughtful-python/");
+    await page.goto("/python/");
     await page.getByRole("button", { name: "I'm a Student" }).click();
     await page.getByRole("link", { name: "Learning to Learn image" }).click();
     await page
@@ -15,7 +15,7 @@ test.describe("Check can navigate into and out of lessons", () => {
   });
 
   test("Can go from units -> lessons -> units", async ({ page }) => {
-    await page.goto("/thoughtful-python/");
+    await page.goto("/python/");
     await page.getByRole("button", { name: "I'm a Student" }).click();
     await page.getByRole("link", { name: "Learning to Learn image" }).click();
     await page.getByRole("link", { name: "← Back to Learning Paths" }).click();
@@ -27,7 +27,7 @@ test.describe("Check can navigate into and out of lessons", () => {
   test("Can go from units -> lessons -> lesson -> lessons -> units", async ({
     page,
   }) => {
-    await page.goto("/thoughtful-python/");
+    await page.goto("/python/");
     await page.getByRole("button", { name: "I'm a Student" }).click();
     await page.getByRole("link", { name: "Learning to Learn image" }).click();
     await page
@@ -41,7 +41,7 @@ test.describe("Check can navigate into and out of lessons", () => {
   });
 
   test("Can hit `Previous Lesson`", async ({ page }) => {
-    await page.goto("/thoughtful-python/");
+    await page.goto("/python/");
     await page.getByRole("button", { name: "I'm a Student" }).click();
     await page.getByRole("link", { name: "Learning to Learn image" }).click();
     await page
@@ -56,7 +56,7 @@ test.describe("Check can navigate into and out of lessons", () => {
   });
 
   test("Can hit `Next Lesson`", async ({ page }) => {
-    await page.goto("/thoughtful-python/");
+    await page.goto("/python/");
     await page.getByRole("button", { name: "I'm a Student" }).click();
     await page.getByRole("link", { name: "Learning to Learn image" }).click();
     await page
@@ -78,7 +78,7 @@ test.describe("Check can navigate into and out of lessons", () => {
   });
 
   test("Can `Run Code`", async ({ page }) => {
-    await page.goto("/thoughtful-python/");
+    await page.goto("/python/");
     await page.getByRole("button", { name: "I'm a Student" }).click();
     await page.getByRole("link", { name: "Learning to Learn image" }).click();
     await page

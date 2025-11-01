@@ -12,9 +12,11 @@ directly in the browser using Pyodide.
 
 ## How to Use
 
-1. Visit the [live site](https://eric-rizzi.github.io/thoughtful-python/)
+1. Visit the [live site](https://thoughtful-coding.github.io/python/)
 2. Select a lesson from the navigation menu
 3. Follow the interactive instructions and complete the exercises
+
+Note: `thoughtful-coding.github.io/` redirects to `/python/` (the default curriculum)
 
 ## Development
 

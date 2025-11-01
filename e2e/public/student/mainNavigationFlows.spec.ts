@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test.describe("Check can navigate to various top-level pages (e.g., Progress", () => {
   test("No learning entries", async ({ page }) => {
-    await page.goto("/thoughtful-python/");
+    await page.goto("/python/");
     await page.getByRole("button", { name: "I'm a Student" }).click();
     await page.getByRole("link", { name: "Learning Entries" }).click();
     await expect(
@@ -11,7 +11,7 @@ test.describe("Check can navigate to various top-level pages (e.g., Progress", (
   });
 
   test("Add passing test to test suite", async ({ page }) => {
-    await page.goto("/thoughtful-python/");
+    await page.goto("/python/");
     await page.getByRole("button", { name: "I'm a Student" }).click();
     await page.getByRole("link", { name: "Code Editor" }).click();
     await page.getByRole("button", { name: "Add Test to Suite" }).click();
@@ -27,7 +27,7 @@ test.describe("Check can navigate to various top-level pages (e.g., Progress", (
   });
 
   test("Add failing test to test suite", async ({ page }) => {
-    await page.goto("/thoughtful-python/");
+    await page.goto("/python/");
     await page.getByRole("button", { name: "I'm a Student" }).click();
     await page.getByRole("link", { name: "Code Editor" }).click();
     await page.getByRole("button", { name: "Add Test to Suite" }).click();

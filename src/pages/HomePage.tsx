@@ -78,7 +78,7 @@ const HomePage: React.FC = () => {
       <div className={styles.unitsGrid}>
         {units.map((unit) => (
           <Link
-            to={`/unit/${unit.id}`}
+            to={`/python/unit/${unit.id}`}
             key={unit.id}
             className={styles.unitCardLink}
           >

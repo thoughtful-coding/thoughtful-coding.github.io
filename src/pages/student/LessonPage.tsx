@@ -316,7 +316,10 @@ const LessonPage: React.FC = () => {
     <div className={styles.lessonContainer}>
       <aside className={styles.lessonSidebar}>
         {parentUnitId && (
-          <Link to={`/unit/${parentUnitId}`} className={styles.backToUnitLink}>
+          <Link
+            to={`/python/unit/${parentUnitId}`}
+            className={styles.backToUnitLink}
+          >
             &larr; Back to Unit Overview
           </Link>
         )}

@@ -35,7 +35,7 @@ const resolveImagePath = (imagePath: string, lessonPath?: string): string => {
   }
   if (lessonPath) {
     const unitDir = lessonPath.split("/")[0];
-    return `/thoughtful-python/data/${unitDir}/${imagePath}`;
+    return `/data/${unitDir}/${imagePath}`;
   }
   return imagePath;
 };
