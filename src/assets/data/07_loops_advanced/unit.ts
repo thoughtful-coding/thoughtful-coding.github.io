@@ -10,8 +10,9 @@ const unitManifest: UnitManifest = {
     "lessons/00_iteration_loops",
     "lessons/01_accumulator_intro",
     "lessons/02_accumulator_strings",
-    "lessons/03_accumulator_practice",
-    "lessons/04_accumulator_wrap_up",
+    "lessons/03_string_functions",
+    "lessons/04_accumulator_practice",
+    "lessons/05_accumulator_wrap_up",
   ],
 };
 
