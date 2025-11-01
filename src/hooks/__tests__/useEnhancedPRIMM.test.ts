@@ -5,6 +5,7 @@ import { useSectionProgress } from "../useSectionProgress";
 import { useAuthStore } from "../../stores/authStore";
 import * as apiService from "../../lib/apiService";
 import { ApiError } from "../../lib/apiService";
+import { ErrorCode } from "../../types/apiServiceTypes";
 import type {
   UnitId,
   LessonId,
@@ -235,7 +236,10 @@ describe("useEnhancedPRIMM", () => {
     const apiError = Object.assign(new Error("Too Many Requests"), {
       name: "ApiError",
       status: 429,
-      data: { message: "Too Many Requests" },
+      data: {
+        message: "Too Many Requests",
+        errorCode: ErrorCode.RATE_LIMIT_EXCEEDED,
+      },
     });
     Object.setPrototypeOf(apiError, ApiError.prototype);
 
@@ -257,7 +261,10 @@ describe("useEnhancedPRIMM", () => {
     const apiError = Object.assign(new Error("Custom error message"), {
       name: "ApiError",
       status: 400,
-      data: { message: "Custom error message" },
+      data: {
+        message: "Custom error message",
+        errorCode: ErrorCode.VALIDATION_ERROR,
+      },
     });
     Object.setPrototypeOf(apiError, ApiError.prototype);
 

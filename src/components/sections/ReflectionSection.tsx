@@ -20,6 +20,7 @@ import {
 import {
   ReflectionInteractionInput,
   ReflectionVersionItem,
+  ErrorCode,
 } from "../../types/apiServiceTypes";
 import LoadingSpinner from "../LoadingSpinner";
 import ContentRenderer from "../content_blocks/ContentRenderer";
@@ -87,9 +88,7 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = ({
     } catch (err) {
       console.error("Failed to fetch reflection draft history:", err);
       if (err instanceof ApiError) {
-        setFetchError(
-          `Error loading history: ${err.data.message} (Status: ${err.status})`
-        );
+        setFetchError(`Error loading history: ${err.data.message}`);
       } else if (err instanceof Error) {
         setFetchError(`Error loading history: ${err.message}`);
       } else {
@@ -120,13 +119,25 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = ({
 
   const handleApiError = (err: unknown, defaultMessage: string) => {
     if (err instanceof ApiError) {
-      // ApiError includes status and potentially parsed server message
-      if (err.status === 429) {
-        setSubmitError(
-          "You've submitted feedback too frequently. Please wait a moment before trying again."
-        );
-      } else {
-        setSubmitError(err.data.message || err.message);
+      switch (err.data.errorCode) {
+        case ErrorCode.RATE_LIMIT_EXCEEDED:
+          setSubmitError(
+            "You've submitted feedback too frequently. Please wait a moment before trying again."
+          );
+          break;
+        case ErrorCode.AI_SERVICE_UNAVAILABLE:
+          setSubmitError(
+            "AI service is temporarily unavailable. Please try again later."
+          );
+          break;
+        case ErrorCode.AUTHENTICATION_FAILED:
+          setSubmitError("Authentication failed. Please log in again.");
+          break;
+        case ErrorCode.AUTHORIZATION_FAILED:
+          setSubmitError("You don't have permission to perform this action.");
+          break;
+        default:
+          setSubmitError(err.data.message);
       }
     } else if (err instanceof Error) {
       setSubmitError(`${defaultMessage}: ${err.message}`);

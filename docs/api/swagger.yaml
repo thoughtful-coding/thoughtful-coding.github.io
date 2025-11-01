@@ -1,12 +1,14 @@
 openapi: 3.0.0
 info:
   title: Thoughtful Python Learning Platform API
-  version: v1.2.0
+  version: v1.3.0
   description: |
     REST API for the Thoughtful Python interactive learning platform supporting student progress tracking,
     AI-powered learning assessments, and instructor oversight.
 
     **Authentication:** Google OAuth 2.0 with JWT tokens (access token: 1 hour, refresh token: 30 days)
+
+    **v1.3.0 Changes:** Standardized error responses - all errors now include required `errorCode` field for programmatic handling
 
     **Data Hierarchy:** Unit → Lesson (GUID) → Section
 
@@ -528,18 +530,27 @@ components:
     #--------------------------------------------------------------------------
     ErrorResponse:
       type: object
-      required: [message]
+      required: [message, errorCode]
       properties:
         message:
           type: string
+          description: "Human-readable error message"
         errorCode:
           type: string
-          nullable: true
-          description: "VALIDATION_ERROR, AUTHENTICATION_FAILED, AUTHORIZATION_FAILED, RESOURCE_NOT_FOUND, RATE_LIMIT_EXCEEDED, AI_SERVICE_UNAVAILABLE, INTERNAL_ERROR"
+          enum:
+            - VALIDATION_ERROR
+            - AUTHENTICATION_FAILED
+            - AUTHORIZATION_FAILED
+            - RESOURCE_NOT_FOUND
+            - RATE_LIMIT_EXCEEDED
+            - AI_SERVICE_UNAVAILABLE
+            - INTERNAL_ERROR
+          description: "Standard error code for programmatic error handling"
         details:
           type: object
           nullable: true
           additionalProperties: true
+          description: "Optional additional error details (e.g., validation errors from Pydantic)"
 
   parameters:
     # Pagination parameters (reusable)

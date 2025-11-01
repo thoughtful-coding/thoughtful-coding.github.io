@@ -1,5 +1,6 @@
 import { API_GATEWAY_BASE_URL } from "../config";
 import { useAuthStore } from "../stores/authStore";
+import { ErrorCode } from "../types/apiServiceTypes";
 import type {
   UserProgressData,
   BatchCompletionsInput,
@@ -255,16 +256,18 @@ export async function logoutUser(
 
 const handleApiResponse = async (response: Response) => {
   if (!response.ok) {
-    let errorData: ErrorResponse = {
-      message: `HTTP error ${response.status}: ${response.statusText}`,
-    };
+    let errorData: ErrorResponse;
     try {
       errorData = await response.json();
     } catch (_e) {
-      // Ignore if body is not valid JSON
+      // If body is not valid JSON, create a fallback error
+      errorData = {
+        message: `HTTP error ${response.status}: ${response.statusText}`,
+        errorCode: ErrorCode.INTERNAL_ERROR,
+      };
     }
     throw new ApiError(
-      errorData.message || `Request failed with status ${response.status}`,
+      errorData.message,
       response.status,
       errorData
     );

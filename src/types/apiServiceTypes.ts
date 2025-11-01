@@ -31,9 +31,30 @@ export interface BatchCompletionsInput {
   completions: SectionCompletionInput[];
 }
 
+/**
+ * Standard error codes returned by the API for programmatic error handling.
+ * Matches the API specification v1.3.0+
+ */
+export enum ErrorCode {
+  VALIDATION_ERROR = "VALIDATION_ERROR",
+  AUTHENTICATION_FAILED = "AUTHENTICATION_FAILED",
+  AUTHORIZATION_FAILED = "AUTHORIZATION_FAILED",
+  RESOURCE_NOT_FOUND = "RESOURCE_NOT_FOUND",
+  RATE_LIMIT_EXCEEDED = "RATE_LIMIT_EXCEEDED",
+  AI_SERVICE_UNAVAILABLE = "AI_SERVICE_UNAVAILABLE",
+  INTERNAL_ERROR = "INTERNAL_ERROR",
+}
+
+/**
+ * Standard error response structure from the API.
+ * As of v1.3.0, errorCode is required in all error responses.
+ */
 export interface ErrorResponse {
+  /** Human-readable error message */
   message: string;
-  errorCode?: string;
+  /** Standard error code for programmatic error handling */
+  errorCode: ErrorCode;
+  /** Optional additional error details (e.g., validation errors from Pydantic) */
   details?: any;
 }
 
@@ -211,15 +232,6 @@ export interface ListOfAssignmentSubmissionsResponse<
   sectionId: SectionId;
   primmExampleId?: string; // Only for PRIMM
   submissions: AssignmentSubmission<T>[];
-}
-
-// You would also keep your existing types like:
-// ErrorResponse, UserProgress, BatchCompletionsInput, SectionCompletionInput
-// For example:
-export interface ErrorResponse {
-  message: string;
-  errorCode?: string;
-  details?: any;
 }
 
 /**

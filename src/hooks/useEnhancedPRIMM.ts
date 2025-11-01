@@ -7,6 +7,7 @@ import type {
   SavedEnhancedPRIMMSectionState,
 } from "../types/data";
 import type { PrimmEvaluationRequest } from "../types/apiServiceTypes";
+import { ErrorCode } from "../types/apiServiceTypes";
 import { useSectionProgress } from "./useSectionProgress";
 import { useAuthStore } from "../stores/authStore";
 import * as apiService from "../lib/apiService";
@@ -130,19 +131,31 @@ export const useEnhancedPRIMM = ({
             isComplete: true,
           });
         } catch (err) {
-          const defaultMessage = "Failed to get AI evaluation";
           if (err instanceof ApiError) {
-            if (err.status === 429) {
-              setAiFeedbackError(
-                "You've submitted feedback too frequently. Please wait a moment before trying again."
-              );
-            } else {
-              setAiFeedbackError(err.data.message || err.message);
+            switch (err.data.errorCode) {
+              case ErrorCode.RATE_LIMIT_EXCEEDED:
+                setAiFeedbackError(
+                  "You've submitted feedback too frequently. Please wait a moment before trying again."
+                );
+                break;
+              case ErrorCode.AI_SERVICE_UNAVAILABLE:
+                setAiFeedbackError(
+                  "AI service is temporarily unavailable. Please try again later."
+                );
+                break;
+              case ErrorCode.AUTHENTICATION_FAILED:
+                setAiFeedbackError("Authentication failed. Please log in again.");
+                break;
+              case ErrorCode.AUTHORIZATION_FAILED:
+                setAiFeedbackError("You don't have permission to perform this action.");
+                break;
+              default:
+                setAiFeedbackError(err.data.message);
             }
           } else if (err instanceof Error) {
-            setAiFeedbackError(`${defaultMessage}: ${err.message}`);
+            setAiFeedbackError(`Failed to get AI evaluation: ${err.message}`);
           } else {
-            setAiFeedbackError(`${defaultMessage}: An unknown error occurred.`);
+            setAiFeedbackError("Failed to get AI evaluation: An unknown error occurred.");
           }
         } finally {
           setIsLoadingAiFeedback(false);
