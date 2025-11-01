@@ -78,7 +78,11 @@ describe("apiService", () => {
         ok: false,
         status: 500,
         statusText: "Server Error",
-        json: () => Promise.resolve({ message: "Internal Server Error" }),
+        json: () =>
+          Promise.resolve({
+            message: "Internal Server Error",
+            errorCode: "INTERNAL_ERROR",
+          }),
       });
 
       // ACT & ASSERT
@@ -184,6 +188,89 @@ describe("apiService", () => {
       const error = new ApiError("Test error", 400);
       expect(error instanceof Error).toBe(true);
       expect(error instanceof ApiError).toBe(true);
+    });
+  });
+
+  describe("Error Response Validation (API v1.3.0+)", () => {
+    it("should normalize error responses without valid errorCode", async () => {
+      // ARRANGE
+      getAccessTokenMock.mockReturnValue("access-token");
+      const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation();
+
+      // Mock an error response without errorCode (legacy format)
+      mockFetch.mockResolvedValue({
+        ok: false,
+        status: 500,
+        json: () =>
+          Promise.resolve({
+            message: "Legacy error without errorCode",
+            someOtherField: "data",
+          }),
+      });
+
+      // ACT
+      try {
+        await apiService.getUserProgress();
+      } catch (error) {
+        // ASSERT
+        expect(error).toBeInstanceOf(ApiError);
+        const apiError = error as ApiError;
+
+        // Should have normalized the error
+        expect(apiError.data).toMatchObject({
+          message: "Legacy error without errorCode",
+          errorCode: "INTERNAL_ERROR",
+          details: {
+            message: "Legacy error without errorCode",
+            someOtherField: "data",
+          },
+        });
+
+        // Should have logged a warning
+        expect(consoleWarnSpy).toHaveBeenCalledWith(
+          expect.stringContaining("without valid errorCode"),
+          expect.objectContaining({ message: "Legacy error without errorCode" })
+        );
+      }
+
+      consoleWarnSpy.mockRestore();
+    });
+
+    it("should accept error responses with valid errorCode", async () => {
+      // ARRANGE
+      getAccessTokenMock.mockReturnValue("access-token");
+      const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation();
+
+      // Mock a proper v1.3.0+ error response
+      mockFetch.mockResolvedValue({
+        ok: false,
+        status: 404,
+        json: () =>
+          Promise.resolve({
+            message: "Resource not found",
+            errorCode: "RESOURCE_NOT_FOUND",
+          }),
+      });
+
+      // ACT
+      try {
+        await apiService.getUserProgress();
+      } catch (error) {
+        // ASSERT
+        expect(error).toBeInstanceOf(ApiError);
+        const apiError = error as ApiError;
+
+        // Should use the error response as-is
+        expect(apiError.data).toEqual({
+          message: "Resource not found",
+          errorCode: "RESOURCE_NOT_FOUND",
+        });
+
+        // Should NOT log a warning
+        expect(consoleWarnSpy).not.toHaveBeenCalled();
+      }
+
+      consoleWarnSpy.mockRestore();
     });
   });
 
@@ -491,7 +578,11 @@ describe("apiService", () => {
       mockFetch.mockResolvedValue({
         ok: false,
         status: 503,
-        json: () => Promise.resolve({ message: "Service unavailable" }),
+        json: () =>
+          Promise.resolve({
+            message: "Service unavailable",
+            errorCode: "AI_SERVICE_UNAVAILABLE",
+          }),
       });
 
       // ACT
@@ -518,7 +609,11 @@ describe("apiService", () => {
       mockFetch.mockResolvedValue({
         ok: false,
         status: 404,
-        json: () => Promise.resolve({ message: "Not found" }),
+        json: () =>
+          Promise.resolve({
+            message: "Not found",
+            errorCode: "RESOURCE_NOT_FOUND",
+          }),
       });
 
       // ACT & ASSERT
@@ -579,7 +674,11 @@ describe("apiService", () => {
       mockFetch.mockResolvedValue({
         ok: false,
         status: 503,
-        json: () => Promise.resolve({ message: "Service unavailable" }),
+        json: () =>
+          Promise.resolve({
+            message: "Service unavailable",
+            errorCode: "AI_SERVICE_UNAVAILABLE",
+          }),
       });
 
       // ACT

@@ -260,7 +260,26 @@ const handleApiResponse = async (response: Response) => {
   if (!response.ok) {
     let errorData: ErrorResponse;
     try {
-      errorData = await response.json();
+      const parsed = await response.json();
+
+      // Validate that errorCode exists and is valid (required as of API v1.3.0)
+      if (
+        !parsed.errorCode ||
+        !Object.values(ErrorCode).includes(parsed.errorCode)
+      ) {
+        console.warn(
+          `API returned error response without valid errorCode field (status ${response.status}):`,
+          parsed
+        );
+        // Create a well-formed ErrorResponse with the original data in details
+        errorData = {
+          message: parsed.message || `HTTP error ${response.status}`,
+          errorCode: ErrorCode.INTERNAL_ERROR,
+          details: parsed,
+        };
+      } else {
+        errorData = parsed as ErrorResponse;
+      }
     } catch (_e) {
       // If body is not valid JSON, create a fallback error
       errorData = {
