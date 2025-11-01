@@ -42,11 +42,11 @@ describe("ReviewByStudentView", () => {
     // Verify that the links have the correct destination URLs
     expect(aliceLink).toHaveAttribute(
       "href",
-      "/instructor-dashboard/students/student-123"
+      "/python/instructor-dashboard/students/student-123"
     );
     expect(bobLink).toHaveAttribute(
       "href",
-      "/instructor-dashboard/students/student-456"
+      "/python/instructor-dashboard/students/student-456"
     );
 
     // Ensure the placeholder message is NOT shown
