@@ -1,5 +1,10 @@
 import { create } from "zustand";
-import { persist, createJSONStorage, StateStorage, devtools } from "zustand/middleware";
+import {
+  persist,
+  createJSONStorage,
+  StateStorage,
+  devtools,
+} from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 import * as apiService from "../lib/apiService"; // Your API service
 import type {
@@ -21,12 +26,12 @@ interface SectionCompletionInput extends ApiSectionCompletionInput {
 
 // Draft content stored locally (not synced to server except firstPassingCode)
 export interface SectionDraftContent {
-  code?: string;                    // User's draft code
-  isModified?: boolean;             // true if user changed from initialCode
-  lastModifiedAt?: number;          // timestamp
-  quizSelections?: any;             // For quiz sections (future)
-  firstPassingCode?: string;        // First passing code for teacher audit (future)
-  firstPassingTimestamp?: number;   // When first passed (future)
+  code?: string; // User's draft code
+  isModified?: boolean; // true if user changed from initialCode
+  lastModifiedAt?: number; // timestamp
+  quizSelections?: any; // For quiz sections (future)
+  firstPassingCode?: string; // First passing code for teacher audit (future)
+  firstPassingTimestamp?: number; // When first passed (future)
 }
 
 const EMPTY_COMPLETED_SECTIONS: { [sectionId: SectionId]: IsoTimestamp } = {};
@@ -129,418 +134,454 @@ export const useProgressStore = create<ProgressState>()(
     immer(
       persist(
         (set, get) => ({
-      ...initialProgressData,
-      actions: {
-        _addToOfflineQueue: (action) => {
-          set((state) => ({
-            offlineActionQueue: [...state.offlineActionQueue, action],
-            lastSyncError: null,
-          }));
-        },
-        completeSection: async (unitId, lessonId, sectionId) => {
-          const currentUnitCompletions = get().completion[unitId] || {};
-          const currentLessonCompletions =
-            currentUnitCompletions[lessonId] || {};
+          ...initialProgressData,
+          actions: {
+            _addToOfflineQueue: (action) => {
+              set((state) => ({
+                offlineActionQueue: [...state.offlineActionQueue, action],
+                lastSyncError: null,
+              }));
+            },
+            completeSection: async (unitId, lessonId, sectionId) => {
+              const currentUnitCompletions = get().completion[unitId] || {};
+              const currentLessonCompletions =
+                currentUnitCompletions[lessonId] || {};
 
-          if (currentLessonCompletions[sectionId]) {
-            console.log(
-              `[ProgressStore] Section ${unitId}/${lessonId}/${sectionId} already complete locally.`
-            );
-            return;
-          }
+              if (currentLessonCompletions[sectionId]) {
+                console.log(
+                  `[ProgressStore] Section ${unitId}/${lessonId}/${sectionId} already complete locally.`
+                );
+                return;
+              }
 
-          const optimisticTimestamp = new Date().toISOString() as IsoTimestamp;
+              const optimisticTimestamp =
+                new Date().toISOString() as IsoTimestamp;
 
-          // Corrected optimistic local update for nested structure
-          set((state) => {
-            const newCompletion = { ...state.completion }; // Top level copy
-            if (!newCompletion[unitId]) {
-              newCompletion[unitId] = {};
-            }
-            const unitCompletion = { ...newCompletion[unitId] }; // Copy unit level
-            if (!unitCompletion[lessonId]) {
-              unitCompletion[lessonId] = {};
-            }
-            const lessonCompletion = { ...unitCompletion[lessonId] }; // Copy lesson level
+              // Corrected optimistic local update for nested structure
+              set((state) => {
+                const newCompletion = { ...state.completion }; // Top level copy
+                if (!newCompletion[unitId]) {
+                  newCompletion[unitId] = {};
+                }
+                const unitCompletion = { ...newCompletion[unitId] }; // Copy unit level
+                if (!unitCompletion[lessonId]) {
+                  unitCompletion[lessonId] = {};
+                }
+                const lessonCompletion = { ...unitCompletion[lessonId] }; // Copy lesson level
 
-            lessonCompletion[sectionId] = optimisticTimestamp; // Update section
-            unitCompletion[lessonId] = lessonCompletion;
-            newCompletion[unitId] = unitCompletion;
+                lessonCompletion[sectionId] = optimisticTimestamp; // Update section
+                unitCompletion[lessonId] = lessonCompletion;
+                newCompletion[unitId] = unitCompletion;
 
-            return {
-              completion: newCompletion,
-              lastSyncError: null,
-            };
-          });
-          console.log(
-            `[ProgressStore] Optimistically completed ${unitId}/${lessonId}/${sectionId} locally.`
-          );
-
-          const authState = storeCoordinator.getCurrentAuthState();
-          if (!authState.isAuthenticated) {
-            console.log("[ProgressStore] Anonymous user. Local update done.");
-            return;
-          }
-
-          // Ensure actionToSync includes unitId if your API and SectionCompletionInput type expect it
-          const actionToSync: SectionCompletionInput = {
-            unitId, // Included unitId
-            lessonId,
-            sectionId,
-            // If your server's SectionCompletionInput doesn't expect unitId (derives it from lessonId),
-            // then create a separate type for the API payload. For now, assume it's useful.
-          };
-
-          if (navigator.onLine) {
-            try {
-              console.log(
-                `[ProgressStore] Syncing: ${unitId}/${lessonId}/${sectionId}`
-              );
-              // The API payload for updateUserProgress might only need lessonId and sectionId,
-              // if the server can derive unitId from lessonId (GUID).
-              // Adjust the payload based on what apiService.updateUserProgress expects.
-              // For this example, assuming it takes SectionCompletionInput which now includes unitId.
-              const serverResponseState = await apiService.updateUserProgress(
-                { completions: [actionToSync] } // Send as batch of one
-              );
-              console.log(
-                `[ProgressStore] Synced: ${unitId}/${lessonId}/${sectionId}.`
-              );
-              get().actions.setServerProgress(serverResponseState);
-            } catch (error) {
-              console.error(
-                `[ProgressStore] Sync failed for ${unitId}/${lessonId}/${sectionId}:`,
-                error
-              );
-              get().actions._addToOfflineQueue(actionToSync);
-              set({
-                lastSyncError:
-                  error instanceof Error ? error.message : String(error),
+                return {
+                  completion: newCompletion,
+                  lastSyncError: null,
+                };
               });
-            }
-          } else {
-            console.log(
-              `[ProgressStore] Offline. Queuing: ${unitId}/${lessonId}/${sectionId}`
-            );
-            get().actions._addToOfflineQueue(actionToSync);
-          }
-        },
-        setServerProgress: (serverData) => {
-          console.log(
-            "[ProgressStore] Setting/Merging from server:",
-            serverData
-          );
-          set((state) => {
-            // Server data (UserProgressData) should also have the nested structure:
-            // { completion: { [unitId]: { [lessonId]: { [sectionId]: timestamp } } } }
-            const newCompletionState = JSON.parse(
-              JSON.stringify(state.completion)
-            );
+              console.log(
+                `[ProgressStore] Optimistically completed ${unitId}/${lessonId}/${sectionId} locally.`
+              );
 
-            for (const unitIdStr in serverData.completion) {
-              const unitId = unitIdStr as UnitId;
-              if (
-                Object.prototype.hasOwnProperty.call(
-                  serverData.completion,
-                  unitId
-                )
-              ) {
-                const serverUnitCompletions = serverData.completion[unitId];
-                if (!newCompletionState[unitId])
-                  newCompletionState[unitId] = {};
+              const authState = storeCoordinator.getCurrentAuthState();
+              if (!authState.isAuthenticated) {
+                console.log(
+                  "[ProgressStore] Anonymous user. Local update done."
+                );
+                return;
+              }
 
-                for (const lessonIdStr in serverUnitCompletions) {
-                  const lessonId = lessonIdStr as LessonId;
+              // Ensure actionToSync includes unitId if your API and SectionCompletionInput type expect it
+              const actionToSync: SectionCompletionInput = {
+                unitId, // Included unitId
+                lessonId,
+                sectionId,
+                // If your server's SectionCompletionInput doesn't expect unitId (derives it from lessonId),
+                // then create a separate type for the API payload. For now, assume it's useful.
+              };
+
+              if (navigator.onLine) {
+                try {
+                  console.log(
+                    `[ProgressStore] Syncing: ${unitId}/${lessonId}/${sectionId}`
+                  );
+                  // The API payload for updateUserProgress might only need lessonId and sectionId,
+                  // if the server can derive unitId from lessonId (GUID).
+                  // Adjust the payload based on what apiService.updateUserProgress expects.
+                  // For this example, assuming it takes SectionCompletionInput which now includes unitId.
+                  const serverResponseState =
+                    await apiService.updateUserProgress(
+                      { completions: [actionToSync] } // Send as batch of one
+                    );
+                  console.log(
+                    `[ProgressStore] Synced: ${unitId}/${lessonId}/${sectionId}.`
+                  );
+                  get().actions.setServerProgress(serverResponseState);
+                } catch (error) {
+                  console.error(
+                    `[ProgressStore] Sync failed for ${unitId}/${lessonId}/${sectionId}:`,
+                    error
+                  );
+                  get().actions._addToOfflineQueue(actionToSync);
+                  set({
+                    lastSyncError:
+                      error instanceof Error ? error.message : String(error),
+                  });
+                }
+              } else {
+                console.log(
+                  `[ProgressStore] Offline. Queuing: ${unitId}/${lessonId}/${sectionId}`
+                );
+                get().actions._addToOfflineQueue(actionToSync);
+              }
+            },
+            setServerProgress: (serverData) => {
+              console.log(
+                "[ProgressStore] Setting/Merging from server:",
+                serverData
+              );
+              set((state) => {
+                // Server data (UserProgressData) should also have the nested structure:
+                // { completion: { [unitId]: { [lessonId]: { [sectionId]: timestamp } } } }
+                const newCompletionState = JSON.parse(
+                  JSON.stringify(state.completion)
+                );
+
+                for (const unitIdStr in serverData.completion) {
+                  const unitId = unitIdStr as UnitId;
                   if (
                     Object.prototype.hasOwnProperty.call(
-                      serverUnitCompletions,
-                      lessonId
+                      serverData.completion,
+                      unitId
                     )
                   ) {
-                    const serverLessonCompletions =
-                      serverUnitCompletions[lessonId];
-                    if (!newCompletionState[unitId][lessonId])
-                      newCompletionState[unitId][lessonId] = {};
+                    const serverUnitCompletions = serverData.completion[unitId];
+                    if (!newCompletionState[unitId])
+                      newCompletionState[unitId] = {};
 
-                    for (const sectionIdStr in serverLessonCompletions) {
-                      const sectionId = sectionIdStr as SectionId;
+                    for (const lessonIdStr in serverUnitCompletions) {
+                      const lessonId = lessonIdStr as LessonId;
                       if (
                         Object.prototype.hasOwnProperty.call(
-                          serverLessonCompletions,
-                          sectionId
+                          serverUnitCompletions,
+                          lessonId
                         )
                       ) {
-                        // Server is truth for sections it knows about
-                        newCompletionState[unitId][lessonId][sectionId] =
-                          serverLessonCompletions[sectionId];
+                        const serverLessonCompletions =
+                          serverUnitCompletions[lessonId];
+                        if (!newCompletionState[unitId][lessonId])
+                          newCompletionState[unitId][lessonId] = {};
+
+                        for (const sectionIdStr in serverLessonCompletions) {
+                          const sectionId = sectionIdStr as SectionId;
+                          if (
+                            Object.prototype.hasOwnProperty.call(
+                              serverLessonCompletions,
+                              sectionId
+                            )
+                          ) {
+                            // Server is truth for sections it knows about
+                            newCompletionState[unitId][lessonId][sectionId] =
+                              serverLessonCompletions[sectionId];
+                          }
+                        }
                       }
                     }
                   }
                 }
+
+                // Filter offline queue: remove actions now confirmed by serverData
+                const updatedQueue = state.offlineActionQueue.filter(
+                  (action) => {
+                    const serverUnit = serverData.completion[action.unitId];
+                    if (!serverUnit) return true; // Unit not on server, keep action
+                    const serverLesson = serverUnit[action.lessonId];
+                    if (!serverLesson) return true; // Lesson not on server for this unit, keep action
+                    return !(action.sectionId in serverLesson); // If section is now on server, remove from queue
+                  }
+                );
+
+                return {
+                  completion: newCompletionState,
+                  offlineActionQueue: updatedQueue,
+                  lastSyncError: null, // Sync was successful or merged
+                };
+              });
+              console.log(
+                "[ProgressStore] Local state updated with server data."
+              );
+            },
+            processOfflineQueue: async () => {
+              const { isSyncing, offlineActionQueue } = get();
+              const authState = storeCoordinator.getCurrentAuthState();
+
+              if (
+                !authState.isAuthenticated ||
+                isSyncing ||
+                offlineActionQueue.length === 0 ||
+                !navigator.onLine
+              ) {
+                return;
               }
-            }
 
-            // Filter offline queue: remove actions now confirmed by serverData
-            const updatedQueue = state.offlineActionQueue.filter((action) => {
-              const serverUnit = serverData.completion[action.unitId];
-              if (!serverUnit) return true; // Unit not on server, keep action
-              const serverLesson = serverUnit[action.lessonId];
-              if (!serverLesson) return true; // Lesson not on server for this unit, keep action
-              return !(action.sectionId in serverLesson); // If section is now on server, remove from queue
-            });
+              set({ isSyncing: true, lastSyncError: null });
+              const queueSnapshot = [...offlineActionQueue];
 
-            return {
-              completion: newCompletionState,
-              offlineActionQueue: updatedQueue,
-              lastSyncError: null, // Sync was successful or merged
-            };
-          });
-          console.log("[ProgressStore] Local state updated with server data.");
-        },
-        processOfflineQueue: async () => {
-          const { isSyncing, offlineActionQueue } = get();
-          const authState = storeCoordinator.getCurrentAuthState();
+              try {
+                // The items in queueSnapshot are SectionCompletionInput, which include unitId
+                const serverResponseState = await apiService.updateUserProgress(
+                  { completions: queueSnapshot }
+                );
+                console.log("[ProgressStore] Synced offline queue to server.");
+                get().actions.setServerProgress(serverResponseState); // This will also filter the queue
 
-          if (
-            !authState.isAuthenticated ||
-            isSyncing ||
-            offlineActionQueue.length === 0 ||
-            !navigator.onLine
-          ) {
-            return;
-          }
+                // Redundant filter after setServerProgress, but ensures only truly unsynced remain
+                // setServerProgress should ideally handle this fully.
+                // For safety, or if setServerProgress's queue filter is different:
+                set((state) => ({
+                  offlineActionQueue: state.offlineActionQueue.filter(
+                    (item) =>
+                      !queueSnapshot.some(
+                        (syncedItem) =>
+                          syncedItem.unitId === item.unitId &&
+                          syncedItem.lessonId === item.lessonId &&
+                          syncedItem.sectionId === item.sectionId
+                      )
+                  ),
+                }));
+              } catch (error) {
+                console.error(
+                  "[ProgressStore] Failed to sync offline queue:",
+                  error
+                );
+                set({
+                  lastSyncError:
+                    error instanceof Error ? error.message : String(error),
+                });
+              } finally {
+                set({ isSyncing: false });
+              }
+            },
+            isSectionComplete: (unitId, lessonId, sectionId) => {
+              const unitCompletions = get().completion[unitId];
+              if (!unitCompletions) return false;
+              const lessonCompletions = unitCompletions[lessonId];
+              if (!lessonCompletions) return false;
+              return sectionId in lessonCompletions;
+            },
+            getCompletedSections: (unitId, lessonId) => {
+              const unitCompletions = get().completion[unitId];
+              if (!unitCompletions) return EMPTY_COMPLETED_SECTIONS;
+              return unitCompletions[lessonId] || EMPTY_COMPLETED_SECTIONS;
+            },
+            resetLessonProgress: (unitId, lessonId) =>
+              set((state) => {
+                const newCompletion = { ...state.completion };
+                if (newCompletion[unitId]) {
+                  const unitCompletion = { ...newCompletion[unitId] };
+                  delete unitCompletion[lessonId];
+                  if (Object.keys(unitCompletion).length === 0) {
+                    delete newCompletion[unitId]; // Clean up empty unit if no lessons left
+                  } else {
+                    newCompletion[unitId] = unitCompletion;
+                  }
+                }
+                console.warn(
+                  `[ProgressStore] Local reset for lesson ${unitId}/${lessonId}.`
+                );
+                return {
+                  completion: newCompletion,
+                  offlineActionQueue: state.offlineActionQueue.filter(
+                    (act) =>
+                      !(act.unitId === unitId && act.lessonId === lessonId)
+                  ),
+                };
+              }),
+            resetAllProgress: () => {
+              set({ ...initialProgressData, completion: {}, drafts: {} }); // Reset completion and drafts
+              console.warn("[ProgressStore] Local reset for all progress.");
+            },
+            startPenalty: () =>
+              set({
+                penaltyEndTime:
+                  Date.now() + PROGRESS_CONFIG.PENALTY_DURATION_MS,
+              }),
+            clearPenalty: () => set({ penaltyEndTime: null }),
+            extractAnonymousCompletions: () => {
+              // Read anonymous progress from localStorage and convert to completions array
+              const anonymousProgressKey = `${ANONYMOUS_USER_ID_PLACEHOLDER}_${BASE_PROGRESS_STORE_KEY}`;
+              const anonymousProgressRaw =
+                localStorage.getItem(anonymousProgressKey);
+              const anonymousCompletions: SectionCompletionInput[] = [];
 
-          set({ isSyncing: true, lastSyncError: null });
-          const queueSnapshot = [...offlineActionQueue];
+              if (anonymousProgressRaw) {
+                try {
+                  const anonymousProgressData =
+                    JSON.parse(anonymousProgressRaw);
+                  const completionData =
+                    anonymousProgressData?.state?.completion;
+                  if (completionData) {
+                    for (const unitId in completionData) {
+                      for (const lessonId in completionData[unitId]) {
+                        for (const sectionId in completionData[unitId][
+                          lessonId
+                        ]) {
+                          anonymousCompletions.push({
+                            unitId: unitId as UnitId,
+                            lessonId: lessonId as LessonId,
+                            sectionId: sectionId as SectionId,
+                          });
+                        }
+                      }
+                    }
+                  }
+                  console.log(
+                    `[ProgressStore] Extracted ${anonymousCompletions.length} anonymous completions.`
+                  );
+                } catch (e) {
+                  console.error(
+                    "[ProgressStore] Failed to parse anonymous progress",
+                    e
+                  );
+                }
+              }
 
-          try {
-            // The items in queueSnapshot are SectionCompletionInput, which include unitId
-            const serverResponseState = await apiService.updateUserProgress(
-              { completions: queueSnapshot }
-            );
-            console.log("[ProgressStore] Synced offline queue to server.");
-            get().actions.setServerProgress(serverResponseState); // This will also filter the queue
+              return anonymousCompletions;
+            },
+            syncProgressAfterLogin: async (anonymousCompletions) => {
+              // Sync anonymous progress with server after login
+              let finalProgress: UserProgressData;
 
-            // Redundant filter after setServerProgress, but ensures only truly unsynced remain
-            // setServerProgress should ideally handle this fully.
-            // For safety, or if setServerProgress's queue filter is different:
-            set((state) => ({
-              offlineActionQueue: state.offlineActionQueue.filter(
-                (item) =>
-                  !queueSnapshot.some(
-                    (syncedItem) =>
-                      syncedItem.unitId === item.unitId &&
-                      syncedItem.lessonId === item.lessonId &&
-                      syncedItem.sectionId === item.sectionId
-                  )
-              ),
-            }));
-          } catch (error) {
-            console.error(
-              "[ProgressStore] Failed to sync offline queue:",
-              error
-            );
-            set({
-              lastSyncError:
-                error instanceof Error ? error.message : String(error),
-            });
-          } finally {
-            set({ isSyncing: false });
-          }
-        },
-        isSectionComplete: (unitId, lessonId, sectionId) => {
-          const unitCompletions = get().completion[unitId];
-          if (!unitCompletions) return false;
-          const lessonCompletions = unitCompletions[lessonId];
-          if (!lessonCompletions) return false;
-          return sectionId in lessonCompletions;
-        },
-        getCompletedSections: (unitId, lessonId) => {
-          const unitCompletions = get().completion[unitId];
-          if (!unitCompletions) return EMPTY_COMPLETED_SECTIONS;
-          return unitCompletions[lessonId] || EMPTY_COMPLETED_SECTIONS;
-        },
-        resetLessonProgress: (unitId, lessonId) =>
-          set((state) => {
-            const newCompletion = { ...state.completion };
-            if (newCompletion[unitId]) {
-              const unitCompletion = { ...newCompletion[unitId] };
-              delete unitCompletion[lessonId];
-              if (Object.keys(unitCompletion).length === 0) {
-                delete newCompletion[unitId]; // Clean up empty unit if no lessons left
+              if (anonymousCompletions.length > 0) {
+                console.log(
+                  `[ProgressStore] Migrating ${anonymousCompletions.length} anonymous completions.`
+                );
+                finalProgress = await apiService.updateUserProgress({
+                  completions: anonymousCompletions,
+                });
               } else {
-                newCompletion[unitId] = unitCompletion;
+                console.log(
+                  "[ProgressStore] No anonymous progress to migrate. Fetching server progress."
+                );
+                finalProgress = await apiService.getUserProgress();
               }
-            }
-            console.warn(
-              `[ProgressStore] Local reset for lesson ${unitId}/${lessonId}.`
-            );
-            return {
-              completion: newCompletion,
-              offlineActionQueue: state.offlineActionQueue.filter(
-                (act) => !(act.unitId === unitId && act.lessonId === lessonId)
-              ),
-            };
-          }),
-        resetAllProgress: () => {
-          set({ ...initialProgressData, completion: {}, drafts: {} }); // Reset completion and drafts
-          console.warn("[ProgressStore] Local reset for all progress.");
-        },
-        startPenalty: () =>
-          set({
-            penaltyEndTime: Date.now() + PROGRESS_CONFIG.PENALTY_DURATION_MS,
-          }),
-        clearPenalty: () => set({ penaltyEndTime: null }),
-        extractAnonymousCompletions: () => {
-          // Read anonymous progress from localStorage and convert to completions array
-          const anonymousProgressKey = `${ANONYMOUS_USER_ID_PLACEHOLDER}_${BASE_PROGRESS_STORE_KEY}`;
-          const anonymousProgressRaw = localStorage.getItem(anonymousProgressKey);
-          const anonymousCompletions: SectionCompletionInput[] = [];
 
-          if (anonymousProgressRaw) {
-            try {
-              const anonymousProgressData = JSON.parse(anonymousProgressRaw);
-              const completionData = anonymousProgressData?.state?.completion;
-              if (completionData) {
-                for (const unitId in completionData) {
-                  for (const lessonId in completionData[unitId]) {
-                    for (const sectionId in completionData[unitId][lessonId]) {
-                      anonymousCompletions.push({
-                        unitId: unitId as UnitId,
-                        lessonId: lessonId as LessonId,
-                        sectionId: sectionId as SectionId,
-                      });
+              // Update local state with server response
+              get().actions.setServerProgress(finalProgress);
+              console.log("[ProgressStore] Progress synced after login.");
+
+              return finalProgress;
+            },
+            // Draft management actions
+            saveDraft: (unitId, lessonId, sectionId, draft) => {
+              set((state) => {
+                // With immer, we can mutate the draft state directly
+                if (!state.drafts[unitId]) state.drafts[unitId] = {};
+                if (!state.drafts[unitId][lessonId])
+                  state.drafts[unitId][lessonId] = {};
+
+                state.drafts[unitId][lessonId][sectionId] = {
+                  ...state.drafts[unitId][lessonId][sectionId],
+                  ...draft,
+                  lastModifiedAt: Date.now(),
+                };
+              });
+            },
+            getDraft: (unitId, lessonId, sectionId) => {
+              const drafts = get().drafts;
+              return drafts[unitId]?.[lessonId]?.[sectionId] || null;
+            },
+            extractAnonymousDrafts: () => {
+              // Read anonymous drafts from localStorage
+              const anonymousProgressKey = `${ANONYMOUS_USER_ID_PLACEHOLDER}_${BASE_PROGRESS_STORE_KEY}`;
+              const anonymousProgressRaw =
+                localStorage.getItem(anonymousProgressKey);
+
+              if (anonymousProgressRaw) {
+                try {
+                  const anonymousProgressData =
+                    JSON.parse(anonymousProgressRaw);
+                  const drafts = anonymousProgressData?.state?.drafts || {};
+                  console.log(
+                    `[ProgressStore] Extracted anonymous drafts for ${Object.keys(drafts).length} units.`
+                  );
+                  return drafts;
+                } catch (e) {
+                  console.error(
+                    "[ProgressStore] Failed to parse anonymous drafts",
+                    e
+                  );
+                }
+              }
+
+              return {};
+            },
+            mergeDraftsAfterLogin: (anonymousDrafts) => {
+              // Merge anonymous drafts with current authenticated drafts
+              // Strategy: If anonymous draft is "worked on" (isModified), use it
+              set((state) => {
+                // With immer, we can mutate the draft state directly
+                for (const unitId in anonymousDrafts) {
+                  if (!state.drafts[unitId]) state.drafts[unitId] = {};
+
+                  for (const lessonId in anonymousDrafts[unitId]) {
+                    if (!state.drafts[unitId][lessonId])
+                      state.drafts[unitId][lessonId] = {};
+
+                    for (const sectionId in anonymousDrafts[unitId][lessonId]) {
+                      const anonymousDraft =
+                        anonymousDrafts[unitId][lessonId][sectionId];
+                      const authenticatedDraft =
+                        state.drafts[unitId][lessonId][sectionId];
+
+                      // If anonymous draft is modified, prefer it (user just worked on it)
+                      if (anonymousDraft.isModified) {
+                        state.drafts[unitId][lessonId][sectionId] =
+                          anonymousDraft;
+                        console.log(
+                          `[ProgressStore] Using anonymous draft for ${unitId}/${lessonId}/${sectionId}`
+                        );
+                      } else if (!authenticatedDraft) {
+                        // If there's no authenticated draft and anonymous isn't modified, still merge it
+                        state.drafts[unitId][lessonId][sectionId] =
+                          anonymousDraft;
+                      }
+                      // Otherwise keep authenticated draft
                     }
                   }
                 }
+
+                console.log("[ProgressStore] Drafts merged after login.");
+              });
+            },
+          },
+        }),
+        {
+          name: BASE_PROGRESS_STORE_KEY,
+          storage: createJSONStorage(() =>
+            createUserSpecificStorage(BASE_PROGRESS_STORE_KEY)
+          ),
+          partialize: (state) => ({
+            completion: state.completion,
+            drafts: state.drafts,
+            penaltyEndTime: state.penaltyEndTime,
+            offlineActionQueue: state.offlineActionQueue,
+            lastSyncError: state.lastSyncError,
+          }),
+          onRehydrateStorage: () => {
+            return (hydratedState, error) => {
+              if (error) {
+                console.error("[ProgressStore] Error rehydrating:", error);
+              } else if (hydratedState) {
+                hydratedState.isSyncing = false; // Always reset isSyncing on load
+                console.log(
+                  "[ProgressStore] Rehydrated. Offline queue:",
+                  hydratedState.offlineActionQueue?.length
+                );
               }
-              console.log(
-                `[ProgressStore] Extracted ${anonymousCompletions.length} anonymous completions.`
-              );
-            } catch (e) {
-              console.error("[ProgressStore] Failed to parse anonymous progress", e);
-            }
-          }
-
-          return anonymousCompletions;
-        },
-        syncProgressAfterLogin: async (anonymousCompletions) => {
-          // Sync anonymous progress with server after login
-          let finalProgress: UserProgressData;
-
-          if (anonymousCompletions.length > 0) {
-            console.log(
-              `[ProgressStore] Migrating ${anonymousCompletions.length} anonymous completions.`
-            );
-            finalProgress = await apiService.updateUserProgress(
-              { completions: anonymousCompletions }
-            );
-          } else {
-            console.log("[ProgressStore] No anonymous progress to migrate. Fetching server progress.");
-            finalProgress = await apiService.getUserProgress();
-          }
-
-          // Update local state with server response
-          get().actions.setServerProgress(finalProgress);
-          console.log("[ProgressStore] Progress synced after login.");
-
-          return finalProgress;
-        },
-        // Draft management actions
-        saveDraft: (unitId, lessonId, sectionId, draft) => {
-          set((state) => {
-            // With immer, we can mutate the draft state directly
-            if (!state.drafts[unitId]) state.drafts[unitId] = {};
-            if (!state.drafts[unitId][lessonId]) state.drafts[unitId][lessonId] = {};
-
-            state.drafts[unitId][lessonId][sectionId] = {
-              ...state.drafts[unitId][lessonId][sectionId],
-              ...draft,
-              lastModifiedAt: Date.now(),
             };
-          });
-        },
-        getDraft: (unitId, lessonId, sectionId) => {
-          const drafts = get().drafts;
-          return drafts[unitId]?.[lessonId]?.[sectionId] || null;
-        },
-        extractAnonymousDrafts: () => {
-          // Read anonymous drafts from localStorage
-          const anonymousProgressKey = `${ANONYMOUS_USER_ID_PLACEHOLDER}_${BASE_PROGRESS_STORE_KEY}`;
-          const anonymousProgressRaw = localStorage.getItem(anonymousProgressKey);
-
-          if (anonymousProgressRaw) {
-            try {
-              const anonymousProgressData = JSON.parse(anonymousProgressRaw);
-              const drafts = anonymousProgressData?.state?.drafts || {};
-              console.log(`[ProgressStore] Extracted anonymous drafts for ${Object.keys(drafts).length} units.`);
-              return drafts;
-            } catch (e) {
-              console.error("[ProgressStore] Failed to parse anonymous drafts", e);
-            }
-          }
-
-          return {};
-        },
-        mergeDraftsAfterLogin: (anonymousDrafts) => {
-          // Merge anonymous drafts with current authenticated drafts
-          // Strategy: If anonymous draft is "worked on" (isModified), use it
-          set((state) => {
-            // With immer, we can mutate the draft state directly
-            for (const unitId in anonymousDrafts) {
-              if (!state.drafts[unitId]) state.drafts[unitId] = {};
-
-              for (const lessonId in anonymousDrafts[unitId]) {
-                if (!state.drafts[unitId][lessonId]) state.drafts[unitId][lessonId] = {};
-
-                for (const sectionId in anonymousDrafts[unitId][lessonId]) {
-                  const anonymousDraft = anonymousDrafts[unitId][lessonId][sectionId];
-                  const authenticatedDraft = state.drafts[unitId][lessonId][sectionId];
-
-                  // If anonymous draft is modified, prefer it (user just worked on it)
-                  if (anonymousDraft.isModified) {
-                    state.drafts[unitId][lessonId][sectionId] = anonymousDraft;
-                    console.log(`[ProgressStore] Using anonymous draft for ${unitId}/${lessonId}/${sectionId}`);
-                  } else if (!authenticatedDraft) {
-                    // If there's no authenticated draft and anonymous isn't modified, still merge it
-                    state.drafts[unitId][lessonId][sectionId] = anonymousDraft;
-                  }
-                  // Otherwise keep authenticated draft
-                }
-              }
-            }
-
-            console.log("[ProgressStore] Drafts merged after login.");
-          });
-        },
-      },
-    }),
-    {
-      name: BASE_PROGRESS_STORE_KEY,
-      storage: createJSONStorage(() =>
-        createUserSpecificStorage(BASE_PROGRESS_STORE_KEY)
-      ),
-      partialize: (state) => ({
-        completion: state.completion,
-        drafts: state.drafts,
-        penaltyEndTime: state.penaltyEndTime,
-        offlineActionQueue: state.offlineActionQueue,
-        lastSyncError: state.lastSyncError,
-      }),
-      onRehydrateStorage: () => {
-        return (hydratedState, error) => {
-          if (error) {
-            console.error("[ProgressStore] Error rehydrating:", error);
-          } else if (hydratedState) {
-            hydratedState.isSyncing = false; // Always reset isSyncing on load
-            console.log(
-              "[ProgressStore] Rehydrated. Offline queue:",
-              hydratedState.offlineActionQueue?.length
-            );
-          }
-        };
-      },
-    })
+          },
+        }
+      )
     ),
     { name: "Progress Store" }
   )

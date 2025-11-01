@@ -183,7 +183,8 @@ async function fetchWithAuth(
       return new Promise((resolve, reject) => {
         failedQueue.push({ resolve, reject });
       }).then(() => {
-        options.headers!["Authorization"] = `Bearer ${authProvider.getAccessToken()}`;
+        options.headers!["Authorization"] =
+          `Bearer ${authProvider.getAccessToken()}`;
         return fetchWithRetry(url, options);
       });
     }
@@ -236,17 +237,18 @@ export async function loginWithGoogle(
 export async function refreshAccessToken(
   refreshToken: string
 ): Promise<{ accessToken: AccessTokenId; refreshToken: RefreshTokenId }> {
-  const response = await fetchWithRetry(`${API_GATEWAY_BASE_URL}/auth/refresh`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ refreshToken }),
-  });
+  const response = await fetchWithRetry(
+    `${API_GATEWAY_BASE_URL}/auth/refresh`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refreshToken }),
+    }
+  );
   return handleApiResponse(response);
 }
 
-export async function logoutUser(
-  refreshToken: string
-): Promise<void> {
+export async function logoutUser(refreshToken: string): Promise<void> {
   await fetchWithRetry(`${API_GATEWAY_BASE_URL}/auth/logout`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -266,11 +268,7 @@ const handleApiResponse = async (response: Response) => {
         errorCode: ErrorCode.INTERNAL_ERROR,
       };
     }
-    throw new ApiError(
-      errorData.message,
-      response.status,
-      errorData
-    );
+    throw new ApiError(errorData.message, response.status, errorData);
   }
   return response.json();
 };
@@ -338,7 +336,9 @@ export async function getReflectionDraftVersions(
  * @returns A Promise resolving to ListOfFinalLearningEntriesResponse.
  */
 export async function getFinalizedLearningEntries(): Promise<ListOfFinalLearningEntriesResponse> {
-  const response = await fetchWithAuth(`${API_GATEWAY_BASE_URL}/learning-entries`);
+  const response = await fetchWithAuth(
+    `${API_GATEWAY_BASE_URL}/learning-entries`
+  );
   return handleApiResponse(response);
 }
 
@@ -354,7 +354,9 @@ export async function submitPrimmEvaluation(
 }
 
 export async function getInstructorPermittedStudents(): Promise<ListOfInstructorStudentsResponse> {
-  const response = await fetchWithAuth(`${API_GATEWAY_BASE_URL}/instructor/students`);
+  const response = await fetchWithAuth(
+    `${API_GATEWAY_BASE_URL}/instructor/students`
+  );
   return handleApiResponse(response);
 }
 

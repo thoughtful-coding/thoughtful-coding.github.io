@@ -51,7 +51,9 @@ test.describe("PrimmSection tests with turtles", () => {
       .filter({ hasText: "Drawing A Shape" });
     await expect(sectionItem).not.toHaveClass(/sectionItemCompleted/);
 
-    await expect(page.locator("#square-primm #defaultCanvas0").first()).toBeVisible();
+    await expect(
+      page.locator("#square-primm #defaultCanvas0").first()
+    ).toBeVisible();
     await page
       .getByRole("textbox", {
         name: "Look at the pattern of forward() and right() function calls. What shape do you",
@@ -68,7 +70,9 @@ test.describe("PrimmSection tests with turtles", () => {
       .click();
     // Turtles take a while
     await page.waitForTimeout(2000);
-    await expect(page.locator("#square-primm #defaultCanvas0").first()).toBeVisible();
+    await expect(
+      page.locator("#square-primm #defaultCanvas0").first()
+    ).toBeVisible();
     await page
       .getByRole("textbox", { name: "Your Reflection/Explanation:" })
       .click();

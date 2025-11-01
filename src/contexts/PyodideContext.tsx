@@ -161,8 +161,8 @@ export const PyodideProvider: React.FC<PyodideProviderProps> = ({
         } catch (err) {
           console.warn(
             "SharedArrayBuffer not available - timeout interruption disabled. " +
-            "Code execution will still work but infinite loops may hang the browser. " +
-            "This is expected in some environments (tests, older browsers)."
+              "Code execution will still work but infinite loops may hang the browser. " +
+              "This is expected in some environments (tests, older browsers)."
           );
           interruptBuffer.current = null;
         }

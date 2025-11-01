@@ -42,7 +42,7 @@ class StoreCoordinator {
    */
   publishAuthState(authState: AuthStateForStores): void {
     this.currentAuthState = authState;
-    this.authStateSubscribers.forEach(subscriber => subscriber(authState));
+    this.authStateSubscribers.forEach((subscriber) => subscriber(authState));
   }
 
   /**

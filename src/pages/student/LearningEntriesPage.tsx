@@ -27,8 +27,7 @@ const LearningEntriesPage: React.FC = () => {
       setIsLoading(true);
       setError(null);
       try {
-        const response =
-          await apiService.getFinalizedLearningEntries();
+        const response = await apiService.getFinalizedLearningEntries();
         const sortedEntries = response.entries.sort(
           (a, b) =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()

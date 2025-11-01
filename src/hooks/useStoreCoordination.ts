@@ -15,9 +15,11 @@ import { storeCoordinator } from "../stores/storeCoordination";
  * Should be used at the app root level.
  */
 export function useStoreCoordination() {
-  const isAuthenticated = useAuthStore(state => state.isAuthenticated);
-  const user = useAuthStore(state => state.user);
-  const processOfflineQueue = useProgressStore(state => state.actions.processOfflineQueue);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const user = useAuthStore((state) => state.user);
+  const processOfflineQueue = useProgressStore(
+    (state) => state.actions.processOfflineQueue
+  );
 
   // Publish auth state changes to the coordinator
   useEffect(() => {
@@ -55,7 +57,10 @@ export interface ProgressSyncOperations {
   setServerProgress: (serverData: any) => void;
   resetAllProgress: () => void;
   extractAnonymousCompletions: () => any[];
-  syncProgressAfterLogin: (apiGatewayUrl: string, anonymousCompletions: any[]) => Promise<any>;
+  syncProgressAfterLogin: (
+    apiGatewayUrl: string,
+    anonymousCompletions: any[]
+  ) => Promise<any>;
   extractAnonymousDrafts: () => any;
   mergeDraftsAfterLogin: (anonymousDrafts: any) => void;
 }
@@ -69,7 +74,8 @@ export function getProgressSyncOperations(): ProgressSyncOperations {
   return {
     setServerProgress: progressStore.actions.setServerProgress,
     resetAllProgress: progressStore.actions.resetAllProgress,
-    extractAnonymousCompletions: progressStore.actions.extractAnonymousCompletions,
+    extractAnonymousCompletions:
+      progressStore.actions.extractAnonymousCompletions,
     syncProgressAfterLogin: progressStore.actions.syncProgressAfterLogin,
     extractAnonymousDrafts: progressStore.actions.extractAnonymousDrafts,
     mergeDraftsAfterLogin: progressStore.actions.mergeDraftsAfterLogin,

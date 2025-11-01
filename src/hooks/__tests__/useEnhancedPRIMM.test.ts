@@ -187,13 +187,12 @@ describe("useEnhancedPRIMM", () => {
       sectionId: defaultProps.sectionId,
       primmExampleId: defaultProps.exampleId,
       codeSnippet: "print(42)",
-        userPredictionPromptText: defaultProps.predictPrompt,
-        userPredictionText: "It prints 42",
-        userPredictionConfidence: 2,
-        actualOutputSummary: "42",
-        userExplanationText: "The code outputs 42",
-      }
-    );
+      userPredictionPromptText: defaultProps.predictPrompt,
+      userPredictionText: "It prints 42",
+      userPredictionConfidence: 2,
+      actualOutputSummary: "42",
+      userExplanationText: "The code outputs 42",
+    });
 
     const updater = mockSetSavedState.mock.calls[0][0];
     const newState = updater({

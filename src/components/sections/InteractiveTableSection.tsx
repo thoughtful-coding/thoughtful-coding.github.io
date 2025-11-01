@@ -94,7 +94,7 @@ const InteractiveTableSection: React.FC<InteractiveTableSectionProps> = (
   const instructionText =
     mode === "coverage"
       ? 'For each "Expected Output" below, fill in the input fields and click "Run" to see if the code produces that exact output.'
-      : "For each row of inputs below, predict what the code will output and enter it in the \"Your Prediction\" column.";
+      : 'For each row of inputs below, predict what the code will output and enter it in the "Your Prediction" column.';
 
   // Progress text based on mode
   const progressText =
@@ -281,7 +281,10 @@ const InteractiveTableSection: React.FC<InteractiveTableSectionProps> = (
                                 className={tableStyles.coverageInput}
                                 value={rowState?.userAnswer ?? ""}
                                 onChange={(e) =>
-                                  handleUserInputChange(rowIndex, e.target.value)
+                                  handleUserInputChange(
+                                    rowIndex,
+                                    e.target.value
+                                  )
                                 }
                                 placeholder="Predict the output"
                                 disabled={isRunning || isLoading}

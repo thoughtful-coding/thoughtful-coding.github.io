@@ -142,7 +142,9 @@ describe("authStore", () => {
     // Check that extraction and sync were called with the completions and drafts
     expect(extractAnonymousCompletionsMock).toHaveBeenCalledTimes(1);
     expect(extractAnonymousDraftsMock).toHaveBeenCalledTimes(1);
-    expect(syncProgressAfterLoginMock).toHaveBeenCalledWith(anonymousCompletions);
+    expect(syncProgressAfterLoginMock).toHaveBeenCalledWith(
+      anonymousCompletions
+    );
     expect(mergeDraftsAfterLoginMock).toHaveBeenCalledWith(anonymousDrafts);
 
     // Check that anonymous data was cleared

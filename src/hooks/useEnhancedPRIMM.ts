@@ -144,10 +144,14 @@ export const useEnhancedPRIMM = ({
                 );
                 break;
               case ErrorCode.AUTHENTICATION_FAILED:
-                setAiFeedbackError("Authentication failed. Please log in again.");
+                setAiFeedbackError(
+                  "Authentication failed. Please log in again."
+                );
                 break;
               case ErrorCode.AUTHORIZATION_FAILED:
-                setAiFeedbackError("You don't have permission to perform this action.");
+                setAiFeedbackError(
+                  "You don't have permission to perform this action."
+                );
                 break;
               default:
                 setAiFeedbackError(err.data.message);
@@ -155,7 +159,9 @@ export const useEnhancedPRIMM = ({
           } else if (err instanceof Error) {
             setAiFeedbackError(`Failed to get AI evaluation: ${err.message}`);
           } else {
-            setAiFeedbackError("Failed to get AI evaluation: An unknown error occurred.");
+            setAiFeedbackError(
+              "Failed to get AI evaluation: An unknown error occurred."
+            );
           }
         } finally {
           setIsLoadingAiFeedback(false);

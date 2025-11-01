@@ -2,11 +2,7 @@ import { create } from "zustand";
 import { persist, createJSONStorage, devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 import * as apiService from "../lib/apiService";
-import type {
-  UserId,
-  AccessTokenId,
-  RefreshTokenId,
-} from "../types/data";
+import type { UserId, AccessTokenId, RefreshTokenId } from "../types/data";
 import { clearAllAnonymousData } from "../lib/localStorageUtils";
 import { getProgressSyncOperations } from "../hooks/useStoreCoordination";
 
@@ -51,99 +47,101 @@ export const useAuthStore = create<AuthState>()(
     immer(
       persist(
         (set, get) => ({
-      ...initialAuthState,
-      actions: {
-        login: async (googleIdToken: string) => {
-          // Step 1: Extract any anonymous progress and drafts before logging in
-          const progressOps = getProgressSyncOperations();
-          const anonymousCompletions = progressOps.extractAnonymousCompletions();
-          const anonymousDrafts = progressOps.extractAnonymousDrafts();
+          ...initialAuthState,
+          actions: {
+            login: async (googleIdToken: string) => {
+              // Step 1: Extract any anonymous progress and drafts before logging in
+              const progressOps = getProgressSyncOperations();
+              const anonymousCompletions =
+                progressOps.extractAnonymousCompletions();
+              const anonymousDrafts = progressOps.extractAnonymousDrafts();
 
-          // Step 2: Log in and get application tokens
-          const { accessToken, refreshToken } =
-            await apiService.loginWithGoogle(googleIdToken);
+              // Step 2: Log in and get application tokens
+              const { accessToken, refreshToken } =
+                await apiService.loginWithGoogle(googleIdToken);
 
-          const decodedToken = JSON.parse(atob(accessToken.split(".")[1]));
-          const userProfile: UserProfile = {
-            userId: decodedToken.sub,
-            name: decodedToken.name,
-            email: decodedToken.email,
-            picture: decodedToken.picture,
-          };
+              const decodedToken = JSON.parse(atob(accessToken.split(".")[1]));
+              const userProfile: UserProfile = {
+                userId: decodedToken.sub,
+                name: decodedToken.name,
+                email: decodedToken.email,
+                picture: decodedToken.picture,
+              };
 
-          // Step 3: Set the new authentication state immediately
-          set({
-            isAuthenticated: true,
-            accessToken,
-            refreshToken,
-            user: userProfile,
-            isSyncingProgress: true,
-            sessionHasExpired: false,
-          });
+              // Step 3: Set the new authentication state immediately
+              set({
+                isAuthenticated: true,
+                accessToken,
+                refreshToken,
+                user: userProfile,
+                isSyncingProgress: true,
+                sessionHasExpired: false,
+              });
 
-          // Step 4: Sync progress and drafts with server/local storage
-          try {
-            // Sync completions with server
-            await progressOps.syncProgressAfterLogin(anonymousCompletions);
+              // Step 4: Sync progress and drafts with server/local storage
+              try {
+                // Sync completions with server
+                await progressOps.syncProgressAfterLogin(anonymousCompletions);
 
-            // Merge drafts locally (drafts don't sync to server)
-            progressOps.mergeDraftsAfterLogin(anonymousDrafts);
+                // Merge drafts locally (drafts don't sync to server)
+                progressOps.mergeDraftsAfterLogin(anonymousDrafts);
 
-            // Clear anonymous data after successful migration
-            const hasAnonymousData =
-              anonymousCompletions.length > 0 ||
-              Object.keys(anonymousDrafts).length > 0;
+                // Clear anonymous data after successful migration
+                const hasAnonymousData =
+                  anonymousCompletions.length > 0 ||
+                  Object.keys(anonymousDrafts).length > 0;
 
-            if (hasAnonymousData) {
-              clearAllAnonymousData();
-            }
-          } catch (error) {
-            console.error("Failed to sync progress after login:", error);
-          } finally {
-            set({ isSyncingProgress: false });
-          }
+                if (hasAnonymousData) {
+                  clearAllAnonymousData();
+                }
+              } catch (error) {
+                console.error("Failed to sync progress after login:", error);
+              } finally {
+                set({ isSyncingProgress: false });
+              }
 
-          // The page does not need to reload.
-        },
-        logout: async () => {
-          const { refreshToken } = get();
-          if (refreshToken) {
-            try {
-              await apiService.logoutUser(refreshToken);
-            } catch (error) {
-              console.error(
-                "Logout API call failed, proceeding with client-side logout.",
-                error
-              );
-            }
-          }
+              // The page does not need to reload.
+            },
+            logout: async () => {
+              const { refreshToken } = get();
+              if (refreshToken) {
+                try {
+                  await apiService.logoutUser(refreshToken);
+                } catch (error) {
+                  console.error(
+                    "Logout API call failed, proceeding with client-side logout.",
+                    error
+                  );
+                }
+              }
 
-          set({ ...initialAuthState });
-          const progressOps = getProgressSyncOperations();
-          progressOps.resetAllProgress();
+              set({ ...initialAuthState });
+              const progressOps = getProgressSyncOperations();
+              progressOps.resetAllProgress();
 
-          // A reload is still the cleanest way to ensure all components re-render with anonymous data.
-          window.location.reload();
-        },
-        setSessionExpired: (hasExpired) =>
-          set({ sessionHasExpired: hasExpired }),
-        setTokens: ({ accessToken, refreshToken }) => {
-          set({ accessToken, refreshToken });
-        },
-        getAccessToken: () => get().accessToken,
-        getRefreshToken: () => get().refreshToken,
-      },
-    }),
-    {
-      name: "auth-storage-v2",
-      storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({
-        isAuthenticated: state.isAuthenticated,
-        user: state.user,
-        accessToken: state.accessToken,
-        refreshToken: state.refreshToken,
-      }),
-    })
+              // A reload is still the cleanest way to ensure all components re-render with anonymous data.
+              window.location.reload();
+            },
+            setSessionExpired: (hasExpired) =>
+              set({ sessionHasExpired: hasExpired }),
+            setTokens: ({ accessToken, refreshToken }) => {
+              set({ accessToken, refreshToken });
+            },
+            getAccessToken: () => get().accessToken,
+            getRefreshToken: () => get().refreshToken,
+          },
+        }),
+        {
+          name: "auth-storage-v2",
+          storage: createJSONStorage(() => localStorage),
+          partialize: (state) => ({
+            isAuthenticated: state.isAuthenticated,
+            user: state.user,
+            accessToken: state.accessToken,
+            refreshToken: state.refreshToken,
+          }),
+        }
+      )
     ),
     { name: "Auth Store" }
   )

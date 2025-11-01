@@ -25,7 +25,8 @@ interface ErrorHintConfig {
  */
 const ERROR_HINTS: Record<string, ErrorHintConfig> = {
   SyntaxError: {
-    generalHint: "Python couldn't understand your code. Check for typos, missing colons, or incorrect indentation.",
+    generalHint:
+      "Python couldn't understand your code. Check for typos, missing colons, or incorrect indentation.",
     patterns: [
       {
         pattern: /invalid syntax/i,
@@ -55,7 +56,8 @@ const ERROR_HINTS: Record<string, ErrorHintConfig> = {
   },
 
   IndentationError: {
-    generalHint: "Python uses indentation to group code. Check that your indentation is consistent.",
+    generalHint:
+      "Python uses indentation to group code. Check that your indentation is consistent.",
     patterns: [
       {
         pattern: /expected an indented block/i,
@@ -73,7 +75,8 @@ const ERROR_HINTS: Record<string, ErrorHintConfig> = {
   },
 
   NameError: {
-    generalHint: "Python doesn't recognize this name. It might be a typo or a variable you haven't defined yet.",
+    generalHint:
+      "Python doesn't recognize this name. It might be a typo or a variable you haven't defined yet.",
     patterns: [
       {
         pattern: /name '(\w+)' is not defined/i,
@@ -83,7 +86,8 @@ const ERROR_HINTS: Record<string, ErrorHintConfig> = {
   },
 
   TypeError: {
-    generalHint: "You're trying to do an operation that doesn't work with these types of data.",
+    generalHint:
+      "You're trying to do an operation that doesn't work with these types of data.",
     patterns: [
       {
         pattern: /unsupported operand type.*'([^']+)'.*'([^']+)'/i,
@@ -91,7 +95,7 @@ const ERROR_HINTS: Record<string, ErrorHintConfig> = {
       },
       {
         pattern: /can only concatenate str.*to str/i,
-        hint: "You're trying to add a non-string to a string. Use str() to convert numbers to strings first, or use f-strings: f\"text {variable}\"",
+        hint: 'You\'re trying to add a non-string to a string. Use str() to convert numbers to strings first, or use f-strings: f"text {variable}"',
       },
       {
         pattern: /'(\w+)' object is not callable/i,
@@ -109,7 +113,8 @@ const ERROR_HINTS: Record<string, ErrorHintConfig> = {
   },
 
   ValueError: {
-    generalHint: "The value you're using is the right type but has an incorrect value.",
+    generalHint:
+      "The value you're using is the right type but has an incorrect value.",
     patterns: [
       {
         pattern: /invalid literal for int\(\) with base 10/i,
@@ -131,7 +136,8 @@ const ERROR_HINTS: Record<string, ErrorHintConfig> = {
   },
 
   IndexError: {
-    generalHint: "You're trying to access an index that doesn't exist in the list or string.",
+    generalHint:
+      "You're trying to access an index that doesn't exist in the list or string.",
     patterns: [
       {
         pattern: /list index out of range/i,
@@ -155,7 +161,8 @@ const ERROR_HINTS: Record<string, ErrorHintConfig> = {
   },
 
   AttributeError: {
-    generalHint: "You're trying to access a property or method that doesn't exist on this object.",
+    generalHint:
+      "You're trying to access a property or method that doesn't exist on this object.",
     patterns: [
       {
         pattern: /'(\w+)' object has no attribute '(\w+)'/i,
@@ -165,7 +172,8 @@ const ERROR_HINTS: Record<string, ErrorHintConfig> = {
   },
 
   ZeroDivisionError: {
-    generalHint: "You're trying to divide by zero, which is mathematically undefined.",
+    generalHint:
+      "You're trying to divide by zero, which is mathematically undefined.",
     patterns: [
       {
         pattern: /division by zero/i,
@@ -185,7 +193,8 @@ const ERROR_HINTS: Record<string, ErrorHintConfig> = {
   },
 
   UnboundLocalError: {
-    generalHint: "You're trying to use a variable before it's been assigned a value in this scope.",
+    generalHint:
+      "You're trying to use a variable before it's been assigned a value in this scope.",
     patterns: [
       {
         pattern: /local variable '(\w+)' referenced before assignment/i,
@@ -195,7 +204,8 @@ const ERROR_HINTS: Record<string, ErrorHintConfig> = {
   },
 
   RecursionError: {
-    generalHint: "Your function is calling itself too many times (infinite recursion).",
+    generalHint:
+      "Your function is calling itself too many times (infinite recursion).",
     patterns: [
       {
         pattern: /maximum recursion depth exceeded/i,
@@ -243,13 +253,19 @@ export function enhancePythonError(
   // Check for specific patterns
   if (config.patterns) {
     for (const { pattern, hint } of config.patterns) {
-      if (pattern.test(errorMessage) || (traceback && pattern.test(traceback))) {
+      if (
+        pattern.test(errorMessage) ||
+        (traceback && pattern.test(traceback))
+      ) {
         // Replace $1, $2, etc. with capture groups
         const match = errorMessage.match(pattern) || traceback?.match(pattern);
         let enhancedHint = hint;
         if (match) {
           for (let i = 1; i < match.length; i++) {
-            enhancedHint = enhancedHint.replace(new RegExp(`\\$${i}`, 'g'), match[i]);
+            enhancedHint = enhancedHint.replace(
+              new RegExp(`\\$${i}`, "g"),
+              match[i]
+            );
           }
         }
         hints.push(`\n💡 ${enhancedHint}`);
@@ -260,7 +276,7 @@ export function enhancePythonError(
   }
 
   // Combine original message with hints
-  return `${errorMessage}\n\n${hints.join('\n')}`;
+  return `${errorMessage}\n\n${hints.join("\n")}`;
 }
 
 /**
@@ -272,7 +288,7 @@ export function enhancePythonError(
 export function extractRelevantTraceback(traceback: string): string {
   // Try to extract just the last line of the traceback (the actual error)
   // and the line before it (which shows the problematic code line)
-  const lines = traceback.split('\n');
+  const lines = traceback.split("\n");
 
   // Find lines that show the actual code (start with spaces/numbers)
   // and the error line (starts with error type)
@@ -288,5 +304,5 @@ export function extractRelevantTraceback(traceback: string): string {
     if (relevantLines.length >= 4) break;
   }
 
-  return relevantLines.length > 0 ? relevantLines.join('\n') : traceback;
+  return relevantLines.length > 0 ? relevantLines.join("\n") : traceback;
 }

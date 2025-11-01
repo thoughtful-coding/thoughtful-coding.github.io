@@ -30,7 +30,12 @@ const TurtleDisplay: React.FC<CodeExecutorProps> = ({
   onTurtleInstanceReady,
 }) => {
   // Persistent draft code management
-  const [code, setCode] = useDraftCode(unitId, lessonId, sectionId, example.initialCode);
+  const [code, setCode] = useDraftCode(
+    unitId,
+    lessonId,
+    sectionId,
+    example.initialCode
+  );
   const canvasRef = useRef<HTMLDivElement>(null);
 
   const { runTurtleCode, stopExecution, isLoading, error } = useTurtleExecution(
@@ -90,7 +95,12 @@ const ConsoleDisplay: React.FC<CodeExecutorProps> = ({
   sectionId,
 }) => {
   // Persistent draft code management
-  const [code, setCode] = useDraftCode(unitId, lessonId, sectionId, example.initialCode);
+  const [code, setCode] = useDraftCode(
+    unitId,
+    lessonId,
+    sectionId,
+    example.initialCode
+  );
 
   const { runCode, isLoading, output, error } = useInteractiveExample({
     unitId,

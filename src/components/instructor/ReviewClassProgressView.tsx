@@ -105,10 +105,7 @@ const ReviewClassProgressView: React.FC<ReviewClassProgressViewProps> = ({
         }
 
         const classProgressResponse =
-          await apiService.getInstructorClassUnitProgress(
-            selectedUnitId,
-            []
-          );
+          await apiService.getInstructorClassUnitProgress(selectedUnitId, []);
 
         const computedProgress: DisplayableStudentUnitProgress[] =
           classProgressResponse.studentProgressData.map((studentData) => {
@@ -193,12 +190,7 @@ const ReviewClassProgressView: React.FC<ReviewClassProgressViewProps> = ({
     if (selectedUnitId && permittedStudents.length > 0) {
       fetchUnitAndProgressDetails();
     }
-  }, [
-    selectedUnitId,
-    permittedStudents,
-    isAuthenticated,
-    units,
-  ]);
+  }, [selectedUnitId, permittedStudents, isAuthenticated, units]);
 
   const handleUnitSelectionChange = (newUnitId: UnitId | "") => {
     setSearchParams(newUnitId ? { unit: newUnitId } : {});

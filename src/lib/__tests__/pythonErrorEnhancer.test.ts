@@ -1,4 +1,7 @@
-import { enhancePythonError, extractRelevantTraceback } from "../pythonErrorEnhancer";
+import {
+  enhancePythonError,
+  extractRelevantTraceback,
+} from "../pythonErrorEnhancer";
 
 describe("pythonErrorEnhancer", () => {
   describe("enhancePythonError", () => {
@@ -19,7 +22,7 @@ describe("pythonErrorEnhancer", () => {
       const result = enhancePythonError(
         "SyntaxError",
         "invalid syntax",
-        "  File \"<stdin>\", line 1\n    if x\n       ^\nSyntaxError: invalid syntax"
+        '  File "<stdin>", line 1\n    if x\n       ^\nSyntaxError: invalid syntax'
       );
 
       expect(result).toContain("invalid syntax");
@@ -42,7 +45,7 @@ describe("pythonErrorEnhancer", () => {
     it("should add hints for TypeError with concatenation", () => {
       const result = enhancePythonError(
         "TypeError",
-        "can only concatenate str (not \"int\") to str",
+        'can only concatenate str (not "int") to str',
         ""
       );
 
@@ -122,7 +125,7 @@ ZeroDivisionError: division by zero`;
       const result = extractRelevantTraceback(fullTraceback);
 
       expect(result).toContain("division by zero");
-      expect(result.split('\n').length).toBeLessThanOrEqual(4);
+      expect(result.split("\n").length).toBeLessThanOrEqual(4);
     });
 
     it("should return original traceback if very short", () => {

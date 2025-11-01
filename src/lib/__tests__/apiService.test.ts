@@ -82,12 +82,10 @@ describe("apiService", () => {
       });
 
       // ACT & ASSERT
-      await expect(
-        apiService.getUserProgress()
-      ).rejects.toThrow(ApiError);
-      await expect(
-        apiService.getUserProgress()
-      ).rejects.toThrow("Internal Server Error");
+      await expect(apiService.getUserProgress()).rejects.toThrow(ApiError);
+      await expect(apiService.getUserProgress()).rejects.toThrow(
+        "Internal Server Error"
+      );
     });
   });
 
@@ -159,9 +157,9 @@ describe("apiService", () => {
       mockFetch.mockResolvedValueOnce({ status: 401, ok: false });
 
       // ACT & ASSERT
-      await expect(
-        apiService.getUserProgress()
-      ).rejects.toThrow("Session expired. Please log in again.");
+      await expect(apiService.getUserProgress()).rejects.toThrow(
+        "Session expired. Please log in again."
+      );
 
       // Check that the session expired flag was set
       expect(setSessionExpiredMock).toHaveBeenCalledWith(true);
@@ -200,9 +198,7 @@ describe("apiService", () => {
         json: () => Promise.resolve(mockTokens),
       });
 
-      const result = await apiService.loginWithGoogle(
-        "google-id-token"
-      );
+      const result = await apiService.loginWithGoogle("google-id-token");
 
       expect(result).toEqual(mockTokens);
       expect(mockFetch).toHaveBeenCalledWith(
@@ -222,9 +218,9 @@ describe("apiService", () => {
         status: 401,
       });
 
-      await expect(
-        apiService.loginWithGoogle("invalid-token")
-      ).rejects.toThrow(ApiError);
+      await expect(apiService.loginWithGoogle("invalid-token")).rejects.toThrow(
+        ApiError
+      );
     });
   });
 
@@ -239,9 +235,7 @@ describe("apiService", () => {
         json: () => Promise.resolve(newTokens),
       });
 
-      const result = await apiService.refreshAccessToken(
-        "old-refresh-token"
-      );
+      const result = await apiService.refreshAccessToken("old-refresh-token");
 
       expect(result).toEqual(newTokens);
       expect(mockFetch).toHaveBeenCalledWith(
@@ -293,9 +287,7 @@ describe("apiService", () => {
       });
 
       // Should not throw - logout is best-effort
-      await expect(
-        apiService.logoutUser("token")
-      ).resolves.not.toThrow();
+      await expect(apiService.logoutUser("token")).resolves.not.toThrow();
     });
   });
 
@@ -336,9 +328,9 @@ describe("apiService", () => {
     it("should reject immediately if no access token available", async () => {
       getAccessTokenMock.mockReturnValue(null);
 
-      await expect(
-        apiService.getUserProgress()
-      ).rejects.toThrow("No access token available.");
+      await expect(apiService.getUserProgress()).rejects.toThrow(
+        "No access token available."
+      );
     });
 
     it("should handle 403 errors same as 401 (trigger refresh)", async () => {
@@ -374,9 +366,9 @@ describe("apiService", () => {
 
       mockFetch.mockResolvedValueOnce({ status: 401, ok: false });
 
-      await expect(
-        apiService.getUserProgress()
-      ).rejects.toThrow("Session expired. Please log in again.");
+      await expect(apiService.getUserProgress()).rejects.toThrow(
+        "Session expired. Please log in again."
+      );
 
       expect(logoutMock).toHaveBeenCalled();
     });
