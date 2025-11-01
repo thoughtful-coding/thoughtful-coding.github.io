@@ -2,21 +2,25 @@ import React, { useState, useEffect, useRef } from "react";
 import CodeEditor from "../CodeEditor";
 import styles from "./DebuggerSection.module.css";
 import sectionStyles from "./Section.module.css";
-import type { DebuggerSectionData } from "../../types/data";
+import type { DebuggerSectionData, UnitId, LessonId } from "../../types/data";
 import ContentRenderer from "../content_blocks/ContentRenderer";
 import { useDebuggerLogic } from "../../hooks/useDebuggerLogic";
+import { useProgressActions } from "../../stores/progressStore";
 
 interface DebuggerSectionProps {
   section: DebuggerSectionData;
+  unitId: UnitId;
+  lessonId: LessonId;
 }
 
-const DebuggerSection: React.FC<DebuggerSectionProps> = ({ section }) => {
+const DebuggerSection: React.FC<DebuggerSectionProps> = ({ section, unitId, lessonId }) => {
   const [userCode, setUserCode] = useState<string>(section.example.initialCode);
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(-1);
   const [breakpoints, setBreakpoints] = useState<Set<number>>(new Set());
   const codeDisplayRef = useRef<HTMLDivElement>(null);
 
   const { runAndTrace, trace, isLoading, error } = useDebuggerLogic();
+  const { completeSection } = useProgressActions();
 
   const simulationActive = trace?.success && trace.steps.length > 0;
 
@@ -102,6 +106,17 @@ const DebuggerSection: React.FC<DebuggerSectionProps> = ({ section }) => {
       lineElement?.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
   }, [currentStepIndex, simulationActive, currentStep]);
+
+  // Mark section as complete when user reaches the end of the trace
+  useEffect(() => {
+    if (
+      trace &&
+      trace.steps.length > 0 &&
+      currentStepIndex === trace.steps.length - 1
+    ) {
+      completeSection(unitId, lessonId, section.id);
+    }
+  }, [currentStepIndex, trace, completeSection, unitId, lessonId, section.id]);
 
   return (
     <div

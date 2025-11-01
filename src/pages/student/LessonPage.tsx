@@ -258,7 +258,14 @@ const LessonPage: React.FC = () => {
           />
         );
       case "Debugger":
-        return <DebuggerSection key={sectionData.id} section={sectionData} />;
+        return (
+          <DebuggerSection
+            key={sectionData.id}
+            unitId={currentUnitGuid}
+            lessonId={currentLessonGuid}
+            section={sectionData}
+          />
+        );
       default:
         const _exhaustiveCheck: never = sectionData;
         console.warn(`Unknown section kind: ${(_exhaustiveCheck as any).kind}`);

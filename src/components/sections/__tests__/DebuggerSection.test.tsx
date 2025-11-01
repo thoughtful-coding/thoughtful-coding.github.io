@@ -9,10 +9,15 @@ import type {
   DebuggerSectionData,
   SectionId,
   Trace,
+  UnitId,
+  LessonId,
 } from "../../../types/data";
 
 // Mock the hook that contains all the complex logic
 vi.mock("../../../hooks/useDebuggerLogic");
+
+const mockUnitId = "test-unit" as UnitId;
+const mockLessonId = "test-lesson" as LessonId;
 
 const mockSectionData: DebuggerSectionData = {
   kind: "Debugger",
@@ -67,7 +72,13 @@ describe("DebuggerSection", () => {
   });
 
   it("renders the initial state before debugging starts", () => {
-    render(<DebuggerSection section={mockSectionData} />);
+    render(
+      <DebuggerSection
+        section={mockSectionData}
+        unitId={mockUnitId}
+        lessonId={mockLessonId}
+      />
+    );
 
     expect(
       screen.getByRole("heading", { name: "Debugging Challenge" })
@@ -85,7 +96,13 @@ describe("DebuggerSection", () => {
     const tracePromise = Promise.resolve(mockTrace);
     runAndTraceMock.mockReturnValue(tracePromise);
 
-    const { rerender } = render(<DebuggerSection section={mockSectionData} />);
+    const { rerender } = render(
+      <DebuggerSection
+        section={mockSectionData}
+        unitId={mockUnitId}
+        lessonId={mockLessonId}
+      />
+    );
 
     // 1. Click the button to enter debug mode
     const debugButton = screen.getByRole("button", {
@@ -106,7 +123,13 @@ describe("DebuggerSection", () => {
       isLoading: false,
       error: null,
     });
-    rerender(<DebuggerSection section={mockSectionData} />);
+    rerender(
+      <DebuggerSection
+        section={mockSectionData}
+        unitId={mockUnitId}
+        lessonId={mockLessonId}
+      />
+    );
 
     // 5. Now the state is consistent, and we can reliably find the elements
     expect(screen.getByText("Line: 2")).toBeInTheDocument();
@@ -134,7 +157,13 @@ describe("DebuggerSection", () => {
       error: "SyntaxError: Invalid syntax",
     });
 
-    render(<DebuggerSection section={mockSectionData} />);
+    render(
+      <DebuggerSection
+        section={mockSectionData}
+        unitId={mockUnitId}
+        lessonId={mockLessonId}
+      />
+    );
 
     expect(screen.getByText("Error:")).toBeInTheDocument();
     expect(screen.getByText("SyntaxError: Invalid syntax")).toBeInTheDocument();
