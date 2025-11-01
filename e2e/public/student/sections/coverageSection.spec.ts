@@ -170,7 +170,7 @@ test.describe("CoverageSection tests", () => {
 
   test("Test fixed inputs are read-only and pre-filled", async ({ page }) => {
     await page.goto(
-      "/thoughtful-python/lesson/05_conditionals/lessons/04_cond_bool"
+      "/thoughtful-python/lesson/05_conditionals/lessons/05_cond_bool"
     );
 
     const sectionItem = page.getByRole("listitem").filter({
