@@ -54,7 +54,7 @@ const Footer: React.FC = () => {
             <div className={styles.linkColumn}>
               <h3 className={styles.columnTitle}>Open Source</h3>
               <a
-                href="https://github.com/thoughtful-coding/thoughtful-coding"
+                href="https://github.com/thoughtful-coding/thoughtful-coding.github.io"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={styles.link}
