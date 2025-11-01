@@ -2,9 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test.describe("PredictionSection tests", () => {
   test("Test get complete if all predictions are right", async ({ page }) => {
-    await page.goto(
-      "/python/lesson/03_functions/lessons/03_func_wrap_up"
-    );
+    await page.goto("/python/lesson/03_functions/lessons/03_func_wrap_up");
 
     const sectionItem = page.getByRole("listitem").filter({
       hasText: "Predict the Outputs",
@@ -52,9 +50,7 @@ test.describe("PredictionSection tests", () => {
   });
 
   test("Test get 2/3 if predictions are mostly right", async ({ page }) => {
-    await page.goto(
-      "/python/lesson/03_functions/lessons/03_func_wrap_up"
-    );
+    await page.goto("/python/lesson/03_functions/lessons/03_func_wrap_up");
 
     const sectionItem = page.getByRole("listitem").filter({
       hasText: "Predict the Outputs",

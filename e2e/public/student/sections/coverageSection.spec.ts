@@ -4,9 +4,7 @@ test.describe("CoverageSection tests", () => {
   test("Test get complete if all coverage inputs are right", async ({
     page,
   }) => {
-    await page.goto(
-      "/python/lesson/03_functions/lessons/03_func_wrap_up"
-    );
+    await page.goto("/python/lesson/03_functions/lessons/03_func_wrap_up");
 
     const sectionItem = page.getByRole("listitem").filter({
       hasText: "Different Inputs",
@@ -63,9 +61,7 @@ test.describe("CoverageSection tests", () => {
   });
 
   test("Test get 2/3 if coverage are mostly right", async ({ page }) => {
-    await page.goto(
-      "/python/lesson/03_functions/lessons/03_func_wrap_up"
-    );
+    await page.goto("/python/lesson/03_functions/lessons/03_func_wrap_up");
 
     const sectionItem = page.getByRole("listitem").filter({
       hasText: "Different Inputs",
@@ -169,9 +165,7 @@ test.describe("CoverageSection tests", () => {
   });
 
   test("Test fixed inputs are read-only and pre-filled", async ({ page }) => {
-    await page.goto(
-      "/python/lesson/05_conditionals/lessons/05_cond_bool"
-    );
+    await page.goto("/python/lesson/05_conditionals/lessons/05_cond_bool");
 
     const sectionItem = page.getByRole("listitem").filter({
       hasText: "Free Admission",

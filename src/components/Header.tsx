@@ -80,7 +80,10 @@ const Header: React.FC = () => {
               </NavLink>
             </li>
             <li>
-              <NavLink to="/python/learning-entries" className={getNavLinkClass}>
+              <NavLink
+                to="/python/learning-entries"
+                className={getNavLinkClass}
+              >
                 Learning Entries
               </NavLink>
             </li>

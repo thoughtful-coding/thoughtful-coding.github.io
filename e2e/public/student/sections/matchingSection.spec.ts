@@ -4,9 +4,7 @@ test.describe("MatchingSection tests", () => {
   test("Test can get a right answer from the MatchingSection", async ({
     page,
   }) => {
-    await page.goto(
-      "/python/lesson/xx_learning/lessons/00_learning_primm"
-    );
+    await page.goto("/python/lesson/xx_learning/lessons/00_learning_primm");
 
     const sectionItem = page
       .getByRole("listitem")
@@ -56,9 +54,7 @@ test.describe("MatchingSection tests", () => {
   test("Test can get a wrong answer from the MatchingSection", async ({
     page,
   }) => {
-    await page.goto(
-      "/python/lesson/xx_learning/lessons/00_learning_primm"
-    );
+    await page.goto("/python/lesson/xx_learning/lessons/00_learning_primm");
 
     const sectionItem = page
       .getByRole("listitem")

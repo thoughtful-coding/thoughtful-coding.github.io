@@ -4,9 +4,7 @@ test.describe("ObservationSection tests for regular code", () => {
   test("Test can click the `Run Code` button for regular code", async ({
     page,
   }) => {
-    await page.goto(
-      "/python/lesson/xx_learning/lessons/00_learning_primm"
-    );
+    await page.goto("/python/lesson/xx_learning/lessons/00_learning_primm");
 
     const sectionItem = page
       .getByRole("listitem")
@@ -25,9 +23,7 @@ test.describe("ObservationSection tests for regular code", () => {
   test("Test can get a Syntax error when clicking `Run Code` for faulty code", async ({
     page,
   }) => {
-    await page.goto(
-      "/python/lesson/xx_learning/lessons/00_learning_primm"
-    );
+    await page.goto("/python/lesson/xx_learning/lessons/00_learning_primm");
 
     const sectionItem = page
       .getByRole("listitem")

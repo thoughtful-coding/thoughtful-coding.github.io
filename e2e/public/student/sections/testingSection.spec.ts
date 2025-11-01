@@ -2,9 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test.describe("TestingSection `procedure` / `__main__` output tests", () => {
   test("Test can click `Run Code` button", async ({ page }) => {
-    await page.goto(
-      "/python/lesson/00_intro/lessons/00_intro_strings"
-    );
+    await page.goto("/python/lesson/00_intro/lessons/00_intro_strings");
 
     const sectionItem = page.getByRole("listitem").filter({
       hasText: "Challenge: Who Goes There?",
@@ -36,9 +34,7 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
   test("Test can click `Run Tests` button (w/o doing anything) and get failure", async ({
     page,
   }) => {
-    await page.goto(
-      "/python/lesson/00_intro/lessons/00_intro_strings"
-    );
+    await page.goto("/python/lesson/00_intro/lessons/00_intro_strings");
 
     const sectionItem = page.getByRole("listitem").filter({
       hasText: "Challenge: Who Goes There?",
@@ -62,9 +58,7 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
   });
 
   test("Test can click `Run Tests` button and get pass", async ({ page }) => {
-    await page.goto(
-      "/python/lesson/00_intro/lessons/00_intro_strings"
-    );
+    await page.goto("/python/lesson/00_intro/lessons/00_intro_strings");
 
     const sectionItem = page.getByRole("listitem").filter({
       hasText: "Challenge: Who Goes There?",
@@ -91,9 +85,7 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
   test("Test can click `Run Tests` button and get failure", async ({
     page,
   }) => {
-    await page.goto(
-      "/python/lesson/00_intro/lessons/00_intro_strings"
-    );
+    await page.goto("/python/lesson/00_intro/lessons/00_intro_strings");
 
     const sectionItem = page.getByRole("listitem").filter({
       hasText: "Challenge: Who Goes There?",
@@ -121,9 +113,7 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
   });
 
   test("Test can have faulty program and get SyntaxError", async ({ page }) => {
-    await page.goto(
-      "/python/lesson/00_intro/lessons/00_intro_strings"
-    );
+    await page.goto("/python/lesson/00_intro/lessons/00_intro_strings");
 
     const sectionItem = page.getByRole("listitem").filter({
       hasText: "Challenge: Who Goes There?",
@@ -149,9 +139,7 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
 
 test.describe("TestingSection `procedure` / `function_name` tests", () => {
   test("Test can click `Run Tests` button and get pass", async ({ page }) => {
-    await page.goto(
-      "/python/lesson/03_functions/lessons/03_func_wrap_up"
-    );
+    await page.goto("/python/lesson/03_functions/lessons/03_func_wrap_up");
 
     const sectionItem = page.getByRole("listitem").filter({
       hasText: "Challenge: Create a Two Input Function",
@@ -180,9 +168,7 @@ test.describe("TestingSection `procedure` / `function_name` tests", () => {
   });
 
   test("Test can click `Run Tests` button and get fail", async ({ page }) => {
-    await page.goto(
-      "/python/lesson/03_functions/lessons/03_func_wrap_up"
-    );
+    await page.goto("/python/lesson/03_functions/lessons/03_func_wrap_up");
 
     const sectionItem = page.getByRole("listitem").filter({
       hasText: "Challenge: Create a Two Input Function",
@@ -215,9 +201,7 @@ test.describe("TestingSection `procedure` / `function_name` tests", () => {
   test("Test can click the `Run Tests` button (w/o doing anything) and get fail", async ({
     page,
   }) => {
-    await page.goto(
-      "/python/lesson/03_functions/lessons/03_func_wrap_up"
-    );
+    await page.goto("/python/lesson/03_functions/lessons/03_func_wrap_up");
 
     const sectionItem = page.getByRole("listitem").filter({
       hasText: "Challenge: Create a Two Input Function",
@@ -321,9 +305,7 @@ test.describe("TestingSection for turtles", () => {
   test("Test can click `Run Tests` button and get pass for turtles for __main__ procedures @flaky", async ({
     page,
   }) => {
-    await page.goto(
-      "/python/lesson/06_loops/lessons/01_loops_challenges"
-    );
+    await page.goto("/python/lesson/06_loops/lessons/01_loops_challenges");
 
     const sectionItem = page.getByRole("listitem").filter({
       hasText: "Challenge: Hexagon",
@@ -362,9 +344,7 @@ test.describe("TestingSection for turtles", () => {
   test("Test that can click `Run Tests` button and get fail for turtles for __main__ procedures", async ({
     page,
   }) => {
-    await page.goto(
-      "/python/lesson/06_loops/lessons/01_loops_challenges"
-    );
+    await page.goto("/python/lesson/06_loops/lessons/01_loops_challenges");
 
     const sectionItem = page.getByRole("listitem").filter({
       hasText: "Challenge: Hexagon",
@@ -403,9 +383,7 @@ test.describe("TestingSection for turtles", () => {
   test("Test that an error in the program shows up when `Run Button` clicked ", async ({
     page,
   }) => {
-    await page.goto(
-      "/python/lesson/06_loops/lessons/01_loops_challenges"
-    );
+    await page.goto("/python/lesson/06_loops/lessons/01_loops_challenges");
 
     const sectionItem = page.getByRole("listitem").filter({
       hasText: "Challenge: Hexagon",
@@ -437,9 +415,7 @@ test.describe("TestingSection for turtles", () => {
   test("Test that an error in the program shows up when `Run Tests` clicked ", async ({
     page,
   }) => {
-    await page.goto(
-      "/python/lesson/06_loops/lessons/01_loops_challenges"
-    );
+    await page.goto("/python/lesson/06_loops/lessons/01_loops_challenges");
 
     const sectionItem = page.getByRole("listitem").filter({
       hasText: "Challenge: Hexagon",
@@ -471,9 +447,7 @@ test.describe("TestingSection for turtles", () => {
   test("Test can click `Run Tests` button and get pass for turtles for non-__main__ procedures @flaky", async ({
     page,
   }) => {
-    await page.goto(
-      "/python/lesson/06_loops/lessons/01_loops_challenges"
-    );
+    await page.goto("/python/lesson/06_loops/lessons/01_loops_challenges");
 
     const sectionItem = page.getByRole("listitem").filter({
       hasText: "Challenge: Octagon with Input",
@@ -512,9 +486,7 @@ test.describe("TestingSection for turtles", () => {
   test("Test can click `Run Tests` button and get fail for turtles for non-__main__ procedures @flaky", async ({
     page,
   }) => {
-    await page.goto(
-      "/python/lesson/06_loops/lessons/01_loops_challenges"
-    );
+    await page.goto("/python/lesson/06_loops/lessons/01_loops_challenges");
 
     const sectionItem = page.getByRole("listitem").filter({
       hasText: "Challenge: Octagon with Input",

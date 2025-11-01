@@ -4,9 +4,7 @@ test.describe("PrimmSection tests with regular code", () => {
   test("Test can run the PRIMM section up to requiring AI", async ({
     page,
   }) => {
-    await page.goto(
-      "/python/lesson/xx_learning/lessons/00_learning_primm"
-    );
+    await page.goto("/python/lesson/xx_learning/lessons/00_learning_primm");
 
     const sectionItem = page
       .getByRole("listitem")
