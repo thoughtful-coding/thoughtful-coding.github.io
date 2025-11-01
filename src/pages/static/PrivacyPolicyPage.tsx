@@ -11,7 +11,7 @@ const PrivacyPolicyPage: React.FC = () => {
       <section className={styles.section}>
         <h2>1. Information We Collect</h2>
         <p>
-          <em>Thoughtful Python</em> collects the following information to
+          <em>Thoughtful Coding</em> collects the following information to
           provide our educational services:
         </p>
         <ul>
@@ -69,7 +69,7 @@ const PrivacyPolicyPage: React.FC = () => {
       <section className={styles.section}>
         <h2>4. Anonymous Users</h2>
         <p>
-          You can use <em>Thoughtful Python</em> without creating an account.
+          You can use <em>Thoughtful Coding</em> without creating an account.
           Anonymous users:
         </p>
         <ul>
@@ -93,7 +93,7 @@ const PrivacyPolicyPage: React.FC = () => {
       <section className={styles.section}>
         <h2>6. Third-Party Services</h2>
         <p>
-          <em>Thoughtful Python</em> uses the following third-party services:
+          <em>Thoughtful Coding</em> uses the following third-party services:
         </p>
         <ul>
           <li>

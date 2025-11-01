@@ -11,21 +11,24 @@ const FAQPage: React.FC = () => {
         <h2>Getting Started</h2>
 
         <div className={styles.faqItem}>
-          <h3>Do I need to create an account to use Thoughtful Python?</h3>
+          <h3>
+            Do I need to create an account to use <em>Thoughtful Coding</em>?
+          </h3>
           <p>
-            No! You can use Thoughtful Python completely anonymously. Your
-            progress will be saved locally in your browser. However, if you want
-            to sync your progress across devices or access your learning history
-            from multiple computers, you can sign in with your Google account.
+            No! You can use <em>Thoughtful Coding</em> completely anonymously.
+            Your progress will be saved locally in your browser. However, if you
+            want to sync your progress across devices, access your learning
+            history from multiple computers, or get feedback from AI on your
+            progress, you can sign in with your Google account.
           </p>
         </div>
 
         <div className={styles.faqItem}>
-          <h3>Do I need to install Python on my computer?</h3>
+          <h3>Do I need to install anything on my computer?</h3>
           <p>
-            No installation is required! Thoughtful Python runs entirely in your
-            browser using Pyodide, a Python interpreter compiled to WebAssembly.
-            This means you can start coding immediately without any setup.
+            No installation is required! <em>Thoughtful Coding</em> runs
+            entirely in your browser. This means you can start coding
+            immediately without any setup.
           </p>
         </div>
 
@@ -45,7 +48,10 @@ const FAQPage: React.FC = () => {
 
         <div className={styles.faqItem}>
           <h3>What types of exercises are available?</h3>
-          <p>Thoughtful Python offers several types of learning activities:</p>
+          <p>
+            <em>Thoughtful Coding</em> offers several types of learning
+            activities:
+          </p>
           <ul>
             <li>
               <strong>Information sections:</strong> Learn concepts through text
@@ -103,16 +109,6 @@ const FAQPage: React.FC = () => {
         <h2>Technical Issues</h2>
 
         <div className={styles.faqItem}>
-          <h3>The platform is running slowly. What can I do?</h3>
-          <p>
-            Pyodide loads the Python interpreter when you first visit the site,
-            which may take a moment. Once loaded, performance should improve.
-            For best results, use a modern browser like Chrome, Firefox, or Edge
-            with JavaScript enabled.
-          </p>
-        </div>
-
-        <div className={styles.faqItem}>
           <h3>My code won't run. What's wrong?</h3>
           <p>Common issues include:</p>
           <ul>
@@ -129,9 +125,10 @@ const FAQPage: React.FC = () => {
         <div className={styles.faqItem}>
           <h3>How do I report a bug or issue?</h3>
           <p>
-            Thoughtful Python is open source! You can report issues on our{" "}
+            <em>Thoughtful Coding</em> is open source! You can report issues on
+            our{" "}
             <a
-              href="https://github.com/eric-rizzi/thoughtful-python/issues"
+              href="https://github.com/thoughtful-coding/thoughtful-coding.github.io/issues"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -147,12 +144,14 @@ const FAQPage: React.FC = () => {
         <h2>For Teachers</h2>
 
         <div className={styles.faqItem}>
-          <h3>Can I use Thoughtful Python in my classroom?</h3>
+          <h3>
+            Can I use <em>Thoughtful Coding</em> in my classroom?
+          </h3>
           <p>
-            Absolutely! Thoughtful Python is designed for educational use. You
-            can have your students use it anonymously or create accounts. The
-            Teacher Portal provides tools for reviewing student submissions and
-            providing feedback.
+            Absolutely! <em>Thoughtful Coding</em> is designed for educational
+            use. You can have your students use it anonymously or create
+            accounts. The Teacher Portal provides tools for reviewing student
+            submissions and providing feedback.
           </p>
         </div>
 
@@ -169,10 +168,11 @@ const FAQPage: React.FC = () => {
         <div className={styles.faqItem}>
           <h3>Can I add my own lessons?</h3>
           <p>
-            Yes! Thoughtful Python is open source and accepts contributions. You
-            can add new lessons by following the contribution guidelines in our{" "}
+            Yes! <em>Thoughtful Coding</em> is open source and accepts
+            contributions. You can add new lessons by following the contribution
+            guidelines in our{" "}
             <a
-              href="https://github.com/eric-rizzi/thoughtful-python"
+              href="https://github.com/thoughtful-coding/thoughtful-coding.github.io"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -216,10 +216,10 @@ const FAQPage: React.FC = () => {
         <div className={styles.faqItem}>
           <h3>Is my code secure?</h3>
           <p>
-            Your code runs entirely in your browser using Pyodide - it never
-            leaves your computer during execution. Only PRIMM and Reflection
-            submissions are sent to our servers for AI evaluation. All data
-            transmission is encrypted using HTTPS.
+            Your code runs entirely in your browser - it never leaves your
+            computer during execution. Only PRIMM and Reflection submissions are
+            sent to our servers for AI evaluation. All data transmission is
+            encrypted using HTTPS.
           </p>
         </div>
       </section>
@@ -238,7 +238,7 @@ const FAQPage: React.FC = () => {
           </a>{" "}
           page or open an issue on{" "}
           <a
-            href="https://github.com/eric-rizzi/thoughtful-python"
+            href="https://github.com/thoughtful-coding/thoughtful-coding.github.io"
             target="_blank"
             rel="noopener noreferrer"
           >
