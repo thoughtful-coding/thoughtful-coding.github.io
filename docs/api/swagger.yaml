@@ -17,11 +17,12 @@ info:
     **Pagination:** DynamoDB LastEvaluatedKey pattern (pass opaque object to next request)
 
 servers:
-  - url: https://3kyvgl1ck0.execute-api.us-east-2.amazonaws.com/ # Your existing server URL
+  - url: https://3kyvgl1ck0.execute-api.us-east-2.amazonaws.com
     description: API Gateway endpoint
-    # Variables can be kept if you use them for different environments via tools
 
 tags:
+  - name: Authentication
+    description: Google OAuth 2.0 authentication endpoints.
   - name: User Progress
     description: Operations related to student learning progress.
   - name: Student Submissions
@@ -31,612 +32,115 @@ tags:
 
 components:
   schemas:
-    #--------------------------------------------------------------------------
     # Core Data Types
-    #--------------------------------------------------------------------------
     UnitId:
-      type: string
-      example: "intro_python"
+      $ref: "./schemas/common.yaml#/UnitId"
     LessonId:
-      type: string
-      format: uuid
-      example: "a1b2c3d4-e5f6-4890-8234-567890abcdef0"
+      $ref: "./schemas/common.yaml#/LessonId"
     SectionId:
-      type: string
-      example: "python-history"
+      $ref: "./schemas/common.yaml#/SectionId"
     PrimmExampleId:
-      type: string
-      example: "primm-greeting-output"
+      $ref: "./schemas/common.yaml#/PrimmExampleId"
     IsoTimestamp:
-      type: string
-      format: date-time
-      example: "2025-06-01T10:00:00Z"
+      $ref: "./schemas/common.yaml#/IsoTimestamp"
     AssessmentLevel:
-      type: string
-      enum: [achieves, mostly, developing, insufficient]
-      description: "AI assessment: achieves (fully meets objectives), mostly (minor gaps), developing (needs improvement), insufficient (doesn't demonstrate understanding)"
-
-    #--------------------------------------------------------------------------
-    # Reusable Common Types
-    #--------------------------------------------------------------------------
+      $ref: "./schemas/common.yaml#/AssessmentLevel"
     LastEvaluatedKey:
-      type: object
-      nullable: true
-      additionalProperties: true
-      description: "DynamoDB pagination token (opaque, pass as-is to next request)"
-
+      $ref: "./schemas/common.yaml#/LastEvaluatedKey"
     CompletionMap:
-      type: object
-      description: "SectionId → IsoTimestamp"
-      additionalProperties:
-        $ref: "#/components/schemas/IsoTimestamp"
-
+      $ref: "./schemas/common.yaml#/CompletionMap"
     LessonCompletionMap:
-      type: object
-      description: "LessonId (GUID) → CompletionMap"
-      additionalProperties:
-        $ref: "#/components/schemas/CompletionMap"
-
+      $ref: "./schemas/common.yaml#/LessonCompletionMap"
     UnitCompletionMap:
-      type: object
-      description: "UnitId → LessonCompletionMap"
-      additionalProperties:
-        $ref: "#/components/schemas/LessonCompletionMap"
-
+      $ref: "./schemas/common.yaml#/UnitCompletionMap"
     BasicUserInfo:
-      type: object
-      properties:
-        userId:
-          type: string
-          example: "USER#google-oauth2|1234567890"
-        userName:
-          type: string
-          nullable: true
-        userEmail:
-          type: string
-          format: email
-          nullable: true
-
+      $ref: "./schemas/common.yaml#/BasicUserInfo"
     PrimmIdentifiers:
-      type: object
-      required: [lessonId, sectionId, primmExampleId]
-      properties:
-        lessonId:
-          $ref: "#/components/schemas/LessonId"
-        sectionId:
-          $ref: "#/components/schemas/SectionId"
-        primmExampleId:
-          $ref: "#/components/schemas/PrimmExampleId"
+      $ref: "./schemas/common.yaml#/PrimmIdentifiers"
 
-    #--------------------------------------------------------------------------
     # Authentication Schemas
-    #--------------------------------------------------------------------------
     GoogleLoginRequest:
-      type: object
-      required: [googleIdToken]
-      properties:
-        googleIdToken:
-          type: string
-          description: "JWT token from Google OAuth 2.0"
-
+      $ref: "./schemas/authentication.yaml#/GoogleLoginRequest"
     TokenRefreshRequest:
-      type: object
-      required: [refreshToken]
-      properties:
-        refreshToken:
-          type: string
-
+      $ref: "./schemas/authentication.yaml#/TokenRefreshRequest"
     LogoutRequest:
-      type: object
-      required: [refreshToken]
-      properties:
-        refreshToken:
-          type: string
-
+      $ref: "./schemas/authentication.yaml#/LogoutRequest"
     AuthTokenResponse:
-      type: object
-      required: [accessToken, refreshToken]
-      properties:
-        accessToken:
-          type: string
-          description: "Valid for 1 hour"
-        refreshToken:
-          type: string
-          description: "Valid for 30 days"
+      $ref: "./schemas/authentication.yaml#/AuthTokenResponse"
 
-    #--------------------------------------------------------------------------
-    # User Progress Schemas
-    #--------------------------------------------------------------------------
-    SectionCompletionInput: # For PUT /progress request by student
-      type: object
-      description: Information for a single section completion event.
-      required:
-        - unitId
-        - lessonId
-        - sectionId
-      properties:
-        unitId:
-          $ref: "#/components/schemas/UnitId"
-        lessonId:
-          $ref: "#/components/schemas/LessonId" # This is the Lesson GUID
-        sectionId:
-          $ref: "#/components/schemas/SectionId"
-
-    BatchCompletionsInput: # Request body for PUT /progress
-      type: object
-      required:
-        - completions
-      properties:
-        completions:
-          type: array
-          items:
-            $ref: "#/components/schemas/SectionCompletionInput"
-          minItems: 1
-          description: "An array of section completion events."
-
+    # Progress Schemas
+    SectionCompletionInput:
+      $ref: "./schemas/progress.yaml#/SectionCompletionInput"
+    BatchCompletionsInput:
+      $ref: "./schemas/progress.yaml#/BatchCompletionsInput"
     UserProgressResponse:
-      type: object
-      required: [userId, completion]
-      properties:
-        userId:
-          type: string
-        completion:
-          $ref: "#/components/schemas/UnitCompletionMap"
+      $ref: "./schemas/progress.yaml#/UserProgressResponse"
 
-    #--------------------------------------------------------------------------
-    # Reflection Schemas (for Student Submissions & Instructor Views)
-    #--------------------------------------------------------------------------
-    ReflectionInteractionInput: # For POST /reflections/...
-      type: object
-      description: "Payload for a student submitting a reflection draft or final entry."
-      required:
-        - userTopic
-        - isUserTopicPredefined
-        - userCode
-        - isUserCodePredefined
-        - userExplanation
-      properties:
-        userTopic: { type: string }
-        isUserTopicPredefined: { type: boolean }
-        userCode: { type: string }
-        isUserCodePredefined: { type: boolean }
-        userExplanation: { type: string }
-        isFinal: { type: boolean, default: false }
-        # lessonId and sectionId are path parameters for this endpoint
+    # Reflection Schemas
+    ReflectionInteractionInput:
+      $ref: "./schemas/reflections.yaml#/ReflectionInteractionInput"
+    ReflectionVersionItem:
+      $ref: "./schemas/reflections.yaml#/ReflectionVersionItem"
+    ListOfReflectionDraftsResponse:
+      $ref: "./schemas/reflections.yaml#/ListOfReflectionDraftsResponse"
 
-    ReflectionVersionItem: # Standard item for reflections
-      type: object
-      description: Represents a single saved version of a reflection, including any AI feedback.
-      required:
-        [
-          versionId,
-          userId,
-          lessonId,
-          sectionId,
-          userTopic,
-          userCode,
-          userExplanation,
-          createdAt,
-          isFinal,
-        ]
-      properties:
-        versionId: { type: string, description: "Unique ID for this version." }
-        userId: { type: string }
-        lessonId: { $ref: "#/components/schemas/LessonId" } # Lesson GUID
-        sectionId: { $ref: "#/components/schemas/SectionId" }
-        userTopic: { type: string }
-        userCode: { type: string }
-        userExplanation: { type: string }
-        aiFeedback: { type: string, nullable: true }
-        aiAssessment:
-          { $ref: "#/components/schemas/AssessmentLevel", nullable: true }
-        createdAt: { $ref: "#/components/schemas/IsoTimestamp" }
-        isFinal: { type: boolean }
-        sourceVersionId:
-          {
-            type: string,
-            nullable: true,
-            description: "ID of the draft this final version was based on.",
-          }
-        finalEntryCreatedAt:
-          {
-            $ref: "#/components/schemas/IsoTimestamp",
-            nullable: true,
-            description: "Timestamp for when this was marked as final (for GSI sorting).",
-          }
-
-    ListOfReflectionDraftsResponse: # For GET /reflections/... (student's own drafts)
-      type: object
-      properties:
-        versions:
-          type: array
-          items: { $ref: "#/components/schemas/ReflectionVersionItem" }
-        lastEvaluatedKey:
-          $ref: "#/components/schemas/LastEvaluatedKey"
-
-    #--------------------------------------------------------------------------
-    # PRIMM Schemas (for Student Submissions & Instructor Views)
-    #--------------------------------------------------------------------------
+    # PRIMM Schemas
     PrimmEvaluationRequest:
-      type: object
-      required:
-        [
-          lessonId,
-          sectionId,
-          primmExampleId,
-          codeSnippet,
-          userPredictionPromptText,
-          userPredictionText,
-          userPredictionConfidence,
-          userExplanationText,
-        ]
-      allOf:
-        - $ref: "#/components/schemas/PrimmIdentifiers"
-        - type: object
-          properties:
-            codeSnippet:
-              type: string
-            userPredictionPromptText:
-              type: string
-            userPredictionText:
-              type: string
-            userPredictionConfidence:
-              type: integer
-              minimum: 1
-              maximum: 3
-              description: "1=Low, 2=Medium, 3=High"
-            userExplanationText:
-              type: string
-            actualOutputSummary:
-              type: string
-              nullable: true
-
+      $ref: "./schemas/primm.yaml#/PrimmEvaluationRequest"
     PrimmEvaluationResponse:
-      type: object
-      required:
-        [aiPredictionAssessment, aiExplanationAssessment, aiOverallComment]
-      properties:
-        aiPredictionAssessment:
-          $ref: "#/components/schemas/AssessmentLevel"
-        aiExplanationAssessment:
-          $ref: "#/components/schemas/AssessmentLevel"
-        aiOverallComment:
-          type: string
+      $ref: "./schemas/primm.yaml#/PrimmEvaluationResponse"
 
-    #--------------------------------------------------------------------------
-    # Instructor Portal Schemas
-    #--------------------------------------------------------------------------
+    # Instructor Schemas
     InstructorStudentInfo:
-      allOf:
-        - $ref: "#/components/schemas/BasicUserInfo"
-        - type: object
-          properties:
-            studentId:
-              type: string
-              description: "Student's User ID (alias for userId)."
-              example: "USER#google-oauth2|9876543210"
-
+      $ref: "./schemas/instructor.yaml#/InstructorStudentInfo"
     ListOfInstructorStudentsResponse:
-      type: object
-      properties:
-        students:
-          type: array
-          items: { $ref: "#/components/schemas/InstructorStudentInfo" }
-
+      $ref: "./schemas/instructor.yaml#/ListOfInstructorStudentsResponse"
     StudentUnitCompletionDataItem:
-      type: object
-      required: [studentId, completedSectionsInUnit]
-      properties:
-        studentId:
-          type: string
-        completedSectionsInUnit:
-          $ref: "#/components/schemas/LessonCompletionMap"
-
-    ClassUnitProgressResponse: # For GET /instructor/units/{unitId}/class-progress
-      type: object
-      required: [unitId, studentProgressData]
-      properties:
-        unitId: { $ref: "#/components/schemas/UnitId" }
-        studentProgressData:
-          type: array
-          items: { $ref: "#/components/schemas/StudentUnitCompletionDataItem" }
-
-    # For instructor viewing a student's learning entries (reflections)
+      $ref: "./schemas/instructor.yaml#/StudentUnitCompletionDataItem"
+    ClassUnitProgressResponse:
+      $ref: "./schemas/instructor.yaml#/ClassUnitProgressResponse"
     StudentLearningEntriesResponse:
-      type: object
-      properties:
-        entries:
-          type: array
-          items: { $ref: "#/components/schemas/ReflectionVersionItem" }
-          description: "List of reflection entries (can include both drafts and final entries)."
-        lastEvaluatedKey:
-          $ref: "#/components/schemas/LastEvaluatedKey"
-
-    # For instructor viewing a student's PRIMM submissions (as stored in DDB)
+      $ref: "./schemas/instructor.yaml#/StudentLearningEntriesResponse"
     StoredPrimmSubmissionItem:
-      type: object
-      description: "A stored PRIMM submission including user inputs and AI evaluation."
-      # Properties should match what's stored in PrimmSubmissionsTable
-      # This includes fields from PrimmEvaluationRequest and PrimmEvaluationResponse, plus metadata
-      required:
-        [
-          userId,
-          submissionCompositeKey,
-          lessonId,
-          sectionId,
-          primmExampleId,
-          timestampIso,
-          codeSnippet,
-          userPredictionPromptText,
-          userPredictionText,
-          userPredictionConfidence,
-          aiPredictionAssessment,
-          aiExplanationAssessment,
-          aiOverallComment,
-          createdAt,
-        ]
-      properties:
-        userId: { type: string }
-        submissionCompositeKey:
-          {
-            type: string,
-            description: "Sort Key: LessonGUID#SectionID#PrimmExampleID#TimestampISO",
-          }
-        lessonId: { $ref: "#/components/schemas/LessonId" }
-        sectionId: { $ref: "#/components/schemas/SectionId" }
-        primmExampleId: { $ref: "#/components/schemas/PrimmExampleId" }
-        timestampIso:
-          {
-            $ref: "#/components/schemas/IsoTimestamp",
-            description: "Timestamp of the PRIMM submission event.",
-          }
-        codeSnippet: { type: string }
-        userPredictionPromptText: { type: string }
-        userPredictionText: { type: string }
-        userPredictionConfidence: { type: integer }
-        actualOutputSummary: { type: string, nullable: true }
-        userExplanationText: { type: string, nullable: true }
-        aiPredictionAssessment: { $ref: "#/components/schemas/AssessmentLevel" }
-        aiExplanationAssessment: {
-            $ref: "#/components/schemas/AssessmentLevel",
-            nullable: true,
-          } # Allow null if no explanation
-        aiOverallComment: { type: string, nullable: true }
-        createdAt:
-          {
-            $ref: "#/components/schemas/IsoTimestamp",
-            description: "Timestamp of when this record was saved.",
-          }
-
+      $ref: "./schemas/instructor.yaml#/StoredPrimmSubmissionItem"
     StudentPrimmSubmissionsResponse:
-      type: object
-      properties:
-        submissions:
-          type: array
-          items: { $ref: "#/components/schemas/StoredPrimmSubmissionItem" }
-          description: "List of PRIMM submissions for the student."
-        lastEvaluatedKey:
-          $ref: "#/components/schemas/LastEvaluatedKey"
-
-    # For assignment submissions endpoint
+      $ref: "./schemas/instructor.yaml#/StudentPrimmSubmissionsResponse"
     AssignmentSubmission:
-      type: object
-      description: "Represents a student's submission for an assignment."
-      required: [studentId, submissionTimestamp, submissionDetails]
-      properties:
-        studentId:
-          type: string
-          description: "The student's user ID."
-          example: "USER#google-oauth2|1234567890"
-        studentName:
-          type: string
-          nullable: true
-          description: "Display name of the student."
-          example: "Jane Doe"
-        submissionTimestamp:
-          $ref: "#/components/schemas/IsoTimestamp"
-        submissionDetails:
-          description: "For Reflection: array of ReflectionVersionItem. For PRIMM: single StoredPrimmSubmissionItem."
-          oneOf:
-            - type: array
-              items: { $ref: "#/components/schemas/ReflectionVersionItem" }
-            - $ref: "#/components/schemas/StoredPrimmSubmissionItem"
-
+      $ref: "./schemas/instructor.yaml#/AssignmentSubmission"
     ListOfAssignmentSubmissionsResponse:
-      type: object
-      required: [assignmentType, unitId, lessonId, sectionId, submissions]
-      properties:
-        assignmentType:
-          type: string
-          enum: [Reflection, PRIMM]
-          description: "Type of assignment."
-        unitId:
-          $ref: "#/components/schemas/UnitId"
-        lessonId:
-          $ref: "#/components/schemas/LessonId"
-        sectionId:
-          $ref: "#/components/schemas/SectionId"
-        primmExampleId:
-          $ref: "#/components/schemas/PrimmExampleId"
-          nullable: true
-          description: "Only present for PRIMM assignments."
-        submissions:
-          type: array
-          items: { $ref: "#/components/schemas/AssignmentSubmission" }
-          description: "List of student submissions for this assignment."
-
+      $ref: "./schemas/instructor.yaml#/ListOfAssignmentSubmissionsResponse"
     SectionStatusItem:
-      type: object
-      required: [sectionId, sectionTitle, sectionKind, status]
-      properties:
-        sectionId:
-          $ref: "#/components/schemas/SectionId"
-        sectionTitle:
-          type: string
-        sectionKind:
-          type: string
-        status:
-          type: string
-          enum: [completed, submitted, not_started]
-        submissionTimestamp:
-          $ref: "#/components/schemas/IsoTimestamp"
-          nullable: true
-        submissionDetails:
-          nullable: true
-          oneOf:
-            - type: array
-              items: { $ref: "#/components/schemas/ReflectionVersionItem" }
-            - $ref: "#/components/schemas/StoredPrimmSubmissionItem"
-
+      $ref: "./schemas/instructor.yaml#/SectionStatusItem"
     LessonProgressProfile:
-      type: object
-      required: [lessonId, lessonTitle, sections]
-      properties:
-        lessonId:
-          $ref: "#/components/schemas/LessonId"
-        lessonTitle:
-          type: string
-        sections:
-          type: array
-          items: { $ref: "#/components/schemas/SectionStatusItem" }
-
+      $ref: "./schemas/instructor.yaml#/LessonProgressProfile"
     UnitProgressProfile:
-      type: object
-      required: [unitId, unitTitle, lessons]
-      properties:
-        unitId:
-          $ref: "#/components/schemas/UnitId"
-        unitTitle:
-          type: string
-        lessons:
-          type: array
-          items: { $ref: "#/components/schemas/LessonProgressProfile" }
-
+      $ref: "./schemas/instructor.yaml#/UnitProgressProfile"
     StudentDetailedProgressResponse:
-      type: object
-      required: [studentId, profile]
-      properties:
-        studentId:
-          type: string
-        studentName:
-          type: string
-          nullable: true
-        profile:
-          type: array
-          items: { $ref: "#/components/schemas/UnitProgressProfile" }
+      $ref: "./schemas/instructor.yaml#/StudentDetailedProgressResponse"
 
-    #--------------------------------------------------------------------------
-    # Reusable Error and Response Components
-    #--------------------------------------------------------------------------
+    # Error Schema
     ErrorResponse:
-      type: object
-      required: [message, errorCode]
-      properties:
-        message:
-          type: string
-          description: "Human-readable error message"
-        errorCode:
-          type: string
-          enum:
-            - VALIDATION_ERROR
-            - AUTHENTICATION_FAILED
-            - AUTHORIZATION_FAILED
-            - RESOURCE_NOT_FOUND
-            - RATE_LIMIT_EXCEEDED
-            - AI_SERVICE_UNAVAILABLE
-            - INTERNAL_ERROR
-          description: "Standard error code for programmatic error handling"
-        details:
-          type: object
-          nullable: true
-          additionalProperties: true
-          description: "Optional additional error details (e.g., validation errors from Pydantic)"
+      $ref: "./schemas/errors.yaml#/ErrorResponse"
 
   parameters:
-    # Pagination parameters (reusable)
     PaginationLimit:
-      name: limit
-      in: query
-      required: false
-      schema:
-        type: integer
-        default: 20
-        minimum: 1
-        maximum: 100
-      description: "Maximum number of items to return per page."
-      example: 20
-
+      $ref: "./parameters/common.yaml#/PaginationLimit"
     PaginationKey:
-      name: lastEvaluatedKey
-      in: query
-      required: false
-      schema:
-        type: string
-      description: "URL-encoded JSON string of the LastEvaluatedKey object from the previous response. Used for pagination."
-      example: "%7B%22PK%22%3A%22USER%23123%22%2C%22SK%22%3A%22LESSON%23abc-123%22%7D"
-
-    # Filter parameters
+      $ref: "./parameters/common.yaml#/PaginationKey"
     LearningEntriesFilter:
-      name: filter
-      in: query
-      required: false
-      schema:
-        type: string
-        enum: [all, final, drafts]
-        default: all
-      description: "Filter entries by finalization status: 'all' (both drafts and final), 'final' (only finalized entries), 'drafts' (only draft versions)."
-      example: "final"
-
-    # Path parameters
+      $ref: "./parameters/common.yaml#/LearningEntriesFilter"
     StudentIdParam:
-      name: studentId
-      in: path
-      required: true
-      schema:
-        type: string
-      description: "The unique identifier of the student user."
-      example: "USER#google-oauth2|1234567890"
-
+      $ref: "./parameters/common.yaml#/StudentIdParam"
     LessonIdParam:
-      name: lessonId
-      in: path
-      required: true
-      schema:
-        $ref: "#/components/schemas/LessonId"
-      description: "The GUID of the lesson."
-
+      $ref: "./parameters/common.yaml#/LessonIdParam"
     SectionIdParam:
-      name: sectionId
-      in: path
-      required: true
-      schema:
-        $ref: "#/components/schemas/SectionId"
-      description: "The ID of the section within the lesson."
-
+      $ref: "./parameters/common.yaml#/SectionIdParam"
     UnitIdParam:
-      name: unitId
-      in: path
-      required: true
-      schema:
-        $ref: "#/components/schemas/UnitId"
-      description: "The unique identifier of the unit."
-
-    # Query parameters for filtering
+      $ref: "./parameters/common.yaml#/UnitIdParam"
     LessonIdQueryParam:
-      name: lessonIdGuid
-      in: query
-      required: false
-      schema:
-        $ref: "#/components/schemas/LessonId"
-      description: "Filter by lesson GUID."
-
+      $ref: "./parameters/common.yaml#/LessonIdQueryParam"
     SectionIdQueryParam:
-      name: sectionId
-      in: query
-      required: false
-      schema:
-        $ref: "#/components/schemas/SectionId"
-      description: "Filter by section ID."
+      $ref: "./parameters/common.yaml#/SectionIdQueryParam"
 
   securitySchemes:
     BearerAuth:
@@ -645,455 +149,58 @@ components:
       bearerFormat: JWT
       description: "JWT token obtained from the `/auth/login` endpoint. Include in the Authorization header as: `Bearer <token>`"
 
-  responses: # Common responses
+  responses:
     BadRequest:
-      description: "Bad Request (e.g., invalid input, missing fields)."
-      content:
-        {
-          application/json:
-            { schema: { $ref: "#/components/schemas/ErrorResponse" } },
-        }
+      $ref: "./responses/common.yaml#/BadRequest"
     Unauthorized:
-      description: "Unauthorized (e.g., missing, invalid, or expired authentication token)."
-      content:
-        {
-          application/json:
-            { schema: { $ref: "#/components/schemas/ErrorResponse" } },
-        }
+      $ref: "./responses/common.yaml#/Unauthorized"
     Forbidden:
-      description: "Forbidden (e.g., authenticated user does not have permission)."
-      content:
-        {
-          application/json:
-            { schema: { $ref: "#/components/schemas/ErrorResponse" } },
-        }
+      $ref: "./responses/common.yaml#/Forbidden"
     NotFound:
-      description: "Resource not found."
-      content:
-        {
-          application/json:
-            { schema: { $ref: "#/components/schemas/ErrorResponse" } },
-        }
+      $ref: "./responses/common.yaml#/NotFound"
     InternalServerError:
-      description: "Internal Server Error."
-      content:
-        {
-          application/json:
-            { schema: { $ref: "#/components/schemas/ErrorResponse" } },
-        }
+      $ref: "./responses/common.yaml#/InternalServerError"
     TooManyRequests:
-      description: "Rate limit exceeded. Too many requests."
-      content:
-        {
-          application/json:
-            { schema: { $ref: "#/components/schemas/ErrorResponse" } },
-        }
+      $ref: "./responses/common.yaml#/TooManyRequests"
 
 security:
   - BearerAuth: []
 
 paths:
-  # === Authentication ===
+  # Authentication
   /auth/login:
-    post:
-      summary: Login with Google OAuth
-      description: "Validates Google ID token, creates/updates user, returns JWT tokens"
-      operationId: loginWithGoogle
-      tags: ["Authentication"]
-      security: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/GoogleLoginRequest"
-      responses:
-        "200":
-          description: Successfully authenticated
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/AuthTokenResponse"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          description: Invalid or expired Google ID token
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-
+    $ref: "./paths/authentication.yaml#/~1auth~1login"
   /auth/refresh:
-    post:
-      summary: Refresh Access Token
-      description: "Returns new access + refresh tokens, invalidates old refresh token"
-      operationId: refreshAccessToken
-      tags: ["Authentication"]
-      security: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/TokenRefreshRequest"
-      responses:
-        "200":
-          description: Successfully refreshed
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/AuthTokenResponse"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          description: Invalid or expired refresh token
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-
+    $ref: "./paths/authentication.yaml#/~1auth~1refresh"
   /auth/logout:
-    post:
-      summary: Logout User
-      description: "Invalidates refresh token (access tokens remain valid until expiration)"
-      operationId: logoutUser
-      tags: ["Authentication"]
-      security: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/LogoutRequest"
-      responses:
-        "200":
-          description: Successfully logged out
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+    $ref: "./paths/authentication.yaml#/~1auth~1logout"
 
-  # === User Progress ===
+  # User Progress
   /progress:
-    get:
-      summary: Get User's Full Progress
-      description: "Returns nested map: UnitId → LessonId (GUID) → SectionId → timestamp"
-      operationId: getUserProgress
-      tags: ["User Progress"]
-      responses:
-        "200":
-          description: Progress retrieved
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UserProgressResponse"
-        "401": { $ref: "#/components/responses/Unauthorized" }
-        "500": { $ref: "#/components/responses/InternalServerError" }
-    put:
-      summary: Update User's Progress
-      description: "Batch completion updates (idempotent, server-generated timestamps)"
-      operationId: updateUserProgress
-      tags: ["User Progress"]
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/BatchCompletionsInput"
-      responses:
-        "200":
-          description: Progress updated
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UserProgressResponse"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+    $ref: "./paths/progress.yaml#/~1progress"
 
-  # === Student Submissions (Reflections & PRIMM) ===
+  # Student Submissions - Reflections
   /reflections/{lessonId}/sections/{sectionId}:
-    parameters:
-      - $ref: "#/components/parameters/LessonIdParam"
-      - $ref: "#/components/parameters/SectionIdParam"
-    post:
-      summary: Submit Reflection Draft or Final
-      description: "isFinal=false: get AI feedback on draft. isFinal=true: create permanent learning entry (requires prior achieves/mostly assessment)"
-      operationId: createOrFinalizeReflection
-      tags: ["Student Submissions"]
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ReflectionInteractionInput"
-      responses:
-        "201":
-          description: Reflection created/finalized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ReflectionVersionItem"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-    get:
-      summary: Get Draft Versions
-      description: "Non-final draft versions for this reflection section"
-      operationId: getStudentReflectionDraftVersions
-      tags: ["Student Submissions"]
-      responses:
-        "200":
-          description: Draft versions list
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ListOfReflectionDraftsResponse"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+    $ref: "./paths/reflections.yaml#/~1reflections~1{lessonId}~1sections~1{sectionId}"
 
+  # Student Submissions - Learning Entries
   /learning-entries:
-    get:
-      summary: Get Student's Finalized Learning Entries
-      operationId: getStudentFinalizedLearningEntries
-      tags: ["Student Submissions"]
-      parameters:
-        - $ref: "#/components/parameters/PaginationLimit"
-        - $ref: "#/components/parameters/PaginationKey"
-      responses:
-        "200":
-          description: Finalized entries
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  entries:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/ReflectionVersionItem"
-                  lastEvaluatedKey:
-                    $ref: "#/components/schemas/LastEvaluatedKey"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+    $ref: "./paths/student-learning.yaml#/~1learning-entries"
 
+  # Student Submissions - PRIMM
   /primm-feedback:
-    post:
-      summary: Submit PRIMM for AI Evaluation
-      description: "Returns AI assessment of prediction and explanation"
-      operationId: submitPrimmForEvaluation
-      tags: ["Student Submissions"]
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/PrimmEvaluationRequest"
-      responses:
-        "200":
-          description: AI evaluation
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/PrimmEvaluationResponse"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "429":
-          $ref: "#/components/responses/TooManyRequests"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-        "503":
-          description: AI service unavailable
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
+    $ref: "./paths/primm.yaml#/~1primm-feedback"
 
-  # === Instructor Portal Endpoints ===
+  # Instructor Portal
   /instructor/students:
-    get:
-      summary: Get Permitted Students
-      operationId: getInstructorStudents
-      tags: ["Instructor Portal"]
-      responses:
-        "200":
-          description: Students list
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ListOfInstructorStudentsResponse"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-
+    $ref: "./paths/instructor/students.yaml#/~1instructor~1students"
   /instructor/units/{unitId}/class-progress:
-    get:
-      summary: Get Class Progress for Unit
-      description: "Raw completion data for all students (client calculates percentages)"
-      operationId: getInstructorClassUnitProgressData
-      tags: ["Instructor Portal"]
-      parameters:
-        - $ref: "#/components/parameters/UnitIdParam"
-      responses:
-        "200":
-          description: Completion data
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ClassUnitProgressResponse"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-
+    $ref: "./paths/instructor/progress.yaml#/~1instructor~1units~1{unitId}~1class-progress"
   /instructor/students/{studentId}/learning-entries:
-    get:
-      summary: Get Student's Learning Entries
-      operationId: getInstructorStudentLearningEntries
-      tags: ["Instructor Portal"]
-      parameters:
-        - $ref: "#/components/parameters/StudentIdParam"
-        - $ref: "#/components/parameters/LearningEntriesFilter"
-        - $ref: "#/components/parameters/LessonIdQueryParam"
-        - $ref: "#/components/parameters/PaginationLimit"
-        - $ref: "#/components/parameters/PaginationKey"
-      responses:
-        "200":
-          description: Learning entries
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/StudentLearningEntriesResponse"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-
+    $ref: "./paths/instructor/learning-entries.yaml#/~1instructor~1students~1{studentId}~1learning-entries"
   /instructor/students/{studentId}/primm-submissions:
-    get:
-      summary: Get Student's PRIMM Submissions
-      operationId: getInstructorStudentPrimmSubmissions
-      tags: ["Instructor Portal"]
-      parameters:
-        - $ref: "#/components/parameters/StudentIdParam"
-        - $ref: "#/components/parameters/LessonIdQueryParam"
-        - $ref: "#/components/parameters/SectionIdQueryParam"
-        - $ref: "#/components/parameters/PaginationLimit"
-        - $ref: "#/components/parameters/PaginationKey"
-      responses:
-        "200":
-          description: PRIMM submissions
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/StudentPrimmSubmissionsResponse"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-
+    $ref: "./paths/instructor/learning-entries.yaml#/~1instructor~1students~1{studentId}~1primm-submissions"
   /instructor/units/{unitId}/lessons/{lessonId}/sections/{sectionId}/assignment-submissions:
-    get:
-      summary: Get Assignment Submissions
-      description: "All student submissions for section (Reflection or PRIMM)"
-      operationId: getAssignmentSubmissions
-      tags: ["Instructor Portal"]
-      parameters:
-        - $ref: "#/components/parameters/UnitIdParam"
-        - $ref: "#/components/parameters/LessonIdParam"
-        - $ref: "#/components/parameters/SectionIdParam"
-        - name: assignmentType
-          in: query
-          required: true
-          schema:
-            type: string
-            enum: [Reflection, PRIMM]
-        - name: primmExampleId
-          in: query
-          required: false
-          schema:
-            $ref: "#/components/schemas/PrimmExampleId"
-          description: "Required when assignmentType='PRIMM'"
-        - $ref: "#/components/parameters/PaginationLimit"
-        - $ref: "#/components/parameters/PaginationKey"
-      responses:
-        "200":
-          description: Submissions list
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ListOfAssignmentSubmissionsResponse"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-
+    $ref: "./paths/instructor/assignments.yaml#/~1instructor~1units~1{unitId}~1lessons~1{lessonId}~1sections~1{sectionId}~1assignment-submissions"
   /instructor/students/{studentId}/detailed-progress:
-    get:
-      summary: Get Student's Detailed Progress
-      description: "Complete progress/submission data across all units, lessons, sections"
-      operationId: getStudentDetailedProgress
-      tags: ["Instructor Portal"]
-      parameters:
-        - $ref: "#/components/parameters/StudentIdParam"
-      responses:
-        "200":
-          description: Detailed progress
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/StudentDetailedProgressResponse"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-
-  # Deprecated/Removed (or not implemented for now)
-  # /instructor/students/{studentId}/units/{unitId}/progress - Handled by client using data from /instructor/units/{unitId}/class-progress
-  # /instructor/units/{unitId}/class-summary - Client calculates this for now
+    $ref: "./paths/instructor/detailed-progress.yaml#/~1instructor~1students~1{studentId}~1detailed-progress"

@@ -1,0 +1,76 @@
+# Core Data Types and Reusable Common Types
+UnitId:
+  type: string
+  example: "intro_python"
+
+LessonId:
+  type: string
+  format: uuid
+  example: "a1b2c3d4-e5f6-4890-8234-567890abcdef"
+
+SectionId:
+  type: string
+  example: "python-history"
+
+PrimmExampleId:
+  type: string
+  example: "primm-greeting-output"
+
+IsoTimestamp:
+  type: string
+  format: date-time
+  example: "2025-06-01T10:00:00Z"
+
+AssessmentLevel:
+  type: string
+  enum: [achieves, mostly, developing, insufficient]
+  description: "AI assessment: achieves (fully meets objectives), mostly (minor gaps), developing (needs improvement), insufficient (doesn't demonstrate understanding)"
+
+LastEvaluatedKey:
+  type: object
+  nullable: true
+  additionalProperties: true
+  description: "DynamoDB pagination token (opaque, pass as-is to next request)"
+
+CompletionMap:
+  type: object
+  description: "SectionId → IsoTimestamp"
+  additionalProperties:
+    $ref: "#/IsoTimestamp"
+
+LessonCompletionMap:
+  type: object
+  description: "LessonId (GUID) → CompletionMap"
+  additionalProperties:
+    $ref: "#/CompletionMap"
+
+UnitCompletionMap:
+  type: object
+  description: "UnitId → LessonCompletionMap"
+  additionalProperties:
+    $ref: "#/LessonCompletionMap"
+
+BasicUserInfo:
+  type: object
+  properties:
+    userId:
+      type: string
+      example: "USER#google-oauth2|1234567890"
+    userName:
+      type: string
+      nullable: true
+    userEmail:
+      type: string
+      format: email
+      nullable: true
+
+PrimmIdentifiers:
+  type: object
+  required: [lessonId, sectionId, primmExampleId]
+  properties:
+    lessonId:
+      $ref: "#/LessonId"
+    sectionId:
+      $ref: "#/SectionId"
+    primmExampleId:
+      $ref: "#/PrimmExampleId"

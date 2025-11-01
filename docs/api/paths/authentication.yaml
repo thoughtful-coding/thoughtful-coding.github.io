@@ -1,0 +1,91 @@
+# Authentication Endpoints
+
+/auth/login:
+  post:
+    summary: Login with Google OAuth
+    description: "Validates Google ID token, creates/updates user, returns JWT tokens"
+    operationId: loginWithGoogle
+    tags: ["Authentication"]
+    security: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/authentication.yaml#/GoogleLoginRequest"
+    responses:
+      "200":
+        description: Successfully authenticated
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/authentication.yaml#/AuthTokenResponse"
+      "400":
+        $ref: "../responses/common.yaml#/BadRequest"
+      "401":
+        description: Invalid or expired Google ID token
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/errors.yaml#/ErrorResponse"
+      "500":
+        $ref: "../responses/common.yaml#/InternalServerError"
+
+/auth/refresh:
+  post:
+    summary: Refresh Access Token
+    description: "Returns new access + refresh tokens, invalidates old refresh token"
+    operationId: refreshAccessToken
+    tags: ["Authentication"]
+    security: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/authentication.yaml#/TokenRefreshRequest"
+    responses:
+      "200":
+        description: Successfully refreshed
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/authentication.yaml#/AuthTokenResponse"
+      "400":
+        $ref: "../responses/common.yaml#/BadRequest"
+      "401":
+        description: Invalid or expired refresh token
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/errors.yaml#/ErrorResponse"
+      "500":
+        $ref: "../responses/common.yaml#/InternalServerError"
+
+/auth/logout:
+  post:
+    summary: Logout User
+    description: "Invalidates refresh token (access tokens remain valid until expiration)"
+    operationId: logoutUser
+    tags: ["Authentication"]
+    security: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/authentication.yaml#/LogoutRequest"
+    responses:
+      "200":
+        description: Successfully logged out
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+      "400":
+        $ref: "../responses/common.yaml#/BadRequest"
+      "500":
+        $ref: "../responses/common.yaml#/InternalServerError"

@@ -1,0 +1,220 @@
+# Instructor Portal Schemas
+InstructorStudentInfo:
+  allOf:
+    - $ref: "./common.yaml#/BasicUserInfo"
+    - type: object
+      properties:
+        studentId:
+          type: string
+          description: "Student's User ID (alias for userId)."
+          example: "USER#google-oauth2|9876543210"
+
+ListOfInstructorStudentsResponse:
+  type: object
+  properties:
+    students:
+      type: array
+      items: { $ref: "#/InstructorStudentInfo" }
+
+StudentUnitCompletionDataItem:
+  type: object
+  required: [studentId, completedSectionsInUnit]
+  properties:
+    studentId:
+      type: string
+    completedSectionsInUnit:
+      $ref: "./common.yaml#/LessonCompletionMap"
+
+ClassUnitProgressResponse: # For GET /instructor/units/{unitId}/class-progress
+  type: object
+  required: [unitId, studentProgressData]
+  properties:
+    unitId: { $ref: "./common.yaml#/UnitId" }
+    studentProgressData:
+      type: array
+      items: { $ref: "#/StudentUnitCompletionDataItem" }
+
+# For instructor viewing a student's learning entries (reflections)
+StudentLearningEntriesResponse:
+  type: object
+  properties:
+    entries:
+      type: array
+      items: { $ref: "./reflections.yaml#/ReflectionVersionItem" }
+      description: "List of reflection entries (can include both drafts and final entries)."
+    lastEvaluatedKey:
+      $ref: "./common.yaml#/LastEvaluatedKey"
+
+# For instructor viewing a student's PRIMM submissions (as stored in DDB)
+StoredPrimmSubmissionItem:
+  type: object
+  description: "A stored PRIMM submission including user inputs and AI evaluation."
+  # Properties should match what's stored in PrimmSubmissionsTable
+  # This includes fields from PrimmEvaluationRequest and PrimmEvaluationResponse, plus metadata
+  required:
+    [
+      userId,
+      submissionCompositeKey,
+      lessonId,
+      sectionId,
+      primmExampleId,
+      timestampIso,
+      codeSnippet,
+      userPredictionPromptText,
+      userPredictionText,
+      userPredictionConfidence,
+      aiPredictionAssessment,
+      aiExplanationAssessment,
+      aiOverallComment,
+      createdAt,
+    ]
+  properties:
+    userId: { type: string }
+    submissionCompositeKey:
+      {
+        type: string,
+        description: "Sort Key: LessonGUID#SectionID#PrimmExampleID#TimestampISO",
+      }
+    lessonId: { $ref: "./common.yaml#/LessonId" }
+    sectionId: { $ref: "./common.yaml#/SectionId" }
+    primmExampleId: { $ref: "./common.yaml#/PrimmExampleId" }
+    timestampIso:
+      {
+        $ref: "./common.yaml#/IsoTimestamp",
+        description: "Timestamp of the PRIMM submission event.",
+      }
+    codeSnippet: { type: string }
+    userPredictionPromptText: { type: string }
+    userPredictionText: { type: string }
+    userPredictionConfidence: { type: integer }
+    actualOutputSummary: { type: string, nullable: true }
+    userExplanationText: { type: string, nullable: true }
+    aiPredictionAssessment: { $ref: "./common.yaml#/AssessmentLevel" }
+    aiExplanationAssessment: {
+        $ref: "./common.yaml#/AssessmentLevel",
+        nullable: true,
+      } # Allow null if no explanation
+    aiOverallComment: { type: string, nullable: true }
+    createdAt:
+      {
+        $ref: "./common.yaml#/IsoTimestamp",
+        description: "Timestamp of when this record was saved.",
+      }
+
+StudentPrimmSubmissionsResponse:
+  type: object
+  properties:
+    submissions:
+      type: array
+      items: { $ref: "#/StoredPrimmSubmissionItem" }
+      description: "List of PRIMM submissions for the student."
+    lastEvaluatedKey:
+      $ref: "./common.yaml#/LastEvaluatedKey"
+
+# For assignment submissions endpoint
+AssignmentSubmission:
+  type: object
+  description: "Represents a student's submission for an assignment."
+  required: [studentId, submissionTimestamp, submissionDetails]
+  properties:
+    studentId:
+      type: string
+      description: "The student's user ID."
+      example: "USER#google-oauth2|1234567890"
+    studentName:
+      type: string
+      nullable: true
+      description: "Display name of the student."
+      example: "Jane Doe"
+    submissionTimestamp:
+      $ref: "./common.yaml#/IsoTimestamp"
+    submissionDetails:
+      description: "For Reflection: array of ReflectionVersionItem. For PRIMM: single StoredPrimmSubmissionItem."
+      oneOf:
+        - type: array
+          items: { $ref: "./reflections.yaml#/ReflectionVersionItem" }
+        - $ref: "#/StoredPrimmSubmissionItem"
+
+ListOfAssignmentSubmissionsResponse:
+  type: object
+  required: [assignmentType, unitId, lessonId, sectionId, submissions]
+  properties:
+    assignmentType:
+      type: string
+      enum: [Reflection, PRIMM]
+      description: "Type of assignment."
+    unitId:
+      $ref: "./common.yaml#/UnitId"
+    lessonId:
+      $ref: "./common.yaml#/LessonId"
+    sectionId:
+      $ref: "./common.yaml#/SectionId"
+    primmExampleId:
+      $ref: "./common.yaml#/PrimmExampleId"
+      nullable: true
+      description: "Only present for PRIMM assignments."
+    submissions:
+      type: array
+      items: { $ref: "#/AssignmentSubmission" }
+      description: "List of student submissions for this assignment."
+
+SectionStatusItem:
+  type: object
+  required: [sectionId, sectionTitle, sectionKind, status]
+  properties:
+    sectionId:
+      $ref: "./common.yaml#/SectionId"
+    sectionTitle:
+      type: string
+    sectionKind:
+      type: string
+    status:
+      type: string
+      enum: [completed, submitted, not_started]
+    submissionTimestamp:
+      $ref: "./common.yaml#/IsoTimestamp"
+      nullable: true
+    submissionDetails:
+      type: object
+      nullable: true
+      oneOf:
+        - type: array
+          items: { $ref: "./reflections.yaml#/ReflectionVersionItem" }
+        - $ref: "#/StoredPrimmSubmissionItem"
+
+LessonProgressProfile:
+  type: object
+  required: [lessonId, lessonTitle, sections]
+  properties:
+    lessonId:
+      $ref: "./common.yaml#/LessonId"
+    lessonTitle:
+      type: string
+    sections:
+      type: array
+      items: { $ref: "#/SectionStatusItem" }
+
+UnitProgressProfile:
+  type: object
+  required: [unitId, unitTitle, lessons]
+  properties:
+    unitId:
+      $ref: "./common.yaml#/UnitId"
+    unitTitle:
+      type: string
+    lessons:
+      type: array
+      items: { $ref: "#/LessonProgressProfile" }
+
+StudentDetailedProgressResponse:
+  type: object
+  required: [studentId, profile]
+  properties:
+    studentId:
+      type: string
+    studentName:
+      type: string
+      nullable: true
+    profile:
+      type: array
+      items: { $ref: "#/UnitProgressProfile" }

@@ -1,0 +1,55 @@
+# Instructor - Student Learning Entries and PRIMM Submissions
+
+/instructor/students/{studentId}/learning-entries:
+  get:
+    summary: Get Student's Learning Entries
+    operationId: getInstructorStudentLearningEntries
+    tags: ["Instructor Portal"]
+    parameters:
+      - $ref: "../../parameters/common.yaml#/StudentIdParam"
+      - $ref: "../../parameters/common.yaml#/LearningEntriesFilter"
+      - $ref: "../../parameters/common.yaml#/LessonIdQueryParam"
+      - $ref: "../../parameters/common.yaml#/PaginationLimit"
+      - $ref: "../../parameters/common.yaml#/PaginationKey"
+    responses:
+      "200":
+        description: Learning entries
+        content:
+          application/json:
+            schema:
+              $ref: "../../schemas/instructor.yaml#/StudentLearningEntriesResponse"
+      "401":
+        $ref: "../../responses/common.yaml#/Unauthorized"
+      "403":
+        $ref: "../../responses/common.yaml#/Forbidden"
+      "404":
+        $ref: "../../responses/common.yaml#/NotFound"
+      "500":
+        $ref: "../../responses/common.yaml#/InternalServerError"
+
+/instructor/students/{studentId}/primm-submissions:
+  get:
+    summary: Get Student's PRIMM Submissions
+    operationId: getInstructorStudentPrimmSubmissions
+    tags: ["Instructor Portal"]
+    parameters:
+      - $ref: "../../parameters/common.yaml#/StudentIdParam"
+      - $ref: "../../parameters/common.yaml#/LessonIdQueryParam"
+      - $ref: "../../parameters/common.yaml#/SectionIdQueryParam"
+      - $ref: "../../parameters/common.yaml#/PaginationLimit"
+      - $ref: "../../parameters/common.yaml#/PaginationKey"
+    responses:
+      "200":
+        description: PRIMM submissions
+        content:
+          application/json:
+            schema:
+              $ref: "../../schemas/instructor.yaml#/StudentPrimmSubmissionsResponse"
+      "401":
+        $ref: "../../responses/common.yaml#/Unauthorized"
+      "403":
+        $ref: "../../responses/common.yaml#/Forbidden"
+      "404":
+        $ref: "../../responses/common.yaml#/NotFound"
+      "500":
+        $ref: "../../responses/common.yaml#/InternalServerError"

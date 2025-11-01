@@ -1,0 +1,25 @@
+# Instructor - Student Detailed Progress Endpoint
+
+/instructor/students/{studentId}/detailed-progress:
+  get:
+    summary: Get Student's Detailed Progress
+    description: "Complete progress/submission data across all units, lessons, sections"
+    operationId: getStudentDetailedProgress
+    tags: ["Instructor Portal"]
+    parameters:
+      - $ref: "../../parameters/common.yaml#/StudentIdParam"
+    responses:
+      "200":
+        description: Detailed progress
+        content:
+          application/json:
+            schema:
+              $ref: "../../schemas/instructor.yaml#/StudentDetailedProgressResponse"
+      "401":
+        $ref: "../../responses/common.yaml#/Unauthorized"
+      "403":
+        $ref: "../../responses/common.yaml#/Forbidden"
+      "404":
+        $ref: "../../responses/common.yaml#/NotFound"
+      "500":
+        $ref: "../../responses/common.yaml#/InternalServerError"

@@ -1,0 +1,18 @@
+# Instructor - Student List Endpoint
+
+/instructor/students:
+  get:
+    summary: Get Permitted Students
+    operationId: getInstructorStudents
+    tags: ["Instructor Portal"]
+    responses:
+      "200":
+        description: Students list
+        content:
+          application/json:
+            schema:
+              $ref: "../../schemas/instructor.yaml#/ListOfInstructorStudentsResponse"
+      "401":
+        $ref: "../../responses/common.yaml#/Unauthorized"
+      "500":
+        $ref: "../../responses/common.yaml#/InternalServerError"

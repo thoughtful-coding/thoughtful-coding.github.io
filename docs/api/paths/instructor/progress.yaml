@@ -1,0 +1,23 @@
+# Instructor - Class Progress Endpoint
+
+/instructor/units/{unitId}/class-progress:
+  get:
+    summary: Get Class Progress for Unit
+    description: "Raw completion data for all students (client calculates percentages)"
+    operationId: getInstructorClassUnitProgressData
+    tags: ["Instructor Portal"]
+    parameters:
+      - $ref: "../../parameters/common.yaml#/UnitIdParam"
+    responses:
+      "200":
+        description: Completion data
+        content:
+          application/json:
+            schema:
+              $ref: "../../schemas/instructor.yaml#/ClassUnitProgressResponse"
+      "401":
+        $ref: "../../responses/common.yaml#/Unauthorized"
+      "404":
+        $ref: "../../responses/common.yaml#/NotFound"
+      "500":
+        $ref: "../../responses/common.yaml#/InternalServerError"

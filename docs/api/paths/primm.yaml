@@ -1,0 +1,35 @@
+# PRIMM Feedback Endpoint
+
+/primm-feedback:
+  post:
+    summary: Submit PRIMM for AI Evaluation
+    description: "Returns AI assessment of prediction and explanation"
+    operationId: submitPrimmForEvaluation
+    tags: ["Student Submissions"]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/primm.yaml#/PrimmEvaluationRequest"
+    responses:
+      "200":
+        description: AI evaluation
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/primm.yaml#/PrimmEvaluationResponse"
+      "400":
+        $ref: "../responses/common.yaml#/BadRequest"
+      "401":
+        $ref: "../responses/common.yaml#/Unauthorized"
+      "429":
+        $ref: "../responses/common.yaml#/TooManyRequests"
+      "500":
+        $ref: "../responses/common.yaml#/InternalServerError"
+      "503":
+        description: AI service unavailable
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/errors.yaml#/ErrorResponse"

@@ -1,0 +1,36 @@
+# User Progress Schemas
+SectionCompletionInput: # For PUT /progress request by student
+  type: object
+  description: Information for a single section completion event.
+  required:
+    - unitId
+    - lessonId
+    - sectionId
+  properties:
+    unitId:
+      $ref: "./common.yaml#/UnitId"
+    lessonId:
+      $ref: "./common.yaml#/LessonId" # This is the Lesson GUID
+    sectionId:
+      $ref: "./common.yaml#/SectionId"
+
+BatchCompletionsInput: # Request body for PUT /progress
+  type: object
+  required:
+    - completions
+  properties:
+    completions:
+      type: array
+      items:
+        $ref: "#/SectionCompletionInput"
+      minItems: 1
+      description: "An array of section completion events."
+
+UserProgressResponse:
+  type: object
+  required: [userId, completion]
+  properties:
+    userId:
+      type: string
+    completion:
+      $ref: "./common.yaml#/UnitCompletionMap"

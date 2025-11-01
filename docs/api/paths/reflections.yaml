@@ -1,0 +1,48 @@
+# Student Reflection Endpoints
+
+/reflections/{lessonId}/sections/{sectionId}:
+  parameters:
+    - $ref: "../parameters/common.yaml#/LessonIdParam"
+    - $ref: "../parameters/common.yaml#/SectionIdParam"
+  post:
+    summary: Submit Reflection Draft or Final
+    description: "isFinal=false: get AI feedback on draft. isFinal=true: create permanent learning entry (requires prior achieves/mostly assessment)"
+    operationId: createOrFinalizeReflection
+    tags: ["Student Submissions"]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/reflections.yaml#/ReflectionInteractionInput"
+    responses:
+      "201":
+        description: Reflection created/finalized
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/reflections.yaml#/ReflectionVersionItem"
+      "400":
+        $ref: "../responses/common.yaml#/BadRequest"
+      "401":
+        $ref: "../responses/common.yaml#/Unauthorized"
+      "500":
+        $ref: "../responses/common.yaml#/InternalServerError"
+  get:
+    summary: Get Draft Versions
+    description: "Non-final draft versions for this reflection section"
+    operationId: getStudentReflectionDraftVersions
+    tags: ["Student Submissions"]
+    responses:
+      "200":
+        description: Draft versions list
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/reflections.yaml#/ListOfReflectionDraftsResponse"
+      "401":
+        $ref: "../responses/common.yaml#/Unauthorized"
+      "404":
+        $ref: "../responses/common.yaml#/NotFound"
+      "500":
+        $ref: "../responses/common.yaml#/InternalServerError"

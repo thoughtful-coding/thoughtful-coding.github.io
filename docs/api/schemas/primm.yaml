@@ -1,0 +1,46 @@
+# PRIMM Schemas (for Student Submissions & Instructor Views)
+PrimmEvaluationRequest:
+  type: object
+  required:
+    [
+      lessonId,
+      sectionId,
+      primmExampleId,
+      codeSnippet,
+      userPredictionPromptText,
+      userPredictionText,
+      userPredictionConfidence,
+      userExplanationText,
+    ]
+  allOf:
+    - $ref: "./common.yaml#/PrimmIdentifiers"
+    - type: object
+      properties:
+        codeSnippet:
+          type: string
+        userPredictionPromptText:
+          type: string
+        userPredictionText:
+          type: string
+        userPredictionConfidence:
+          type: integer
+          minimum: 1
+          maximum: 3
+          description: "1=Low, 2=Medium, 3=High"
+        userExplanationText:
+          type: string
+        actualOutputSummary:
+          type: string
+          nullable: true
+
+PrimmEvaluationResponse:
+  type: object
+  required:
+    [aiPredictionAssessment, aiExplanationAssessment, aiOverallComment]
+  properties:
+    aiPredictionAssessment:
+      $ref: "./common.yaml#/AssessmentLevel"
+    aiExplanationAssessment:
+      $ref: "./common.yaml#/AssessmentLevel"
+    aiOverallComment:
+      type: string

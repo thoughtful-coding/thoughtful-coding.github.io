@@ -1,0 +1,28 @@
+# Student Learning Entries Endpoints
+
+/learning-entries:
+  get:
+    summary: Get Student's Finalized Learning Entries
+    operationId: getStudentFinalizedLearningEntries
+    tags: ["Student Submissions"]
+    parameters:
+      - $ref: "../parameters/common.yaml#/PaginationLimit"
+      - $ref: "../parameters/common.yaml#/PaginationKey"
+    responses:
+      "200":
+        description: Finalized entries
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                entries:
+                  type: array
+                  items:
+                    $ref: "../schemas/reflections.yaml#/ReflectionVersionItem"
+                lastEvaluatedKey:
+                  $ref: "../schemas/common.yaml#/LastEvaluatedKey"
+      "401":
+        $ref: "../responses/common.yaml#/Unauthorized"
+      "500":
+        $ref: "../responses/common.yaml#/InternalServerError"

@@ -1,0 +1,41 @@
+# User Progress Endpoints
+
+/progress:
+  get:
+    summary: Get User's Full Progress
+    description: "Returns nested map: UnitId → LessonId (GUID) → SectionId → timestamp"
+    operationId: getUserProgress
+    tags: ["User Progress"]
+    responses:
+      "200":
+        description: Progress retrieved
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/progress.yaml#/UserProgressResponse"
+      "401": { $ref: "../responses/common.yaml#/Unauthorized" }
+      "500": { $ref: "../responses/common.yaml#/InternalServerError" }
+  put:
+    summary: Update User's Progress
+    description: "Batch completion updates (idempotent, server-generated timestamps)"
+    operationId: updateUserProgress
+    tags: ["User Progress"]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/progress.yaml#/BatchCompletionsInput"
+    responses:
+      "200":
+        description: Progress updated
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/progress.yaml#/UserProgressResponse"
+      "400":
+        $ref: "../responses/common.yaml#/BadRequest"
+      "401":
+        $ref: "../responses/common.yaml#/Unauthorized"
+      "500":
+        $ref: "../responses/common.yaml#/InternalServerError"

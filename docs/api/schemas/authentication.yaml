@@ -1,0 +1,33 @@
+# Authentication Schemas
+GoogleLoginRequest:
+  type: object
+  required: [googleIdToken]
+  properties:
+    googleIdToken:
+      type: string
+      description: "JWT token from Google OAuth 2.0"
+
+TokenRefreshRequest:
+  type: object
+  required: [refreshToken]
+  properties:
+    refreshToken:
+      type: string
+
+LogoutRequest:
+  type: object
+  required: [refreshToken]
+  properties:
+    refreshToken:
+      type: string
+
+AuthTokenResponse:
+  type: object
+  required: [accessToken, refreshToken]
+  properties:
+    accessToken:
+      type: string
+      description: "Valid for 1 hour"
+    refreshToken:
+      type: string
+      description: "Valid for 30 days"

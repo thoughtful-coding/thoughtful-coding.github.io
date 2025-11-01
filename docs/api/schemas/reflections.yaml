@@ -1,0 +1,68 @@
+# Reflection Schemas (for Student Submissions & Instructor Views)
+ReflectionInteractionInput: # For POST /reflections/...
+  type: object
+  description: "Payload for a student submitting a reflection draft or final entry."
+  required:
+    - userTopic
+    - isUserTopicPredefined
+    - userCode
+    - isUserCodePredefined
+    - userExplanation
+  properties:
+    userTopic: { type: string }
+    isUserTopicPredefined: { type: boolean }
+    userCode: { type: string }
+    isUserCodePredefined: { type: boolean }
+    userExplanation: { type: string }
+    isFinal: { type: boolean, default: false }
+    # lessonId and sectionId are path parameters for this endpoint
+
+ReflectionVersionItem: # Standard item for reflections
+  type: object
+  description: Represents a single saved version of a reflection, including any AI feedback.
+  required:
+    [
+      versionId,
+      userId,
+      lessonId,
+      sectionId,
+      userTopic,
+      userCode,
+      userExplanation,
+      createdAt,
+      isFinal,
+    ]
+  properties:
+    versionId: { type: string, description: "Unique ID for this version." }
+    userId: { type: string }
+    lessonId: { $ref: "./common.yaml#/LessonId" } # Lesson GUID
+    sectionId: { $ref: "./common.yaml#/SectionId" }
+    userTopic: { type: string }
+    userCode: { type: string }
+    userExplanation: { type: string }
+    aiFeedback: { type: string, nullable: true }
+    aiAssessment:
+      { $ref: "./common.yaml#/AssessmentLevel", nullable: true }
+    createdAt: { $ref: "./common.yaml#/IsoTimestamp" }
+    isFinal: { type: boolean }
+    sourceVersionId:
+      {
+        type: string,
+        nullable: true,
+        description: "ID of the draft this final version was based on.",
+      }
+    finalEntryCreatedAt:
+      {
+        $ref: "./common.yaml#/IsoTimestamp",
+        nullable: true,
+        description: "Timestamp for when this was marked as final (for GSI sorting).",
+      }
+
+ListOfReflectionDraftsResponse: # For GET /reflections/... (student's own drafts)
+  type: object
+  properties:
+    versions:
+      type: array
+      items: { $ref: "#/ReflectionVersionItem" }
+    lastEvaluatedKey:
+      $ref: "./common.yaml#/LastEvaluatedKey"

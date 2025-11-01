@@ -1,0 +1,43 @@
+# Common Reusable Responses
+
+BadRequest:
+  description: "Bad Request (e.g., invalid input, missing fields)."
+  content:
+    application/json:
+      schema:
+        $ref: "../schemas/errors.yaml#/ErrorResponse"
+
+Unauthorized:
+  description: "Unauthorized (e.g., missing, invalid, or expired authentication token)."
+  content:
+    application/json:
+      schema:
+        $ref: "../schemas/errors.yaml#/ErrorResponse"
+
+Forbidden:
+  description: "Forbidden (e.g., authenticated user does not have permission)."
+  content:
+    application/json:
+      schema:
+        $ref: "../schemas/errors.yaml#/ErrorResponse"
+
+NotFound:
+  description: "Resource not found."
+  content:
+    application/json:
+      schema:
+        $ref: "../schemas/errors.yaml#/ErrorResponse"
+
+InternalServerError:
+  description: "Internal Server Error."
+  content:
+    application/json:
+      schema:
+        $ref: "../schemas/errors.yaml#/ErrorResponse"
+
+TooManyRequests:
+  description: "Rate limit exceeded. Too many requests."
+  content:
+    application/json:
+      schema:
+        $ref: "../schemas/errors.yaml#/ErrorResponse"

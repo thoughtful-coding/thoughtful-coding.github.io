@@ -1,0 +1,43 @@
+# Instructor - Assignment Submissions Endpoint
+
+/instructor/units/{unitId}/lessons/{lessonId}/sections/{sectionId}/assignment-submissions:
+  get:
+    summary: Get Assignment Submissions
+    description: "All student submissions for section (Reflection or PRIMM)"
+    operationId: getAssignmentSubmissions
+    tags: ["Instructor Portal"]
+    parameters:
+      - $ref: "../../parameters/common.yaml#/UnitIdParam"
+      - $ref: "../../parameters/common.yaml#/LessonIdParam"
+      - $ref: "../../parameters/common.yaml#/SectionIdParam"
+      - name: assignmentType
+        in: query
+        required: true
+        schema:
+          type: string
+          enum: [Reflection, PRIMM]
+      - name: primmExampleId
+        in: query
+        required: false
+        schema:
+          $ref: "../../schemas/common.yaml#/PrimmExampleId"
+        description: "Required when assignmentType='PRIMM'"
+      - $ref: "../../parameters/common.yaml#/PaginationLimit"
+      - $ref: "../../parameters/common.yaml#/PaginationKey"
+    responses:
+      "200":
+        description: Submissions list
+        content:
+          application/json:
+            schema:
+              $ref: "../../schemas/instructor.yaml#/ListOfAssignmentSubmissionsResponse"
+      "400":
+        $ref: "../../responses/common.yaml#/BadRequest"
+      "401":
+        $ref: "../../responses/common.yaml#/Unauthorized"
+      "403":
+        $ref: "../../responses/common.yaml#/Forbidden"
+      "404":
+        $ref: "../../responses/common.yaml#/NotFound"
+      "500":
+        $ref: "../../responses/common.yaml#/InternalServerError"
