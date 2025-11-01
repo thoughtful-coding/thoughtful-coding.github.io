@@ -392,19 +392,10 @@ export async function getSubmissionsForAssignment<
   return handleApiResponse(response);
 }
 
-export async function getInstructorStudentLearningEntries(
-  studentId: UserId
-): Promise<StudentLearningEntriesResponse> {
-  const endpoint = `${API_GATEWAY_BASE_URL}/instructor/students/${studentId}/learning-entries`;
-  const response = await fetchWithAuth(endpoint);
-  return handleApiResponse(response);
-}
-
 export async function getInstructorStudentFinalLearningEntries(
   studentId: UserId
 ): Promise<StudentLearningEntriesResponse> {
-  // Real API call: add ?isFinal=true query parameter
-  const endpoint = `${API_GATEWAY_BASE_URL}/instructor/students/${studentId}/learning-entries?isFinal=true`;
+  const endpoint = `${API_GATEWAY_BASE_URL}/instructor/students/${studentId}/learning-entries?filter=final`;
   const response = await fetchWithAuth(endpoint);
   return handleApiResponse(response);
 }

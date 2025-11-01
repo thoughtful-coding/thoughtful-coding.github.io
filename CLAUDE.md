@@ -2,6 +2,15 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Code Quality Principles
+
+**Avoid Cruft**: This is a single-developer project currently. When refactoring or making improvements:
+- **Do NOT maintain backwards compatibility** unless explicitly requested
+- Prefer clean, simple solutions over maintaining deprecated code paths
+- Remove old/unused code rather than keeping it "just in case"
+- Make breaking changes if they result in cleaner, more maintainable code
+- The developer will handle necessary updates across the codebase
+
 ## Project Overview
 
 This is an interactive Python learning platform that runs entirely in the browser using Pyodide. Students work through structured lessons with multiple section types (Information, Observation, Testing, Prediction, Coverage, PRIMM, Reflection, MultipleChoice, etc.) to learn Python programming. The platform supports both anonymous users (local storage) and authenticated users (with server sync).

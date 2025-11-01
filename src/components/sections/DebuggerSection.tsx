@@ -13,7 +13,11 @@ interface DebuggerSectionProps {
   lessonId: LessonId;
 }
 
-const DebuggerSection: React.FC<DebuggerSectionProps> = ({ section, unitId, lessonId }) => {
+const DebuggerSection: React.FC<DebuggerSectionProps> = ({
+  section,
+  unitId,
+  lessonId,
+}) => {
   const [userCode, setUserCode] = useState<string>(section.example.initialCode);
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(-1);
   const [breakpoints, setBreakpoints] = useState<Set<number>>(new Set());
