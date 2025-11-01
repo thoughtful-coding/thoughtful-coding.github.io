@@ -18,17 +18,16 @@ import ReviewClassProgressView from "../../components/instructor/ReviewClassProg
 import ReviewByAssignmentView from "../../components/instructor/ReviewByAssignmentView";
 import ReviewStudentDetailView from "../../components/instructor/shared/ReviewStudentDetailView";
 import LoadingSpinner from "../../components/LoadingSpinner";
-import Footer from "../../components/Footer";
 import ReviewByStudentView from "../../components/instructor/ReviewByStudentView";
 import styles from "./InstructorDashboardPage.module.css";
 import ReviewLearningEntriesView from "../../components/instructor/ReviewLearningEntriesView";
 
 const navLinks = [
-  { path: "/instructor-dashboard/progress", label: "Class Progress" },
-  { path: "/instructor-dashboard/assignments", label: "By Assignment" },
-  { path: "/instructor-dashboard/students", label: "By Student" },
+  { path: "/python/instructor-dashboard/progress", label: "Class Progress" },
+  { path: "/python/instructor-dashboard/assignments", label: "By Assignment" },
+  { path: "/python/instructor-dashboard/students", label: "By Student" },
   {
-    path: "/instructor-dashboard/learning-entries",
+    path: "/python/instructor-dashboard/learning-entries",
     label: "Final Learning Entries",
   },
 ];
@@ -76,7 +75,7 @@ const InstructorDashboardPage: React.FC = () => {
   const handleLogout = () => {
     googleLogout();
     logout();
-    navigate("/");
+    navigate("/python/");
   };
 
   const handleLoginSuccess = async (credentialResponse: CredentialResponse) => {
@@ -104,7 +103,7 @@ const InstructorDashboardPage: React.FC = () => {
           <div className={styles.headerMain}>
             <div>
               <h1>Thoughtful Dashboard</h1>
-              <Link to="/" className={styles.backToStudentLink}>
+              <Link to="/python/" className={styles.backToStudentLink}>
                 &larr; Back to Student View
               </Link>
             </div>
@@ -205,7 +204,6 @@ const InstructorDashboardPage: React.FC = () => {
             </p>
           </div>
         </main>
-        <Footer />
       </div>
     );
   }
@@ -216,7 +214,7 @@ const InstructorDashboardPage: React.FC = () => {
         <div className={styles.headerMain}>
           <div>
             <h1>Thoughtful Dashboard</h1>
-            <Link to="/" className={styles.backToStudentLink}>
+            <Link to="/python/" className={styles.backToStudentLink}>
               &larr; Back to Student View
             </Link>
           </div>
@@ -316,8 +314,6 @@ const InstructorDashboardPage: React.FC = () => {
           </Routes>
         )}
       </main>
-
-      <Footer />
     </div>
   );
 };
