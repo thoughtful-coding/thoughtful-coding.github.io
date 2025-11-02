@@ -6,7 +6,7 @@ import { COLORS, DIMENSIONS, STYLES } from "./turtleTestConstants";
 interface TestCaseItemProps {
   result: TurtleTestResult;
   index: number;
-  forceExpanded?: boolean;
+  initiallyExpanded?: boolean;
 }
 
 /**
@@ -15,12 +15,11 @@ interface TestCaseItemProps {
 const TestCaseItem: React.FC<TestCaseItemProps> = ({
   result,
   index,
-  forceExpanded = false,
+  initiallyExpanded = false,
 }) => {
-  const [isExpanded, setIsExpanded] = useState(!result.passed);
-
-  // Use forceExpanded if provided, otherwise use state
-  const expanded = forceExpanded || isExpanded;
+  const [isExpanded, setIsExpanded] = useState(
+    initiallyExpanded || !result.passed
+  );
 
   return (
     <div
@@ -31,8 +30,8 @@ const TestCaseItem: React.FC<TestCaseItemProps> = ({
     >
       <div
         className={styles.testCaseHeader}
-        onClick={() => !forceExpanded && setIsExpanded(!isExpanded)}
-        style={{ cursor: forceExpanded ? "default" : "pointer" }}
+        onClick={() => setIsExpanded(!isExpanded)}
+        style={{ cursor: "pointer" }}
       >
         <div className={styles.testCaseHeaderLeft}>
           <span className={styles.testCaseIcon}>
@@ -46,13 +45,11 @@ const TestCaseItem: React.FC<TestCaseItemProps> = ({
           <span style={STYLES.similarityText(result.passed)}>
             {(result.similarity * 100).toFixed(1)}% match
           </span>
-          {!forceExpanded && (
-            <span className={styles.expandIcon}>{expanded ? "▼" : "▶"}</span>
-          )}
+          <span className={styles.expandIcon}>{isExpanded ? "▼" : "▶"}</span>
         </div>
       </div>
 
-      {expanded && (
+      {isExpanded && (
         <div className={styles.testCaseBody}>
           <div className={styles.testCaseImagesGrid}>
             <div className={styles.testCaseImageColumn}>
@@ -109,18 +106,22 @@ const TurtleTestAccordion: React.FC<TurtleTestAccordionProps> = ({
 }) => {
   if (results.length === 0) return null;
 
+  // Check if all tests passed
+  const allTestsPassed = results.every((r) => r.passed);
+
   return (
     <div className={styles.testCasesList} style={{ marginBottom: "1rem" }}>
       {results.map((result, idx) => {
-        // Last test in accordion should be expanded when tests are complete
+        // Last test should be initially expanded when all tests pass
         const isLastTest = idx === results.length - 1;
-        const shouldExpand = testsComplete && isLastTest;
+        const shouldInitiallyExpand =
+          testsComplete && isLastTest && allTestsPassed;
         return (
           <TestCaseItem
             key={idx}
             result={result}
             index={idx}
-            forceExpanded={shouldExpand}
+            initiallyExpanded={shouldInitiallyExpand}
           />
         );
       })}
