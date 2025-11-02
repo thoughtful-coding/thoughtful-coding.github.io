@@ -1058,7 +1058,7 @@
 .visualTestingContainer {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+  gap: 0; /* Remove gap so canvases are directly adjacent */
   margin-top: 1rem;
   align-items: start;
 }
@@ -1261,25 +1261,21 @@
 
 /* Canvas Container */
 .turtleCanvasContainer {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  /* min-height: 320px; Let canvas element define height */
-  /* width: 100%; Let canvas element define width */
+  /* Removed border and padding to match reference image styling */
   max-width: 420px; /* Example max width */
-  margin: 1rem auto; /* Center the canvas container */
-  background-color: #f0f0f0; /* Background for container */
-  padding: 5px; /* Optional padding around canvas */
-  display: inline-block; /* Allow centering with margin:auto */
+  margin: 0; /* Remove margin for side-by-side view */
+  display: block; /* Changed from inline-block */
   line-height: 0; /* Prevent extra space below canvas */
 }
 
-/* Actual canvas element */
+/* Actual canvas element - styled to match reference image */
 .turtleCanvasContainer > canvas {
   display: block; /* Remove extra space */
   background-color: white; /* White drawing area */
   max-width: 100%;
   height: auto;
-  /* border: 1px solid #ddd; Moved border to container */
+  border: 2px solid #ccc; /* Match reference image border */
+  border-radius: 4px; /* Match reference image border radius */
 }
 
 /* Reuse feedback styles from quiz/testing */
