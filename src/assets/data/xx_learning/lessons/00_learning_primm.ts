@@ -58,7 +58,7 @@ const lessonData: Lesson = {
     } as InformationSectionData,
     {
       kind: "Matching",
-      id: "primm-quiz" as SectionId,
+      id: "primm-matching" as SectionId,
       title: "Matching PRIMM",
       content: [
         {

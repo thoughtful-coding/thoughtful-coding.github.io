@@ -325,12 +325,12 @@ test.describe("TestingSection for turtles", () => {
         "import turtle\n\nturtle.speed(0)\ndef make_hexagon():\n  # Your code here converting the code above to a loop\n  for i in range(6):\n    turtle.forward(50)\n    turtle.right(60)\n\n\nmake_hexagon()"
       );
     await page
-      .locator("#hexagon-builder")
+      .locator("#hexagon-testing")
       .getByRole("button", { name: "Run Code" })
       .click();
     await page.waitForTimeout(2000);
     await page
-      .locator("#hexagon-builder")
+      .locator("#hexagon-testing")
       .getByRole("button", { name: "Run Tests" })
       .click();
     await page.waitForTimeout(2000);
@@ -364,12 +364,12 @@ test.describe("TestingSection for turtles", () => {
         "import turtle\n\nturtle.speed(0)\ndef make_hexagon():\n  # Your code here converting the code above to a loop\n  for i in range(6):\n    turtle.forward(50)\n    turtle.right(61)\n\n\nmake_hexagon()"
       );
     await page
-      .locator("#hexagon-builder")
+      .locator("#hexagon-testing")
       .getByRole("button", { name: "Run Code" })
       .click();
     await page.waitForTimeout(1000);
     await page
-      .locator("#hexagon-builder")
+      .locator("#hexagon-testing")
       .getByRole("button", { name: "Run Tests" })
       .click();
     await page.waitForTimeout(1000);
@@ -403,7 +403,7 @@ test.describe("TestingSection for turtles", () => {
         "import turtle\n\nturtle.speed(0)\ndef make_hexagon(size)\n  # Your code here converting the code above to a loop\n  for i in range(6):\n    turtle.forward(size)\n    turtle.right(61)\n\n\nmake_hexagon(55)"
       );
     await page
-      .locator("#hexagon-builder")
+      .locator("#hexagon-testing")
       .getByRole("button", { name: "Run Code" })
       .click();
     await page.waitForTimeout(1000);
@@ -435,7 +435,7 @@ test.describe("TestingSection for turtles", () => {
         "import turtle\n\nturtle.speed(0)\ndef make_hexagon(size)\n  # Your code here converting the code above to a loop\n  for i in range(6):\n    turtle.forward(size)\n    turtle.right(61)\n\n\nmake_hexagon(55)"
       );
     await page
-      .locator("#hexagon-builder")
+      .locator("#hexagon-testing")
       .getByRole("button", { name: "Run Tests" })
       .click();
     await page.waitForTimeout(1000);
@@ -467,12 +467,12 @@ test.describe("TestingSection for turtles", () => {
         "import turtle\n\nturtle.speed(0)\ndef make_octagon(size):\n  # Your code here converting the code above to a loop\n  for i in range(8):\n    turtle.forward(size)\n    turtle.right(45)\n\n\nmake_octagon(55)"
       );
     await page
-      .locator("#octagon-builder")
+      .locator("#octagon-testing")
       .getByRole("button", { name: "Run Code" })
       .click();
     await page.waitForTimeout(2000);
     await page
-      .locator("#octagon-builder")
+      .locator("#octagon-testing")
       .getByRole("button", { name: "Run Tests" })
       .click();
     await page.waitForTimeout(2000);
@@ -506,12 +506,12 @@ test.describe("TestingSection for turtles", () => {
         "import turtle\n\nturtle.speed(0)\ndef make_octagon(size):\n  # Your code here converting the code above to a loop\n  for i in range(8):\n    turtle.forward(55)\n    turtle.right(45)\n\n\nmake_octagon(55)"
       );
     await page
-      .locator("#octagon-builder")
+      .locator("#octagon-testing")
       .getByRole("button", { name: "Run Code" })
       .click();
     await page.waitForTimeout(2000);
     await page
-      .locator("#octagon-builder")
+      .locator("#octagon-testing")
       .getByRole("button", { name: "Run Tests" })
       .click();
     await page.waitForTimeout(2000);

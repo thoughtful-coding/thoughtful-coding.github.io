@@ -181,7 +181,7 @@ const lessonData: Lesson = {
     } as TestingSectionData,
     {
       kind: "Reflection",
-      id: "fstrings-power-reflection" as SectionId,
+      id: "fstrings-reflection" as SectionId,
       title: "F-Strings Make Output Clear",
       content: [
         {

@@ -75,7 +75,7 @@ const lessonData: Lesson = {
     } as MultipleChoiceSectionData,
     {
       kind: "Debugger",
-      id: "watch-nesting" as SectionId,
+      id: "debug-nesting" as SectionId,
       title: "Watching Nested Loops",
       content: [
         {

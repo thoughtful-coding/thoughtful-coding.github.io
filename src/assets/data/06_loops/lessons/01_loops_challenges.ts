@@ -59,7 +59,7 @@ const lessonData: Lesson = {
     } as MultipleSelectionSectionData,
     {
       kind: "Testing",
-      id: "hexagon-builder" as SectionId,
+      id: "hexagon-testing" as SectionId,
       title: "Challenge: Hexagon",
       content: [
         {
@@ -87,7 +87,7 @@ const lessonData: Lesson = {
     } as TestingSectionData,
     {
       kind: "Testing",
-      id: "octagon-builder" as SectionId,
+      id: "octagon-testing" as SectionId,
       title: "Challenge: Octagon with Input",
       content: [
         {

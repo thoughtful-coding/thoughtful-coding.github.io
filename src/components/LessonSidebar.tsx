@@ -27,10 +27,10 @@ const LessonSidebar: React.FC<LessonSidebarProps> = ({
     // Find target element
     const targetElement = document.getElementById(sectionId);
     if (targetElement) {
-      // Smooth scroll (optional)
+      // Smooth scroll
       targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
-      // Update URL hash manually if needed, without triggering full navigation
-      // window.history.pushState(null, '', `#${sectionId}`);
+      // Update URL hash to make the link shareable
+      window.history.pushState(null, "", `#${sectionId}`);
     }
     // Call prop handler if provided
     // onLinkClick?.(sectionId);

@@ -96,6 +96,18 @@ const LessonPage: React.FC = () => {
         setLesson(fetchedLesson);
         document.title = `${fetchedLesson.title} - Python Lesson`;
 
+        // Handle hash fragment scrolling after lesson loads
+        if (window.location.hash) {
+          const hash = window.location.hash.substring(1); // Remove the '#'
+          // Use setTimeout to ensure DOM has rendered
+          setTimeout(() => {
+            const element = document.getElementById(hash);
+            if (element) {
+              element.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+          }, 100);
+        }
+
         let foundUnitLessons: LessonReference[] | null = null;
         let foundIndex = -1;
         let foundUnitId: UnitId | null = null;
@@ -353,7 +365,11 @@ const LessonPage: React.FC = () => {
           )}
         </div>
 
-        {lesson.sections.map((sectionItem) => renderSection(sectionItem))}
+        {lesson.sections.map((sectionItem) => (
+          <div key={sectionItem.id} id={sectionItem.id}>
+            {renderSection(sectionItem)}
+          </div>
+        ))}
 
         {totalLessonsInUnit > 0 && (
           <div
