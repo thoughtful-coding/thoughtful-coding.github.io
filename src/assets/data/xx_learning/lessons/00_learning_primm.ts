@@ -35,7 +35,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "This website is designed to allow you to quickly write, run, and debug programs. Below is your first program. Run it by clicking the `Run Code` button and compare the program with the resulting output to try and understand what is happening.",
+            "This website is designed to allow you to quickly write, run, and debug programs. Below is your first program. Run it by clicking the `Run Code` button. Once it is done executing, compare the program with the resulting output to try and understand what is happened.",
         },
       ],
       example: {
@@ -52,7 +52,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "That worked, but here's the issue: if all you do is run code and copy examples, you're not really learning to think like a programmer. For this reason, this website takes a very opinionated approach to learning by using a method called PRIMM. PRIMM is based on the realization that people often struggle to learn programming because writing a program from scratch involves **a lot** of things happening all at once. For novices, handling all the necessary details can quickly become overwhelming.\n\nPRIMM (which stands for Predict, Run, Investigate, Modify, Make) is a way of learning to program that mimics how real engineers work. Very rarely do engineers create something from scratch. Instead, they start with something that's close and then slowly mold it to be what they want.",
+            "That was interesting, but here's the issue: if all you do is run code and copy examples, you're not really learning to think like a programmer. For this reason, this website takes a very opinionated approach to learning by using a method called PRIMM. PRIMM is based on the realization that people often struggle to learn programming because writing a program from scratch involves **a lot** of things happening all at once. For novices, handling all the necessary details can quickly become overwhelming.\n\nPRIMM (which stands for Predict, Run, Investigate, Modify, Make) is a way of learning to program that mimics how real engineers work. Very rarely do engineers create something from scratch. Instead, they start with something that's close and then slowly mold it to be what they want.",
         },
       ],
     } as InformationSectionData,
@@ -63,7 +63,8 @@ const lessonData: Lesson = {
       content: [
         {
           kind: "text",
-          value: "Match each part of PRIMM with what you think its purpose is:",
+          value:
+            "Based on the definition above, match each part of PRIMM with what you think its purpose is:",
         },
       ],
       prompts: [
@@ -84,7 +85,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Now, let's try the PRIMM way so you can see the difference. Below is a PRIMM-ified version of the code you ran above. To complete the section, you must:\n1. Predict what will happen\n2. Run the program\n3. Investigate the output and explain what (if anything) was wrong with your prediction\n\n\nThe key is to be as **specific as possible** in your prediction and interpretation.",
+            "Now, let's try the PRIMM way of learning so you can see the difference. Below is a PRIMM-ified version of the code you ran above. To complete the section, you must:\n1. Predict what will happen\n2. Run the program\n3. Investigate the output and explain what (if anything) was wrong with your prediction\n\n\nThe key is to be as **specific as possible** in your prediction and interpretation.",
         },
       ],
       example: {
@@ -94,7 +95,7 @@ const lessonData: Lesson = {
       },
       predictPrompt: "What do you think the program will print out?",
       conclusion:
-        "PRIMM increases learning by making you read code carefully and then understand and correct anything you got wrong",
+        "PRIMM increases learning by making you read code carefully and then address anything you got wrong",
     } as PRIMMSectionData,
     {
       kind: "Information",
