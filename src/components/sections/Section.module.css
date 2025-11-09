@@ -64,12 +64,18 @@
 }
 
 .content code {
-  /* Inline code snippets */
+  font-size: 0.9em;
+  font-family: var(--font-mono);
+}
+
+.content p code,
+.content li code,
+.content td code,
+.content th code {
+  /* Inline code snippets only (not in CodeMirror editor or pre blocks) */
   /* background-color: #f0f0f0; */
   padding: 0.2em 0.4em;
   border-radius: var(--radius-sm);
-  font-family: var(--font-mono);
-  font-size: 0.9em;
 }
 
 .content pre {
