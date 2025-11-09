@@ -40,7 +40,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            'This would result in the following error:\n```\nError:\n\nExecution Error: Traceback (most recent call last):\n  File "/lib/python311.zip/_pyodide/_base.py", line 573, in eval_code_async\n    await CodeRunner(\n  File "/lib/python311.zip/_pyodide/_base.py", line 393, in run_async\n    coroutine = eval(self.code, globals, locals)\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "<exec>", line 2, in <module>\nNameError: name \'numbr\' is not defined\n```\nWhat the error is saying is that there is no variable named `numbr`. This makes sense because the program misspelled the variable `number` that was created on the previous line.',
+            'This would result in the following error:\n```\nNameError: Traceback (most recent call last):\n  File "/lib/python311.zip/_pyodide/_base.py", line 573, in eval_code_async\n    await CodeRunner(\n  File "/lib/python311.zip/_pyodide/_base.py", line 393, in run_async\n    coroutine = eval(self.code, globals, locals)\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "<exec>", line 2, in <module>\nNameError: name \'numbr\' is not defined\n```\nWhat the error is saying is that there is no variable named `numbr`. This makes sense because the program misspelled the variable `number` that was created on the previous line.',
         },
       ],
     } as InformationSectionData,

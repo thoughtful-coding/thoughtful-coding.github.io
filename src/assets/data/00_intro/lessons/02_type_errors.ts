@@ -7,6 +7,8 @@ import type {
   MatchingSectionData,
   ReflectionSectionData,
   MultipleChoiceSectionData,
+  DebuggerSectionData,
+  MultipleSelectionSectionData,
 } from "../../../../types/data";
 
 const lessonData: Lesson = {
@@ -23,10 +25,49 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "In the previous lesson you learned about different data types and how different operators do different things with them. In this lesson, you will see what happens when you accidentally mix stuff up.",
+            "In the previous lesson you learned about different data types and how different operators do different things with them. In this lesson, you will see how computers work and what happens when you accidentally mix the data types up.",
         },
       ],
     } as InformationSectionData,
+    {
+      kind: "Debugger",
+      id: "line-by-line-debugging" as SectionId,
+      title: "Watching a Computer Work",
+      content: [
+        {
+          kind: "text",
+          value:
+            'One things that\'s important to understand is that computers are very stupid. Despite their ability to do incredible things, they will just keep mindlessly executing a program line by line until the program ends or there\'s an error.\n\nThis section introduces a new way of interacting with a program: a "debugger". The point of a debugger is to allow a programmer to step line-by-line through a program to see how it works. Click the `Enter Debug Mode` button and pay attention to the following:\n- How you can "step" through each line of the program\n- How every print results in a new things being output',
+        },
+      ],
+      example: {
+        visualization: "console",
+        initialCode: 'print(3 + 3)\nprint("a" + "b")\nprint("All done!")\n',
+      },
+    } as DebuggerSectionData,
+    {
+      kind: "MultipleSelection",
+      id: "debugging-concepts",
+      title: "Debugging Concepts",
+      content: [
+        {
+          kind: "text",
+          value:
+            "The debugger above highlighted several important concepts about how computers work. Based on your observations, select all of the statements that are true.",
+        },
+      ],
+      options: [
+        "A computer double checks its work by running lines multiple times",
+        "A computer starts executes a program from top to bottom",
+        "A computer waits to output everything until the program is done",
+        "A computer outputs a print statement immediately",
+      ],
+      correctAnswers: [1, 3],
+      feedback: {
+        correct:
+          "Correct! Computers run the Python code from top to bottom as quickly as possible, outputting values as they go.",
+      },
+    } as MultipleSelectionSectionData,
     {
       kind: "PRIMM",
       id: "primm-type-error" as SectionId,
@@ -35,12 +76,13 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            'What happens when you operate on a string and an integer? Below is a simple Python program that has this issue: the `3` is an integer but the `"4"` is a string. First, predict what you think the code will do and then investigate whether your prediction is correct. Be sure to read the AI response afterwards very carefully if your prediction was incorrect.',
+            'Now that you know that computers execute programs line-by-line, an interesting question arises: what if something "weird" happens in the middle of a program? Below is version of the program above with one additional line of code on line 3. Unfortunately, line 3 has an issue: it\'s trying to use `+` with the integer `3` and the string `"4"`. First, predict what you think the code will do and then investigate whether your prediction is correct. Be sure to read the AI response afterwards very carefully if your prediction was incorrect.',
         },
       ],
       example: {
         visualization: "console",
-        initialCode: 'print(3 + "4")',
+        initialCode:
+          'print(3 + 3)\nprint("a" + "b")\nprint(3 + "4")\nprint("All done!")\n',
       },
       predictPrompt:
         "We are trying to do use the `+` operator on a string and an integer. What do you think will happen when you run the code?",
@@ -55,7 +97,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Getting errors while you're writing a program is very common. You got a `SyntaxError` in the lesson about single and double quotes. Here you're getting a `TypeError`. Learning how to interpret errors will save you **a ton of time** later.\n\nThe error above is trying to tell you two things: where and what the issue is.\n- Where\n    - The second to last line of the error shows what line of code has the problem\n    - The error above says \"line 1\", which makes sense since our program has only one line\n- What\n    -The last line of the error shows was the actual problem is\n    - The error above says the problem is that we're doing an operation (`+`) that can't handle two different data types",
+            "Getting errors while you're writing a program is very common. You got a `SyntaxError` in the lesson about single and double quotes. Here you're getting a `TypeError`. Learning how to interpret errors will save you **a ton of time** later.\n\nThe error above is trying to tell you two things: where and what the issue is.\n- Where\n    - The second to last line of the error shows what line of code has the problem\n    - The error above says \"line 3\", which makes sense this was the line that was added\n- What\n    -The last line of the error shows was the actual problem is\n    - The error above says the problem is that we're doing an operation (`+`) that can't handle two different data types",
         },
       ],
     } as InformationSectionData,
@@ -66,8 +108,7 @@ const lessonData: Lesson = {
       content: [
         {
           kind: "text",
-          value: `Let's see if you can interpret an error to figure out _where_ the issue is:\n\`\`\`\nPyodide Execution Error: 
-Execution Error: Traceback (most recent call last):
+          value: `Let's see if you can interpret an error to figure out _where_ the issue is:\n\`\`\`\nTypeError: Traceback (most recent call last):
   File "/lib/python311.zip/_pyodide/_base.py", line 573, in eval_code_async
     await CodeRunner(
   File "/lib/python311.zip/_pyodide/_base.py", line 393, in run_async
@@ -91,7 +132,7 @@ TypeError: unsupported operand type(s) for +: 'int' and 'str'\n\`\`\``,
       content: [
         {
           kind: "text",
-          value: `All errors follow the same basic format. For example, look at the following \`SyntaxError\`. As you saw in the first lesson, these occur when your program is written incorrectly. What is the following \`SyntaxError\` trying to communicate?\n\`\`\`\nExecution Error: Traceback (most recent call last):
+          value: `All errors follow the same basic format. For example, look at the following \`SyntaxError\`. As you saw in the first lesson, these occur when your program is written incorrectly. What is the following \`SyntaxError\` trying to communicate?\n\`\`\`\nSyntaxError: Traceback (most recent call last):
   File "/lib/python311.zip/_pyodide/_base.py", line 573, in eval_code_async
     await CodeRunner(
           ^^^^^^^^^^^

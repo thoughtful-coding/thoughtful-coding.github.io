@@ -68,6 +68,28 @@ const lessonData: Lesson = {
       },
     } as DebuggerSectionData,
     {
+      kind: "MultipleChoice",
+      id: "variable-value-tracking",
+      title: "Variable Value Tracking",
+      content: [
+        {
+          kind: "text",
+          value:
+            "If you were to insert the line `students_count = students_count + 16` between the first and second line of the example from the video, what would be printed out?",
+        },
+        {
+          kind: "code",
+          value:
+            'num_1 = "6"\nnum_2 = "3"\nresult_1 = num_1 + num_2\n\nnum_3 = 5\nnum_4 = 2\nresult_2 = num_3 + num_4\n\nprint(result_1)\nprint(result_2)\n',
+        },
+      ],
+      options: ["63 then 52", "63 then 7", "9 then 7", "9 then 52"],
+      correctAnswer: 1,
+      feedback: {
+        correct: "Correct!",
+      },
+    } as MultipleChoiceSectionData,
+    {
       kind: "Information",
       id: "variables-single",
       title: "Short Term Memory",
