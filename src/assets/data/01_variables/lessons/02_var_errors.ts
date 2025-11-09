@@ -22,7 +22,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Using variables is necessary for pretty much all programs. Therefore, it's necessary to know how to handle errors that are \"raised\" while you're using them. As stated in the previous lesson on `TypeErrors`, errors are one of the most common reasons new programmers feel overwhelmed. Learning to understand variable errors will make you a more confident, able programmer.",
+            "Using variables is necessary for pretty much all programs. Therefore, it's necessary to know how to handle errors that are \"raised\" while you're using them. As stated in the previous lesson on `TypeErrors`, errors are one of the most common reasons new programmers feel overwhelmed. In this lesson, you'll learn to understand variable errors in order to make you a more confident, able programmer.",
         },
       ],
     } as InformationSectionData,
@@ -40,7 +40,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            'This would result in the following error:\n```\nNameError: Traceback (most recent call last):\n  File "/lib/python311.zip/_pyodide/_base.py", line 573, in eval_code_async\n    await CodeRunner(\n  File "/lib/python311.zip/_pyodide/_base.py", line 393, in run_async\n    coroutine = eval(self.code, globals, locals)\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "<exec>", line 2, in <module>\nNameError: name \'numbr\' is not defined\n```\nWhat the error is saying is that there is no variable named `numbr`. This makes sense because the program misspelled the variable `number` that was created on the previous line.',
+            'This would result in the following error:\n```\nNameError: Traceback (most recent call last):\n  File "/lib/python311.zip/_pyodide/_base.py", line 573, in eval_code_async\n    await CodeRunner(\n  File "/lib/python311.zip/_pyodide/_base.py", line 393, in run_async\n    coroutine = eval(self.code, globals, locals)\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "<exec>", line 2, in <module>\nNameError: name \'numbr\' is not defined\n```\nThe error is saying is that the the computer failed trying to read a non-existent variable named `numbr` on line 2. This makes sense because the program misspelled the variable `number` that was created on the previous line.',
         },
       ],
     } as InformationSectionData,
@@ -52,7 +52,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "There is a misspelling in the simple program below. Use the `NameError` that is raised when you run the program so that you can quickly find and fix the bug.",
+            "There is a misspelling in the simple program below. Click the `Run Code` button to run the program. Then, use the `NameError` that is raised to find and fix the bug - a misspelled variable - in the program. Finally, click the `Run Tests` button to verify you fixed it as expected.",
         },
       ],
       example: {

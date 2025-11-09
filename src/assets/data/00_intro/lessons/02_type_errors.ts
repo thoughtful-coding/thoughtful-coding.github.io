@@ -46,31 +46,8 @@ const lessonData: Lesson = {
       },
     } as DebuggerSectionData,
     {
-      kind: "MultipleSelection",
-      id: "debugging-concepts",
-      title: "Debugging Concepts",
-      content: [
-        {
-          kind: "text",
-          value:
-            "The debugger above highlighted several important concepts about how computers work. Based on your observations, select all of the statements that are true.",
-        },
-      ],
-      options: [
-        "A computer double checks its work by running lines multiple times",
-        "A computer starts executes a program from top to bottom",
-        "A computer waits to output everything until the program is done",
-        "A computer outputs a print statement immediately",
-      ],
-      correctAnswers: [1, 3],
-      feedback: {
-        correct:
-          "Correct! Computers run the Python code from top to bottom as quickly as possible, outputting values as they go.",
-      },
-    } as MultipleSelectionSectionData,
-    {
       kind: "PRIMM",
-      id: "primm-type-error" as SectionId,
+      id: "primm-type-errors" as SectionId,
       title: "Data Type Mixup",
       content: [
         {

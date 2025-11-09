@@ -58,7 +58,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Which of the following is a valid string that could be printed without causing a `SyntaxError`?",
+            "Which of the following is a valid string that could be printed **without** causing a `SyntaxError`?",
         },
       ],
       options: [

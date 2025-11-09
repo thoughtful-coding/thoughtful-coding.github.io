@@ -24,7 +24,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "In previous lessons, you learned how to create variables that store both strings and integers. You also learned how to print these variables. However, there's something we carefully avoided talking about: printing integers and strings together on the same line.\n\nFor example, if you have a variable age that holds the integer 15 (`age = 15`), we've only shown you how to print `age` by itself. We haven't shown you how to print something like `You are 15 years old` where the integer is combined with a string. In this lesson, we'll show you different ways to try and do this and how to debug any errors you encounter along the way.",
+            "In previous lessons, you learned how to create variables that store both strings and integers. You also learned how to print these variables. However, there's something we carefully avoided talking about: printing integers and strings together on the same line.\n\nFor example, if you have a variable `age` that holds the integer `15` (via the code `age = 15`), we've only shown you how to print `age` by itself. We haven't shown you how to print something like `You are 15 years old` where the integer is combined with a string. In this lesson, we'll show you different ways to try and do this and how to debug any errors you encounter along the way.",
         },
       ],
     } as InformationSectionData,
@@ -57,13 +57,13 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "The solution to this problem is something called an **f-string** (short for 'format string'). An f-string lets you easily insert variables into text, regardless of whether they're strings or integers.\n\nHere's the same program from before, but using f-strings. Notice three key parts:\n1. The letter `f` appears right before the opening quote\n2. Variable names go inside curly braces `{}`\n3. Python automatically converts the variable to text\n\nRun this code and see how smoothly it works:",
+            "The solution to the problem of printing strings and integers on the same line is something called an **f-string** (short for 'format string'). An f-string lets you easily insert variables into text, regardless of whether they're strings or integers.\n\nHere's the same program from before, but using f-strings. Notice three key parts:\n1. The letter `f` appears right before the opening quote\n2. Variable names go inside curly braces `{}`\n3. Python automatically converts the variable to text\n\nRun this code and see how smoothly it works:",
         },
       ],
       example: {
         visualization: "console",
         initialCode:
-          'color = "red"\num = 25\nprint(f"A color is {color}")\nprint(f"A number is {num}")',
+          'color = "red"\nnum = 25\nprint(f"A color is {color}")\nprint(f"A number is {num}")',
       },
     } as ObservationSectionData,
     {
@@ -95,7 +95,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Which of the following correctly uses an f-string to print 'Score: 100' when the variable `score` has the value 100?",
+            "Given that `score = 100`, which of the following correctly uses an f-string to print 'Score: 100'?",
         },
       ],
       options: [
@@ -141,7 +141,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Remember the TypeError you saw at the beginning? That happened because Python couldn't use `+` to combine strings and integers. You'd need to convert the integer to a string first, which is complicated and error-prone.\n\nF-strings solve this problem elegantly:\n- They automatically handle different data types (strings, integers, even calculations)\n- They're much easier to read than alternatives\n- You can see exactly what the output will look like just by reading the code\n- You can put expressions (like `{age + 1}`) directly inside the curly braces\n\nCompare these two approaches:\n```python\n# The hard way (causes errors!)\nprint('You are ' + age + ' years old')\n\n# The easy way (works perfectly!)\nprint(f'You are {age} years old')\n```",
+            "Remember the TypeError you saw at the beginning of this lesson? That happened because Python couldn't use `+` to combine strings and integers. You'd need to convert the integer to a string first, which is complicated and error-prone.\n\nF-strings solve this problem elegantly:\n- They automatically handle different data types (strings, integers, even calculations)\n- They're much easier to read than alternatives\n- You can see exactly what the output will look like just by reading the code\n- You can put expressions (like `{age + 1}`) directly inside the curly braces",
         },
       ],
     } as InformationSectionData,
@@ -184,7 +184,7 @@ const lessonData: Lesson = {
       example: {
         visualization: "console",
         initialCode:
-          "# Create your three variables\nname = \nage = \nstate = \n\n# Print the profile sentence using an f-string\n",
+          '# Create your three variables\nname = "Mary"\nage = 12\nstate = "New Jersey"\n\n# Print the profile sentence using an f-string\n',
       },
       testCases: [
         {

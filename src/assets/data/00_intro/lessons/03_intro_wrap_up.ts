@@ -126,7 +126,7 @@ SyntaxError: '(' was never closed for print("hi"`,
     } as MultipleChoiceSectionData,
     {
       kind: "MultipleSelection",
-      id: "operation-question",
+      id: "ways-to-get-twelve-question",
       title: "When To Use What?",
       content: [
         {
@@ -157,7 +157,7 @@ SyntaxError: '(' was never closed for print("hi"`,
         {
           kind: "text",
           value:
-            'Create an Instagram post notification program that prints these three lines exactly:\n```\nTaylor liked your photo\n"Great shot!" \n42 others also liked it\n```\n\nWatch out for:\n- The quotation marks around "Great shot!" must appear in the output\n- Each line needs its own print statement\n\nTo check your work, click the `Run Code` button. Once you think your program is ready, click the `Run Tests` button to check that the generated output exactly matches expectations.',
+            'Create an Instagram post notification program that prints these three lines exactly:\n```\nTaylor liked your photo\nBill said "Great shot!"\n42 others also liked it\n```\n\nWatch out for:\n- The quotation marks around "Great shot!" must appear in the output\n- Each line needs its own print statement\n\nTo check your work, click the `Run Code` button. Once you think your program is ready, click the `Run Tests` button to check that the generated output exactly matches expectations.',
         },
       ],
       example: {
@@ -169,7 +169,7 @@ SyntaxError: '(' was never closed for print("hi"`,
         {
           input: [null],
           expected:
-            'Taylor liked your photo\n"Great shot!"\n42 others also liked it',
+            'Taylor liked your photo\nBill said "Great shot!"\n42 others also liked it',
           description: "Test Instagram notification format",
         },
       ],

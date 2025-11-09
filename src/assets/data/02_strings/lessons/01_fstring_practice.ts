@@ -54,7 +54,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Given the variables `name = 'Alice'` and `score = 95`, which of the following correctly prints 'Alice scored 95 points'?",
+            "Given that `name = 'Alice'` and `score = 95`, which of the following correctly prints 'Alice scored 95 points'?",
         },
       ],
       options: [
@@ -128,33 +128,7 @@ const lessonData: Lesson = {
     } as MatchingSectionData,
     {
       kind: "Testing",
-      id: "score-reporter" as SectionId,
-      title: "Challenge: Score Reporter",
-      content: [
-        {
-          kind: "text",
-          value:
-            "Create a program that reports game scores. You are given three variables: `player_name`, `round1_score`, and `round2_score`.\n\nYour program should print exactly two lines:\n1. 'Player: [player_name]'\n2. 'Total score: [sum of both round scores]'\n\nYou must use f-strings with expressions to calculate the total.\n\nExample: If player_name='Alice', round1_score=50, round2_score=70, output:\n```\nPlayer: Alice\nTotal score: 120\n```",
-        },
-      ],
-      example: {
-        visualization: "console",
-        initialCode:
-          '# Variables are provided\nplayer_name = "Alice"\nround1_score = 50\nround2_score = 70\n\n# Write your two print statements here using f-strings\n',
-      },
-      testCases: [
-        {
-          input: [null],
-          expected: "Player: Alice\nTotal score: 120",
-          description: "Test with Alice, scores 50 and 70",
-        },
-      ],
-      testMode: "procedure",
-      functionToTest: "__main__",
-    } as TestingSectionData,
-    {
-      kind: "Testing",
-      id: "trip-calculator" as SectionId,
+      id: "shopping-cart-test" as SectionId,
       title: "Challenge: Shopping Cart",
       content: [
         {

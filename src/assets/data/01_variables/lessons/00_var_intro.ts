@@ -1,7 +1,6 @@
 import type {
   InformationSectionData,
   Lesson,
-  ObservationSectionData,
   LessonId,
   SectionId,
   MultipleSelectionSectionData,
@@ -78,10 +77,10 @@ const lessonData: Lesson = {
         },
       ],
       options: [
-        'The variable name is `"Eric"`',
-        "The variable name is `name`",
-        'The variable value is `"Eric"`',
-        "The variable value is `name`",
+        'The variable\'s name is `"Eric"`',
+        "The variable's name is `name`",
+        'The variable\'s value is `"Eric"`',
+        "The variable's value is `name`",
         "The `=` sign stores the value in the variable",
         "The `=` sign checks if two things are equal",
       ],
