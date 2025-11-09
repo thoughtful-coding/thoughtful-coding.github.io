@@ -13,7 +13,6 @@ import React, {
 // If not, replace PyodideInterface with 'any' for now.
 import type { PyodideInterface } from "../types/pyodide";
 import { PYODIDE_CONFIG } from "../config/constants";
-import { enhancePythonError } from "../lib/pythonErrorEnhancer";
 
 // Define the structure for Python execution results with proper stream separation
 export interface PythonExecutionResult {
@@ -284,10 +283,10 @@ export const PyodideProvider: React.FC<PyodideProviderProps> = ({
         // Build traceback from stderr if available, otherwise use error string
         const traceback = stderr || err.toString();
 
-        // Enhance error message with beginner-friendly hints (unless it's a timeout)
+        // Use raw error message (or timeout message if applicable)
         const errorMessage = isTimeout
           ? `Code execution timed out after ${PYODIDE_CONFIG.EXECUTION_TIMEOUT_MS / 1000} seconds. This usually happens when your code has an infinite loop or takes too long to complete.`
-          : enhancePythonError(errorType, originalErrorMessage, traceback);
+          : originalErrorMessage;
 
         // Return structured error with streams preserved
         return {
