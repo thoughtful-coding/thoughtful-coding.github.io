@@ -46,32 +46,6 @@ const lessonData: Lesson = {
       },
     } as MultipleChoiceSectionData,
     {
-      kind: "Testing",
-      id: "instagram-likes" as SectionId,
-      title: "Instagram Post",
-      content: [
-        {
-          kind: "text",
-          value:
-            'Create an Instagram post notification program that prints these three lines exactly:\n```\nTaylor liked your photo\n"Great shot!" \n42 others also liked it\n```\n\nWatch out for:\n- The quotation marks around "Great shot!" must appear in the output\n- Each line needs its own print statement\n\nTo check your work, click the `Run Code` button. Once you think your program is ready, click the `Run Tests` button to check that the generated output exactly matches expectations.',
-        },
-      ],
-      example: {
-        visualization: "console",
-        initialCode: "# Print the three lines exactly as shown\n",
-      },
-      testCases: [
-        {
-          input: [null],
-          expected:
-            'Taylor liked your photo\n"Great shot!"\n42 others also liked it',
-          description: "Test Instagram notification format",
-        },
-      ],
-      testMode: "procedure",
-      functionToTest: "__main__",
-    } as TestingSectionData,
-    {
       kind: "Matching",
       id: "python-ops-match" as SectionId,
       title: "Matching Operations",
@@ -95,27 +69,108 @@ const lessonData: Lesson = {
       ],
     } as MatchingSectionData,
     {
-      kind: "Testing",
-      id: "twitter-retwits" as SectionId,
-      title: "Twit Stats",
+      kind: "MultipleChoice",
+      id: "operation-question",
+      title: "When To Use What?",
       content: [
         {
           kind: "text",
           value:
-            "Create a twit statistics display. You need to calculate and display retwit math.\n\nPrint exactly:\n```\nYour twit got 15 retwits\nYour friend's twit got 45 retwits\nTotal retwits...\n60\n```\n\nYou must:\n- Use integers for all numbers\n- Calculate 15 + 45 for the total\n- Include the apostrophe in \"friend's\"",
+            "What determines what operations (`+`, `-`, `*`) you can use (without getting an error)?",
+        },
+      ],
+      options: [
+        "The type of the data",
+        "The location of the data",
+        "How old your are",
+        "How old the computer is",
+      ],
+      correctAnswer: 0,
+      feedback: {
+        correct:
+          "Correct! The **data type** determines what the operations does (and if it can be used).",
+      },
+    } as MultipleChoiceSectionData,
+    {
+      kind: "MultipleChoice",
+      id: "syntax-error-interpretation",
+      title: "SyntaxError Interpretation",
+      content: [
+        {
+          kind: "text",
+          value: `What is the following \`SyntaxError\` trying to communicate?\n\`\`\`\nSyntaxError: Traceback (most recent call last):
+  File "/lib/python311.zip/_pyodide/_base.py", line 573, in eval_code_async
+    await CodeRunner(
+          ^^^^^^^^^^^
+  File "/lib/python311.zip/_pyodide/_base.py", line 267, in __init__
+    self.ast = next(self._gen)
+               ^^^^^^^^^^^^^^^
+  File "/lib/python311.zip/_pyodide/_base.py", line 145, in _parse_and_compile_gen
+    mod = compile(source, filename, mode, flags | ast.PyCF_ONLY_AST)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<exec>", line 5
+SyntaxError: '(' was never closed for print("hi"`,
+        },
+      ],
+      options: [
+        "There's an error on line 57 because there's a `*` instead of a `+`",
+        "There's an error on line 12 because `print` is misspelled",
+        "There's an error on line 15 because there's a missing end quote",
+        "There's an error on line 5 because there's a missing `)` for the print",
+      ],
+      correctAnswer: 3,
+      feedback: {
+        correct:
+          'Correct! The program should be `print("hi")` instead of `print("hi"`',
+      },
+    } as MultipleChoiceSectionData,
+    {
+      kind: "MultipleSelection",
+      id: "operation-question",
+      title: "When To Use What?",
+      content: [
+        {
+          kind: "text",
+          value:
+            'Which of the following will result in the `12` or `"12"` being printed out? Select all that apply.',
+        },
+      ],
+      options: [
+        "print(1 + 2)",
+        'print("1" + "2")',
+        "print(3 * 4)",
+        "print(11 + 1)",
+        'print("11" + "1")',
+        "print(13 - 1)",
+        'print("13" - "1")',
+      ],
+      correctAnswers: [1, 2, 3, 5],
+      feedback: {
+        correct: "Correct! Different operations can yield the same result.",
+      },
+    } as MultipleSelectionSectionData,
+    {
+      kind: "Testing",
+      id: "instagram-likes" as SectionId,
+      title: "Instagram Post",
+      content: [
+        {
+          kind: "text",
+          value:
+            'Create an Instagram post notification program that prints these three lines exactly:\n```\nTaylor liked your photo\n"Great shot!" \n42 others also liked it\n```\n\nWatch out for:\n- The quotation marks around "Great shot!" must appear in the output\n- Each line needs its own print statement\n\nTo check your work, click the `Run Code` button. Once you think your program is ready, click the `Run Tests` button to check that the generated output exactly matches expectations.',
         },
       ],
       example: {
         visualization: "console",
         initialCode:
-          "# Create the twit statistics display\n# Remember to calculate the math!\n",
+          "# Print the three lines above exactly as shown\nprint()\nprint()\nprint()\n",
       },
       testCases: [
         {
           input: [null],
           expected:
-            "Your twit got 15 retwits\nYour friend's twit got 45 retwits\nTotal retwits...\n60",
-          description: "Test twit statistics with calculations",
+            'Taylor liked your photo\n"Great shot!"\n42 others also liked it',
+          description: "Test Instagram notification format",
         },
       ],
       testMode: "procedure",

@@ -5,6 +5,7 @@
    ============================ */
 
 .section {
+  margin-top: 1rem; /* Spacing between sections */
   margin-bottom: 1rem; /* Spacing between sections */
   padding-bottom: 0.25rem;
   border-bottom: 1px solid #eee; /* Separator line */

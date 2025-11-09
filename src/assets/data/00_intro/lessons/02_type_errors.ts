@@ -55,14 +55,14 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Getting errors while you're writing a program is very common. You got a `SyntaxError` in the first lesson and here you're getting a `TypeError`. Learning how to interpret errors will save you **a ton of time** later.\n\nThe error above is trying to tell you two things: where and what the issue is.\n- Where\n    - Look at the second to last line of the error to see what line of code has the problem\n    - The error above says \"line 1\", which makes sense since our program is only one line\n- What\n    - Look at the last line of the error to see what the problem is\n    - The error above says the problem is that we're doing an operation (`+`) that can't handle two different data types",
+            "Getting errors while you're writing a program is very common. You got a `SyntaxError` in the lesson about single and double quotes. Here you're getting a `TypeError`. Learning how to interpret errors will save you **a ton of time** later.\n\nThe error above is trying to tell you two things: where and what the issue is.\n- Where\n    - The second to last line of the error shows what line of code has the problem\n    - The error above says \"line 1\", which makes sense since our program has only one line\n- What\n    -The last line of the error shows was the actual problem is\n    - The error above says the problem is that we're doing an operation (`+`) that can't handle two different data types",
         },
       ],
     } as InformationSectionData,
     {
       kind: "MultipleChoice",
       id: "type-error-interpretation",
-      title: "Type Error Interpretation",
+      title: "TypeError Interpretation",
       content: [
         {
           kind: "text",
@@ -87,11 +87,11 @@ TypeError: unsupported operand type(s) for +: 'int' and 'str'\n\`\`\``,
     {
       kind: "MultipleChoice",
       id: "syntax-error-interpretation",
-      title: "Syntax Error Interpretation",
+      title: "SyntaxError Interpretation",
       content: [
         {
           kind: "text",
-          value: `All errors follow the same basic format. For example, look at the following \`SyntaxError\`. As you saw in the first lesson, these occur when your program is typed incorrectly. What is the following \`SyntaxError\` trying to communicate?\n\`\`\`\nExecution Error: Traceback (most recent call last):
+          value: `All errors follow the same basic format. For example, look at the following \`SyntaxError\`. As you saw in the first lesson, these occur when your program is written incorrectly. What is the following \`SyntaxError\` trying to communicate?\n\`\`\`\nExecution Error: Traceback (most recent call last):
   File "/lib/python311.zip/_pyodide/_base.py", line 573, in eval_code_async
     await CodeRunner(
           ^^^^^^^^^^^

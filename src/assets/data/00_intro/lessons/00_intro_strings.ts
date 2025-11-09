@@ -63,7 +63,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "The first thing to appreciate about all programming languages is that they're primarily used to operate on data. Therefore, understanding the _type of data_ you're operating on is very important. The first **data type** we're going to cover are **strings**. Strings are lists of characters that can form words, sentences, and paragraphs. They are composed of letters, spaces, punctuation, and even numerical characters.\n\nStrings are most often denoted with a start `\"` and an end `\"`. Based on this definition, select the **two** options below that are valid strings.",
+            "The first thing to appreciate about all programming languages is that they're primarily used to operate on data. Therefore, understanding the _type of data_ you're operating on is very important. The first **data type** we're going to cover are **strings**. Strings are lists of characters that can form words, sentences, and paragraphs. They are composed of letters, spaces, punctuation, and even numerical characters.\n\nStrings are most often denoted by being inside double quotes. This means they start with a `\"` and end with a `\"`. Based on this definition, select the **two** options below that are valid strings.",
         },
       ],
       options: [
@@ -100,6 +100,31 @@ const lessonData: Lesson = {
       conclusion:
         "When you use double quotes to denote a string, you can't use double quotes **inside the string**",
     } as PRIMMSectionData,
+    {
+      kind: "Testing",
+      id: "hello-testing" as SectionId,
+      title: "Challenge: Hello, World!",
+      content: [
+        {
+          kind: "text",
+          value:
+            'Now it\'s your turn to write your first bit of code! The program below says `"Hello, World"`, but it\'s missing the expected exclamation point. Add **a single character** to the program so that it outputs `"Hello, World!"` instead. Once you think you\'ve made the right change:\n1. Verify that your program works by clicking the `Run Code` button\n2. Click the `Run Tests` button to "grade" your answer\n\nWhen you click the `Run Tests` button, the website will double check that your program produces the exactly correct output. If the generated output matches expectations, the entire section will be marked complete. If your change wasn\'t quite right, fix the error, and then rerun the tests.',
+        },
+      ],
+      example: {
+        visualization: "console",
+        initialCode: 'print("Hello, World")\n',
+      },
+      testCases: [
+        {
+          input: [null],
+          expected: "Hello, World!",
+          description: "Has trailing exclamation point",
+        },
+      ],
+      testMode: "procedure",
+      functionToTest: "__main__",
+    } as TestingSectionData,
     {
       kind: "Observation",
       id: "single-quote-strings" as SectionId,
@@ -145,13 +170,13 @@ const lessonData: Lesson = {
     } as MultipleSelectionSectionData,
     {
       kind: "Testing",
-      id: "problem1-task-grammatical-greeting" as SectionId,
+      id: "single-vs-double-testing" as SectionId,
       title: "Challenge: Who Goes There?",
       content: [
         {
           kind: "text",
           value:
-            "Now it's your turn to write some code! Write a program that outputs the following two sentences, one after the other:\n\n1. `Who's out there?`\n2. `I heard Eric say \"me\".`\n\nYou should be able to create this program by adding two different strings to the `print()` statements below.\n\nOnce you're ready, check that your program works by `Run Code` button. Then, if everything looks right, click the `Run Tests` button. When you do this, the website will double check that your program produces the exactly correct output. If the generated output matches expectations, the `Run Tests` button will turn the section green. If there's an error, look for where the generated output differs from expectations, fix the error, and then rerun the tests.",
+            "Now it's your turn to write a complete program! Write a program that outputs the following two sentences, one after the other:\n\n1. `Who's out there?`\n2. `I heard Eric say \"me\".`\n\nYou should be able to create this program by adding two different strings to the `print()` statements below.\n\nOnce you're ready, check that your program works by clicking the `Run Code` button. Then, if everything looks right, click the `Run Tests` button. If the generated output matches expectations, the section will be marked complete. If there's an error, look for where the generated output differs from expectations, fix the issue, and rerun the tests.",
         },
       ],
       example: {
