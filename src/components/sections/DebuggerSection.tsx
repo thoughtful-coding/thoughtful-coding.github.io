@@ -123,12 +123,9 @@ const DebuggerSection: React.FC<DebuggerSectionProps> = ({
   }, [currentStepIndex, trace, completeSection, unitId, lessonId, section.id]);
 
   return (
-    <div
-      id={section.id}
-      className={`${sectionStyles.section} ${styles.debuggerSection}`}
-    >
-      <h2 className={styles.title}>{section.title}</h2>
-      <div className={styles.content}>
+    <section id={section.id} className={sectionStyles.section}>
+      <h2 className={sectionStyles.title}>{section.title}</h2>
+      <div className={sectionStyles.content}>
         <ContentRenderer content={section.content} />
       </div>
 
@@ -291,7 +288,7 @@ const DebuggerSection: React.FC<DebuggerSectionProps> = ({
           </div>
         </div>
       )}
-    </div>
+    </section>
   );
 };
 

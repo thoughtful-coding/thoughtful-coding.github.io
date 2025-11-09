@@ -1,39 +1,25 @@
 /* src/components/sections/DebuggerSection.module.css */
-.debuggerSection {
-  margin-bottom: 2.5rem;
-  padding: 1.5rem;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-}
-
-.title {
-  color: #306998;
-  margin-top: 0;
-  margin-bottom: 1rem;
-  font-size: 1.8rem;
-}
 
 .editorContainer {
-  margin-bottom: 1rem;
+  margin-bottom: var(--spacing-lg);
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: var(--radius-md);
   overflow: hidden;
 }
 
 .controls {
-  margin-bottom: 1rem;
+  margin-bottom: var(--spacing-lg);
   display: flex;
-  gap: 1rem;
+  gap: var(--spacing-lg);
   align-items: center;
 }
 
 .runButton {
-  background-color: #28a745;
+  background-color: var(--color-success);
   color: white;
   border: none;
   padding: 0.6rem 1.2rem;
-  border-radius: 4px;
+  border-radius: var(--radius-md);
   cursor: pointer;
   font-weight: 600;
   transition: background-color 0.3s;
@@ -41,7 +27,7 @@
 }
 
 .runButton:hover:not(:disabled) {
-  background-color: #218838;
+  background-color: var(--color-success-dark);
 }
 
 .runButton:disabled {
@@ -55,12 +41,14 @@
 }
 
 .simulationArea {
-  margin-top: 1.5rem;
-  border-top: 1px solid #ddd;
-  padding-top: 1rem;
+  margin-top: var(--spacing-xl);
+  padding: var(--spacing-xl);
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: var(--radius-lg);
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.5rem;
+  gap: var(--spacing-xl);
 }
 
 @media (min-width: 768px) {
@@ -70,10 +58,10 @@
 }
 
 .simulationControls {
-  margin-bottom: 1rem;
+  margin-bottom: var(--spacing-lg);
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: var(--spacing-md);
   align-items: center;
 }
 
@@ -83,11 +71,11 @@
 .stepOverButton,
 .stepOutButton,
 .continueButton {
-  background-color: #007bff;
+  background-color: var(--color-info);
   color: white;
   border: none;
   padding: 0.5rem 1rem;
-  border-radius: 4px;
+  border-radius: var(--radius-md);
   cursor: pointer;
   font-weight: 500;
   transition: background-color 0.3s;
@@ -100,7 +88,7 @@
 .stepOverButton:hover:not(:disabled),
 .stepOutButton:hover:not(:disabled),
 .continueButton:hover:not(:disabled) {
-  background-color: #0056b3;
+  background-color: var(--color-info-dark);
 }
 
 .stepButton:disabled,
@@ -115,18 +103,18 @@
 }
 
 .restartButton {
-  background-color: #28a745; /* Green as in VSCode */
+  background-color: var(--color-success); /* Green as in VSCode */
 }
 .restartButton:hover:not(:disabled) {
-  background-color: #218838;
+  background-color: var(--color-success-dark);
 }
 
 .stopButton {
-  background-color: #dc3545;
+  background-color: var(--color-error);
   color: white;
   border: none;
   padding: 0.5rem 1rem;
-  border-radius: 4px;
+  border-radius: var(--radius-md);
   cursor: pointer;
   font-weight: 500;
   transition: background-color 0.3s;
@@ -144,23 +132,23 @@
 }
 
 .currentStepInfo {
-  font-family: "Menlo", "Consolas", "Courier New", monospace;
+  font-family: var(--font-mono);
   font-size: 0.9rem;
   padding: 0.5rem;
   background-color: #e9ecef;
-  border-radius: 4px;
+  border-radius: var(--radius-md);
   color: #333;
   white-space: nowrap;
-  margin-bottom: 1rem;
+  margin-bottom: var(--spacing-lg);
 }
 
 .variablesDisplay {
-  margin-top: 1.5rem;
+  margin-top: var(--spacing-xl);
 }
 
 .variablesDisplay h4 {
   margin-top: 0;
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--spacing-md);
   color: #306998;
   font-size: 1.1rem;
 }
@@ -168,10 +156,10 @@
 .variablesDisplay pre {
   background-color: #f8f9fa;
   color: #212529;
-  padding: 0.75rem 1rem;
-  border-radius: 4px;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-md);
   border: 1px solid #dee2e6;
-  font-family: "Menlo", "Consolas", "Courier New", monospace;
+  font-family: var(--font-mono);
   font-size: 0.9rem;
   line-height: 1.5;
   min-height: 60px;
@@ -189,10 +177,10 @@
 }
 
 .variableChanged {
-  background-color: #d4edda; /* Light green highlight */
+  background-color: var(--color-success-light); /* Light green highlight */
   font-weight: bold;
   padding: 2px 4px;
-  border-radius: 3px;
+  border-radius: var(--radius-sm);
   display: inline;
   transition: background-color 0.5s ease;
 }
@@ -200,9 +188,9 @@
 .simulationCodeDisplay {
   background-color: #fff;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: var(--radius-md);
   padding: 0.5rem;
-  font-family: "Menlo", "Consolas", "Courier New", monospace;
+  font-family: var(--font-mono);
   font-size: 0.9rem;
   line-height: 1.5;
   max-height: 400px;
@@ -222,13 +210,13 @@
 }
 
 .errorMessage {
-  color: #721c24;
-  background-color: #f8d7da;
-  border: 1px solid #f5c6cb;
-  padding: 0.75rem 1.25rem;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  border-radius: 4px;
+  color: var(--color-error-text);
+  background-color: var(--color-error-light);
+  border: 1px solid var(--color-error-border);
+  padding: var(--spacing-md) 1.25rem;
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  border-radius: var(--radius-md);
   white-space: pre-wrap;
 }
 
@@ -266,12 +254,12 @@
 }
 
 .programOutputDisplay {
-  margin-top: 1.5rem;
+  margin-top: var(--spacing-xl);
 }
 
 .programOutputDisplay h4 {
   margin-top: 0;
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--spacing-md);
   color: #306998;
   font-size: 1.1rem;
 }
@@ -279,10 +267,10 @@
 .programOutputDisplay pre {
   background-color: #f8f9fa;
   color: #212529;
-  padding: 0.75rem 1rem;
-  border-radius: 4px;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-md);
   border: 1px solid #dee2e6;
-  font-family: "Menlo", "Consolas", "Courier New", monospace;
+  font-family: var(--font-mono);
   font-size: 0.9rem;
   line-height: 1.5;
   min-height: 60px;
