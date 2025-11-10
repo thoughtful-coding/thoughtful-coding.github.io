@@ -9,7 +9,7 @@ test.describe("DebuggerSection tests", () => {
     });
     await expect(sectionItem).not.toHaveClass(/sectionItemCompleted/);
 
-    await page.getByRole("button", { name: "Enter Debug Mode" }).click();
+    await page.locator("#variable-debugging").getByRole("button").click();
     await page.getByRole("button", { name: "Next Step →" }).click();
     await page.getByRole("button", { name: "Next Step →" }).click();
     await page.getByRole("button", { name: "Next Step →" }).click();

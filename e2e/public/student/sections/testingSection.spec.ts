@@ -19,12 +19,12 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
       .getByText("print()print()")
       .fill('print("Who\'s out there?")\nprint(\'I heard Eric say "me".');
     await page
-      .locator("#problem1-task-grammatical-greeting")
+      .locator("#single-vs-double-testing")
       .getByRole("button", { name: "Run Code" })
       .click();
     await expect(
       page
-        .locator("#problem1-task-grammatical-greeting")
+        .locator("#single-vs-double-testing")
         .getByText('Who\'s out there?\nI heard Eric say "me".')
     ).toBeVisible();
 
@@ -47,7 +47,7 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
       .nth(1)
       .click();
     await page
-      .locator("#problem1-task-grammatical-greeting")
+      .locator("#single-vs-double-testing")
       .getByRole("button", { name: "Run Tests" })
       .click();
     await expect(
@@ -74,7 +74,7 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
       .getByText("print()print()")
       .fill('print("Who\'s out there?")\nprint(\'I heard Eric say "me".\')');
     await page
-      .locator("#problem1-task-grammatical-greeting")
+      .locator("#single-vs-double-testing")
       .getByRole("button", { name: "Run Tests" })
       .click();
     await expect(page.getByText("All tests passed!")).toBeVisible();
@@ -102,7 +102,7 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
       .getByText("print()print()")
       .fill("print(\"Who's out there?\")\nprint(\"I heard Eric say 'me'.");
     await page
-      .locator("#problem1-task-grammatical-greeting")
+      .locator("#single-vs-double-testing")
       .getByRole("button", { name: "Run Tests" })
       .click();
     await expect(
@@ -128,7 +128,7 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
     await page.getByText("print()print()").press("ControlOrMeta+a");
     await page.getByText("print()print()").fill("print(a)");
     await page
-      .locator("#problem1-task-grammatical-greeting")
+      .locator("#single-vs-double-testing")
       .getByRole("button", { name: "Run Tests" })
       .click();
     await expect(page.getByText("name 'a' is not defined")).toBeVisible();
