@@ -75,7 +75,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            'Ok, now for the tricky part! It\'s important to understand the difference between strings and integers because the computer **operates on them differently**. In particular the **string** `"5"` is not the same as the **integer** `5`.\n\nBelow is a simple Python program that showcases this difference. First, predict what you think the code will do and then investigate whether your prediction was correct. Be sure to read the AI response very carefully if your prediction was incorrect.',
+            'Ok, now for the tricky part! It\'s important to understand the difference between strings and integers because the computers **operate on them differently**. In particular the **string** `"5"` is not the same as the **integer** `5`.\n\nBelow is a simple Python program that showcases this difference. First, predict what you think the code will do and then investigate whether your prediction was correct. Be sure to read the AI response very carefully if your prediction was incorrect.',
         },
       ],
       example: {
@@ -83,7 +83,7 @@ const lessonData: Lesson = {
         initialCode: 'print(5 + 5)\nprint("5" + "5")',
       },
       predictPrompt:
-        "The two print statements above will print out different things. This is because in one case the `+` is operating on **integers** and in the other case it's operating on **strings**. What do you think the will happen when you run the code?",
+        "The two print statements above will print out different things. This is because in one case the `+` is operating on **integers** and in the other case the `+` is operating on **strings**. What do you think the will happen when you run the code?",
       conclusion:
         "When you use `+` with two **integers**, the result is addition. When you use `+` with two **strings**, the result is combining (technically called concatenation)",
     } as PRIMMSectionData,

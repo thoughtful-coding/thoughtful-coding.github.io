@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test.describe("TestingSection `procedure` / `__main__` output tests", () => {
   test("Test can click `Run Code` button", async ({ page }) => {
-    await page.goto("/python/lesson/00_intro/lessons/00_intro_strings");
+    await page.goto("/python/lesson/00_intro/lessons/01_intro_strings");
 
     const sectionItem = page.getByRole("listitem").filter({
       hasText: "Challenge: Who Goes There?",
@@ -34,7 +34,7 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
   test("Test can click `Run Tests` button (w/o doing anything) and get failure", async ({
     page,
   }) => {
-    await page.goto("/python/lesson/00_intro/lessons/00_intro_strings");
+    await page.goto("/python/lesson/00_intro/lessons/01_intro_strings");
 
     const sectionItem = page.getByRole("listitem").filter({
       hasText: "Challenge: Who Goes There?",
@@ -58,7 +58,7 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
   });
 
   test("Test can click `Run Tests` button and get pass", async ({ page }) => {
-    await page.goto("/python/lesson/00_intro/lessons/00_intro_strings");
+    await page.goto("/python/lesson/00_intro/lessons/01_intro_strings");
 
     const sectionItem = page.getByRole("listitem").filter({
       hasText: "Challenge: Who Goes There?",
@@ -85,7 +85,7 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
   test("Test can click `Run Tests` button and get failure", async ({
     page,
   }) => {
-    await page.goto("/python/lesson/00_intro/lessons/00_intro_strings");
+    await page.goto("/python/lesson/00_intro/lessons/01_intro_strings");
 
     const sectionItem = page.getByRole("listitem").filter({
       hasText: "Challenge: Who Goes There?",
@@ -113,7 +113,7 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
   });
 
   test("Test can have faulty program and get SyntaxError", async ({ page }) => {
-    await page.goto("/python/lesson/00_intro/lessons/00_intro_strings");
+    await page.goto("/python/lesson/00_intro/lessons/01_intro_strings");
 
     const sectionItem = page.getByRole("listitem").filter({
       hasText: "Challenge: Who Goes There?",

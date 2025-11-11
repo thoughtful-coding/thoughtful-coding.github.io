@@ -7,8 +7,6 @@ import type {
   MatchingSectionData,
   ReflectionSectionData,
   MultipleChoiceSectionData,
-  DebuggerSectionData,
-  MultipleSelectionSectionData,
 } from "../../../../types/data";
 
 const lessonData: Lesson = {
@@ -25,26 +23,10 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "In the previous lesson you learned about different data types and how different operators do different things with them. In this lesson, you will see how computers work and what happens when you accidentally mix the data types up.",
+            "In the previous lesson you learned about different data types and how different operators affect them. In this lesson, you will see what happens when you accidentally mix up the data types.",
         },
       ],
     } as InformationSectionData,
-    {
-      kind: "Debugger",
-      id: "line-by-line-debugging" as SectionId,
-      title: "Watching a Computer Work",
-      content: [
-        {
-          kind: "text",
-          value:
-            'One things that\'s important to understand is that computers are very stupid. Despite their ability to do incredible things, they will just keep mindlessly executing a program line by line until the program ends or there\'s an error.\n\nThis section introduces a new way of interacting with a program: a "debugger". The point of a debugger is to allow a programmer to step line-by-line through a program to see how it works. Click the `Enter Debug Mode` button and pay attention to the following:\n- How you can "step" through each line of the program\n- How every print results in a new things being output',
-        },
-      ],
-      example: {
-        visualization: "console",
-        initialCode: 'print(3 + 3)\nprint("a" + "b")\nprint("All done!")\n',
-      },
-    } as DebuggerSectionData,
     {
       kind: "PRIMM",
       id: "primm-type-errors" as SectionId,
@@ -53,7 +35,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            'Now that you know that computers execute programs line-by-line, an interesting question arises: what if something "weird" happens in the middle of a program? Below is version of the program above with one additional line of code on line 3. Unfortunately, line 3 has an issue: it\'s trying to use `+` with the integer `3` and the string `"4"`. First, predict what you think the code will do and then investigate whether your prediction is correct. Be sure to read the AI response afterwards very carefully if your prediction was incorrect.',
+            "The first two lines of the program below do things we've seen before. Using a `+` on two strings results in concatenation. Using a `+` on two integers results in addition. Something new is happening on the third line of the program, however. We're using a `+` on the integer `3` and the the string `\"4\"`. First, predict what you think the code will do and then investigate whether your prediction is correct. Be sure to read the AI response afterwards very carefully if your prediction was incorrect.",
         },
       ],
       example: {

@@ -13,7 +13,7 @@ const lessonData: Lesson = {
   title: "Python Basics",
   guid: "3c1e0332-e7ec-4e6a-b0c6-f9c9890999c5" as LessonId,
   description:
-    "Welcome to your first Python lesson! In this lesson, you'll learn how to write your first simple program.",
+    "Learn how text is represented in a computer and use this knowledge to write your first Python program.",
   sections: [
     {
       kind: "Information",
@@ -23,38 +23,10 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Python was first released in 1991. Since then, it has become a very popular language because of its clean syntax and the way that well-written Python programs almost read like English prose.",
-        },
-        {
-          kind: "image",
-          src: "data/00_intro/images/simple_program.png",
-          alt: "Screenshot of a simple Python program in VSCode",
-          maxWidthPercentage: 70,
-        },
-        {
-          kind: "text",
-          value:
-            'Learning Python is great for formalizing your understanding of difficult topics and sharing your ideas with others. In this lesson, you\'ll learn how to print out "strings of characters" to the screen: a necessary part of building useful programs.',
+            "In the previous lesson, you ran your first Python program and then used the debugger to watch it run in slow motion. In this lesson, you'll learn how to output your own, custom text to the screen. Then, you'll use this knowledge to write your first two Python programs.",
         },
       ],
     } as InformationSectionData,
-    {
-      kind: "Observation",
-      id: "print-function" as SectionId,
-      title: "Printing Stuff",
-      content: [
-        {
-          kind: "text",
-          value:
-            "Computers wouldn't be of any use if they couldn't communicate with their users. The `print()` statement is used to display output to the user. It's one of the most basic and frequently used bits of code in Python.\n\nLet's start with the [classic](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program) \"Hello, World!\" example. Run the code below by clicking the `Run Code` button. You will see how the program produces two outputs: one line for each value inside a print statement.",
-        },
-      ],
-      example: {
-        visualization: "console",
-        initialCode:
-          'print("Hello, World!")\nprint("Can I call myself a programmer now?")',
-      },
-    } as ObservationSectionData,
     {
       kind: "MultipleSelection",
       id: "what-is-a-string",
