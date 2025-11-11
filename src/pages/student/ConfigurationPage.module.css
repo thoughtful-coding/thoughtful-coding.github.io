@@ -3,14 +3,14 @@
   max-width: 800px;
   margin: 2rem auto;
   padding: 2rem;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: var(--bg-elevated);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
 }
 
 .configPageContainer h2 {
   text-align: center;
-  color: #306998;
+  color: var(--primary-dark);
   margin-bottom: 2rem;
 }
 
@@ -22,16 +22,16 @@
 
 .configSection {
   padding: 1.5rem;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
-  background-color: #f9f9f9;
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-lg);
+  background-color: var(--bg-code);
 }
 
 .configSection h3 {
   margin-top: 0;
   margin-bottom: 1.5rem;
-  color: #4b8bbe;
-  border-bottom: 1px solid #d0d0d0;
+  color: var(--primary);
+  border-bottom: 1px solid var(--border-tertiary);
   padding-bottom: 0.75rem;
 }
 
@@ -47,7 +47,7 @@
   display: block;
   font-weight: 600;
   margin-bottom: 0.5rem;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .formGroup input[type="text"],
@@ -56,10 +56,12 @@
 .formGroup textarea {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 2px solid var(--border-tertiary);
+  border-radius: var(--radius-md);
   font-size: 1rem;
   box-sizing: border-box;
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
   transition:
     border-color 0.2s,
     box-shadow 0.2s;
@@ -69,39 +71,41 @@
 .formGroup input[type="url"]:focus,
 .formGroup input[type="password"]:focus,
 .formGroup textarea:focus {
-  border-color: #4b8bbe;
+  border-color: var(--border-focus);
   outline: none;
-  box-shadow: 0 0 0 3px rgba(75, 139, 190, 0.2);
+  box-shadow: var(--focus-shadow-lg);
 }
 
 .formGroup small {
   display: block;
   margin-top: 0.5rem;
   font-size: 0.85rem;
-  color: #666;
+  color: var(--text-muted);
 }
 
 .imagePreview {
   margin-top: 1rem;
 }
+
 .imagePreview p {
   margin-bottom: 0.5rem;
   font-weight: 500;
 }
+
 .imagePreview img {
   max-width: 100px;
   max-height: 100px;
   border-radius: 50%; /* Make it circular */
   object-fit: cover;
-  border: 2px solid #ddd;
+  border: 2px solid var(--border-tertiary);
 }
 
 .saveButton {
   padding: 0.75rem 1.5rem;
-  background-color: #28a745; /* Green */
+  background-color: var(--success);
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: var(--radius-md);
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -110,12 +114,12 @@
 }
 
 .saveButton:hover {
-  background-color: #218838;
+  background-color: var(--success-dark);
 }
 
 .saveStatus {
   margin-top: 1rem;
-  color: #155724; /* Green */
+  color: var(--success-text);
   font-weight: 500;
 }
 

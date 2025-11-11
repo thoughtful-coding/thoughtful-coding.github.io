@@ -2,7 +2,7 @@
 
 .editorContainer {
   margin-bottom: var(--spacing-lg);
-  border: 1px solid #ccc;
+  border: 2px solid var(--border-primary);
   border-radius: var(--radius-md);
   overflow: hidden;
 }
@@ -31,27 +31,27 @@
 }
 
 .runButton:disabled {
-  background-color: #94d3a2;
+  background-color: var(--success-light);
   cursor: not-allowed;
 }
 
 .statusMessage {
   font-style: italic;
-  color: #555;
+  color: var(--text-secondary);
 }
 
 .simulationArea {
   margin-top: var(--spacing-xl);
   padding: var(--spacing-xl);
-  background-color: #f5f5f5;
-  border: 1px solid #ddd;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-tertiary);
   border-radius: var(--radius-lg);
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--spacing-xl);
 }
 
-@media (min-width: 768px) {
+@media (width >= 768px) {
   .simulationArea {
     grid-template-columns: auto 1fr;
   }
@@ -97,7 +97,7 @@
 .stepOverButton:disabled,
 .stepOutButton:disabled,
 .continueButton:disabled {
-  background-color: #6c757d;
+  background-color: var(--text-muted);
   cursor: not-allowed;
   opacity: 0.7;
 }
@@ -105,6 +105,7 @@
 .restartButton {
   background-color: var(--color-success); /* Green as in VSCode */
 }
+
 .restartButton:hover:not(:disabled) {
   background-color: var(--color-success-dark);
 }
@@ -122,11 +123,11 @@
 }
 
 .stopButton:hover:not(:disabled) {
-  background-color: #c82333;
+  background-color: var(--error-dark);
 }
 
 .stopButton:disabled {
-  background-color: #e77580;
+  background-color: var(--text-muted);
   cursor: not-allowed;
   opacity: 0.7;
 }
@@ -135,9 +136,9 @@
   font-family: var(--font-mono);
   font-size: 0.9rem;
   padding: 0.5rem;
-  background-color: #e9ecef;
+  background-color: var(--bg-secondary);
   border-radius: var(--radius-md);
-  color: #333;
+  color: var(--text-primary);
   white-space: nowrap;
   margin-bottom: var(--spacing-lg);
 }
@@ -149,16 +150,16 @@
 .variablesDisplay h4 {
   margin-top: 0;
   margin-bottom: var(--spacing-md);
-  color: #306998;
+  color: var(--primary-dark);
   font-size: 1.1rem;
 }
 
 .variablesDisplay pre {
-  background-color: #f8f9fa;
-  color: #212529;
+  background-color: var(--bg-code);
+  color: var(--text-primary);
   padding: var(--spacing-md) var(--spacing-lg);
   border-radius: var(--radius-md);
-  border: 1px solid #dee2e6;
+  border: 1px solid var(--border-secondary);
   font-family: var(--font-mono);
   font-size: 0.9rem;
   line-height: 1.5;
@@ -168,11 +169,10 @@
   white-space: pre-wrap;
   word-break: break-all;
   margin: 0;
-  color: #111;
 }
 
 .noVariables {
-  color: #666;
+  color: var(--text-muted);
   font-style: italic;
 }
 
@@ -186,8 +186,8 @@
 }
 
 .simulationCodeDisplay {
-  background-color: #fff;
-  border: 1px solid #ccc;
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border-primary);
   border-radius: var(--radius-md);
   padding: 0.5rem;
   font-family: var(--font-mono);
@@ -201,11 +201,11 @@
 .simulationCodeDisplay h4 {
   margin-top: 0;
   margin-bottom: 0.5rem;
-  color: #306998;
+  color: var(--primary-dark);
   padding-left: 0.5rem;
   position: sticky;
   top: 0;
-  background-color: #fff;
+  background-color: var(--bg-elevated);
   z-index: 1;
 }
 
@@ -235,7 +235,7 @@
   width: 40px;
   text-align: right;
   padding-right: 10px;
-  color: #888;
+  color: var(--text-muted);
   user-select: none;
   display: flex;
   align-items: center;
@@ -249,7 +249,7 @@
 }
 
 .highlightedLine .codeContent {
-  background-color: #fffbdd;
+  background-color: var(--warning-light);
   border-radius: 2px;
 }
 
@@ -260,16 +260,16 @@
 .programOutputDisplay h4 {
   margin-top: 0;
   margin-bottom: var(--spacing-md);
-  color: #306998;
+  color: var(--primary-dark);
   font-size: 1.1rem;
 }
 
 .programOutputDisplay pre {
-  background-color: #f8f9fa;
-  color: #212529;
+  background-color: var(--bg-code);
+  color: var(--text-primary);
   padding: var(--spacing-md) var(--spacing-lg);
   border-radius: var(--radius-md);
-  border: 1px solid #dee2e6;
+  border: 1px solid var(--border-secondary);
   font-family: var(--font-mono);
   font-size: 0.9rem;
   line-height: 1.5;
@@ -277,5 +277,5 @@
   max-height: 300px;
   overflow-y: auto;
   white-space: pre-wrap;
-  word-break: break-word;
+  overflow-wrap: break-word;
 }

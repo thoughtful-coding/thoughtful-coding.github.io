@@ -113,7 +113,7 @@ const ConfigurationPage: React.FC = () => {
                   checked={theme === "dark"}
                   onChange={(e) => setTheme(e.target.value as Theme)}
                 />
-                Dark (Work in Progress)
+                Dark
               </label>
               <label>
                 <input
@@ -123,7 +123,7 @@ const ConfigurationPage: React.FC = () => {
                   checked={theme === "system"}
                   onChange={(e) => setTheme(e.target.value as Theme)}
                 />
-                System (Work in Progress)
+                System
               </label>
             </div>
             <small>

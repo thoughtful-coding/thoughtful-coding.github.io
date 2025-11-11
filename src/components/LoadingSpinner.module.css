@@ -5,20 +5,25 @@
   align-items: center;
   justify-content: center;
   padding: 2rem; /* Default padding, matches many existing loading messages */
-  color: #666;
+  color: var(--text-muted);
   text-align: center;
   width: 100%; /* Ensure it can center within various containers */
   box-sizing: border-box;
 }
 
 .spinner {
-  border: 4px solid rgba(0, 0, 0, 0.1);
+  border: 4px solid var(--border-primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
   /* Default size (medium) */
   width: 40px;
   height: 40px;
-  border-left-color: #4b8bbe; /* Theme color */
+  border-left-color: var(--primary); /* Theme color */
+}
+
+:root.theme-dark .spinner {
+  border-color: var(--glass-border-light);
+  border-left-color: var(--primary);
 }
 
 .spinnerContainer.small .spinner {
@@ -26,6 +31,7 @@
   height: 24px;
   border-width: 3px;
 }
+
 .spinnerContainer.small {
   padding: 1rem; /* Smaller padding for small spinner */
 }
@@ -40,7 +46,7 @@
   margin-top: 1rem; /* Consistent margin */
   font-size: 1.05em; /* Match existing intro texts */
   font-weight: 500; /* Make it slightly prominent */
-  color: #555;
+  color: var(--text-secondary);
 }
 
 .spinnerContainer.small .spinnerText {
@@ -57,6 +63,7 @@
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }

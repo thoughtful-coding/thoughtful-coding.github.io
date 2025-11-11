@@ -12,7 +12,7 @@
 
 /* Base link style - Adapt colors for page background */
 .navLink {
-  color: #4b8bbe; /* Use theme's link color */
+  color: var(--link-color); /* Use theme's link color */
   text-decoration: none;
   padding: 0.4rem 0.6rem; /* Slightly adjusted padding */
   border-radius: 4px;
@@ -29,20 +29,21 @@
 
 /* Hover effect for enabled links */
 .navLink:hover:not(.navLinkDisabled) {
-  background-color: #eef6ff; /* Light blue background on hover */
-  color: #306998; /* Darker blue text on hover */
-  border-color: #cce0ff;
+  background-color: var(--primary-bg); /* Light blue background on hover */
+  color: var(--primary-dark); /* Darker blue text on hover */
+  border-color: var(--border-focus);
 }
 
 /* Style for disabled links/spans */
 .navLinkDisabled {
   opacity: 0.5;
   cursor: not-allowed;
-  color: #777; /* Grey out disabled text */
+  color: var(--text-muted); /* Grey out disabled text */
 }
+
 .navLinkDisabled:hover {
   background-color: transparent; /* No background change on hover */
-  color: #777;
+  color: var(--text-muted);
 }
 
 /* Current lesson indicator */
@@ -50,19 +51,20 @@
   font-size: 0.9rem;
   font-weight: 600;
   padding: 0 0.75rem;
-  color: #555; /* Darker text for indicator */
+  color: var(--text-secondary); /* Darker text for indicator */
   white-space: nowrap;
   text-align: center;
-  border-left: 1px solid #ddd; /* Separator lines */
-  border-right: 1px solid #ddd;
+  border-left: 1px solid var(--border-tertiary); /* Separator lines */
+  border-right: 1px solid var(--border-tertiary);
   margin: 0 0.25rem; /* Slight margin */
 }
 
 /* Responsive adjustments */
-@media (max-width: 600px) {
+@media (width <= 600px) {
   .navigationContainer {
     justify-content: center; /* Center items when stacked */
   }
+
   .lessonCurrentIndicator {
     margin: 0.5rem 0;
     width: 100%; /* Take full width if needed */

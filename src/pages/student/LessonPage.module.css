@@ -24,12 +24,13 @@
   text-decoration: none;
   font-weight: 500;
   font-size: 0.9rem;
-  background-color: #f8f9fa;
+  background-color: var(--bg-code);
   border-radius: var(--radius-md);
-  border: 1px solid #eee;
+  border: 1px solid var(--border-secondary);
 }
+
 .backToUnitLink:hover {
-  background-color: #eef6ff;
+  background-color: var(--primary-bg);
   text-decoration: underline;
 }
 
@@ -45,7 +46,7 @@
   flex-wrap: wrap; /* Allow wrapping */
   padding-bottom: 1.5rem;
   margin-bottom: 2rem;
-  border-bottom: 2px solid #eee; /* Stronger separator */
+  border-bottom: 2px solid var(--border-secondary); /* Stronger separator */
   gap: 1rem; /* Gap between title and nav if they wrap */
 }
 
@@ -70,20 +71,16 @@
 .error {
   text-align: center;
   padding: 3rem;
-  color: #666;
-  font-size: 1.1rem;
-  grid-column: 1 / -1; /* Span both columns */
-}
-
-.error {
   color: var(--color-error);
   background-color: var(--color-error-light);
   border: 1px solid var(--color-error-border);
   border-radius: var(--radius-xl);
+  font-size: 1.1rem;
+  grid-column: 1 / -1; /* Span both columns */
 }
 
 /* Responsive adjustments */
-@media (max-width: 992px) {
+@media (width <= 992px) {
   /* Adjust breakpoint as needed */
   .lessonContainer {
     grid-template-columns: 1fr; /* Stack columns */

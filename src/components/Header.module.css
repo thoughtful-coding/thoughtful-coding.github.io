@@ -55,11 +55,11 @@
 
 .navLink:hover:not(.navLinkDisabled) {
   /* Only apply hover if not disabled */
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: var(--glass-bg-light);
 }
 
 .navLinkActive {
-  background-color: rgba(255, 255, 255, 0.25);
+  background-color: var(--glass-bg-medium);
   font-weight: 600;
 }
 
@@ -67,14 +67,10 @@
   /* composes: navLink; */ /* Not directly supported, apply base styles manually or ensure they are general enough */
   opacity: 0.6;
   cursor: not-allowed;
-  color: rgba(
-    255,
-    255,
-    255,
-    0.6
-  ); /* Ensure text color reflects disabled state */
+  color: var(--glass-text); /* Ensure text color reflects disabled state */
   background-color: transparent !important; /* Ensure no background on hover for disabled */
 }
+
 .navLinkDisabled:hover {
   background-color: transparent;
 }
@@ -85,7 +81,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem; /* Space between prev, current, next */
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--glass-text-hover);
   white-space: nowrap;
   padding: 0.25rem 0; /* Add some vertical padding */
 }
@@ -94,9 +90,9 @@
   font-size: 0.9rem;
   font-weight: 500;
   padding: 0 0.5rem; /* Add some horizontal padding around the text */
-  color: #ffd43b; /* Highlight current lesson indicator */
-  border-left: 1px solid rgba(255, 255, 255, 0.3);
-  border-right: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--warning-text); /* Highlight current lesson indicator */
+  border-left: 1px solid var(--glass-border-light);
+  border-right: 1px solid var(--glass-border-light);
 }
 
 .titleLink {
@@ -118,7 +114,7 @@
   height: 32px;
   border-radius: 50%;
   object-fit: cover;
-  border: 1px solid rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--glass-border-strong);
 }
 
 .userName {
@@ -129,9 +125,9 @@
 }
 
 .authButton {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: var(--glass-bg-medium);
   color: white;
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  border: 1px solid var(--glass-border-medium);
   padding: 0.4rem 0.8rem;
   border-radius: var(--radius-md);
   cursor: pointer;
@@ -140,7 +136,7 @@
 }
 
 .authButton:hover {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: var(--glass-bg-strong);
 }
 
 .settingsArea {
@@ -159,7 +155,7 @@
 }
 
 .settingsLink:hover {
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: var(--glass-bg-light);
 }
 
 /* Adjustments for lessonNavigation if needed to ensure it doesn't collide */
@@ -171,13 +167,14 @@
 }
 
 /* Responsive adjustments */
-@media (max-width: 992px) {
+@media (width <= 992px) {
   .nav {
     order: 1; /* Example: if you want nav first when stacked */
     width: 100%;
     justify-content: center;
     margin-top: 0.5rem;
   }
+
   .authSection {
     order: 2; /* Example order */
     width: 100%;
@@ -186,32 +183,37 @@
     margin-top: 0.75rem;
     padding-left: 0;
   }
+
   .settingsArea {
     order: 3; /* Example order */
     align-self: center;
     margin-top: 0.75rem;
     padding-left: 0;
   }
+
   .headerContent {
     flex-direction: column; /* Stack all items */
   }
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .headerContent {
     flex-direction: column;
     align-items: stretch;
   }
+
   .title {
     text-align: center;
     margin-right: 0;
     margin-bottom: 1rem;
   }
+
   .navList {
     width: 100%;
     justify-content: center;
     margin-bottom: 0.5rem;
   }
+
   .settingsArea {
     margin-top: 0.75rem;
     align-self: center; /* Center when stacked */

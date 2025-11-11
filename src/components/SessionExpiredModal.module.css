@@ -4,7 +4,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: var(--overlay-dark);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -12,23 +12,23 @@
 }
 
 .modalContent {
-  background-color: white;
+  background-color: var(--bg-elevated);
   padding: 2rem 3rem;
-  border-radius: 8px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
   text-align: center;
   max-width: 500px;
   width: 90%;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .modalContent h2 {
   margin-top: 0;
-  color: #c82333; /* A red color to indicate an issue */
+  color: var(--error); /* Red color to indicate an issue */
 }
 
 .modalContent p {
-  color: #555;
+  color: var(--text-secondary);
   margin-bottom: 2rem;
   font-size: 1.1em;
   line-height: 1.6;

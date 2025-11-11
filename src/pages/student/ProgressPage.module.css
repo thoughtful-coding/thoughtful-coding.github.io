@@ -3,20 +3,20 @@
   max-width: 960px; /* Slightly wider than config page */
   margin: 2rem auto;
   padding: 2rem;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: var(--bg-elevated);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
 }
 
 .progressPageContainer h2 {
   text-align: center;
-  color: #306998;
+  color: var(--primary-dark);
   margin-bottom: 1.5rem;
 }
 
 .introText {
   text-align: center;
-  color: #666;
+  color: var(--text-muted);
   margin-bottom: 2.5rem;
   font-size: 1.05em;
 }
@@ -24,7 +24,7 @@
 .unitProgressContainer {
   margin-bottom: 3rem;
   padding-bottom: 1.5rem;
-  border-bottom: 1px dashed #ddd;
+  border-bottom: 1px dashed var(--border-tertiary);
 }
 
 .unitProgressContainer:last-child {
@@ -35,7 +35,7 @@
 
 .unitTitle {
   font-size: 1.8rem;
-  color: #4b8bbe;
+  color: var(--primary);
   margin-top: 0;
   margin-bottom: 1.5rem;
   text-align: center;
@@ -69,25 +69,25 @@
   color: white; /* Default text color */
   border: 2px solid transparent; /* For border highlight */
   transition: all 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-sm);
   flex-shrink: 0; /* Prevent shrinking on smaller screens */
 }
 
 /* Colors for completion status */
 .completedCircle {
-  background-color: #28a745; /* Green */
-  border-color: #218838;
+  background-color: var(--success);
+  border-color: var(--success-dark);
 }
 
 .incompleteCircle {
-  background-color: #95a5a6; /* Grey */
-  border-color: #7f8c8d;
+  background-color: var(--text-muted);
+  border-color: var(--text-secondary);
 }
 
 .lessonCircleLink:hover .lessonCircle {
   transform: translateY(-3px);
-  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
-  border-color: #4b8bbe; /* Highlight on hover */
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary);
 }
 
 /* Loading and Error Messages */
@@ -95,9 +95,9 @@
 .noProgressMessage {
   text-align: center;
   padding: 2rem;
-  background-color: #f9f9fa;
-  border: 1px dashed #ddd;
-  border-radius: 8px;
+  background-color: var(--bg-code);
+  border: 1px dashed var(--border-tertiary);
+  border-radius: var(--radius-xl);
   margin-top: 2rem;
 }
 
@@ -105,22 +105,22 @@
 .errorMessage p,
 .noProgressMessage p {
   margin-bottom: 1rem;
-  color: #555;
+  color: var(--text-secondary);
 }
 
 .errorMessage {
-  color: #dc3545;
-  background-color: #f8d7da;
-  border-color: #f5c6cb;
+  color: var(--error);
+  background-color: var(--error-light);
+  border-color: var(--error-border);
 }
 
 .primaryButton {
   /* Reusing style from LearningEntriesPage */
   display: inline-block;
   padding: 0.75rem 1.5rem;
-  background-color: #4b8bbe;
+  background-color: var(--primary);
   color: white;
-  border-radius: 4px;
+  border-radius: var(--radius-md);
   text-decoration: none;
   font-weight: 600;
   margin-top: 1rem;
@@ -130,5 +130,5 @@
 }
 
 .primaryButton:hover {
-  background-color: #306998;
+  background-color: var(--primary-dark);
 }

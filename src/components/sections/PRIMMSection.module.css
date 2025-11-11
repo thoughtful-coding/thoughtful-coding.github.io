@@ -22,7 +22,7 @@
   display: block;
   font-weight: 600;
   margin-bottom: 0.5rem;
-  color: #333;
+  color: var(--text-primary);
   font-size: 1rem;
 }
 
@@ -30,7 +30,7 @@
 .explanationTextarea {
   width: 100%;
   padding: var(--spacing-md);
-  border: 1px solid #ced4da;
+  border: 2px solid var(--border-tertiary);
   border-radius: var(--radius-md);
   box-sizing: border-box;
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -39,23 +39,28 @@
   min-height: 70px;
   margin-bottom: var(--spacing-xs);
   resize: vertical;
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
 }
+
 .predictionTextarea:focus,
 .explanationTextarea:focus {
-  border-color: var(--primary-color);
+  border-color: var(--primary);
   outline: none;
-  box-shadow: 0 0 0 2px rgba(75, 139, 190, 0.2);
+  box-shadow: var(--focus-shadow);
 }
+
 .predictionTextarea:disabled,
 .explanationTextarea:disabled {
-  background-color: #e9ecef;
-  color: #495057;
+  background-color: var(--bg-secondary);
+  color: var(--text-muted);
   cursor: default;
+  opacity: 0.7;
 }
 
 .lengthHint {
   font-size: 0.85em;
-  color: #e74c3c;
+  color: var(--error);
   margin-top: 0.1rem;
 }
 
@@ -64,6 +69,7 @@
   font-weight: normal;
   cursor: pointer;
 }
+
 .confidenceSelectContainer input[type="radio"] {
   margin-right: 5px;
   cursor: pointer;
@@ -71,13 +77,11 @@
 
 /* "Past Answers / Information" Div */
 .pastAnswersDiv {
-  margin-top: var(--spacing-xl);
+  composes: containerPrimary from "../../styles/common.module.css";
   padding: var(--spacing-lg);
-  background-color: #f8f9fa;
-  border-radius: var(--radius-lg);
-  border: 1px solid #e9ecef;
   margin-bottom: var(--spacing-xl);
 }
+
 .pastAnswersDiv_hidden {
   display: none;
 }
@@ -86,21 +90,22 @@
   margin-top: 0.75rem;
   margin-bottom: 0.75rem;
 }
+
 .infoEntry:last-child {
   margin-bottom: 0;
 }
 
 .turtleCanvasContainer {
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-tertiary);
   border-radius: var(--radius-md);
-  background-color: #fff;
+  background-color: var(--bg-primary);
   position: relative;
 }
 
 .infoLabel {
   display: block;
   font-size: 1rem;
-  color: #495057;
+  color: var(--text-primary);
   font-weight: 600;
   margin-bottom: 0.25rem;
 }
@@ -110,7 +115,7 @@
   margin-left: 1em;
   padding: 0.25em 0;
   white-space: pre-wrap;
-  color: #212529;
+  color: var(--text-secondary);
   display: block;
   line-height: 1.5;
   /* Ensures this text also uses the standard prose font by inheritance */
@@ -127,33 +132,35 @@
   display: inline-block;
   vertical-align: middle;
 }
+
 .assessmentAchieves {
-  color: var(--color-success-text);
-  background-color: var(--color-success-light);
-  border: 1px solid #b2d8b5;
+  color: var(--success-text);
+  background-color: var(--success-light);
+  border: 1px solid var(--success);
 }
+
 .assessmentMostly {
-  color: #004085;
-  background-color: #cce5ff;
-  border: 1px solid #a3c2e0;
+  color: var(--info-text);
+  background-color: var(--info-light);
+  border: 1px solid var(--info);
 }
+
 .assessmentDeveloping {
-  color: var(--color-warning-text);
-  background-color: var(--color-warning-light);
-  border: 1px solid #f0dd92;
+  color: var(--warning-text);
+  background-color: var(--warning-light);
+  border: 1px solid var(--warning);
 }
+
 .assessmentInsufficient {
-  color: var(--color-error-text);
-  background-color: var(--color-error-light);
-  border: 1px solid #ebc0c3;
+  color: var(--error-text);
+  background-color: var(--error-light);
+  border: 1px solid var(--error);
 }
 
 .keyOutputText {
-  background-color: #23272f;
-  color: #d8dee9;
+  composes: codeDisplay from "../../styles/common.module.css";
+  color: var(--text-code-block);
   padding: var(--spacing-md) var(--spacing-lg);
-  border-radius: var(--radius-md);
-  font-family: var(--font-mono);
   font-size: 0.95em;
   white-space: pre-wrap;
   word-break: break-all;
@@ -168,8 +175,9 @@
 .nextQuestionDiv {
   margin-top: 1.5rem;
   padding-top: 1.5rem;
-  border-top: 1px dashed #ced4da;
+  border-top: 1px dashed var(--border-tertiary);
 }
+
 .nextQuestionDiv_noContentAbove {
   margin-top: 0;
   padding-top: 0;
@@ -189,11 +197,13 @@
   font-size: 0.95em;
   margin-top: var(--spacing-sm);
 }
+
 .primmButton:hover:not(:disabled) {
   background-color: var(--color-info-dark);
 }
+
 .primmButton:disabled {
-  background-color: #6c757d;
+  background-color: var(--text-muted);
   opacity: 0.65;
   cursor: not-allowed;
 }
@@ -202,6 +212,7 @@
   composes: primmButton;
   background-color: var(--color-success);
 }
+
 .getFeedbackButton:hover:not(:disabled) {
   background-color: var(--color-success-dark);
 }

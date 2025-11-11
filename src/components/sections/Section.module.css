@@ -1,5 +1,17 @@
 /* src/components/sections/Section.module.css */
 
+/*
+ * STRUCTURE:
+ * - Base Section Styles (search for "Base Section Styles")
+ * - Code Examples / Observation (search for "Code Example Styles")
+ * - Testing Sections (search for "Testing Specific Styles")
+ * - Quiz Sections (search for "Quiz/MultipleChoice Styles")
+ * - Prediction Sections (search for "Prediction Sections")
+ * - Coverage Sections (search for "Coverage Section")
+ * - Reflection Sections (search for "Reflection Section")
+ * - Turtle Graphics (search for "Turtle Graphics")
+ */
+
 /* ============================
    Base Section Styles (Step 11)
    ============================ */
@@ -8,7 +20,7 @@
   margin-top: 1rem; /* Spacing between sections */
   margin-bottom: 1rem; /* Spacing between sections */
   padding-bottom: 0.25rem;
-  border-bottom: 1px solid #eee; /* Separator line */
+  border-bottom: 1px solid var(--border-secondary); /* Separator line */
 }
 
 /* Remove bottom border for the very last section on a page */
@@ -47,7 +59,7 @@
 }
 
 .content p {
-  margin: 0em; /* Spacing between paragraphs */
+  margin: 0; /* Spacing between paragraphs */
   margin-top: 1em;
 }
 
@@ -55,8 +67,8 @@
 .content ol {
   margin: 0.5em;
   margin-left: 0.5em; /* Indent lists */
-  padding-top: 0em;
-  padding-bottom: 0em;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 .content li {
@@ -80,8 +92,8 @@
 
 .content pre {
   /* Code blocks (```) */
-  background-color: #2e3440;
-  color: #d8dee9;
+  background-color: var(--bg-code-block);
+  color: var(--text-code-block);
   padding: 1em;
   border-radius: var(--radius-md);
   overflow-x: auto;
@@ -94,12 +106,12 @@
 
 /* Placeholder for sections where interactive part isn't built yet */
 .interactivePlaceholder {
-  border: 1px dashed #ccc;
+  border: 1px dashed var(--border-tertiary);
   padding: 1rem;
   margin-top: 1.5rem; /* Spacing from main content */
-  color: #777;
+  color: var(--text-muted);
   font-style: italic;
-  background-color: #f9f9f9;
+  background-color: var(--bg-secondary);
   border-radius: 4px;
   text-align: center;
 }
@@ -109,12 +121,9 @@
      ========================================== */
 
 .exampleContainer {
+  composes: containerSecondary from "../../styles/common.module.css";
   margin-top: var(--spacing-xl);
   margin-bottom: var(--spacing-2xl);
-  padding: var(--spacing-xl);
-  background-color: #fdfdfd;
-  border: 1px solid #eaeaea;
-  border-radius: var(--radius-lg);
 }
 
 .exampleContainer h4 {
@@ -132,7 +141,7 @@
 
 .exampleTitle {
   font-size: 1.3rem;
-  color: #3a7ab8; /* Slightly different blue */
+  color: var(--primary); /* Slightly different blue */
   margin-top: 0;
   margin-bottom: 0.75rem;
   font-weight: 500; /* Less heavy than section title */
@@ -141,7 +150,7 @@
 .exampleDescription {
   font-size: 1rem;
   margin-bottom: 1rem;
-  color: #555;
+  color: var(--text-secondary);
   line-height: 1.6;
 }
 
@@ -157,54 +166,32 @@
 }
 
 .runButton {
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  font-weight: 600;
-  transition: background-color 0.3s;
-  font-size: 0.9rem;
-}
-
-.runButton:hover:not(:disabled) {
-  background-color: var(--primary-dark-color);
-}
-
-.runButton:disabled {
-  background-color: #a8c7e0;
-  cursor: not-allowed;
+  composes: primaryButton from "../../styles/common.module.css";
 }
 
 .pyodideStatus {
   font-size: 0.85rem;
-  color: #666;
+  color: var(--text-muted);
   font-style: italic;
   text-align: right; /* Align status to the right */
 }
 
 .pyodideError {
   composes: pyodideStatus; /* Inherit base style */
-  color: #c53030; /* Red for error */
+  color: var(--error); /* Red for error */
   font-weight: 500;
 }
 
 /* Code output area */
 .outputArea {
+  composes: codeDisplay from "../../styles/common.module.css";
   margin-top: var(--spacing-lg);
-  background-color: #2e3440;
-  color: #d8dee9;
+  color: var(--text-code-block);
   padding: var(--spacing-md) var(--spacing-lg);
-  border-radius: var(--radius-md);
-  font-family: var(--font-mono);
-  font-size: 0.9rem;
-  line-height: 1.5;
   min-height: 40px;
   max-height: 300px;
   overflow-y: auto;
   white-space: pre-wrap;
-  border: 1px solid #444;
   width: 100%;
 }
 
@@ -213,11 +200,11 @@
 }
 
 .outputError {
-  color: #ff7c7c; /* Bright red for errors within output */
+  color: var(--error-text); /* Bright red for errors within output */
 }
 
 .outputEmpty {
-  color: #888; /* Dim color for empty output message */
+  color: var(--text-muted); /* Dim color for empty output message */
   font-style: italic;
 }
 
@@ -226,42 +213,22 @@
      ===================================== */
 
 .testButton {
-  background-color: var(--color-success);
-  color: white;
-  border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  font-weight: 600;
-  transition: background-color 0.3s;
-  font-size: 0.9rem;
+  composes: successButton from "../../styles/common.module.css";
   margin-left: var(--spacing-sm);
-}
-
-.testButton:hover:not(:disabled) {
-  background-color: var(--color-success-dark);
-}
-
-.testButton:disabled {
-  background-color: #94d3a2; /* Lighter green */
-  cursor: not-allowed;
 }
 
 /* Container for test results display */
 .testResultArea {
   margin-top: 1.5rem;
-  border-top: 2px solid #eee; /* Clearer separator */
+  border-top: 2px solid var(--border-secondary); /* Clearer separator */
   padding-top: 1.5rem;
 }
 
 /* Test Success Box */
 .testSuccess {
-  background-color: var(--color-success-light);
-  color: var(--color-success-text);
-  padding: var(--spacing-lg) var(--spacing-xl);
-  border-radius: var(--radius-md);
-  border-left: 5px solid var(--color-success);
+  composes: successMessage from "../../styles/common.module.css";
 }
+
 .testSuccess h4 {
   color: var(--color-success-text);
   margin-top: 0;
@@ -271,18 +238,16 @@
 
 /* Test Failure Box */
 .testFailure {
-  background-color: var(--color-warning-light);
-  color: var(--color-warning-text);
-  padding: var(--spacing-lg) var(--spacing-xl);
-  border-radius: var(--radius-md);
-  border-left: 5px solid var(--color-warning);
+  composes: warningMessage from "../../styles/common.module.css";
 }
+
 .testFailure h4 {
   color: var(--color-warning-text);
   margin-top: 0;
   margin-bottom: 0.5rem;
   font-size: 1.1rem;
 }
+
 .testFailure h5 {
   /* Sub-heading for "First Failed Test" */
   margin-top: 1rem;
@@ -293,21 +258,19 @@
 
 /* Test Error Box (e.g., code crashed, parsing failed) */
 .testError {
-  background-color: var(--color-error-light);
-  color: var(--color-error-text);
-  padding: var(--spacing-lg) var(--spacing-xl);
-  border-radius: var(--radius-md);
-  border-left: 5px solid var(--color-error);
+  composes: errorMessage from "../../styles/common.module.css";
 }
+
 .testError h4 {
   color: var(--color-error-text);
   margin-top: 0;
   margin-bottom: 0.5rem;
   font-size: 1.1rem;
 }
+
 .testError pre {
   /* Styling for error details */
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: var(--overlay-subtle);
   padding: 0.5rem;
   border-radius: 3px;
   overflow-x: auto;
@@ -318,29 +281,16 @@
 
 /* Test Results Table */
 .testResultsTable {
-  width: 100%;
-  border-collapse: collapse;
+  composes: dataTable from "../../styles/common.module.css";
   margin-top: 0.5rem;
-  border: 1px solid #ddd;
-  font-size: 0.95rem;
-}
-
-.testResultsTable th,
-.testResultsTable td {
-  border: 1px solid #ddd;
-  padding: 0.75rem;
-  text-align: left;
 }
 
 .testResultsTable th {
-  background-color: #f0f4f8;
-  color: #306998;
-  font-weight: bold;
   font-size: 0.95em;
 }
 
 .testResultsTable code {
-  background-color: #f8f9fa;
+  background-color: var(--bg-code);
   padding: 0.2rem 0.4rem;
   border-radius: var(--radius-sm);
   font-family: var(--font-mono);
@@ -349,65 +299,63 @@
 
 /* Styling for passed/failed rows */
 .passedRow {
-  background-color: #f1f8f4;
+  background-color: var(--success-light);
 }
 
 .passedRow:hover {
-  background-color: #e6f4ec;
+  background-color: var(--success-light);
+  opacity: 0.8;
 }
 
 .failedRow {
-  background-color: #fef1f1;
+  background-color: var(--error-light);
 }
 
 .failedRow:hover {
-  background-color: #fde8e8;
+  background-color: var(--error-light);
+  opacity: 0.8;
 }
 
 /* Failed test details row */
 .failedDetailsRow {
-  background-color: #fff8f8;
+  background-color: var(--error-light);
 }
 
 .failedDetails {
   padding: 1rem;
-  background-color: #fef9f9;
-  border-left: 4px solid #f44336;
+  background-color: var(--error-light);
+  border-left: 4px solid var(--error);
 }
 
 .failedDetailsTable {
-  width: 100%;
-  border-collapse: collapse;
+  composes: dataTable from "../../styles/common.module.css";
   margin-top: 0.5rem;
 }
 
 .failedDetailsTable th,
 .failedDetailsTable td {
-  border: 1px solid #e0e0e0;
   padding: 0.5rem;
-  text-align: left;
   vertical-align: top;
 }
 
 .failedDetailsTable th {
-  background-color: #f5f5f5;
-  color: #333;
-  font-weight: 600;
+  background-color: var(--bg-secondary);
   font-size: 0.9em;
 }
 
 .failedDetailsTable code {
   display: block;
   white-space: pre-wrap;
-  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 /* Old failed row styling - keeping for backwards compatibility */
 .testFailedRow {
-  background-color: #fff5f5;
+  background-color: var(--error-light);
 }
+
 .testFailedRow code {
-  background-color: rgba(220, 53, 69, 0.1);
+  background-color: var(--error-light);
   padding: 0.1em 0.3em;
   border-radius: 3px;
 }
@@ -423,11 +371,11 @@
      new specific modules as needed. */
 
 .quizForm {
-  background-color: #f8f9fa;
+  background-color: var(--bg-code);
   border-radius: var(--radius-xl);
   padding: var(--spacing-xl);
   margin: var(--spacing-xl) 0 0;
-  border: 1px solid #e1e4e8;
+  border: 1px solid var(--border-primary);
 }
 
 .quizOption {
@@ -443,8 +391,8 @@
 }
 
 .quizOption:hover:not(.optionDisabled) {
-  background-color: #e9ecef; /* Light hover */
-  border-color: #ced4da;
+  background-color: var(--bg-secondary);
+  border-color: var(--border-tertiary);
 }
 
 .quizOption input[type="radio"],
@@ -466,48 +414,35 @@
 .quizFormSubmitted .quizOption {
   cursor: default;
 }
+
 .quizFormSubmitted .quizOption:hover {
   background-color: transparent; /* No hover effect after submit */
   border-color: transparent;
 }
+
 .quizFormSubmitted input {
   cursor: default;
 }
 
 .quizSubmitButton {
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
+  composes: primaryButton from "../../styles/common.module.css";
   padding: var(--spacing-md) var(--spacing-xl);
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  font-weight: 600;
   margin-top: var(--spacing-lg);
-  transition: background-color 0.3s;
   font-size: 1rem;
 }
 
-.quizSubmitButton:hover:not(:disabled) {
-  background-color: var(--primary-dark-color);
-}
-
-.quizSubmitButton:disabled {
-  background-color: #a8c7e0;
-  cursor: not-allowed;
-}
-
 .questionError {
-  border: 2px solid red;
+  border: 2px solid var(--error);
   border-radius: 8px;
   padding: 1rem;
-  background-color: #f8d7da;
+  background-color: var(--error-light);
 }
 
 .penaltyMessageActive {
-  background-color: #fff3cd; /* Light yellow */
-  color: #856404; /* Dark yellow text */
+  background-color: var(--warning-light);
+  color: var(--warning-text);
   padding: 1rem;
-  border: 1px solid #ffeeba; /* Yellow border */
+  border: 1px solid var(--warning);
   border-radius: 4px;
   margin-bottom: 1rem;
   text-align: center;
@@ -539,81 +474,48 @@
 }
 
 .tryAgainButton {
-  background-color: #ffc107; /* Amber/Warning yellow */
-  color: #212529; /* Dark text for contrast */
-  border: none;
+  composes: warningButton from "../../styles/common.module.css";
   padding: 0.75rem 1.5rem;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 600;
   margin-top: 1rem; /* Same margin as submit button */
-  transition: background-color 0.3s;
   font-size: 1rem;
 }
 
-.tryAgainButton:hover:not(:disabled) {
-  background-color: #e0a800; /* Darker amber */
-}
-
-.tryAgainButton:disabled {
-  background-color: #ffe8a1;
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
 /* Feedback Area */
-.quizFeedback {
-  margin-top: 1.5rem; /* Space above feedback */
-  padding: 1rem 1.5rem;
-  border-radius: 4px;
-  font-weight: 500;
-  border-left: 5px solid transparent; /* Base for colored border */
-}
-
 .correctFeedback {
-  composes: quizFeedback;
-  background-color: var(--color-success-light);
-  color: var(--color-success-text);
-  border-left: 5px solid var(--color-success);
+  composes: successMessage from "../../styles/common.module.css";
   text-align: center;
+  font-weight: 500;
 }
 
 .incorrectFeedback {
-  composes: quizFeedback;
-  background-color: var(--color-error-light);
-  color: var(--color-error-text);
-  border-left: 5px solid var(--color-error);
+  composes: errorMessage from "../../styles/common.module.css";
   text-align: center;
+  font-weight: 500;
 }
 
 /* --- New Styles for Prediction Sections --- */
 
 .functionDisplayContainer {
   margin: 1.5rem 0 2rem; /* Space around function display */
-  background-color: #f0f4f8; /* Light blue background */
-  border: 1px solid #d1dce5;
+  background-color: var(--primary-bg);
+  border: 1px solid var(--border-primary);
   border-radius: 6px;
   padding: 1rem 1.5rem;
 }
 
 .functionDisplayTitle {
   font-size: 1.1rem;
-  color: #306998;
+  color: var(--primary-dark);
   margin-top: 0;
   margin-bottom: 0.75rem;
   font-weight: 600;
 }
 
 .functionDisplayCode {
-  background-color: #ffffff; /* White background for code */
-  padding: 1rem;
-  border-radius: 4px;
-  overflow-x: auto;
-  font-family: "Menlo", "Consolas", "Courier New", monospace;
-  font-size: 0.95rem; /* Slightly larger */
-  line-height: 1.5;
+  composes: codeDisplay from "../../styles/common.module.css";
+  background-color: var(--bg-elevated);
+  font-size: 0.95rem;
   white-space: pre; /* Preserve formatting */
-  border: 1px solid #ccc;
 }
 
 .predictionTableContainer {
@@ -622,60 +524,45 @@
 }
 
 .predictionTable {
-  width: 100%;
+  composes: dataTable from "../../styles/common.module.css";
   min-width: 600px; /* Prevent excessive shrinking */
-  border-collapse: collapse;
-  border: 1px solid #ddd;
 }
 
 .predictionTable th,
 .predictionTable td {
-  padding: 0.75rem;
   text-align: center; /* Center align table content */
-  border: 1px solid #ddd;
   vertical-align: middle;
 }
 
 .predictionTable th {
-  background-color: #eef6ff; /* Light blue header */
-  font-weight: 600;
+  background-color: var(--primary-bg);
 }
 
 .predictionTable tr:nth-child(even) {
-  background-color: #f9f9f9;
+  background-color: var(--bg-secondary);
 }
 
 /* Input field for user's prediction */
 .predictionInput {
+  composes: textInput from "../../styles/common.module.css";
   width: 90%; /* Take most of cell width */
   max-width: 100px; /* Max width */
   padding: 0.5rem;
   text-align: center;
-  border: 1px solid #ccc;
-  border-radius: 4px;
   font-size: 0.95rem;
-  transition:
-    border-color 0.2s,
-    box-shadow 0.2s;
-}
-
-.predictionInput:focus {
-  outline: none;
-  border-color: #4b8bbe;
-  box-shadow: 0 0 0 2px rgba(75, 139, 190, 0.2);
 }
 
 /* Styling for correct/incorrect input fields */
 .predictionInputCorrect {
   composes: predictionInput; /* Inherit base styles */
-  border-color: #28a745;
-  background-color: #e6f4ea;
+  border-color: var(--success);
+  background-color: var(--success-light);
 }
 
 .predictionInputIncorrect {
   composes: predictionInput; /* Inherit base styles */
-  border-color: #dc3545;
-  background-color: #fff5f5;
+  border-color: var(--error);
+  background-color: var(--error-light);
 }
 
 /* Status cell with icon */
@@ -696,34 +583,31 @@
 
 .statusIndicatorCorrect {
   composes: statusIndicator; /* Inherit base styles */
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
+  background-color: var(--success-light);
+  color: var(--success-text);
+  border: 1px solid var(--success);
 }
+
 .statusIndicatorCorrect::after {
   content: "✓";
 }
 
 .statusIndicatorIncorrect {
   composes: statusIndicator; /* Inherit base styles */
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
+  background-color: var(--error-light);
+  color: var(--error-text);
+  border: 1px solid var(--error);
 }
+
 .statusIndicatorIncorrect::after {
   content: "✗";
 }
 
 /* Completion Message Area */
 .completionMessage {
-  margin-top: 1.5rem;
-  background-color: var(--color-success-light);
-  color: var(--color-success-text);
-  padding: var(--spacing-lg) var(--spacing-xl);
-  border-radius: var(--radius-md);
-  border-left: 5px solid var(--color-success);
-  font-weight: 500;
+  composes: successMessage from "../../styles/common.module.css";
   text-align: center;
+  font-weight: 500;
 }
 
 /* --- New/Refined Styles for Coverage Section --- */
@@ -731,27 +615,28 @@
 .progressBar {
   flex-grow: 1;
   height: 12px; /* Slightly thicker */
-  background-color: #e9ecef;
+  background-color: var(--bg-secondary);
   border-radius: 6px;
   overflow: hidden;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-tertiary);
 }
 
 .progressFill {
   height: 100%;
-  background-color: #4b8bbe; /* Blue fill */
+  background-color: var(--primary);
   border-radius: 6px 0 0 6px; /* Rounded on left */
   transition: width 0.4s ease-in-out;
 }
+
 .progressFillComplete {
   composes: progressFill;
-  background-color: #28a745; /* Green fill when complete */
+  background-color: var(--success);
   border-radius: 6px; /* Fully rounded when complete */
 }
 
 .progressText {
   font-size: 0.9rem;
-  color: #333;
+  color: var(--text-primary);
   font-weight: 500;
   min-width: 120px; /* Ensure text doesn't wrap too soon */
   text-align: right;
@@ -765,11 +650,8 @@
    ===================================== */
 
 .reflectionContainer {
-  background-color: #f8f9fa; /* Light grey background */
+  composes: containerPrimary from "../../styles/common.module.css";
   border-radius: 8px;
-  padding: 1.5rem;
-  margin: 1.5rem 0; /* Keep or adjust margin */
-  border: 1px solid #e1e4e8; /* Subtle border */
 }
 
 .reflectionInputGroup {
@@ -778,46 +660,34 @@
 
 .reflectionLabel {
   display: block;
-  margin-bottom: 0.75rem; /* Original h4 margin */
-  font-weight: 600; /* Make labels stand out */
-  color: #306998; /* Original heading blue */
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  color: var(--primary-dark);
 }
 
 .topicSelector {
-  width: 100%;
-  padding: 0.75rem;
-  margin-top: 0.5rem; /* Add small top margin */
-  margin-bottom: 1.5rem; /* Original margin */
-  border: 1px solid #ddd; /* Original border */
-  border-radius: 4px;
-  font-size: 1rem;
-  background-color: white; /* Ensure background */
-  box-sizing: border-box; /* Include padding in width */
+  composes: select from "../../styles/common.module.css";
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .reflectionCodeEditorWrapper {
-  border: 1px solid #ddd; /* Original border */
+  border: 2px solid var(--border-tertiary);
   border-radius: 4px;
   overflow: hidden;
-  margin-bottom: 1.5rem; /* Original margin */
+  margin-bottom: 1.5rem;
+  background-color: var(--bg-elevated);
 }
 /* Ensure CodeMirror inside takes up space and min-height */
 .reflectionCodeEditorWrapper :global(.cm-editor) {
-  min-height: 150px; /* Original min-height for editor area */
+  min-height: 150px;
 }
 
 .reflectionExplanation {
-  width: 100%;
-  min-height: 150px; /* Original min-height */
-  padding: 1rem; /* Original padding */
-  font-family: inherit; /* Use page font */
-  font-size: 1rem;
-  line-height: 1.6; /* Original line-height */
-  resize: vertical;
-  border: 1px solid #ddd; /* Original border */
-  border-radius: 4px;
-  margin-bottom: 1.5rem; /* Original margin */
-  box-sizing: border-box; /* Include padding in width */
+  composes: textArea from "../../styles/common.module.css";
+  min-height: 150px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .reflectionButtons {
@@ -827,95 +697,72 @@
   margin-top: 0.5rem; /* Add some space above buttons */
 }
 
-.reflectionFeedbackBtn,
-.reflectionSubmitBtn {
-  border: none;
+.reflectionFeedbackBtn {
+  composes: primaryButton from "../../styles/common.module.css";
   padding: 0.75rem 1.5rem;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: background-color 0.3s;
   flex: 1; /* Make buttons share space */
-  font-size: 1rem; /* Ensure readable text */
+  font-size: 1rem;
   text-align: center;
 }
 
-.reflectionFeedbackBtn {
-  background-color: #4b8bbe; /* Original blue */
-  color: white;
-}
-.reflectionFeedbackBtn:hover:not(:disabled) {
-  background-color: #306998; /* Original hover */
-}
-
 .reflectionSubmitBtn {
-  background-color: var(--color-success);
-  color: white;
-}
-.reflectionSubmitBtn:hover:not(:disabled) {
-  background-color: var(--color-success-dark);
-}
-
-.reflectionFeedbackBtn:disabled,
-.reflectionSubmitBtn:disabled {
-  opacity: 0.6; /* Original approx */
-  cursor: not-allowed;
-  /* Explicitly set disabled background if needed */
-  /* background-color: #a8c7e0; for feedback btn */
-  /* background-color: #8ed7a5; for submit btn */
+  composes: successButton from "../../styles/common.module.css";
+  padding: 0.75rem 1.5rem;
+  flex: 1; /* Make buttons share space */
+  font-size: 1rem;
+  text-align: center;
 }
 
 .apiError {
-  color: var(--color-error);
-  margin-top: var(--spacing-lg);
-  background-color: var(--color-error-light);
-  border: 1px solid var(--color-error-border);
-  padding: var(--spacing-md) 1.25rem;
-  border-radius: var(--radius-sm);
+  composes: errorMessage from "../../styles/common.module.css";
 }
 
 .reflectionHistory {
   margin-top: 2.5rem;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--border-secondary);
   padding-top: 1.5rem;
 }
+
 .reflectionHistory h4 {
-  color: #555; /* Original color */
+  color: var(--text-secondary);
   margin-bottom: 1rem;
 }
 
 .noHistory {
-  color: #666;
+  color: var(--text-muted);
   font-style: italic;
   text-align: center;
   padding: 1rem;
-  background-color: #f0f0f0; /* Add subtle background */
+  background-color: var(--bg-secondary);
   border-radius: 4px;
 }
 
 .reflectionCard {
-  background-color: white;
+  background-color: var(--bg-elevated);
   border-radius: 8px;
-  padding: 1.5rem; /* Original padding */
+  padding: 1.5rem;
   margin-bottom: 1.5rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); /* Original shadow */
-  border: none; /* Remove default border */
-  border-left: 4px solid #eee; /* Original default left border */
+  box-shadow: var(--shadow-md);
+  border: none;
+  border-left: 4px solid var(--border-secondary);
 }
 
 /* Assessment-based border colors for the card */
 /* NOTE: Apply these classes in your JSX: className={`${styles.reflectionCard} ${styles[`cardAssessment${entry.response.assessment}`] || ''}`} */
 .cardAssessmentinsufficient {
-  border-left-color: #ff2807 !important;
+  border-left-color: var(--error) !important;
 }
+
 .cardAssessmentdeveloping {
-  border-left-color: #ff8307 !important;
+  border-left-color: var(--warning) !important;
 }
+
 .cardAssessmentmostly {
-  border-left-color: #74c609 !important;
+  border-left-color: var(--info) !important;
 }
+
 .cardAssessmentachieves {
-  border-left-color: #28a745 !important;
+  border-left-color: var(--success) !important;
 }
 
 .reflectionHeader {
@@ -928,7 +775,7 @@
 }
 
 .reflectionDate {
-  color: #666;
+  color: var(--text-muted);
   font-size: 0.9rem;
 }
 
@@ -946,57 +793,56 @@
   /* Topic title */
   margin-top: 0;
   margin-bottom: 0.75rem;
-  color: #306998;
-  font-size: 1.3rem; /* Match original */
+  color: var(--primary-dark);
+  font-size: 1.3rem;
 }
 
 /* Ensure details/summary has spacing */
 .reflectionSubmission details {
   margin: 1rem 0;
 }
+
 .reflectionSubmission summary {
   cursor: pointer;
-  font-weight: 600; /* Make summary stand out */
-  color: #306998;
+  font-weight: 600;
+  color: var(--primary-dark);
   margin-bottom: 0.5rem;
 }
 
 .reflectionCodeDisplay {
-  background-color: #f8f8f8; /* Original background */
-  padding: 1rem; /* Original padding */
-  border-radius: 4px;
-  margin-top: 0.5rem; /* Space below summary */
-  margin-bottom: 1rem; /* Space before explanation */
-  overflow-x: auto;
-  border: 1px solid #eee; /* Add subtle border */
+  composes: codeDisplay from "../../styles/common.module.css";
+  background-color: var(--bg-code);
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  border-color: var(--border-secondary);
 }
+
 .reflectionCodeDisplay pre {
   margin: 0;
-  font-family: "Courier New", monospace; /* Ensure monospace */
-  font-size: 0.9rem;
 }
 
 .reflectionExplanationDisplay {
-  margin-top: 0.5rem; /* Space below summary or code */
+  margin-top: 0.5rem;
 }
 
 .reflectionExplanationDisplay p {
   margin: 0;
   line-height: 1.6;
-  color: #444; /* Match general content color */
+  color: var(--text-secondary);
 }
 
 .reflectionResponse {
-  margin-top: 1.5rem; /* More space */
-  padding-top: 1.5rem; /* More space */
-  border-top: 1px dashed #ccc; /* Dashed separator */
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px dashed var(--border-tertiary);
 }
+
 .reflectionResponse h5 {
   /* Feedback title */
   margin-top: 0;
   margin-bottom: 0.75rem;
-  color: #306998;
-  font-size: 1.1rem; /* Slightly smaller than topic */
+  color: var(--primary-dark);
+  font-size: 1.1rem;
 }
 
 /* Assessment Badges - using original names adapted for CSS Modules */
@@ -1010,53 +856,44 @@
   border-radius: 4px;
   font-size: 0.8rem;
   font-weight: 600;
-  margin-bottom: 0.75rem; /* More space */
+  margin-bottom: 0.75rem;
   text-transform: uppercase;
-  line-height: 1.2; /* Ensure proper line height */
+  line-height: 1.2;
 }
+
 .assessmentBadgeInsufficient {
-  background-color: #d4300f;
-  color: #edde38;
+  background-color: var(--error);
+  color: var(--warning-text);
 }
+
 .assessmentBadgeDeveloping {
-  background-color: #fff3cd;
-  color: #856404;
+  background-color: var(--warning-light);
+  color: var(--warning-text);
 }
+
 .assessmentBadgeMostly {
-  background-color: #d4edda;
-  color: #1d94ae;
+  background-color: var(--success-light);
+  color: var(--info-text);
 }
+
 .assessmentBadgeAchieves {
-  background-color: #cce5ff;
-  color: #008500;
+  background-color: var(--info-light);
+  color: var(--success-text);
 }
 
 .reflectionResponse p {
   margin: 0;
   line-height: 1.6;
-  color: #444;
+  color: var(--text-secondary);
 }
 
 .topicInput {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-  box-sizing: border-box;
-  margin-bottom: 1rem; /* Add some space below */
-}
-.topicInput:focus {
-  border-color: #4b8bbe;
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(75, 139, 190, 0.2);
+  composes: textInput from "../../styles/common.module.css";
+  margin-bottom: 1rem;
 }
 
 .feedbackOnlyBadge {
-  background-color: #6c757d; /* Example: Grey color */
-  /* Or maybe just a different border/text */
-  /* border: 1px solid #5a6268; */
-  /* color: #eee; */
+  background-color: var(--text-muted);
 }
 
 /* --- Styles for Turtle Section (Approach 3) --- */
@@ -1080,12 +917,12 @@
 .studentCanvasColumn h4 {
   margin-top: 0;
   margin-bottom: 0.75rem;
-  color: #306998;
+  color: var(--primary-dark);
   font-size: 1.15em;
 }
 
 /* Responsive: stack vertically on smaller screens */
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .visualTestingContainer {
     grid-template-columns: 1fr;
   }
@@ -1100,15 +937,15 @@
 }
 
 .testCaseCard {
-  background-color: white;
+  background-color: var(--bg-elevated);
   border-radius: 6px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-tertiary);
   overflow: hidden;
   transition: box-shadow 0.2s;
 }
 
 .testCaseCard:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
 }
 
 .testCaseHeader {
@@ -1116,13 +953,13 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem 1rem;
-  background-color: #f8f9fa;
+  background-color: var(--bg-code);
   user-select: none;
   transition: background-color 0.2s;
 }
 
 .testCaseHeader:hover {
-  background-color: #e9ecef;
+  background-color: var(--bg-secondary);
 }
 
 .testCaseHeaderLeft {
@@ -1146,18 +983,18 @@
 
 .testCaseTitle {
   font-weight: 600;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .expandIcon {
-  color: #666;
+  color: var(--text-muted);
   font-size: 0.8rem;
   margin-left: 0.5rem;
 }
 
 .testCaseBody {
   padding: 1rem;
-  border-top: 1px solid #e9ecef;
+  border-top: 1px solid var(--border-secondary);
 }
 
 .testCaseImagesGrid {
@@ -1173,15 +1010,15 @@
 }
 
 .testCaseImageColumn h5 {
-  margin: 0 0 0.5rem 0;
-  color: #306998;
+  margin: 0 0 0.5rem;
+  color: var(--primary-dark);
   font-size: 1rem;
 }
 
 .testCaseImage {
   width: 100%;
   max-width: 400px;
-  border: 2px solid #ccc;
+  border: 2px solid var(--border-tertiary);
   border-radius: 4px;
   display: block;
 }
@@ -1189,18 +1026,18 @@
 .testCaseTips {
   margin-top: 1rem;
   padding: 0.75rem;
-  background-color: #f8f9fa;
+  background-color: var(--bg-code);
   border-radius: 4px;
-  color: #666;
+  color: var(--text-muted);
 }
 
 .testCaseTips ul {
-  margin: 0.5rem 0 0 0;
+  margin: 0.5rem 0 0;
   padding-left: 1.5rem;
 }
 
 /* Responsive: stack images vertically on smaller screens */
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .testCaseImagesGrid {
     grid-template-columns: 1fr;
   }
@@ -1209,15 +1046,15 @@
 .turtleInstructions,
 .turtleCommandsReference {
   margin-bottom: 1.5rem;
-  background-color: #f0f4f8;
-  border: 1px solid #d1dce5;
+  background-color: var(--primary-bg);
+  border: 1px solid var(--border-primary);
   border-radius: 6px;
   padding: 1rem 1.5rem;
 }
 
 .turtleInstructions h4,
 .turtleCommandsReference h4 {
-  color: #306998;
+  color: var(--primary-dark);
   margin-top: 0;
   margin-bottom: 0.75rem;
 }
@@ -1227,35 +1064,30 @@
   padding-left: 1.2rem;
   list-style: disc;
 }
+
 .turtleCommandsReference li {
   margin-bottom: 0.4rem;
   font-size: 0.9rem;
 }
+
 .turtleCommandsReference code {
-  background-color: #e1e8ed;
+  background-color: var(--bg-code);
   padding: 0.2rem 0.4rem;
   border-radius: 3px;
-  font-family: "Menlo", "Consolas", "Courier New", monospace;
+  font-family: var(--font-mono);
 }
 
 .turtleEditorContainer {
   margin: 1.5rem 0;
 }
+
 .turtleEditorContainer h4 {
   margin-bottom: 0.75rem;
-  color: #306998;
+  color: var(--primary-dark);
 }
 
 /* Reuse .editorControls, .runButton, .testButton from previous styles */
 /* Add styles for speed control */
-.editorControls {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 1rem; /* Spacing between controls */
-  margin-top: 0.75rem;
-}
-
 .speedLabel {
   font-weight: 500;
   margin-left: auto; /* Push speed control to the right */
@@ -1278,22 +1110,16 @@
 /* Actual canvas element - styled to match reference image */
 .turtleCanvasContainer > canvas {
   display: block; /* Remove extra space */
-  background-color: white; /* White drawing area */
+  background-color: white; /* White drawing area - always white for turtle graphics */
   max-width: 100%;
   height: auto;
-  border: 2px solid #ccc; /* Match reference image border */
-  border-radius: 4px; /* Match reference image border radius */
+  border: 2px solid var(--border-tertiary);
+  border-radius: 4px;
 }
 
 /* Reuse feedback styles from quiz/testing */
-/* Ensure .quizFeedback, .correctFeedback, .incorrectFeedback, .errorFeedback exist */
 .errorFeedback {
-  background-color: var(--color-error-light);
-  color: var(--color-error-text);
-  border-left: 5px solid var(--color-error);
-  padding: var(--spacing-lg) var(--spacing-xl);
-  border-radius: var(--radius-md);
+  composes: errorMessage from "../../styles/common.module.css";
   font-weight: 500;
-  margin-top: var(--spacing-lg);
   white-space: pre-wrap;
 }

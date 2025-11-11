@@ -1,0 +1,364 @@
+/*
+ * Common/Shared CSS Module
+ *
+ * Reusable component patterns used across the application.
+ * Import these styles into components to maintain consistency.
+ *
+ * Usage:
+ *   import commonStyles from '@/styles/common.module.css';
+ *   <button className={commonStyles.primaryButton}>Click me</button>
+ */
+
+/* ===== BUTTONS ===== */
+
+.primaryButton {
+  background-color: var(--primary-color);
+  color: var(--text-on-primary);
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s;
+  font-size: 0.9rem;
+}
+
+.primaryButton:hover:not(:disabled) {
+  background-color: var(--primary-dark-color);
+}
+
+.primaryButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.secondaryButton {
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  border: 1px solid var(--border-primary);
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 600;
+  transition:
+    background-color 0.3s,
+    border-color 0.3s;
+  font-size: 0.9rem;
+}
+
+.secondaryButton:hover:not(:disabled) {
+  background-color: var(--bg-secondary);
+  border-color: var(--border-focus);
+}
+
+.secondaryButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.successButton {
+  background-color: var(--success);
+  color: var(--text-on-primary);
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s;
+  font-size: 0.9rem;
+}
+
+.successButton:hover:not(:disabled) {
+  background-color: var(--success-dark);
+}
+
+.successButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.warningButton {
+  background-color: var(--warning);
+  color: var(--text-primary);
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s;
+  font-size: 0.9rem;
+}
+
+.warningButton:hover:not(:disabled) {
+  background-color: var(--warning-dark);
+}
+
+.warningButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ===== FORM CONTROLS ===== */
+
+.textInput {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid var(--border-tertiary);
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+.textInput:focus {
+  outline: none;
+  border-color: var(--border-focus);
+  box-shadow: var(--focus-shadow);
+}
+
+.textArea {
+  width: 100%;
+  min-height: 100px;
+  padding: 0.75rem;
+  border: 2px solid var(--border-tertiary);
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-family: inherit;
+  line-height: 1.6;
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
+  resize: vertical;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+.textArea:focus {
+  outline: none;
+  border-color: var(--border-focus);
+  box-shadow: var(--focus-shadow);
+}
+
+.select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid var(--border-tertiary);
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--border-focus);
+  box-shadow: var(--focus-shadow);
+}
+
+/* ===== FEEDBACK MESSAGES ===== */
+
+.successMessage {
+  background-color: var(--success-light);
+  color: var(--success-text);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  border-radius: var(--radius-md);
+  border-left: 5px solid var(--success);
+  margin: var(--spacing-lg) 0;
+}
+
+.errorMessage {
+  background-color: var(--error-light);
+  color: var(--error-text);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  border-radius: var(--radius-md);
+  border-left: 5px solid var(--error);
+  margin: var(--spacing-lg) 0;
+}
+
+.warningMessage {
+  background-color: var(--warning-light);
+  color: var(--warning-text);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  border-radius: var(--radius-md);
+  border-left: 5px solid var(--warning);
+  margin: var(--spacing-lg) 0;
+}
+
+.infoMessage {
+  background-color: var(--info-light);
+  color: var(--info-text);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  border-radius: var(--radius-md);
+  border-left: 5px solid var(--info);
+  margin: var(--spacing-lg) 0;
+}
+
+/* ===== CARD CONTAINERS ===== */
+
+.card {
+  background-color: var(--bg-elevated);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-primary);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-md);
+  transition:
+    box-shadow 0.3s,
+    transform 0.3s;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.cardHeader {
+  margin-top: 0;
+  margin-bottom: var(--spacing-md);
+  color: var(--primary-dark-color);
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.cardBody {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ===== CONTAINERS ===== */
+
+.containerPrimary {
+  background-color: var(--bg-code);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  margin: var(--spacing-xl) 0;
+}
+
+.containerSecondary {
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  margin: var(--spacing-xl) 0;
+}
+
+/* ===== CODE DISPLAY ===== */
+
+.codeDisplay {
+  background-color: var(--bg-code-block);
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  border: 1px solid var(--border-tertiary);
+  color: var(--text-primary);
+  overflow-x: auto;
+}
+
+/* ===== DATA TABLES ===== */
+
+.dataTable {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--border-tertiary);
+  font-size: 0.95rem;
+}
+
+.dataTable th,
+.dataTable td {
+  border: 1px solid var(--border-tertiary);
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.dataTable th {
+  background-color: var(--bg-code);
+  color: var(--primary-dark);
+  font-weight: bold;
+}
+
+/* ===== LOADING STATES ===== */
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl);
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.loadingText {
+  margin-top: var(--spacing-md);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* ===== UTILITY CLASSES ===== */
+
+.textCenter {
+  text-align: center;
+}
+
+.textLeft {
+  text-align: left;
+}
+
+.textRight {
+  text-align: right;
+}
+
+.marginTopSm {
+  margin-top: var(--spacing-sm);
+}
+
+.marginTopMd {
+  margin-top: var(--spacing-md);
+}
+
+.marginTopLg {
+  margin-top: var(--spacing-lg);
+}
+
+.marginTopXl {
+  margin-top: var(--spacing-xl);
+}
+
+.marginBottom {
+  margin-bottom: var(--spacing-md);
+}
+
+.marginBottomLg {
+  margin-bottom: var(--spacing-lg);
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.hidden {
+  display: none;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border-width: 0;
+}

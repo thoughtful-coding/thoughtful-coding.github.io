@@ -1,0 +1,48 @@
+/*
+ * Static SEO Content Styles
+ *
+ * These styles are applied before React loads to ensure search engine crawlers
+ * and no-JS browsers see properly styled content. They use CSS variables with
+ * fallbacks to work before index.css is loaded.
+ */
+
+body {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+  color: var(--text-color, #213547); /* Use CSS variable with fallback */
+  background-color: var(--background-color, #fff); /* Use CSS variable with fallback */
+  margin: 0 auto;
+  padding: 2rem;
+  max-width: 1200px;
+}
+
+#static-content h1 {
+  color: var(--primary-dark, #306998);
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+#static-content p {
+  color: var(--text-secondary, #444);
+  margin-bottom: 1.5rem;
+}
+
+#static-content nav ul {
+  list-style: none;
+  padding: 0;
+}
+
+#static-content nav li {
+  margin: 0.5rem 0;
+}
+
+#static-content nav a {
+  color: var(--primary, #4b8bbe);
+  text-decoration: none;
+  font-size: 1.1rem;
+}
+
+#static-content nav a:hover {
+  color: var(--primary-dark, #306998);
+  text-decoration: underline;
+}

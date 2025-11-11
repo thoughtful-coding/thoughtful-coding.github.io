@@ -1,11 +1,12 @@
 /* src/components/CodeEditor.module.css */
 .editorWrapper {
-  border: 1px solid #ddd;
+  border: 2px solid var(--border-tertiary);
   border-radius: var(--radius-md);
   overflow: hidden;
   margin: var(--spacing-lg) 0;
   position: relative;
   font-size: 0.9rem;
+  background-color: var(--bg-elevated); /* Lighter background to stand out */
 }
 
 /* Ensure CodeMirror takes up space */

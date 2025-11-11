@@ -34,15 +34,14 @@
 .unitDescription {
   max-width: 800px;
   margin: 0 auto;
-  color: #555;
+  color: var(--text-secondary);
   line-height: 1.6;
 }
 
 .lessonsList {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  row-gap: 4rem;
-  column-gap: 2rem;
+  gap: 4rem 2rem;
   grid-auto-rows: auto;
   margin-bottom: 4rem;
 }
@@ -56,7 +55,7 @@
 }
 
 .lessonCard {
-  background-color: white;
+  background-color: var(--bg-elevated);
   padding: var(--spacing-xl);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-md);
@@ -73,12 +72,12 @@
 .lessonCard:hover {
   transform: translateY(-5px);
   box-shadow: var(--shadow-lg);
-  border-left-color: #ffd43b;
+  border-left-color: var(--warning);
 }
 
 .lessonNumber {
   font-size: 0.85rem;
-  color: #777;
+  color: var(--text-muted);
   margin-bottom: 0.5rem;
   font-weight: 500;
 }
@@ -92,7 +91,7 @@
 
 .lessonDescription {
   font-size: 0.95rem;
-  color: #555;
+  color: var(--text-secondary);
   line-height: 1.5;
   flex-grow: 1; /* Push status down */
   text-align: left;
@@ -104,7 +103,7 @@
   font-size: 0.85rem;
   display: flex;
   align-items: center;
-  color: #555;
+  color: var(--text-secondary);
 }
 
 .statusDot {
@@ -113,44 +112,42 @@
   border-radius: 50%;
   display: inline-block;
   margin-right: 8px; /* More space */
-  border: 1px solid rgba(0, 0, 0, 0.1); /* Subtle border */
+  border: 1px solid var(--border-primary); /* Subtle border */
 }
 
 .statusNotStarted {
-  background-color: #e0e0e0; /* Grey */
+  background-color: var(--border-primary);
 }
 
 .statusInProgress {
-  background-color: #ffd43b; /* Yellow */
+  background-color: var(--warning);
 }
 
 .statusCompleted {
-  color: green;
+  color: var(--success);
 }
 
 /* Loading and Error States */
 .error {
   text-align: center;
   padding: 3rem;
-  color: #666;
+  color: var(--error);
+  background-color: var(--error-light);
+  border: 1px solid var(--error-border);
+  border-radius: var(--radius-xl);
   font-size: 1.1rem;
 }
 
-.error {
-  color: var(--color-error);
-  background-color: var(--color-error-light);
-  border: 1px solid var(--color-error-border);
-  border-radius: var(--radius-xl);
-}
-
 /* Responsive adjustments */
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .lessonsList {
     grid-template-columns: 1fr;
   }
+
   .unitHeader {
     padding: 1.5rem 1rem;
   }
+
   .unitTitle {
     font-size: 1.8rem;
   }

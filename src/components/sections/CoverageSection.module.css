@@ -2,18 +2,20 @@
   composes: functionDisplayContainer from global; /* Or copy styles */
   margin-bottom: 1.5rem;
 }
+
 .coverageCodeDisplayTitle {
   composes: functionDisplayTitle from global; /* Or copy styles */
 }
+
 .coverageCodeDisplayCode {
   composes: functionDisplayCode from global; /* Or copy styles */
 }
 
 .coverageInstruction {
+  composes: containerPrimary from "../../styles/common.module.css";
   margin-bottom: 1.5rem;
   padding: 0.75rem;
-  background-color: #f8f9fa;
-  border: 1px solid #eee;
+  border-color: var(--border-secondary);
   border-radius: 4px;
 }
 
@@ -23,52 +25,49 @@
 }
 
 .coverageTable {
-  width: 100%;
+  composes: dataTable from "../../styles/common.module.css";
   min-width: 700px; /* Ensure enough space for columns */
-  border-collapse: collapse;
-  border: 1px solid #ddd;
 }
 
 .coverageTable th,
 .coverageTable td {
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  text-align: left; /* Align text left, center numbers if needed */
   vertical-align: middle;
 }
 
 .coverageTable th {
-  background-color: #eef6ff;
-  font-weight: 600;
+  background-color: var(--primary-bg);
   white-space: nowrap; /* Prevent headers wrapping */
 }
 
 .coverageTable tr:nth-child(even) {
-  background-color: #f9f9f9;
+  background-color: var(--bg-secondary);
 }
 
 /* Highlight rows based on correctness */
 .correctRow {
-  background-color: rgba(212, 237, 218, 0.3) !important;
+  background-color: var(--success-bg-subtle) !important;
 }
+
 .incorrectRow {
-  background-color: rgba(248, 215, 218, 0.2) !important;
+  background-color: var(--error-bg-subtle) !important;
 }
 
 .coverageInput {
   width: 100%;
   min-width: 80px;
   padding: var(--spacing-sm);
-  border: 1px solid #ccc;
+  border: 2px solid var(--border-primary);
   border-radius: var(--radius-md);
   font-size: 0.9rem;
   box-sizing: border-box; /* Include padding and border in width calculation */
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
 }
 
 .coverageInput.fixedInput {
-  background-color: #f0f0f0;
+  background-color: var(--bg-secondary);
   cursor: not-allowed;
-  color: #666;
+  color: var(--text-muted);
   font-style: italic;
 }
 
@@ -79,6 +78,7 @@
   white-space: pre-wrap;
   vertical-align: top;
 }
+
 .expectedOutputCell pre,
 .actualOutputCell pre {
   margin: 0;
@@ -94,13 +94,14 @@
   background-color: var(--color-error-light);
   color: var(--color-error-text);
 }
+
 .actualOutputCell.error pre {
   background-color: var(--color-error-light);
   color: var(--color-error-text);
   font-weight: bold;
   margin: 0;
   white-space: pre-wrap;
-  word-break: break-word;
+  overflow-wrap: break-word;
   padding: var(--spacing-xs);
 }
 
@@ -113,7 +114,7 @@
   composes: runButton from global; /* Reuse run button style */
   padding: 0.5rem 1rem; /* Adjust padding if needed */
   font-size: 0.85rem;
-  background-color: #007bff; /* Blue button - stands out more */
+  background-color: var(--info); /* Blue button - stands out more */
   color: white;
   border: none;
   border-radius: 4px;
@@ -122,12 +123,12 @@
 }
 
 .coverageRunButton:hover:not(:disabled) {
-  background-color: #0056b3; /* Darker blue on hover */
+  background-color: var(--info-dark); /* Darker blue on hover */
 }
 
 .coverageRunButton:disabled {
-  background-color: #cccccc; /* Light grey when disabled */
-  color: #666666;
+  background-color: var(--bg-tertiary); /* Light grey when disabled */
+  color: var(--text-disabled);
   cursor: not-allowed;
 }
 
@@ -137,9 +138,9 @@
   height: 20px;
   line-height: 18px;
   text-align: center;
-  background-color: #ffd43b;
-  color: #333;
-  border: 1px solid #ffc107;
+  background-color: var(--warning);
+  color: var(--text-primary);
+  border: 1px solid var(--warning-dark);
   border-radius: 50%;
   font-weight: bold;
   cursor: pointer;
@@ -147,17 +148,18 @@
   font-size: 0.8rem;
   vertical-align: middle;
 }
+
 .hintButton:hover {
-  background-color: #ffca2c;
+  background-color: var(--warning-dark);
 }
 
 .coverageProgress {
+  composes: containerPrimary from "../../styles/common.module.css";
   margin-top: 1.5rem;
   display: flex;
   align-items: center;
   gap: 1rem;
-  background-color: #f8f9fa;
   padding: 0.75rem 1rem;
   border-radius: 4px;
-  border: 1px solid #eee;
+  border-color: var(--border-secondary);
 }

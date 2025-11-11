@@ -1,6 +1,6 @@
 /* src/components/LessonSidebar.module.css */
 .sidebar {
-  background-color: white;
+  background-color: var(--bg-elevated);
   padding: var(--spacing-xl);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-md);
@@ -11,9 +11,9 @@
   margin-top: 0;
   margin-bottom: 1rem;
   padding-bottom: 0.75rem; /* Increased padding */
-  border-bottom: 2px solid #eee;
+  border-bottom: 2px solid var(--border-secondary);
   font-size: 1.2rem; /* Slightly larger title */
-  color: #333;
+  color: var(--text-primary);
 }
 
 .sectionList {
@@ -30,7 +30,7 @@
 }
 
 .sectionItem:hover {
-  background-color: #f8f9fa; /* Subtle hover background */
+  background-color: var(--bg-secondary); /* Subtle hover background */
 }
 
 .sectionLink {
@@ -69,11 +69,11 @@
 /* Adjust link padding when checkmark is present */
 .sectionItemToBeDone .sectionLink {
   padding-left: 30px; /* Make space for the checkmark */
-  color: #555; /* Optional: slightly muted color for completed items */
+  color: var(--text-secondary); /* Optional: slightly muted color for completed items */
 }
 
 .sectionItemToBeDone .sectionLink:hover {
-  color: #333; /* Darken slightly on hover */
+  color: var(--text-primary); /* Darken slightly on hover */
 }
 
 .sectionItemCompleted {
@@ -83,7 +83,7 @@
 
 .sectionItemCompleted::before {
   content: "✓"; /* Checkmark */
-  color: #28a745; /* Green color */
+  color: var(--success); /* Green color */
   font-weight: bold;
   margin-right: 8px;
   display: inline-block;
@@ -97,15 +97,15 @@
 /* Adjust link padding when checkmark is present */
 .sectionItemCompleted .sectionLink {
   padding-left: 30px; /* Make space for the checkmark */
-  color: #555; /* Optional: slightly muted color for completed items */
+  color: var(--text-secondary); /* Optional: slightly muted color for completed items */
 }
 
 .sectionItemCompleted .sectionLink:hover {
-  color: #333; /* Darken slightly on hover */
+  color: var(--text-primary); /* Darken slightly on hover */
 }
 
 .loading {
-  color: #666;
+  color: var(--text-muted);
   font-style: italic;
   padding: 0.5rem 0;
 }

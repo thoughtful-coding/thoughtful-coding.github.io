@@ -3,22 +3,22 @@
   max-width: 900px;
   margin: 2rem auto;
   padding: 2rem;
-  background-color: #fff;
+  background-color: var(--bg-elevated);
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg);
   line-height: 1.6;
 }
 
 .staticPageContainer h1 {
   text-align: center;
-  color: #306998;
+  color: var(--primary-dark);
   margin-bottom: 0.5rem;
   font-size: 2.5rem;
 }
 
 .lastUpdated {
   text-align: center;
-  color: #666;
+  color: var(--text-muted);
   font-size: 0.9rem;
   margin-bottom: 2rem;
   font-style: italic;
@@ -29,15 +29,15 @@
 }
 
 .section h2 {
-  color: #4b8bbe;
-  border-bottom: 2px solid #e0e0e0;
+  color: var(--primary);
+  border-bottom: 2px solid var(--border-primary);
   padding-bottom: 0.5rem;
   margin-bottom: 1rem;
   font-size: 1.75rem;
 }
 
 .section h3 {
-  color: #306998;
+  color: var(--primary-dark);
   margin-top: 1.5rem;
   margin-bottom: 0.75rem;
   font-size: 1.25rem;
@@ -45,7 +45,7 @@
 
 .section p {
   margin-bottom: 1rem;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .section ul {
@@ -55,22 +55,22 @@
 
 .section li {
   margin-bottom: 0.5rem;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .section a {
-  color: #4b8bbe;
+  color: var(--link-color);
   text-decoration: none;
   transition: color 0.2s;
 }
 
 .section a:hover {
-  color: #306998;
+  color: var(--link-hover);
   text-decoration: underline;
 }
 
 .section strong {
-  color: #306998;
+  color: var(--primary-dark);
   font-weight: 600;
 }
 
@@ -80,7 +80,7 @@
 }
 
 .faqItem h3 {
-  color: #306998;
+  color: var(--primary-dark);
   margin-bottom: 0.75rem;
   font-size: 1.1rem;
 }
@@ -95,7 +95,7 @@
 }
 
 /* Responsive adjustments */
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .staticPageContainer {
     margin: 1rem;
     padding: 1.5rem;

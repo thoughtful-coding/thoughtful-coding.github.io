@@ -7,8 +7,8 @@
   /* Heading for "Review by Assignment" or "Review by Student" */
   margin-top: 0;
   font-size: 1.6em; /* Larger heading for the view title */
-  color: #2c3e50; /* Darker, more prominent heading color */
-  border-bottom: 2px solid #e0eaf3; /* A subtle underline */
+  color: var(--text-primary); /* Darker, more prominent heading color */
+  border-bottom: 2px solid var(--border-primary); /* A subtle underline */
   padding-bottom: 0.75rem;
   margin-bottom: 1.5rem;
 }
@@ -21,38 +21,41 @@
   align-items: center;
   flex-wrap: wrap; /* Allow filters to wrap on smaller screens */
   padding: 1rem 1.5rem;
-  background-color: #f8f9fa; /* Light background for the filter bar */
+  background-color: var(--bg-code); /* Light background for the filter bar */
   border-radius: 6px;
-  border: 1px solid #e9ecef;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--border-secondary);
+  box-shadow: var(--shadow-sm);
 }
 
 .filterSelect {
   padding: 0.6rem 0.8rem;
   border-radius: 4px;
-  border: 1px solid #ced4da;
+  border: 1px solid var(--border-primary);
   font-size: 0.95rem;
   min-width: 200px; /* Good width for select dropdowns */
-  background-color: #fff;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
+  box-shadow: var(--focus-shadow-inset);
   transition:
     border-color 0.15s ease-in-out,
     box-shadow 0.15s ease-in-out;
 }
+
 .filterSelect:focus {
-  border-color: #80bdff;
+  border-color: var(--border-focus);
   outline: 0;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  box-shadow: 0 0 0 0.2rem var(--info-light);
 }
+
 .filterSelect:disabled {
-  background-color: #e9ecef;
+  background-color: var(--bg-secondary);
   cursor: not-allowed;
   opacity: 0.7;
 }
 
 .filterButton {
   padding: 0.65rem 1.3rem;
-  background-color: #007bff;
+  background-color: var(--info);
   color: white;
   border: none;
   border-radius: 4px;
@@ -61,11 +64,13 @@
   font-size: 0.95rem;
   transition: background-color 0.2s;
 }
+
 .filterButton:hover:not(:disabled) {
-  background-color: #0056b3;
+  background-color: var(--info-dark);
 }
+
 .filterButton:disabled {
-  background-color: #6c757d;
+  background-color: var(--text-muted);
   opacity: 0.65;
 }
 
@@ -75,10 +80,10 @@
   margin-bottom: 1.5rem;
   max-height: 350px; /* Increased height */
   overflow-y: auto;
-  border: 1px solid #dfe6ed;
+  border: 1px solid var(--border-primary);
   border-radius: 6px;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+  background-color: var(--bg-elevated);
+  box-shadow: var(--shadow-sm);
 }
 
 .assignmentList {
@@ -89,51 +94,57 @@
 
 .assignmentListItem {
   padding: 0.85rem 1.25rem;
-  border-bottom: 1px solid #e9ecef;
+  border-bottom: 1px solid var(--border-secondary);
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
+
 .assignmentListItem:last-child {
   border-bottom: none;
 }
+
 .assignmentListItem:hover {
-  background-color: #f0f4f8;
+  background-color: var(--bg-code);
 }
+
 .assignmentListItem.selected {
-  background-color: #d1e7fd; /* Lighter blue for selected */
+  background-color: var(--info-light); /* Lighter blue for selected */
   font-weight: 600;
-  color: #052c65; /* Darker blue text for selected */
-  border-left: 4px solid #007bff;
+  color: var(--info-text); /* Darker blue text for selected */
+  border-left: 4px solid var(--info);
   padding-left: calc(1.25rem - 4px);
 }
 
 .assignmentTitle {
   display: block;
   font-size: 1.05em;
-  color: #0056b3; /* Link-like color */
+  color: var(--link-color); /* Link-like color */
   margin-bottom: 0.2rem;
 }
+
 .assignmentListItem.selected .assignmentTitle {
-  color: #052c65;
+  color: var(--info-text);
 }
+
 .assignmentMeta {
   font-size: 0.85em;
-  color: #6c757d;
+  color: var(--text-muted);
 }
 
 /* Submission Viewer (for Review by Assignment) */
 .submissionViewer {
   margin-top: 1.5rem;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--border-primary);
   border-radius: 8px;
   padding: 1.5rem;
-  background-color: #fff;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+  background-color: var(--bg-elevated);
+  box-shadow: var(--shadow-md);
 }
+
 .submissionViewer > h4 {
   /* "Viewing Submission X of Y" */
   margin-top: 0;
-  color: #4a5568;
+  color: var(--text-secondary);
   font-size: 1.1em; /* Slightly larger */
   margin-bottom: 1.5rem; /* More space below */
   text-align: center;
@@ -144,38 +155,43 @@
 .submissionDetailCard {
   padding: 1.5rem;
   margin-bottom: 1rem;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border-secondary);
   border-radius: 6px;
-  background-color: #fdfdff;
+  background-color: var(--bg-tertiary);
 }
+
 .submissionDetailCard h4,
 .submissionDetailCard h5 {
   /* Title of the submission, e.g., Reflection topic or "AI Evaluation" */
   margin-top: 0;
-  color: #1a202c;
+  color: var(--text-primary);
   font-size: 1.25em; /* Consistent heading size */
   margin-bottom: 0.75rem;
 }
+
 .submissionDetailCard strong {
   /* For labels like "Student:", "Code:" */
-  color: #4a5568;
+  color: var(--text-secondary);
   font-weight: 600; /* Make labels a bit bolder */
 }
+
 .submissionDetailCard pre {
   /* For code snippets */
-  background-color: #2d3748;
-  color: #e2e8f0;
+  background-color: var(--bg-code-block);
+  color: var(--text-code-block);
   padding: 0.75rem 1rem;
   border-radius: 4px;
   overflow-x: auto;
   font-size: 0.9em;
-  margin: 0.5rem 0 1rem 0; /* Add bottom margin */
+  margin: 0.5rem 0 1rem; /* Add bottom margin */
 }
+
 .submissionDetailCard p {
   line-height: 1.6;
   margin-bottom: 0.75rem; /* Consistent paragraph spacing */
-  color: #2d3748;
+  color: var(--text-primary);
 }
+
 .submissionDetailCard div > p:last-child,
 .submissionDetailCard > p:last-child {
   margin-bottom: 0;
@@ -188,19 +204,22 @@
 .aiFeedbackBlock {
   margin-top: 1.5rem; /* More space before AI feedback */
   padding-top: 1rem;
-  border-top: 1px dashed #ced4da; /* Softer separator */
+  border-top: 1px dashed var(--border-tertiary); /* Softer separator */
 }
+
 .aiFeedbackBlock p {
   /* Paragraphs within AI feedback, e.g., for individual feedback points */
   margin-bottom: 0.5rem;
 }
+
 .aiFeedbackBlock p strong {
   /* Labels like "Prediction Assessment:" */
   margin-right: 0.3em;
 }
+
 .aiFeedbackBlock em {
   /* For AI's textual feedback */
-  color: #4a5568;
+  color: var(--text-secondary);
 }
 
 /* Assessment Labels (Shared) */
@@ -215,25 +234,29 @@
   vertical-align: middle;
   line-height: 1.3;
 }
+
 .assessmentAchieves {
-  color: #155724;
-  background-color: #d4edda;
-  border: 1px solid #b2d8b5;
+  color: var(--success-text);
+  background-color: var(--success-light);
+  border: 1px solid var(--success);
 }
+
 .assessmentMostly {
-  color: #004085;
-  background-color: #cce5ff;
-  border: 1px solid #a3c2e0;
+  color: var(--info-text);
+  background-color: var(--info-light);
+  border: 1px solid var(--info);
 }
+
 .assessmentDeveloping {
-  color: #856404;
-  background-color: #fff3cd;
-  border: 1px solid #f0dd92;
+  color: var(--warning-text);
+  background-color: var(--warning-light);
+  border: 1px solid var(--warning);
 }
+
 .assessmentInsufficient {
-  color: #991b1b;
-  background-color: #fee2e2;
-  border: 1px solid #ebc0c3;
+  color: var(--error-text);
+  background-color: var(--error-light);
+  border: 1px solid var(--error);
 }
 
 .assessmentLabelSmall {
@@ -251,30 +274,34 @@
   justify-content: space-between;
   align-items: center;
   padding-top: 1rem;
-  border-top: 1px solid #e9ecef;
+  border-top: 1px solid var(--border-secondary);
 }
+
 .navigationButtons button {
   padding: 0.6rem 1.2rem;
   min-width: 150px; /* Ensure good width */
   font-size: 0.9rem;
-  background-color: #6c757d;
+  background-color: var(--text-muted);
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.2s;
 }
+
 .navigationButtons button:hover:not(:disabled) {
-  background-color: #5a6268;
+  background-color: var(--text-secondary);
 }
+
 .navigationButtons button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
 .navigationButtons span {
   /* For "Student X / Y" text */
   font-size: 0.95em;
-  color: #495057;
+  color: var(--text-secondary);
   font-weight: 500;
 }
 
@@ -285,42 +312,49 @@
   gap: 2rem;
   margin-top: 1rem;
 }
+
 .submissionCategory h4 {
   font-size: 1.2em;
-  color: #306998;
+  color: var(--primary-dark);
   margin-top: 0;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid #e0eaf3;
+  border-bottom: 1px solid var(--border-primary);
 }
+
 .submissionList {
   list-style: none;
   padding: 0;
   margin: 0;
   max-height: 400px; /* Or adjust */
   overflow-y: auto;
-  border: 1px solid #e9ecef;
+  border: 1px solid var(--border-secondary);
   border-radius: 4px;
 }
+
 .submissionListItem {
   padding: 0.75rem 1rem;
-  border-bottom: 1px solid #f1f1f1;
+  border-bottom: 1px solid var(--border-secondary);
   cursor: pointer;
   transition: background-color 0.2s;
 }
+
 .submissionListItem:last-child {
   border-bottom: none;
 }
+
 .submissionListItem:hover {
-  background-color: #f8f9fa;
+  background-color: var(--bg-code);
 }
+
 .submissionListItem strong {
   display: block;
   margin-bottom: 0.2rem;
-  color: #0056b3;
+  color: var(--link-color);
 }
+
 .submissionListItem small {
-  color: #6c757d;
+  color: var(--text-muted);
   font-size: 0.85em;
   display: block;
 }
@@ -332,7 +366,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.65); /* Darker backdrop */
+  background-color: var(--overlay-medium); /* Darker backdrop */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -342,19 +376,20 @@
 }
 
 .modalContent {
-  background-color: white;
+  background-color: var(--bg-elevated);
   padding: 2rem;
   border-radius: 8px;
   max-width: 800px; /* Max width for the modal */
   width: 95%; /* Responsive width */
   max-height: 90vh; /* Max height */
   overflow-y: auto;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-xl);
   position: relative; /* For potential close button positioning */
 }
+
 .modalContent h3 {
   margin-top: 0;
-  color: #306998;
+  color: var(--primary-dark);
   font-size: 1.5em;
   margin-bottom: 1rem;
 }
@@ -363,46 +398,53 @@
   display: block;
   margin: 2rem auto 0.5rem; /* More space above, less below */
   padding: 0.7rem 1.8rem;
-  background-color: #6c757d;
+  background-color: var(--text-muted);
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-weight: 500;
 }
+
 .closeButton:hover {
-  background-color: #5a6268;
+  background-color: var(--text-secondary);
 }
 
 .iterationsContainer {
   margin-top: 1.5rem;
 }
+
 .iterationsContainer h4 {
   font-size: 1.1em;
-  color: #495057;
+  color: var(--text-secondary);
   margin-bottom: 0.75rem;
 }
+
 .iterationsContainer details {
   margin-bottom: 0.75rem;
-  border: 1px solid #e9ecef;
+  border: 1px solid var(--border-secondary);
   border-radius: 4px;
 }
+
 .iterationsContainer summary {
   cursor: pointer;
   font-weight: 500;
   padding: 0.6rem 1rem;
-  background-color: #f0f4f8;
+  background-color: var(--bg-code);
   border-radius: 3px;
   display: flex; /* For aligning assessment label */
   justify-content: space-between;
   align-items: center;
 }
+
 .iterationsContainer summary:hover {
-  background-color: #e0eaf3;
+  background-color: var(--bg-secondary);
 }
+
 .iterationsContainer details[open] summary {
-  border-bottom: 1px solid #dfe6ed;
+  border-bottom: 1px solid var(--border-primary);
 }
+
 .iterationsContainer .submissionDetailCard {
   /* Nested card for version details */
   border-top: none;
@@ -414,9 +456,9 @@
 
 /* General Utility */
 .errorMessage {
-  color: #991b1b; /* Darker red */
-  background-color: #fee2e2;
-  border: 1px solid #fca5a5;
+  color: var(--error-text); /* Darker red */
+  background-color: var(--error-light);
+  border: 1px solid var(--error-border);
   padding: 1rem 1.5rem;
   border-radius: 6px;
   text-align: center;
@@ -426,10 +468,10 @@
 .placeholderMessage {
   text-align: center;
   padding: 2.5rem 1rem;
-  color: #6c757d;
+  color: var(--text-muted);
   font-style: italic;
-  background-color: #f8f9fa;
-  border: 1px dashed #ced4da;
+  background-color: var(--bg-code);
+  border: 1px dashed var(--border-tertiary);
   border-radius: 6px;
   margin-top: 1rem;
 }
@@ -438,19 +480,20 @@
   display: inline-block;
   margin-bottom: 1rem;
   font-size: 0.9em;
-  color: #007bff;
+  color: var(--link-color);
   text-decoration: none;
 }
+
 .contextLink:hover {
   text-decoration: underline;
 }
 
 .entryCard {
-  background-color: #f9f9fa;
+  background-color: var(--bg-secondary);
   border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-md);
   padding: 1.5rem;
-  border-left: 4px solid #4b8bbe;
+  border-left: 4px solid var(--primary);
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
@@ -459,12 +502,12 @@
 
 .entryCard:hover {
   transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg);
 }
 
 .entryHeader {
   margin-bottom: 1rem;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid var(--border-secondary);
   padding-bottom: 1rem;
 }
 
@@ -474,13 +517,13 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 0.5rem;
-  color: #777;
+  color: var(--text-muted);
   font-size: 0.9rem;
   margin-bottom: 0.5rem;
 }
 
 .entryTopic {
-  color: #306998;
+  color: var(--primary-dark);
   margin: 0;
   font-size: 1.3rem;
   font-weight: 600;
@@ -488,11 +531,11 @@
 
 .entryDate {
   font-size: 0.9em;
-  color: #6c757d;
+  color: var(--text-muted);
 }
 
 .entryLesson a {
-  color: #4b8bbe;
+  color: var(--primary);
   text-decoration: none;
   font-weight: 500;
   font-size: 0.9em;
@@ -508,7 +551,7 @@
   gap: 1.5rem;
 }
 
-@media (min-width: 768px) {
+@media (width >= 768px) {
   .entryContent {
     grid-template-columns: 1fr 1fr;
   }
@@ -516,25 +559,25 @@
 
 .entryCode,
 .entryExplanation {
-  background-color: white;
+  background-color: var(--bg-elevated);
   padding: 1rem;
   border-radius: 6px;
-  border: 1px solid #eee;
+  border: 1px solid var(--border-secondary);
 }
 
 .entryCode h4,
 .entryExplanation h4 {
-  color: #555;
+  color: var(--text-secondary);
   margin-top: 0;
   margin-bottom: 0.75rem;
   font-size: 1rem;
 }
 
 .entryCode pre {
-  background-color: #f8f8f8;
+  background-color: var(--bg-code);
   padding: 1rem;
   border-radius: 4px;
   overflow-x: auto;
   margin: 0;
-  border: 1px solid #eee;
+  border: 1px solid var(--border-secondary);
 }

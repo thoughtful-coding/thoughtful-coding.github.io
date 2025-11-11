@@ -4,12 +4,12 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: var(--overlay-dark);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 2000; /* Ensure it's on top of everything */
-  color: white;
+  color: var(--text-on-primary);
 }
 
 .overlayContent {
