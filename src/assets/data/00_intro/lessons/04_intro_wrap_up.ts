@@ -23,7 +23,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "In the previous lessons you learned about strings, integers, and how they behave differently. You've discovered that quotation marks matter, that `+` does different things to different data types, and that computers are very picky about details.\n\nNow comes the real test: can you use what you've learned to solve actual problems? The following challenges aren't meant to be easy. But, the struggle is where the learning happens.",
+            "In the previous lessons you learned about strings and integers. You've discovered that quotation marks matter, that `+` does different things to different data types, and that computers are very picky about details.\n\nNow comes the real test: can you use what you've learned to solve actual problems? The following challenges aren't meant to be easy. But, the struggle is where the learning happens.",
         },
       ],
     } as InformationSectionData,
@@ -132,7 +132,7 @@ SyntaxError: '(' was never closed for print("hi"`,
         {
           kind: "text",
           value:
-            'Which of the following will result in the `12` or `"12"` being printed out? Select all that apply.',
+            'Which of the following will result in `12` **OR** `"12"` being printed out? Select all that apply.',
         },
       ],
       options: [
@@ -157,7 +157,7 @@ SyntaxError: '(' was never closed for print("hi"`,
         {
           kind: "text",
           value:
-            'Create an Instagram post notification program that prints these three lines exactly:\n```\nTaylor liked your photo\nBill said "Great shot!"\n42 others also liked it\n```\n\nWatch out for:\n- The quotation marks around "Great shot!" must appear in the output\n- Each line needs its own print statement\n\nTo check your work, click the `Run Code` button. Once you think your program is ready, click the `Run Tests` button to check that the generated output exactly matches expectations.',
+            'Now for some actual coding. Your goal is to create a program that mimics an Instagram post by printing out these three lines exactly:\n```\nTaylor liked your photo\nBill said "Great shot!"\n42 others also liked it\n```\n\nWatch out for:\n- The quotation marks around "Great shot!" must appear in the output\n- Each line needs its own print statement\n\nTo check your work, click the `Run Code` button. Once you think your program is ready, click the `Run Tests` button to check that the generated output exactly matches expectations. Hint: if you get stuck, go back and look at your learning entries by clicking on the `Learning Entries` tab at the top of the page.',
         },
       ],
       example: {
@@ -209,7 +209,7 @@ SyntaxError: '(' was never closed for print("hi"`,
         {
           kind: "text",
           value:
-            "If you made it through all four parts, congratulations. You learned to write programs using print statements, strings, and integers. If you struggled with quotation marks, got `TypeError` messages, or had to count characters on your fingers - that's completely normal. Every programmer has been there. The difference between those who succeed and those who don't isn't talent - it's persistence.",
+            "If you made it through all five lessons, congratulations. You learned to write programs using print statements, strings, and integers. If you struggled with quotation marks, got `TypeError` messages, or had to count characters on your fingers - that's completely normal. Every programmer has been there. The difference between those who succeed and those who don't isn't talent - it's persistence.",
         },
       ],
     } as InformationSectionData,

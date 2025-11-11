@@ -65,7 +65,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "The first, and perhaps most important thing to understand is that computers are **mindlessly literal**. They don't \"understand\" your code; they just follow your instructions one line at a time.\n\nTo see this in action, we'll use the **Debugger**. The debugger is one of the most important tools in programming. It lets you slow down time and watch your program execute step-by-step, exactly like the computer does.\n\nClick the `Enter Debug Mode` button and use the `Step` button to walk through the program. Pay attention to:\n- How the **Program Output** panel only changes *after* a `print` line is executed.\n- How the computer goes from line 1 to line 2, in order.",
+            "The first, and perhaps most important thing to understand is that computers are **mindlessly literal**. They don't \"understand\" your code; they just follow your instructions one line at a time.\n\nTo see this in action, we'll use the **Debugger**. The debugger is one of the most important tools in programming. It lets you watch the computer execute your program step-by-step.\n\nClick the `Enter Debug Mode` button and use the `Step` button to run each line of the program. Pay attention to:\n- How the `Program Output` panel only changes *after* a `print` line is executed\n- How the computer goes executes each line of code in order",
         },
       ],
       example: {
@@ -106,7 +106,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            'If you ask a computer to do `2 + 2` what does the computer "think"?',
+            'Hopefully that experience showed you that computers don\'t do anything special: they simply follow the instructions they are given. They really are mindless machines.\n\nIf you ask a computer to do `2 + 2` what does the computer "think"?',
         },
       ],
       options: [
@@ -129,7 +129,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            'As stated above, computers are very literal. They\'re perfectly happy running "useless" instructions. Below is an example of this. There are a bunch of `print()` statements without anything in them. Predict what you think will happen when you run the program.',
+            'Because computers are mindlessly literal, they\'re perfectly happy running "useless" instructions. Below is an example of this. There are a bunch of `print()` statements without anything in them. First, predict what you think the code will do when you run it and then see if your prediction is correct. Finally, use the feedback from AI to correct/refine your mental model.',
         },
       ],
       example: {
@@ -150,7 +150,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "You just *predicted* what the code with blank lines would do. Now, let's *watch* it happen in the debugger to confirm.\n\nThis is a core part of programming: **Predict then Verify**. Use the `Step` button again to walk through this program. Notice how the computer 'executes' `print()` just as seriously as it executes `print(\"Hello, World!\")`. It's just following instructions.",
+            'You just *predicted* what the code with blank lines would do. Now, let\'s *watch* it happen in the debugger. Use the `Step` button again to run each line of code in the program. Notice how the computer "executes" `print()` just as seriously as it executes `print("Hello, World!")`. It\'s just following instructions.',
         },
       ],
       example: {
@@ -167,18 +167,17 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Computers are *so* literal that they can't even understand a simple typo. The program below is *almost* correct, but it has a **SyntaxError** (a 'grammar' error).\n\nThe computer doesn't know what `printt` means, even though *we* do. It won't try to guess or 'figure out what you meant.'",
+            "Computers are *so* mindlessly literal that they can't even understand a simple typo. The program below is *almost* correct, but it has a small error: `print()` is misspelled as `printt()`. Predict what you think will happen when you run the program.",
         },
       ],
       example: {
         visualization: "console",
-        initialCode:
-          'print("Hello, World!")\nprintt("This line has a typo")\nprint("Goodbye!")',
+        initialCode: 'printt("This line has a typo")\nprint("Goodbye!")',
       },
       predictPrompt:
         "What will happen? Will the first line print? Will the computer fix the typo? Will it print an error?",
       conclusion:
-        "It prints a `SyntaxError`! The computer didn't even *run* the program. It checked the file for grammar mistakes first, found `printt`, and refused to start. This is why programmers must be so precise.",
+        "The computer tried to run but then became confused by the misspelled word. This is why programmers must be so precise.",
     } as PRIMMSectionData,
     {
       kind: "Matching",
@@ -192,27 +191,24 @@ const lessonData: Lesson = {
         },
       ],
       prompts: [
-        { 'Intent: `printt("Hello")`': "Sees a `SyntaxError` and crashes." },
         {
-          'Intent: `print("Hello"`':
-            "Sees a `SyntaxError` (missing parenthesis) and crashes.",
+          'Intent: `printt("Hello")`':
+            "Crashes because doesn't know what `printt()` means.",
         },
         {
           "Intent: `print()`":
-            "Mindlessly executes the instruction and prints a blank line.",
+            "Executes the instruction and prints a blank line.",
         },
         {
-          'Intent: `print("Hello")`':
-            'Mindlessly executes and prints the "Hello"',
+          'Intent: `print("Hello")`': 'Executes and prints the "Hello"',
         },
         {
-          'Intent: `print("Hlelo")`':
-            'Mindlessly executes and prints the "Hlelo"',
+          'Intent: `print("Hlelo")`': 'Executes and prints the "Hlelo"',
         },
       ],
       feedback: {
         correct:
-          "Perfect! This is the core challenge of programming. The computer never understands what you *want*, only what you *write*.",
+          "Perfect! The core challenge of programming is that the computer never understands what you *want*, only what you *write*.",
       },
     } as MatchingSectionData,
     {
@@ -223,7 +219,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "You've now seen two ways computers are 'stupid':\n1.  **Mindless Execution:** They'll run 'useless' code like `print()` over and over.\n2.  **Literal Rule-Following:** They'll crash on a simple typo like `printt` and not even *try* to run.\n\nThis is the core challenge of programming! The computer is a powerful but *literal* tool. Our job as programmers is to provide **perfect, step-by-step** instructions.\n\nIn the next section, you'll investigate how to output your own custom text and write your first few Python programs.",
+            "You've now seen two ways computers are 'stupid':\n1.  **Mindless Execution:** They'll run 'useless' code like `print()` over and over\n2.  **Literal Rule-Following:** They'll crash on a simple typo like `printt`\n\nThis is the core challenge of programming! The computer is a powerful but *literal* tool. Our job as programmers is to provide **perfect, step-by-step** instructions.\n\nIn the next section, you'll investigate how to output your own custom text and write your first few Python programs.",
         },
       ],
     } as InformationSectionData,

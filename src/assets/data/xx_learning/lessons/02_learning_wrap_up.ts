@@ -20,7 +20,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "You've just experienced the core learning strategies of this website: PRIMM and Reflection. These aren't random activities; they're built on well-researched best practices for learning complex skills. Understanding these strategies will not only help you get the most out of this site, but will help you learn pretty much anything more effectively.\n\nAcross all fields, the core techniques for learning are: _spaced-practice_, _interleaving_, _retrieval-practice_, _elaboration_, _concrete examples_, and _dual coding_. Each of these techniques are a way of exercising your brain and creating complex webs of connections that improve your understanding. For more information about how each of these techniques help you learn, [click here](https://www.example.com).",
+            "You've just experienced the core learning strategies of this website: PRIMM and Reflection. These aren't random activities; they're built on well-researched best practices for learning complex skills. Understanding these strategies will not only help you get the most out of this site, but will help you learn pretty much anything more effectively.\n\nAcross all fields, the core techniques for learning are: _spaced-practice_, _interleaving_, _retrieval-practice_, _elaboration_, _concrete examples_, and _dual coding_. Each of these techniques exercise your brain and create complex webs of connections that improve your understanding. For more information about how each of these techniques help you learn, [click here](https://www.example.com).",
         },
       ],
     } as InformationSectionData,

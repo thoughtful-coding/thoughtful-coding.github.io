@@ -35,7 +35,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "The first two lines of the program below do things we've seen before. Using a `+` on two strings results in concatenation. Using a `+` on two integers results in addition. Something new is happening on the third line of the program, however. We're using a `+` on the integer `3` and the the string `\"4\"`. First, predict what you think the code will do and then investigate whether your prediction is correct. Be sure to read the AI response afterwards very carefully if your prediction was incorrect.",
+            "The first two lines of the program below do things we've seen before. Using a `+` on two integers results in addition. Using a `+` on two strings results in concatenation.\n\nSomething new is happening on the third line of the program, however. We're using a `+` on the integer `3` and the string `\"4\"`. First, predict what you think the code will do and then investigate whether your prediction is correct. Be sure to read the AI response afterwards very carefully if your prediction was incorrect.",
         },
       ],
       example: {
@@ -56,7 +56,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Getting errors while you're writing a program is very common. You got a `SyntaxError` in the lesson about single and double quotes. Here you're getting a `TypeError`. Learning how to interpret errors will save you **a ton of time** later.\n\nThe error above is trying to tell you two things: where and what the issue is.\n- Where\n    - The second to last line of the error shows what line of code has the problem\n    - The error above says \"line 3\", which makes sense this was the line that was added\n- What\n    -The last line of the error shows was the actual problem is\n    - The error above says the problem is that we're doing an operation (`+`) that can't handle two different data types",
+            "Getting errors while you're writing a program is very common. You saw a `SyntaxError` in the lesson about single and double quotes. Here you're seeing a `TypeError`. Learning how to interpret errors will save you **a ton of time** later.\n\nThe error above is trying to tell you two things: where and what the issue is.\n- Where\n    - The second to last line of the error shows what line of code has the problem\n    - The error above says \"line 3\", which makes sense this was the line that was added\n- What\n    - The last line of the error shows was the actual problem is\n    - The error above says the problem is that we're the `+` operation can't handle two different data types",
         },
       ],
     } as InformationSectionData,
@@ -125,7 +125,7 @@ TypeError: unsupported operand type(s) for +: 'int' and 'str'\n\`\`\``,
         {
           kind: "text",
           value:
-            'Having experimented with different data types, different operations, and the different errors that can be "raised" if you make a mistake, match each of the following bits of code with their output:',
+            'Having experimented with different data types, different operations, and the different errors that can be "raised" if you make a mistake, match each of the following bits of code with their result:',
         },
       ],
       prompts: [
@@ -145,7 +145,7 @@ TypeError: unsupported operand type(s) for +: 'int' and 'str'\n\`\`\``,
         {
           kind: "text",
           value:
-            "Identifying the **data types** that are being operated on is crucial in understanding how Python works. Accidentally mixing up data types (and getting an error because of it) is the single biggest source frustration for people who are learning to code.\n\nNow it's time to reflect to formalize your knowledge. Create a simple 2-3 line code example that demonstrates the difference between strings and integers, and write 3-4 sentences explaining how the example works.",
+            "Identifying the **data types** that are being operated on is crucial in understanding how Python works. Accidentally mixing up data types (and getting an error because of it) is one of the biggest sources of frustration for people who are learning to code.\n\nNow it's time to reflect to formalize your knowledge. Create a simple 2-3 line code example that demonstrates the difference between strings and integers, and write 3-4 sentences explaining how the example works.",
         },
       ],
       topic: "Strings vs. Integers",
@@ -163,7 +163,7 @@ TypeError: unsupported operand type(s) for +: 'int' and 'str'\n\`\`\``,
         {
           kind: "text",
           value:
-            "Congratulations on completing the strings vs. integers lesson. As stated above, it is a major source of confusion and frustration. If you ever see a `TypeError`, take your time and think about what _type_ of things the program is operating on.",
+            "Congratulations on completing the strings vs. integers lesson. As stated above, it is a major source of confusion and frustration. If you ever see a `TypeError`, take your time and think about what line the error is identifying as the problem and what data types are on that line.",
         },
       ],
     } as InformationSectionData,
