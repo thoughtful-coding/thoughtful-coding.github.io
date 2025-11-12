@@ -69,7 +69,9 @@
 /* Adjust link padding when checkmark is present */
 .sectionItemToBeDone .sectionLink {
   padding-left: 30px; /* Make space for the checkmark */
-  color: var(--text-secondary); /* Optional: slightly muted color for completed items */
+  color: var(
+    --text-secondary
+  ); /* Optional: slightly muted color for completed items */
 }
 
 .sectionItemToBeDone .sectionLink:hover {
@@ -97,7 +99,9 @@
 /* Adjust link padding when checkmark is present */
 .sectionItemCompleted .sectionLink {
   padding-left: 30px; /* Make space for the checkmark */
-  color: var(--text-secondary); /* Optional: slightly muted color for completed items */
+  color: var(
+    --text-secondary
+  ); /* Optional: slightly muted color for completed items */
 }
 
 .sectionItemCompleted .sectionLink:hover {

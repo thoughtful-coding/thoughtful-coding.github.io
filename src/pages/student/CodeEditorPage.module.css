@@ -122,7 +122,9 @@
 /* Apply background to the theme container or editor directly */
 /* This targets the element CodeMirror applies its theme class to */
 .editorWrapper :global(.cm-theme) {
-  background-color: var(--bg-code); /* Light grey background for the editor area */
+  background-color: var(
+    --bg-code
+  ); /* Light grey background for the editor area */
   height: 100%; /* Ensure it fills the wrapper vertically */
 }
 /* Fallback if .cm-theme doesn't work */

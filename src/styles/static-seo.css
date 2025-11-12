@@ -10,7 +10,10 @@ body {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.6;
   color: var(--text-color, #213547); /* Use CSS variable with fallback */
-  background-color: var(--background-color, #fff); /* Use CSS variable with fallback */
+  background-color: var(
+    --background-color,
+    #fff
+  ); /* Use CSS variable with fallback */
   margin: 0 auto;
   padding: 2rem;
   max-width: 1200px;

@@ -13,7 +13,7 @@ Reusable CSS module classes for common UI patterns.
 **Usage Example**:
 
 ```tsx
-import commonStyles from '@/styles/common.module.css';
+import commonStyles from "@/styles/common.module.css";
 
 function MyComponent() {
   return (
@@ -25,9 +25,7 @@ function MyComponent() {
           className={commonStyles.textInput}
           placeholder="Enter text"
         />
-        <button className={commonStyles.primaryButton}>
-          Submit
-        </button>
+        <button className={commonStyles.primaryButton}>Submit</button>
       </div>
     </div>
   );
