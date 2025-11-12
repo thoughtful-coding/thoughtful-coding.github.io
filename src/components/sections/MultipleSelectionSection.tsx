@@ -74,7 +74,15 @@ const MultipleSelectionSection: React.FC<MultipleSelectionSectionProps> = ({
 
   return (
     <section id={section.id} className={styles.section}>
-      <h2 className={styles.title}>{section.title}</h2>
+      <h2 className={styles.title}>
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          disallowedElements={["p"]}
+          unwrapDisallowed={true}
+        >
+          {section.title}
+        </ReactMarkdown>
+      </h2>
       <div
         className={!hasRequiredPhrase ? styles.questionError : styles.content}
       >
@@ -142,17 +150,25 @@ const MultipleSelectionSection: React.FC<MultipleSelectionSectionProps> = ({
         )}
       </form>
 
-      {isSubmitted && section.feedback && (
+      {isSubmitted && (
         <div
           className={
             isCorrect ? styles.correctFeedback : styles.incorrectFeedback
           }
         >
-          {isCorrect
-            ? section.feedback
-              ? section.feedback.correct
-              : "Correct!"
-            : "Incorrect!"}
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            disallowedElements={["p"]}
+            unwrapDisallowed={true}
+          >
+            {isCorrect
+              ? section.feedback
+                ? section.feedback.correct
+                : "Correct!"
+              : section.feedback
+                ? section.feedback.incorrect || "Incorrect!"
+                : "Incorrect!"}
+          </ReactMarkdown>
         </div>
       )}
 

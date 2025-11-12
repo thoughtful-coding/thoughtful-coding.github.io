@@ -1,4 +1,6 @@
 import React, { ReactNode } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import type { SectionId } from "../../types/data";
 import styles from "./Section.module.css";
 import ContentRenderer from "../content_blocks/ContentRenderer";
@@ -23,7 +25,15 @@ const BaseSectionWrapper: React.FC<BaseSectionWrapperProps> = ({
 }) => {
   return (
     <section id={sectionId} className={styles.section}>
-      <h2 className={styles.title}>{title}</h2>
+      <h2 className={styles.title}>
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          disallowedElements={["p"]}
+          unwrapDisallowed={true}
+        >
+          {title}
+        </ReactMarkdown>
+      </h2>
       <div className={styles.content}>
         <ContentRenderer content={content} />
       </div>

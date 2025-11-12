@@ -1,5 +1,7 @@
 // src/components/sections/MultipleChoiceSection.tsx
 import React, { useCallback } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import type {
   MultipleChoiceSectionData,
   UnitId,
@@ -65,7 +67,15 @@ const MultipleChoiceSection: React.FC<MultipleChoiceSectionProps> = ({
 
   return (
     <section id={section.id} className={styles.section}>
-      <h2 className={styles.title}>{section.title}</h2>
+      <h2 className={styles.title}>
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          disallowedElements={["p"]}
+          unwrapDisallowed={true}
+        >
+          {section.title}
+        </ReactMarkdown>
+      </h2>
       <div className={styles.content}>
         <ContentRenderer content={section.content} />
       </div>
@@ -107,7 +117,13 @@ const MultipleChoiceSection: React.FC<MultipleChoiceSectionProps> = ({
                 disabled={isSubmitted || isLocallyDisabled}
                 tabIndex={-1}
               />
-              {option}
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                disallowedElements={["p"]}
+                unwrapDisallowed={true}
+              >
+                {option}
+              </ReactMarkdown>
             </label>
           </div>
         ))}
@@ -130,11 +146,19 @@ const MultipleChoiceSection: React.FC<MultipleChoiceSectionProps> = ({
             isCorrect ? styles.correctFeedback : styles.incorrectFeedback
           }
         >
-          {isCorrect
-            ? section.feedback
-              ? section.feedback.correct
-              : "Correct!"
-            : "Incorrect!"}
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            disallowedElements={["p"]}
+            unwrapDisallowed={true}
+          >
+            {isCorrect
+              ? section.feedback
+                ? section.feedback.correct
+                : "Correct!"
+              : section.feedback
+                ? section.feedback.incorrect || "Incorrect!"
+                : "Incorrect!"}
+          </ReactMarkdown>
         </div>
       )}
 

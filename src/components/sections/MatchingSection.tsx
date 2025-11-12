@@ -1,4 +1,6 @@
 import React, { useMemo } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import type { MatchingSectionData, UnitId, LessonId } from "../../types/data";
 import { useSectionProgress } from "../../hooks/useSectionProgress";
 import { useMatchingInteraction } from "../../hooks/useMatchingInteraction";
@@ -127,7 +129,15 @@ const MatchingSection: React.FC<MatchingSectionProps> = ({
 
   return (
     <section id={section.id} className={sectionStyles.section}>
-      <h2 className={sectionStyles.title}>{section.title}</h2>
+      <h2 className={sectionStyles.title}>
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          disallowedElements={["p"]}
+          unwrapDisallowed={true}
+        >
+          {section.title}
+        </ReactMarkdown>
+      </h2>
       <div className={styles.content}>
         <ContentRenderer content={section.content} />
       </div>
@@ -142,7 +152,15 @@ const MatchingSection: React.FC<MatchingSectionProps> = ({
 
             return (
               <div key={promptText} className={styles.matchRow}>
-                <div className={styles.promptItem}>{promptText}</div>
+                <div className={styles.promptItem}>
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    disallowedElements={["p"]}
+                    unwrapDisallowed={true}
+                  >
+                    {promptText}
+                  </ReactMarkdown>
+                </div>
                 <div
                   className={`${styles.dropZone} ${
                     hoveredPromptId === promptText ? styles.dropZoneHover : ""
@@ -193,7 +211,13 @@ const MatchingSection: React.FC<MatchingSectionProps> = ({
                       onTouchMove={handleTouchMove}
                       onTouchEnd={handleTouchEnd}
                     >
-                      {matchedOption.text}
+                      <ReactMarkdown
+                        remarkPlugins={[remarkGfm]}
+                        disallowedElements={["p"]}
+                        unwrapDisallowed={true}
+                      >
+                        {matchedOption.text}
+                      </ReactMarkdown>
                     </div>
                   ) : (
                     <span className={styles.dropZonePlaceholder}>
@@ -222,7 +246,13 @@ const MatchingSection: React.FC<MatchingSectionProps> = ({
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
             >
-              {option.text}
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                disallowedElements={["p"]}
+                unwrapDisallowed={true}
+              >
+                {option.text}
+              </ReactMarkdown>
             </div>
           ))}
         </div>
@@ -238,7 +268,13 @@ const MatchingSection: React.FC<MatchingSectionProps> = ({
       {/* Correct feedback message */}
       {isSectionComplete && (
         <div className={sectionStyles.completionMessage}>
-          {section.feedback ? section.feedback.correct : "Correct!"}
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            disallowedElements={["p"]}
+            unwrapDisallowed={true}
+          >
+            {section.feedback ? section.feedback.correct : "Correct!"}
+          </ReactMarkdown>
         </div>
       )}
     </section>

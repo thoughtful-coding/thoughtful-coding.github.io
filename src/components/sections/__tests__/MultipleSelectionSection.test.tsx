@@ -158,7 +158,7 @@ describe("MultipleSelectionSection", () => {
 
     // ASSERT 1
     expect(screen.getByText(/oops! time penalty active/i)).toBeInTheDocument();
-    expect(screen.getByText("Incorrect!")).toBeInTheDocument();
+    expect(screen.getByText("Not quite.")).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /try again/i })).toBeNull();
 
     // ARRANGE 2: Mock the state after the penalty has expired
