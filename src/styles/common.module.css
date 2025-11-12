@@ -261,7 +261,7 @@
   font-size: 0.9rem;
   line-height: 1.5;
   border: 1px solid var(--border-tertiary);
-  color: var(--text-primary);
+  color: var(--text-code-block);
   overflow-x: auto;
 }
 

@@ -233,9 +233,11 @@ const PRIMMSection: React.FC<PRIMMSectionProps> = ({
                     <span className={primmStyles.infoLabel}>
                       AI Overall Comments:
                     </span>
-                    <p className={primmStyles.aiCommentText}>
-                      {state.aiEvaluationResult.aiOverallComment}
-                    </p>
+                    <div className={primmStyles.aiCommentText}>
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {state.aiEvaluationResult.aiOverallComment}
+                      </ReactMarkdown>
+                    </div>
                   </div>
                 </>
               )}
@@ -246,7 +248,11 @@ const PRIMMSection: React.FC<PRIMMSectionProps> = ({
           )}
 
         {isSectionComplete && (
-          <div className={styles.completionMessage}>{section.conclusion}</div>
+          <div className={styles.completionMessage}>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {section.conclusion}
+            </ReactMarkdown>
+          </div>
         )}
       </div>
     </section>
