@@ -41,7 +41,11 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "If you were to insert the line `students_count = students_count + 16` between the first and second line of the example from the video, what would be printed out?",
+            "The program below recreates the example from the video. If you were to insert the line `students_count = students_count + 16` between the first and second lines, what would be printed out?",
+        },
+        {
+          kind: "code",
+          value: "students_count = 1000\nprint(students_count)\n",
         },
       ],
       options: ["16", "428", "1016", "Error"],

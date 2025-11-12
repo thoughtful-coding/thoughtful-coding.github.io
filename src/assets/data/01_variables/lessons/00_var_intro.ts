@@ -17,13 +17,23 @@ const lessonData: Lesson = {
   sections: [
     {
       kind: "Information",
-      id: "variables-intro",
+      id: "variables-intro" as SectionId,
       title: "Why Variables Matter",
       content: [
         {
           kind: "text",
           value:
-            "So far, you've learned how to work with strings and integers directly in your code. But, what if you want to use the same value multiple times? Or, what if you want to easily change a value that's used in many different locations? That's where **variables** come in. Variables allow you to give a name to a piece of data so you can use it repeatedly in your program.",
+            "So far, you've learned how to work with strings and integers directly in your code. But, what if you want to use the same value multiple times? Or, what if you want to easily change a value that's used in many different locations? For example, consider the simple program below:",
+        },
+        {
+          kind: "code",
+          value:
+            'print("Hi Eric!")\nprint("How\'s your day Eric?")\nprint("Bye Eric")',
+        },
+        {
+          kind: "text",
+          value:
+            "The name `\"Eric\"` is used over and over. If you wanted to greet someone else, then you'd have to change every single line. That's where **variables** come in. Variables allow you to give a name to a piece of data so you can use it repeatedly in your program.",
         },
       ],
     } as InformationSectionData,
@@ -43,7 +53,7 @@ const lessonData: Lesson = {
       example: {
         visualization: "console",
         initialCode:
-          'name = "Eric"\nprint("Hi " + name + "!")\nprint("It\'s nice to meet you!")\nprint("Bye " + name)\n',
+          'name = "Eric"\nprint("Hi " + name + "!")\nprint("How\'s your day " + name + "?")\nprint("Bye " + name)\n',
       },
       conclusion:
         'Variables remember their values! The variable `name` stored `"Eric"` throughout the program and could be used over and over.',
@@ -56,13 +66,13 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Variables are such an important concept that it's worth slowing down what just happened. To do that, we're going to use the debugger to watch the computer execute the program line-by-line. As you step through the program pay particular attention to the following:\n- How the variable `name` is stored in the `Variables` side-panel\n- How the value stored in `name` is used throughout the program\n\nStep carefully through the program and try and form a mental image of the variable `name` holding or storing a value that can used whenever the variable is called.",
+            "Variables are such an important concept that it's worth slowing down what just happened with the debugger. As you step line-by-line through the program pay particular attention to the following:\n- How the variable `name` shows up in the `Variables` side-panel\n- How the value stored in `name` is used throughout the program\n\nStep carefully through the program and try and form a mental image of the variable `name` holding or storing a value that can used whenever the variable is called.",
         },
       ],
       example: {
         visualization: "console",
         initialCode:
-          'name = "Eric"\nprint("Hi " + name + "!")\nprint("It\'s nice to meet you!")\nprint("Bye " + name)\n',
+          'name = "Eric"\nprint("Hi " + name + "!")\nprint("How\'s your day " + name + "?")\nprint("Bye " + name)\n',
       },
     } as DebuggerSectionData,
     {
@@ -77,8 +87,8 @@ const lessonData: Lesson = {
         },
       ],
       options: [
-        'The variable\'s name is `"Eric"`',
-        "The variable's name is `name`",
+        'The variable is named `"Eric"`',
+        "The variable is named `name`",
         'The variable\'s value is `"Eric"`',
         "The variable's value is `name`",
         "The `=` sign stores the value in the variable",
