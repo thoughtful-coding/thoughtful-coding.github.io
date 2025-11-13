@@ -7,6 +7,7 @@ import type {
   PRIMMSectionData,
   DebuggerSectionData,
   MultipleChoiceSectionData,
+  MatchingSectionData,
 } from "../../../../types/data";
 
 const lessonData: Lesson = {
@@ -33,7 +34,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "The name `\"Eric\"` is used over and over. If you wanted to greet someone else, then you'd have to change every single line. That's where **variables** come in. Variables allow you to give a name to a piece of data so you can use it repeatedly in your program.",
+            "The name `\"Eric\"` is used over and over. If you wanted to change your program to greet someone else, however, then you'd have to change every single line. That's where **variables** come in. Variables allow you to give a name to a piece of data so you can use it repeatedly throughout your program.",
         },
       ],
     } as InformationSectionData,
@@ -45,7 +46,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            'You can create a variable in Python with just a single line of code. For example, `name = Eric` creates a variable named `name` and then stores the string `"Eric"` in it. You can then reference the variable `name` later in the program and it will give you the value `"Eric"`.\n\nBased on this brief explanation, predict what the code below will output, then run it to check your prediction.',
+            'You can create a variable in Python with just a single line of code. For example, `name = \"Eric\"` creates a variable named `name` and then stores the string `"Eric"` in it. You can then reference the variable `name` later in the program and it will give you back the value `"Eric"`.\n\nBased on this brief explanation, predict what the code below will output, then run it to check your prediction.',
         },
       ],
       predictPrompt:
@@ -121,65 +122,61 @@ const lessonData: Lesson = {
         "Variables remember their values! The variable `age` stayed 15 throughout the program, even after being used in the calculation `age + 5`",
     } as PRIMMSectionData,
     {
-      kind: "Debugger",
-      id: "variable-debugging" as SectionId,
-      title: "Watching Variables Change",
+      kind: "Matching",
+      id: "set-vs-read-matching" as SectionId,
+      title: "Setting and Reading Variables in Code",
       content: [
         {
           kind: "text",
           value:
-            "One of the most powerful features of variables is that you can update the value they're storing. When you assign a new value to an existing variable, it simply overwrites the old value.\n\nUse the debugging tool to step line-by-line through the code and observe how the value of the `score` variable **changes**. Pay particular attention to the following:\n- When `score` is created, it shows up in the `Variables` side-panel with its given, initial value\n- When the value of `score` is updated, the variable is highlighted in the `Variables` side-panel with its new value\n- Whenever a `print()` statement is run, the output is shown in the `Program Output` side-panel",
+            "There are two key operations for variables: **set** and **read**.\n\n- **Set:** `age = 15` \n   - This *sets* the value of `age` to be `15`\n- **Read:** `print(age)` and `print(age + 5)`\n    - These *reads* the value `10` from `points` and uses it in calculations.\n\nThese two operations - set and read - are the two core things you can do with variables. To tie it back to the debugger, you can only store values into the `Variables` slots and then get the values out of those slots.\n\nBased on this explanation, match the following lines of code with their outcome.",
         },
       ],
-      example: {
-        visualization: "console",
-        initialCode:
-          "score = 10\nprint(score)\nscore = 20\nprint(score)\nscore = score + 5\nprint(score)",
+      prompts: [
+        { "`x = 10`": "Sets the value of `x` to be ten" },
+        { "`print(x)`": "Reads the value of `x` and prints the result" },
+        {
+          "`10 = x`":
+            "SyntaxError since you can't set something that isn't a variable",
+        },
+        { "`x = 55`": "Sets the value of `x` to fifty-five" },
+        {
+          "`print(x + 10)`":
+            "Reads the value of `x`, adds ten, and prints the result",
+        },
+      ],
+      feedback: {
+        correct: "Correct! You know it's a set if there's a `=` sign.",
       },
-    } as DebuggerSectionData,
+    } as MatchingSectionData,
     {
       kind: "MultipleChoice",
-      id: "variable-reassignment",
+      id: "variable-reading",
       title: "Variable Values",
       content: [
         {
           kind: "text",
           value:
-            "Based on what you observed in the previous section, what will be the final value of `points` after running this code?",
+            "This quiz tests your understanding of **set** versus **read**.\n\nThe first line, `points = 10`, **sets** the value of `points`. The next three `print` lines all **read** the value of `points`\n\nWhat will the three lines print?",
         },
         {
           kind: "code",
-          value: "points = 100\npoints = 50\npoints = points + 25",
+          value:
+            "points = 10\nprint(points - 2)\nprint(points)\nprint(points * 4)",
         },
       ],
-      options: ["100", "50", "75", "175"],
-      correctAnswer: 2,
+      options: [
+        "First `-2`, then `10`, then `14`",
+        "First `2`, then `2`, then `4`",
+        "First `10`, then `5`, then `4`",
+        "First `8`, then `10`, then `40`",
+      ],
+      correctAnswer: 3,
       feedback: {
         correct:
-          "Correct! The variable starts at 100, gets sets to 50, then gets updated to 50 + 25 = 75.",
+          "Correct! The variable `points` is set to `10` on the first line. Then that value is read and used over and over.",
       },
     } as MultipleChoiceSectionData,
-    {
-      kind: "PRIMM",
-      id: "string-variables-primm" as SectionId,
-      title: "Changing String Variables",
-      content: [
-        {
-          kind: "text",
-          value:
-            "Just like with integers, you can update (e.g., change, overwrite, reassign) the value that a variable is holding. And, just like with integers, you can use the old value when calculating what new value to store in the variable.\n\nPredict what the program below will output, then run it to check your prediction.",
-        },
-      ],
-      example: {
-        visualization: "console",
-        initialCode:
-          'greeting = "Hello"\nprint(greeting)\ngreeting = "Goodbye"\nprint(greeting)\ngreeting = greeting + "!"\nprint(greeting)\n',
-      },
-      predictPrompt:
-        'The variable `greeting` is initially set to "Hello" but gets updated twice. What do you think each print statement will output?',
-      conclusion:
-        "Just like with integers, you can reassign string variables and even use the variables in their own (re)assignment!",
-    } as PRIMMSectionData,
     {
       kind: "Information",
       id: "variables-conclusion",
@@ -188,7 +185,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Congratulations on learning about variables! You now understand how to store data, update it, and reuse it throughout your programs. Variables are the foundation for creating programs that can respond to complex problems.\n\nIn the next lesson you'll learn how to use multiple variables in a single program.",
+            "Congratulations on learning about variables! You now understand how to set variables to be a particular value and then read/use the variable throughout your program. Variables are the foundation for creating programs that can respond to complex problems.\n\nIn the next lesson you'll learn how to combine the store and read operations to _update_ variables as the program progresses.",
         },
       ],
     } as InformationSectionData,

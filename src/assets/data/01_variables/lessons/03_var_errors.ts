@@ -133,18 +133,17 @@ const lessonData: Lesson = {
     } as TestingSectionData,
     {
       kind: "Reflection",
-      id: "variables-reflection" as SectionId,
-      title: "Variables Reflection",
+      id: "variables-errors-reflection" as SectionId,
+      title: "Variable Errors Reflection",
       content: [
         {
           kind: "text",
-          value:
-            'Variables are fundamental to programming because they allow programs to store, update, and reuse data. Without variables, every bit of data would have to be written directly into the code, making programs inflexible and hard to maintain.\n\nNow it\'s time to reflect in order to formalize your knowledge. Create a simple 3-4 line code example that demonstrates how variables can make a program more useful, and write 3-4 sentences explaining how your program works. Remember to use the phrase "as seen in the example above".',
+          value: "blah blah blah",
         },
       ],
-      topic: "Why Variables Matter",
+      topic: "Blah blah",
       isTopicPredefined: true,
-      code: "Create an example showing why variables are useful",
+      code: "Create an example showing blah blah",
       isCodePredefined: false,
       explanation: "Explain how the code in example works (3-4 sentences)",
       isExplanationPredefined: false,
@@ -157,7 +156,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Congratulations on learning about variables! You now understand how to store data, update it, and reuse it throughout your programs. Variables are the foundation for creating programs that can respond to complex problems.\n\nYou should feel proud. Over the previous three lessons, you've learned some of the most important concepts in programming. They will come up over and over again. In the next lesson, we'll pause and test ourselves on everything we've learned so far.",
+            "Congratulations on learning about variables! You now understand how to set variables, reuse variables, and even update a variable's value throughout your programs. Variables are the foundation for creating programs that can respond to complex problems.\n\nYou should feel proud. Over the previous three lessons, you've learned some of the most important concepts in programming. They will come up over and over again. In the next lesson, we'll pause and test ourselves on everything we've learned so far.",
         },
       ],
     } as InformationSectionData,

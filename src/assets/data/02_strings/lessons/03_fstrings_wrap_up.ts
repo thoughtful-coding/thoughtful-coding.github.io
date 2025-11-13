@@ -46,6 +46,18 @@ const lessonData: Lesson = {
       },
     } as MultipleChoiceSectionData,
     {
+      kind: "Information",
+      id: "wrap-up-intro",
+      title: "Bringing It All Together",
+      content: [
+        {
+          kind: "text",
+          value:
+            "TODO: https://drive.google.com/drive/folders/15AdutAgRgxRVO6XqqS_0-Z_KIAS1CTzW : Hello World program",
+        },
+      ],
+    } as InformationSectionData,
+    {
       kind: "MultipleSelection",
       id: "valid-strings",
       title: "Valid String Syntax",

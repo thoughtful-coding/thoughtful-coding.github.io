@@ -8,9 +8,10 @@ const unitManifest: UnitManifest = {
     "Learn how to store data and reuse it to make you programs more versatile.",
   lessons: [
     "lessons/00_var_intro",
-    "lessons/01_var_multi",
-    "lessons/02_var_errors",
-    "lessons/03_var_wrap_up",
+    "lessons/01_var_reset",
+    "lessons/02_var_multi",
+    "lessons/03_var_errors",
+    "lessons/04_var_wrap_up",
   ],
 };
 
