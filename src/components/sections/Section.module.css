@@ -39,6 +39,12 @@
   scroll-margin-top: 80px;
 }
 
+.title code {
+  padding: 0.2em 0.4em;
+  background-color: var(--bg-code);
+  border-radius: 3px;
+}
+
 .content {
   margin-bottom: 1.5rem;
   line-height: 1.6; /* Good readability */
@@ -84,10 +90,10 @@
 .content li code,
 .content td code,
 .content th code {
-  /* Inline code snippets only (not in CodeMirror editor or pre blocks) */
-  /* background-color: #f0f0f0; */
+  /* Inline code snippets only (not in code blocks) */
   padding: 0.2em 0.4em;
-  border-radius: var(--radius-sm);
+  background-color: var(--bg-code);
+  border-radius: 3px;
 }
 
 .content pre {
@@ -410,6 +416,12 @@
   /* width: calc(100% - 30px); Allow label to wrap naturally */
 }
 
+.quizOption code {
+  padding: 0.2em 0.4em;
+  background-color: var(--bg-code);
+  border-radius: 3px;
+}
+
 /* Styles when submitted */
 .quizFormSubmitted .quizOption {
   cursor: default;
@@ -487,10 +499,22 @@
   font-weight: 500;
 }
 
+.correctFeedback code {
+  padding: 0.2em 0.4em;
+  background-color: var(--bg-code);
+  border-radius: 3px;
+}
+
 .incorrectFeedback {
   composes: errorMessage from "../../styles/common.module.css";
   text-align: center;
   font-weight: 500;
+}
+
+.incorrectFeedback code {
+  padding: 0.2em 0.4em;
+  background-color: var(--bg-code);
+  border-radius: 3px;
 }
 
 /* --- New Styles for Prediction Sections --- */
@@ -608,6 +632,12 @@
   composes: successMessage from "../../styles/common.module.css";
   text-align: center;
   font-weight: 500;
+}
+
+.completionMessage code {
+  padding: 0.2em 0.4em;
+  background-color: var(--bg-code);
+  border-radius: 3px;
 }
 
 /* --- New/Refined Styles for Coverage Section --- */

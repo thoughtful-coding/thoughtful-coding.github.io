@@ -1,3 +1,9 @@
+.content code {
+  padding: 0.2em 0.4em;
+  background-color: var(--bg-code);
+  border-radius: 3px;
+}
+
 .matchingContainer {
   composes: containerPrimary from "../../styles/common.module.css";
   display: flex;
@@ -29,6 +35,12 @@
   font-size: 0.9em;
   text-align: right;
   font-weight: 400;
+}
+
+.promptItem code {
+  padding: 0.2em 0.4em;
+  background-color: var(--bg-code);
+  border-radius: 3px;
 }
 
 .dropZone {
@@ -94,6 +106,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.draggableOption code,
+.matchedOption code {
+  padding: 0.2em 0.4em;
+  background-color: var(--bg-code);
+  border-radius: 3px;
 }
 
 .draggableOption:hover {
