@@ -157,12 +157,20 @@ export interface ListOfInstructorStudentsResponse {
   // lastEvaluatedKey?: Record<string, any> | null; // For future pagination if the list becomes very long
 }
 
+/**
+ * Details about a section completion, including timestamp and attempt count
+ */
+export interface SectionCompletionDetail {
+  completedAt: IsoTimestamp;
+  attemptsBeforeSuccess: number;
+}
+
 export interface StudentUnitCompletionData {
   studentId: UserId;
   // studentName?: string | null; // Optional: server could still provide this if easily available
   completedSectionsInUnit: {
     // Key is full lessonId (e.g., "00_intro/lesson_1")
-    [lessonId: LessonId]: { [sectionId: SectionId]: IsoTimestamp };
+    [lessonId: LessonId]: { [sectionId: SectionId]: SectionCompletionDetail };
   };
 }
 

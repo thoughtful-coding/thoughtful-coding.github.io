@@ -50,11 +50,13 @@ export const useAuthStore = create<AuthState>()(
           ...initialAuthState,
           actions: {
             login: async (googleIdToken: string) => {
-              // Step 1: Extract any anonymous progress and drafts before logging in
+              // Step 1: Extract any anonymous progress, drafts, and attempt counters before logging in
               const progressOps = getProgressSyncOperations();
               const anonymousCompletions =
                 progressOps.extractAnonymousCompletions();
               const anonymousDrafts = progressOps.extractAnonymousDrafts();
+              const anonymousAttemptCounters =
+                progressOps.extractAnonymousAttemptCounters();
 
               // Step 2: Log in and get application tokens
               const { accessToken, refreshToken } =
@@ -78,7 +80,7 @@ export const useAuthStore = create<AuthState>()(
                 sessionHasExpired: false,
               });
 
-              // Step 4: Sync progress and drafts with server/local storage
+              // Step 4: Sync progress, drafts, and attempt counters with server/local storage
               try {
                 // Sync completions with server
                 await progressOps.syncProgressAfterLogin(anonymousCompletions);
@@ -86,10 +88,16 @@ export const useAuthStore = create<AuthState>()(
                 // Merge drafts locally (drafts don't sync to server)
                 progressOps.mergeDraftsAfterLogin(anonymousDrafts);
 
+                // Merge attempt counters locally (counters don't sync to server, only used for next completion)
+                progressOps.mergeAttemptCountersAfterLogin(
+                  anonymousAttemptCounters
+                );
+
                 // Clear anonymous data after successful migration
                 const hasAnonymousData =
                   anonymousCompletions.length > 0 ||
-                  Object.keys(anonymousDrafts).length > 0;
+                  Object.keys(anonymousDrafts).length > 0 ||
+                  Object.keys(anonymousAttemptCounters).length > 0;
 
                 if (hasAnonymousData) {
                   clearAllAnonymousData();

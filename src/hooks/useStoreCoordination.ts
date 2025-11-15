@@ -63,6 +63,8 @@ export interface ProgressSyncOperations {
   ) => Promise<any>;
   extractAnonymousDrafts: () => any;
   mergeDraftsAfterLogin: (anonymousDrafts: any) => void;
+  extractAnonymousAttemptCounters: () => any;
+  mergeAttemptCountersAfterLogin: (anonymousCounters: any) => void;
 }
 
 /**
@@ -79,5 +81,9 @@ export function getProgressSyncOperations(): ProgressSyncOperations {
     syncProgressAfterLogin: progressStore.actions.syncProgressAfterLogin,
     extractAnonymousDrafts: progressStore.actions.extractAnonymousDrafts,
     mergeDraftsAfterLogin: progressStore.actions.mergeDraftsAfterLogin,
+    extractAnonymousAttemptCounters:
+      progressStore.actions.extractAnonymousAttemptCounters,
+    mergeAttemptCountersAfterLogin:
+      progressStore.actions.mergeAttemptCountersAfterLogin,
   };
 }

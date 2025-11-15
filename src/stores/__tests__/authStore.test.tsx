@@ -51,8 +51,10 @@ describe("authStore", () => {
   // Mock functions for the progress sync operations
   const extractAnonymousCompletionsMock = vi.fn();
   const extractAnonymousDraftsMock = vi.fn();
+  const extractAnonymousAttemptCountersMock = vi.fn();
   const syncProgressAfterLoginMock = vi.fn();
   const mergeDraftsAfterLoginMock = vi.fn();
+  const mergeAttemptCountersAfterLoginMock = vi.fn();
   const setServerProgressMock = vi.fn();
   const resetAllProgressMock = vi.fn();
 
@@ -75,8 +77,10 @@ describe("authStore", () => {
     vi.mocked(storeCoordination.getProgressSyncOperations).mockReturnValue({
       extractAnonymousCompletions: extractAnonymousCompletionsMock,
       extractAnonymousDrafts: extractAnonymousDraftsMock,
+      extractAnonymousAttemptCounters: extractAnonymousAttemptCountersMock,
       syncProgressAfterLogin: syncProgressAfterLoginMock,
       mergeDraftsAfterLogin: mergeDraftsAfterLoginMock,
+      mergeAttemptCountersAfterLogin: mergeAttemptCountersAfterLoginMock,
       setServerProgress: setServerProgressMock,
       resetAllProgress: resetAllProgressMock,
     });
@@ -91,6 +95,7 @@ describe("authStore", () => {
     vi.mocked(apiService.loginWithGoogle).mockResolvedValue(mockTokens);
     extractAnonymousCompletionsMock.mockReturnValue([]);
     extractAnonymousDraftsMock.mockReturnValue({});
+    extractAnonymousAttemptCountersMock.mockReturnValue({});
     syncProgressAfterLoginMock.mockResolvedValue({ completion: {} });
 
     // ACT: Call the login action
@@ -105,8 +110,10 @@ describe("authStore", () => {
     expect(state.accessToken).toBe(mockAccessToken);
     expect(extractAnonymousCompletionsMock).toHaveBeenCalledTimes(1);
     expect(extractAnonymousDraftsMock).toHaveBeenCalledTimes(1);
+    expect(extractAnonymousAttemptCountersMock).toHaveBeenCalledTimes(1);
     expect(syncProgressAfterLoginMock).toHaveBeenCalledWith([]);
     expect(mergeDraftsAfterLoginMock).toHaveBeenCalledWith({});
+    expect(mergeAttemptCountersAfterLoginMock).toHaveBeenCalledWith({});
     expect(state.isSyncingProgress).toBe(false); // Should be false at the end
   });
 
@@ -122,11 +129,21 @@ describe("authStore", () => {
         },
       },
     };
+    const anonymousAttemptCounters = {
+      "unit-1": {
+        "lesson-1": {
+          "sec-2": 3, // 3 wrong attempts on sec-2
+        },
+      },
+    };
 
     // Mock the API and progress operations
     vi.mocked(apiService.loginWithGoogle).mockResolvedValue(mockTokens);
     extractAnonymousCompletionsMock.mockReturnValue(anonymousCompletions);
     extractAnonymousDraftsMock.mockReturnValue(anonymousDrafts);
+    extractAnonymousAttemptCountersMock.mockReturnValue(
+      anonymousAttemptCounters
+    );
     syncProgressAfterLoginMock.mockResolvedValue({
       completion: {
         "unit-1": { "lesson-1": { "sec-1": "timestamp" } },
@@ -139,13 +156,17 @@ describe("authStore", () => {
     });
 
     // ASSERT
-    // Check that extraction and sync were called with the completions and drafts
+    // Check that extraction and sync were called with the completions, drafts, and attempt counters
     expect(extractAnonymousCompletionsMock).toHaveBeenCalledTimes(1);
     expect(extractAnonymousDraftsMock).toHaveBeenCalledTimes(1);
+    expect(extractAnonymousAttemptCountersMock).toHaveBeenCalledTimes(1);
     expect(syncProgressAfterLoginMock).toHaveBeenCalledWith(
       anonymousCompletions
     );
     expect(mergeDraftsAfterLoginMock).toHaveBeenCalledWith(anonymousDrafts);
+    expect(mergeAttemptCountersAfterLoginMock).toHaveBeenCalledWith(
+      anonymousAttemptCounters
+    );
 
     // Check that anonymous data was cleared
     expect(localStorageUtils.clearAllAnonymousData).toHaveBeenCalledTimes(1);
