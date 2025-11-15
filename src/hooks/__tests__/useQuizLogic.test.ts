@@ -49,6 +49,7 @@ const mockMsqSection: MultipleSelectionSectionData = {
 describe("useQuizLogic", () => {
   const setPersistedQuizStateMock = vi.fn();
   const startPenaltyMock = vi.fn();
+  const incrementAttemptCounterMock = vi.fn();
   let mockCurrentState: any;
 
   beforeEach(() => {
@@ -57,6 +58,7 @@ describe("useQuizLogic", () => {
     // Default mock for progress store hooks
     mockedUseProgressActions.mockReturnValue({
       startPenalty: startPenaltyMock,
+      incrementAttemptCounter: incrementAttemptCounterMock,
     });
     mockedUseIsPenaltyActive.mockReturnValue(false);
     mockedUseRemainingPenaltyTime.mockReturnValue(0);

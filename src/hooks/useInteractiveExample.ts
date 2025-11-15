@@ -63,7 +63,7 @@ export const useInteractiveExample = ({
 
       // On any execution (success or error), mark the section as complete
       if (autoComplete) {
-        completeSection(unitId, lessonId, sectionId);
+        completeSection(unitId, lessonId, sectionId, 1);
       }
 
       // Return formatted result

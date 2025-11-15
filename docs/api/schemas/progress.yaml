@@ -6,6 +6,7 @@ SectionCompletionInput: # For PUT /progress request by student
     - unitId
     - lessonId
     - sectionId
+    - attemptsBeforeSuccess
   properties:
     unitId:
       $ref: "./common.yaml#/UnitId"
@@ -13,6 +14,10 @@ SectionCompletionInput: # For PUT /progress request by student
       $ref: "./common.yaml#/LessonId" # This is the Lesson GUID
     sectionId:
       $ref: "./common.yaml#/SectionId"
+    attemptsBeforeSuccess:
+      type: integer
+      minimum: 1
+      description: "Number of attempts (including the successful attempt) before completing the section. Minimum value is 1."
 
 BatchCompletionsInput: # Request body for PUT /progress
   type: object

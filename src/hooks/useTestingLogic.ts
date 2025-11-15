@@ -39,7 +39,7 @@ export const useTestingLogic = ({
     isLoading: isPyodideLoading,
     error: pyodideError,
   } = usePyodide();
-  const { completeSection } = useProgressActions();
+  const { completeSection, incrementAttemptCounter } = useProgressActions();
 
   const [isRunningTests, setIsRunningTests] = useState(false);
   const [testResults, setTestResults] = useState<TestResult[] | null>(null);
@@ -398,8 +398,13 @@ print(json.dumps(result))
         const allPassed = results.every((res) => res.passed);
         if (allPassed) {
           completeSection(unitId, lessonId, sectionId);
+        } else {
+          // Increment attempt counter on test failure
+          incrementAttemptCounter(unitId, lessonId, sectionId);
         }
       } catch (e) {
+        // Increment attempt counter on error (code failed to execute)
+        incrementAttemptCounter(unitId, lessonId, sectionId);
         const errorMessage =
           e instanceof Error ? e.message : "An unknown error occurred.";
         console.error("Testing execution error:", errorMessage);
@@ -414,6 +419,7 @@ print(json.dumps(result))
       testCases,
       runPythonCode,
       completeSection,
+      incrementAttemptCounter,
       unitId,
       lessonId,
       sectionId,

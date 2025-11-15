@@ -93,7 +93,8 @@ describe("useInteractiveExample", () => {
     expect(mockCompleteSection).toHaveBeenCalledWith(
       defaultProps.unitId,
       defaultProps.lessonId,
-      defaultProps.sectionId
+      defaultProps.sectionId,
+      1
     );
   });
 
@@ -166,7 +167,8 @@ describe("useInteractiveExample", () => {
     expect(mockCompleteSection).toHaveBeenCalledWith(
       defaultProps.unitId,
       defaultProps.lessonId,
-      defaultProps.sectionId
+      defaultProps.sectionId,
+      1
     );
   });
 
@@ -394,7 +396,8 @@ describe("useInteractiveExample", () => {
     expect(mockCompleteSection).toHaveBeenCalledWith(
       "unit-99",
       "lesson-99",
-      "section-99"
+      "section-99",
+      1
     );
   });
 });

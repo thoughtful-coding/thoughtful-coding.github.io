@@ -213,7 +213,8 @@ describe("ReflectionSection", () => {
       expect(completeSectionMock).toHaveBeenCalledWith(
         "unit-1",
         "lesson-1",
-        "reflect-1"
+        "reflect-1",
+        1
       );
     });
   });

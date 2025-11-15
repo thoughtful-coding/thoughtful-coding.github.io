@@ -52,6 +52,13 @@ interface ProgressStateData {
       };
     };
   };
+  attemptCounters: {
+    [unitId: UnitId]: {
+      [lessonId: LessonId]: {
+        [sectionId: SectionId]: number; // Counter for wrong attempts
+      };
+    };
+  };
   penaltyEndTime: number | null;
   offlineActionQueue: SectionCompletionInput[]; // Now uses the extended SectionCompletionInput
   isSyncing: boolean;
@@ -62,7 +69,8 @@ interface ProgressActions {
   completeSection: (
     unitId: UnitId,
     lessonId: LessonId,
-    sectionId: SectionId
+    sectionId: SectionId,
+    attemptsBeforeSuccess?: number
   ) => Promise<void>;
   isSectionComplete: (
     unitId: UnitId,
@@ -87,6 +95,26 @@ interface ProgressActions {
     anonymousCompletions: SectionCompletionInput[]
   ) => Promise<UserProgressData>;
   _addToOfflineQueue: (action: SectionCompletionInput) => void;
+  // Attempt counter management
+  incrementAttemptCounter: (
+    unitId: UnitId,
+    lessonId: LessonId,
+    sectionId: SectionId
+  ) => void;
+  getAttemptCounter: (
+    unitId: UnitId,
+    lessonId: LessonId,
+    sectionId: SectionId
+  ) => number;
+  resetAttemptCounter: (
+    unitId: UnitId,
+    lessonId: LessonId,
+    sectionId: SectionId
+  ) => void;
+  extractAnonymousAttemptCounters: () => ProgressStateData["attemptCounters"];
+  mergeAttemptCountersAfterLogin: (
+    anonymousCounters: ProgressStateData["attemptCounters"]
+  ) => void;
   // Draft management (local-only persistence)
   saveDraft: (
     unitId: UnitId,
@@ -110,6 +138,7 @@ interface ProgressState extends ProgressStateData {
 const initialProgressData: ProgressStateData = {
   completion: {},
   drafts: {},
+  attemptCounters: {},
   penaltyEndTime: null,
   offlineActionQueue: [],
   isSyncing: false,
@@ -123,9 +152,9 @@ const createUserSpecificStorage = (baseKey: string): StateStorage => {
     return `${userId}_${baseKey}`;
   };
   return {
-    getItem: (name) => localStorage.getItem(getEffectiveKey()),
-    setItem: (name, value) => localStorage.setItem(getEffectiveKey(), value),
-    removeItem: (name) => localStorage.removeItem(getEffectiveKey()),
+    getItem: (_name) => localStorage.getItem(getEffectiveKey()),
+    setItem: (_name, value) => localStorage.setItem(getEffectiveKey(), value),
+    removeItem: (_name) => localStorage.removeItem(getEffectiveKey()),
   };
 };
 
@@ -142,7 +171,44 @@ export const useProgressStore = create<ProgressState>()(
                 lastSyncError: null,
               }));
             },
-            completeSection: async (unitId, lessonId, sectionId) => {
+            incrementAttemptCounter: (unitId, lessonId, sectionId) => {
+              set((state) => {
+                // With Immer, we mutate the draft directly
+                if (!state.attemptCounters[unitId])
+                  state.attemptCounters[unitId] = {};
+                if (!state.attemptCounters[unitId][lessonId])
+                  state.attemptCounters[unitId][lessonId] = {};
+                state.attemptCounters[unitId][lessonId][sectionId] =
+                  (state.attemptCounters[unitId][lessonId][sectionId] || 0) + 1;
+                // Don't return anything - Immer tracks the mutations
+              });
+            },
+            getAttemptCounter: (unitId, lessonId, sectionId) => {
+              const state = get();
+              return (
+                state.attemptCounters[unitId]?.[lessonId]?.[sectionId] || 0
+              );
+            },
+            resetAttemptCounter: (unitId, lessonId, sectionId) => {
+              set((state) => {
+                // With Immer, we mutate the draft directly
+                if (state.attemptCounters[unitId]?.[lessonId]) {
+                  delete state.attemptCounters[unitId][lessonId][sectionId];
+                  // Clean up empty nested objects
+                  if (
+                    Object.keys(state.attemptCounters[unitId][lessonId])
+                      .length === 0
+                  ) {
+                    delete state.attemptCounters[unitId][lessonId];
+                  }
+                  if (Object.keys(state.attemptCounters[unitId]).length === 0) {
+                    delete state.attemptCounters[unitId];
+                  }
+                }
+                // Don't return anything - Immer tracks the mutations
+              });
+            },
+            completeSection: async (unitId, lessonId, sectionId, attemptsBeforeSuccess) => {
               const currentUnitCompletions = get().completion[unitId] || {};
               const currentLessonCompletions =
                 currentUnitCompletions[lessonId] || {};
@@ -153,6 +219,13 @@ export const useProgressStore = create<ProgressState>()(
                 );
                 return;
               }
+
+              // Calculate attemptsBeforeSuccess if not provided
+              // If provided, use it; otherwise get from counter and add 1 for current successful attempt
+              const finalAttempts =
+                attemptsBeforeSuccess !== undefined
+                  ? attemptsBeforeSuccess
+                  : get().actions.getAttemptCounter(unitId, lessonId, sectionId) + 1;
 
               const optimisticTimestamp =
                 new Date().toISOString() as IsoTimestamp;
@@ -179,7 +252,7 @@ export const useProgressStore = create<ProgressState>()(
                 };
               });
               console.log(
-                `[ProgressStore] Optimistically completed ${unitId}/${lessonId}/${sectionId} locally.`
+                `[ProgressStore] Optimistically completed ${unitId}/${lessonId}/${sectionId} locally with ${finalAttempts} attempts.`
               );
 
               const authState = storeCoordinator.getCurrentAuthState();
@@ -190,13 +263,12 @@ export const useProgressStore = create<ProgressState>()(
                 return;
               }
 
-              // Ensure actionToSync includes unitId if your API and SectionCompletionInput type expect it
+              // Ensure actionToSync includes unitId and attemptsBeforeSuccess
               const actionToSync: SectionCompletionInput = {
-                unitId, // Included unitId
+                unitId,
                 lessonId,
                 sectionId,
-                // If your server's SectionCompletionInput doesn't expect unitId (derives it from lessonId),
-                // then create a separate type for the API payload. For now, assume it's useful.
+                attemptsBeforeSuccess: finalAttempts,
               };
 
               if (navigator.onLine) {
@@ -216,6 +288,8 @@ export const useProgressStore = create<ProgressState>()(
                     `[ProgressStore] Synced: ${unitId}/${lessonId}/${sectionId}.`
                   );
                   get().actions.setServerProgress(serverResponseState);
+                  // Reset attempt counter after successful sync
+                  get().actions.resetAttemptCounter(unitId, lessonId, sectionId);
                 } catch (error) {
                   console.error(
                     `[ProgressStore] Sync failed for ${unitId}/${lessonId}/${sectionId}:`,
@@ -334,6 +408,23 @@ export const useProgressStore = create<ProgressState>()(
                 console.log("[ProgressStore] Synced offline queue to server.");
                 get().actions.setServerProgress(serverResponseState); // This will also filter the queue
 
+                // Reset attempt counters for successfully synced sections
+                queueSnapshot.forEach((syncedItem) => {
+                  // Check if this item is confirmed on server
+                  const serverUnit = serverResponseState.completion[syncedItem.unitId];
+                  if (serverUnit) {
+                    const serverLesson = serverUnit[syncedItem.lessonId];
+                    if (serverLesson && syncedItem.sectionId in serverLesson) {
+                      // Section is confirmed on server, reset its counter
+                      get().actions.resetAttemptCounter(
+                        syncedItem.unitId,
+                        syncedItem.lessonId,
+                        syncedItem.sectionId
+                      );
+                    }
+                  }
+                });
+
                 // Redundant filter after setServerProgress, but ensures only truly unsynced remain
                 // setServerProgress should ideally handle this fully.
                 // For safety, or if setServerProgress's queue filter is different:
@@ -397,7 +488,12 @@ export const useProgressStore = create<ProgressState>()(
                 };
               }),
             resetAllProgress: () => {
-              set({ ...initialProgressData, completion: {}, drafts: {} }); // Reset completion and drafts
+              set({
+                ...initialProgressData,
+                completion: {},
+                drafts: {},
+                attemptCounters: {},
+              }); // Reset completion, drafts, and attempt counters
               console.warn("[ProgressStore] Local reset for all progress.");
             },
             startPenalty: () =>
@@ -419,16 +515,26 @@ export const useProgressStore = create<ProgressState>()(
                     JSON.parse(anonymousProgressRaw);
                   const completionData =
                     anonymousProgressData?.state?.completion;
+                  const attemptCountersData =
+                    anonymousProgressData?.state?.attemptCounters || {};
+
                   if (completionData) {
                     for (const unitId in completionData) {
                       for (const lessonId in completionData[unitId]) {
                         for (const sectionId in completionData[unitId][
                           lessonId
                         ]) {
+                          // Get attempt count from counters if available, default to 1
+                          const attemptCount =
+                            attemptCountersData[unitId]?.[lessonId]?.[
+                              sectionId
+                            ] || 1;
+
                           anonymousCompletions.push({
                             unitId: unitId as UnitId,
                             lessonId: lessonId as LessonId,
                             sectionId: sectionId as SectionId,
+                            attemptsBeforeSuccess: attemptCount,
                           });
                         }
                       }
@@ -553,6 +659,68 @@ export const useProgressStore = create<ProgressState>()(
                 console.log("[ProgressStore] Drafts merged after login.");
               });
             },
+            extractAnonymousAttemptCounters: () => {
+              // Read anonymous attempt counters from localStorage
+              const anonymousProgressKey = `${ANONYMOUS_USER_ID_PLACEHOLDER}_${BASE_PROGRESS_STORE_KEY}`;
+              const anonymousProgressRaw =
+                localStorage.getItem(anonymousProgressKey);
+
+              if (anonymousProgressRaw) {
+                try {
+                  const anonymousProgressData =
+                    JSON.parse(anonymousProgressRaw);
+                  const counters =
+                    anonymousProgressData?.state?.attemptCounters || {};
+                  console.log(
+                    `[ProgressStore] Extracted anonymous attempt counters for ${Object.keys(counters).length} units.`
+                  );
+                  return counters;
+                } catch (e) {
+                  console.error(
+                    "[ProgressStore] Failed to parse anonymous attempt counters",
+                    e
+                  );
+                }
+              }
+
+              return {};
+            },
+            mergeAttemptCountersAfterLogin: (anonymousCounters) => {
+              // Merge anonymous attempt counters with current authenticated counters
+              // Strategy: Keep anonymous counters (they are in-progress attempts)
+              set((state) => {
+                // With immer, we can mutate the state directly
+                for (const unitId in anonymousCounters) {
+                  if (!state.attemptCounters[unitId])
+                    state.attemptCounters[unitId] = {};
+
+                  for (const lessonId in anonymousCounters[unitId]) {
+                    if (!state.attemptCounters[unitId][lessonId])
+                      state.attemptCounters[unitId][lessonId] = {};
+
+                    for (const sectionId in anonymousCounters[unitId][
+                      lessonId
+                    ]) {
+                      const anonymousCounter =
+                        anonymousCounters[unitId][lessonId][sectionId];
+                      const authenticatedCounter =
+                        state.attemptCounters[unitId][lessonId][sectionId];
+
+                      // Use whichever counter is higher (more attempts)
+                      state.attemptCounters[unitId][lessonId][sectionId] =
+                        Math.max(anonymousCounter || 0, authenticatedCounter || 0);
+                      console.log(
+                        `[ProgressStore] Merged attempt counter for ${unitId}/${lessonId}/${sectionId}: ${state.attemptCounters[unitId][lessonId][sectionId]}`
+                      );
+                    }
+                  }
+                }
+
+                console.log(
+                  "[ProgressStore] Attempt counters merged after login."
+                );
+              });
+            },
           },
         }),
         {
@@ -563,6 +731,7 @@ export const useProgressStore = create<ProgressState>()(
           partialize: (state) => ({
             completion: state.completion,
             drafts: state.drafts,
+            attemptCounters: state.attemptCounters,
             penaltyEndTime: state.penaltyEndTime,
             offlineActionQueue: state.offlineActionQueue,
             lastSyncError: state.lastSyncError,

@@ -118,7 +118,7 @@ const DebuggerSection: React.FC<DebuggerSectionProps> = ({
       trace.steps.length > 0 &&
       currentStepIndex === trace.steps.length - 1
     ) {
-      completeSection(unitId, lessonId, section.id);
+      completeSection(unitId, lessonId, section.id, 1);
     }
   }, [currentStepIndex, trace, completeSection, unitId, lessonId, section.id]);
 

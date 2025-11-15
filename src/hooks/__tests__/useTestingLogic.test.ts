@@ -11,6 +11,7 @@ vi.mock("../../stores/progressStore");
 
 const mockRunPythonCode = vi.fn();
 const mockCompleteSection = vi.fn();
+const mockIncrementAttemptCounter = vi.fn();
 const mockedUsePyodide = vi.mocked(usePyodide);
 const mockedUseProgressActions = vi.mocked(useProgressActions);
 
@@ -41,6 +42,7 @@ describe("useTestingLogic", () => {
 
     mockedUseProgressActions.mockReturnValue({
       completeSection: mockCompleteSection,
+      incrementAttemptCounter: mockIncrementAttemptCounter,
     });
   });
 

@@ -73,7 +73,7 @@ export const useTurtleTesting = ({
   runTurtleCode,
   functionToTest,
 }: UseTurtleTestingProps) => {
-  const { completeSection } = useProgressActions();
+  const { completeSection, incrementAttemptCounter } = useProgressActions();
   const [testResults, setTestResults] = useState<TurtleTestResult[] | null>(
     null
   );
@@ -190,8 +190,13 @@ export const useTurtleTesting = ({
         const allPassed = results.every((res) => res.passed);
         if (allPassed) {
           completeSection(unitId, lessonId, sectionId);
+        } else {
+          // Increment attempt counter on test failure
+          incrementAttemptCounter(unitId, lessonId, sectionId);
         }
       } catch (e) {
+        // Increment attempt counter on error (code failed to execute)
+        incrementAttemptCounter(unitId, lessonId, sectionId);
         const errorMessage =
           e instanceof Error ? e.message : "An unknown error occurred.";
         console.error("Visual testing execution error:", errorMessage);
@@ -206,6 +211,7 @@ export const useTurtleTesting = ({
       runTurtleCode,
       turtleInstance,
       completeSection,
+      incrementAttemptCounter,
       unitId,
       lessonId,
       sectionId,

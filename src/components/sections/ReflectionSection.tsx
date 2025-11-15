@@ -265,7 +265,7 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = ({
       alert(
         `Learning entry on ${finalEntryResponse.userTopic} submitted successfully!`
       );
-      completeSection(unitId, lessonId, sectionId);
+      completeSection(unitId, lessonId, sectionId, 1);
       fetchAndUpdateHistory();
     } catch (err) {
       console.error("Error submitting final learning entry:", err);

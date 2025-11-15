@@ -2,6 +2,7 @@ import { renderHook, act } from "@testing-library/react";
 import { vi } from "vitest";
 import { useInteractiveTableLogic } from "../useInteractiveTableLogic";
 import { usePyodide } from "../../contexts/PyodideContext";
+import { useProgressActions } from "../../stores/progressStore";
 import type {
   UnitId,
   LessonId,
@@ -13,9 +14,12 @@ import type {
 
 // Mock dependencies
 vi.mock("../../contexts/PyodideContext");
+vi.mock("../../stores/progressStore");
 
 const mockRunPythonCode = vi.fn();
+const mockIncrementAttemptCounter = vi.fn();
 const mockedUsePyodide = vi.mocked(usePyodide);
+const mockedUseProgressActions = vi.mocked(useProgressActions);
 
 describe("useInteractiveTableLogic", () => {
   const defaultColumns: InputParam[] = [
@@ -65,6 +69,10 @@ describe("useInteractiveTableLogic", () => {
       isLoading: false,
       error: null,
       loadPackages: vi.fn(),
+    });
+
+    mockedUseProgressActions.mockReturnValue({
+      incrementAttemptCounter: mockIncrementAttemptCounter,
     });
   });
 

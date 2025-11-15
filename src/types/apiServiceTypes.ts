@@ -14,6 +14,7 @@ export interface SectionCompletionInput {
   unitId: UnitId;
   lessonId: LessonId;
   sectionId: SectionId;
+  attemptsBeforeSuccess: number; // Number of attempts (including successful attempt) before completing section
 }
 
 export interface UserProgressData {

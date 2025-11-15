@@ -11,6 +11,7 @@ import type {
   TestMode,
 } from "../types/data";
 import { usePyodide } from "../contexts/PyodideContext";
+import { useProgressActions } from "../stores/progressStore";
 // useSectionProgress is no longer needed
 
 type SectionMode = "coverage" | "prediction";
@@ -45,6 +46,7 @@ export const useInteractiveTableLogic = ({
     isLoading: isPyodideLoading,
     error: pyodideError,
   } = usePyodide();
+  const { incrementAttemptCounter } = useProgressActions();
 
   const initialState = useMemo((): TableState => {
     if (mode === "coverage") {
@@ -168,6 +170,11 @@ export const useInteractiveTableLogic = ({
             : `Error: ${String(err)}`;
         isCorrect = false;
       } finally {
+        // Increment attempt counter if the result is incorrect
+        if (!isCorrect) {
+          incrementAttemptCounter(unitId, lessonId, sectionId);
+        }
+
         setState((prev) => {
           if (mode === "coverage") {
             const prevStates =
@@ -207,6 +214,10 @@ export const useInteractiveTableLogic = ({
       runPythonCode,
       setState,
       columns,
+      incrementAttemptCounter,
+      unitId,
+      lessonId,
+      sectionId,
     ]
   );
 

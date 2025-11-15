@@ -235,7 +235,7 @@ json.dumps(_js_turtle_commands_)
         }
 
         if (!stopRequestedRef.current && autoCompleteOnRun) {
-          completeSection(unitId, lessonId, sectionId);
+          completeSection(unitId, lessonId, sectionId, 1);
         }
       } catch (_e) {
         const errorMessage = _e instanceof Error ? _e.message : String(_e);

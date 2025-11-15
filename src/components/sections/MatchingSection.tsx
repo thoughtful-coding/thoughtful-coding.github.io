@@ -1,9 +1,10 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import type { MatchingSectionData, UnitId, LessonId } from "../../types/data";
 import { useSectionProgress } from "../../hooks/useSectionProgress";
 import { useMatchingInteraction } from "../../hooks/useMatchingInteraction";
+import { useProgressActions } from "../../stores/progressStore";
 import styles from "./MatchingSection.module.css";
 import sectionStyles from "./Section.module.css";
 import ContentRenderer from "../content_blocks/ContentRenderer";
@@ -88,6 +89,9 @@ const MatchingSection: React.FC<MatchingSectionProps> = ({
       checkCompletion
     );
 
+  const { incrementAttemptCounter } = useProgressActions();
+  const hasCountedCurrentAttempt = useRef(false);
+
   // Determine if all drop zones are filled
   const isFullyMatched = useMemo(() => {
     return (
@@ -96,12 +100,36 @@ const MatchingSection: React.FC<MatchingSectionProps> = ({
     );
   }, [prompts, savedState.userMatches]);
 
+  // Track incorrect attempts: when all matches are filled but wrong
+  useEffect(() => {
+    // When user changes matches, reset the attempt counter flag
+    hasCountedCurrentAttempt.current = false;
+  }, [savedState.userMatches]);
+
+  useEffect(() => {
+    if (
+      isFullyMatched &&
+      !isSectionComplete &&
+      !hasCountedCurrentAttempt.current
+    ) {
+      // All slots filled but incorrect - count this as an attempt
+      incrementAttemptCounter(unitId, lessonId, section.id);
+      hasCountedCurrentAttempt.current = true;
+    }
+  }, [
+    isFullyMatched,
+    isSectionComplete,
+    incrementAttemptCounter,
+    unitId,
+    lessonId,
+    section.id,
+  ]);
+
   // --- Interaction Logic (Drag, Tap-to-Select, Long-Press) ---
   const {
     draggingOptionId,
     hoveredPromptId,
     selectedOptionId,
-    selectedSourcePrompt,
     handleDragStart,
     handleDragEnd,
     handleDragOver,

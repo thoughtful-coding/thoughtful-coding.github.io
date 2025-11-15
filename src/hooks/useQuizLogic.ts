@@ -40,7 +40,7 @@ export const useQuizLogic = ({
     isCorrect: null,
   };
 
-  const { startPenalty } = useProgressActions();
+  const { startPenalty, incrementAttemptCounter } = useProgressActions();
   const isPenaltyActiveGlobally = useIsPenaltyActive();
   const remainingPenaltyTimeGlobal = useRemainingPenaltyTime();
 
@@ -132,6 +132,7 @@ export const useQuizLogic = ({
 
     if (!answerIsCorrect) {
       startPenalty();
+      incrementAttemptCounter(unitId, lessonId, section.id);
     }
   }, [
     selectedOptionsSet,
@@ -142,6 +143,9 @@ export const useQuizLogic = ({
     section,
     setPersistedQuizState,
     startPenalty,
+    incrementAttemptCounter,
+    unitId,
+    lessonId,
   ]);
 
   const handleTryAgain = useCallback(() => {
