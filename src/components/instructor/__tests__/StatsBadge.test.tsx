@@ -153,7 +153,10 @@ describe("StatsBadge", () => {
       const p50Badge = screen.getByText(/p50: 1/);
       const p95Badge = screen.getByText(/p95: 3/);
 
-      expect(p50Badge).toHaveAttribute("title", "Median: 1 attempt (50 students)");
+      expect(p50Badge).toHaveAttribute(
+        "title",
+        "Median: 1 attempt (50 students)"
+      );
       expect(p95Badge).toHaveAttribute("title", "95th percentile: 3 attempts");
     });
 

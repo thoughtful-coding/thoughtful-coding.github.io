@@ -208,7 +208,12 @@ export const useProgressStore = create<ProgressState>()(
                 // Don't return anything - Immer tracks the mutations
               });
             },
-            completeSection: async (unitId, lessonId, sectionId, attemptsBeforeSuccess) => {
+            completeSection: async (
+              unitId,
+              lessonId,
+              sectionId,
+              attemptsBeforeSuccess
+            ) => {
               const currentUnitCompletions = get().completion[unitId] || {};
               const currentLessonCompletions =
                 currentUnitCompletions[lessonId] || {};
@@ -225,7 +230,11 @@ export const useProgressStore = create<ProgressState>()(
               const finalAttempts =
                 attemptsBeforeSuccess !== undefined
                   ? attemptsBeforeSuccess
-                  : get().actions.getAttemptCounter(unitId, lessonId, sectionId) + 1;
+                  : get().actions.getAttemptCounter(
+                      unitId,
+                      lessonId,
+                      sectionId
+                    ) + 1;
 
               const optimisticTimestamp =
                 new Date().toISOString() as IsoTimestamp;
@@ -289,7 +298,11 @@ export const useProgressStore = create<ProgressState>()(
                   );
                   get().actions.setServerProgress(serverResponseState);
                   // Reset attempt counter after successful sync
-                  get().actions.resetAttemptCounter(unitId, lessonId, sectionId);
+                  get().actions.resetAttemptCounter(
+                    unitId,
+                    lessonId,
+                    sectionId
+                  );
                 } catch (error) {
                   console.error(
                     `[ProgressStore] Sync failed for ${unitId}/${lessonId}/${sectionId}:`,
@@ -411,7 +424,8 @@ export const useProgressStore = create<ProgressState>()(
                 // Reset attempt counters for successfully synced sections
                 queueSnapshot.forEach((syncedItem) => {
                   // Check if this item is confirmed on server
-                  const serverUnit = serverResponseState.completion[syncedItem.unitId];
+                  const serverUnit =
+                    serverResponseState.completion[syncedItem.unitId];
                   if (serverUnit) {
                     const serverLesson = serverUnit[syncedItem.lessonId];
                     if (serverLesson && syncedItem.sectionId in serverLesson) {
@@ -708,7 +722,10 @@ export const useProgressStore = create<ProgressState>()(
 
                       // Use whichever counter is higher (more attempts)
                       state.attemptCounters[unitId][lessonId][sectionId] =
-                        Math.max(anonymousCounter || 0, authenticatedCounter || 0);
+                        Math.max(
+                          anonymousCounter || 0,
+                          authenticatedCounter || 0
+                        );
                       console.log(
                         `[ProgressStore] Merged attempt counter for ${unitId}/${lessonId}/${sectionId}: ${state.attemptCounters[unitId][lessonId][sectionId]}`
                       );

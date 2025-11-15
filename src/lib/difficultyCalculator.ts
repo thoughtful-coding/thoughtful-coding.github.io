@@ -60,10 +60,13 @@ export function calculateSectionStats(
   const sorted = [...attempts].sort((a, b) => a - b);
 
   // Calculate distribution (map of attempts -> count)
-  const distribution = attempts.reduce((acc, val) => {
-    acc[val] = (acc[val] || 0) + 1;
-    return acc;
-  }, {} as Record<number, number>);
+  const distribution = attempts.reduce(
+    (acc, val) => {
+      acc[val] = (acc[val] || 0) + 1;
+      return acc;
+    },
+    {} as Record<number, number>
+  );
 
   // Calculate mean
   const sum = attempts.reduce((a, b) => a + b, 0);
