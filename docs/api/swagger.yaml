@@ -47,6 +47,8 @@ components:
       $ref: "./schemas/common.yaml#/AssessmentLevel"
     LastEvaluatedKey:
       $ref: "./schemas/common.yaml#/LastEvaluatedKey"
+    SectionCompletionDetail:
+      $ref: "./schemas/common.yaml#/SectionCompletionDetail"
     CompletionMap:
       $ref: "./schemas/common.yaml#/CompletionMap"
     LessonCompletionMap:
@@ -105,6 +107,8 @@ components:
       $ref: "./schemas/instructor.yaml#/StoredPrimmSubmissionItem"
     StudentPrimmSubmissionsResponse:
       $ref: "./schemas/instructor.yaml#/StudentPrimmSubmissionsResponse"
+    StoredFirstSolutionItem:
+      $ref: "./schemas/instructor.yaml#/StoredFirstSolutionItem"
     AssignmentSubmission:
       $ref: "./schemas/instructor.yaml#/AssignmentSubmission"
     ListOfAssignmentSubmissionsResponse:

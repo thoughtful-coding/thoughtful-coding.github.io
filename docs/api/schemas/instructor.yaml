@@ -111,6 +111,50 @@ StudentPrimmSubmissionsResponse:
     lastEvaluatedKey:
       $ref: "./common.yaml#/LastEvaluatedKey"
 
+# For instructor viewing a student's first solution submissions (testing sections)
+StoredFirstSolutionItem:
+  type: object
+  description: "A stored first solution from a Testing section for academic integrity auditing."
+  required:
+    [
+      sectionCompositeKey,
+      userId,
+      unitId,
+      lessonId,
+      sectionId,
+      solution,
+      questionType,
+      submittedAt,
+    ]
+  properties:
+    sectionCompositeKey:
+      type: string
+      description: "Composite key: unitId#lessonId#sectionId"
+      example: "unit1#lesson-guid-123#section2"
+    userId:
+      type: string
+      description: "Student's user ID"
+      example: "USER#google-oauth2|1234567890"
+    unitId:
+      $ref: "./common.yaml#/UnitId"
+    lessonId:
+      $ref: "./common.yaml#/LessonId"
+    sectionId:
+      $ref: "./common.yaml#/SectionId"
+    solution:
+      type: string
+      maxLength: 1000
+      description: "Student's first correct solution (max 1000 characters)"
+      example: "def fibonacci(n):\n    if n <= 1:\n        return n\n    return fibonacci(n-1) + fibonacci(n-2)"
+    questionType:
+      type: string
+      description: "Type of question (currently always 'testing')"
+      default: "testing"
+      example: "testing"
+    submittedAt:
+      $ref: "./common.yaml#/IsoTimestamp"
+      description: "Timestamp when the first correct solution was submitted"
+
 # For assignment submissions endpoint
 AssignmentSubmission:
   type: object
@@ -129,11 +173,12 @@ AssignmentSubmission:
     submissionTimestamp:
       $ref: "./common.yaml#/IsoTimestamp"
     submissionDetails:
-      description: "For Reflection: array of ReflectionVersionItem. For PRIMM: single StoredPrimmSubmissionItem."
+      description: "For Reflection: array of ReflectionVersionItem. For PRIMM: single StoredPrimmSubmissionItem. For Testing: object with solution data."
       oneOf:
         - type: array
           items: { $ref: "./reflections.yaml#/ReflectionVersionItem" }
         - $ref: "#/StoredPrimmSubmissionItem"
+        - $ref: "#/StoredFirstSolutionItem"
 
 ListOfAssignmentSubmissionsResponse:
   type: object
@@ -141,7 +186,7 @@ ListOfAssignmentSubmissionsResponse:
   properties:
     assignmentType:
       type: string
-      enum: [Reflection, PRIMM]
+      enum: [Reflection, PRIMM, Testing]
       description: "Type of assignment."
     unitId:
       $ref: "./common.yaml#/UnitId"
@@ -181,6 +226,7 @@ SectionStatusItem:
         - type: array
           items: { $ref: "./reflections.yaml#/ReflectionVersionItem" }
         - $ref: "#/StoredPrimmSubmissionItem"
+        - $ref: "#/StoredFirstSolutionItem"
 
 LessonProgressProfile:
   type: object

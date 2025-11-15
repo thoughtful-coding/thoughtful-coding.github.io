@@ -18,6 +18,10 @@ SectionCompletionInput: # For PUT /progress request by student
       type: integer
       minimum: 1
       description: "Number of attempts (including the successful attempt) before completing the section. Minimum value is 1."
+    firstCompletionContent:
+      type: string
+      nullable: true
+      description: "Optional. The student's content (e.g., code, text) on first successful completion. Used for academic integrity auditing. Only sent once per section."
 
 BatchCompletionsInput: # Request body for PUT /progress
   type: object

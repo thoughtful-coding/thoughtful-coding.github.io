@@ -368,7 +368,13 @@ paths:
   /instructor/units/{unitId}/lessons/{lessonId}/sections/{sectionId}/assignment-submissions:
     get:
       summary: Get Assignment Submissions
-      description: All student submissions for section (Reflection or PRIMM)
+      description: |
+        Retrieve all student submissions for a specific section assignment.
+
+        **Assignment Types:**
+        - `Reflection`: Student reflections with AI feedback
+        - `PRIMM`: PRIMM activity submissions with predictions and explanations
+        - `Testing`: First correct solutions from testing sections (academic integrity auditing)
       operationId: getAssignmentSubmissions
       tags:
         - Instructor Portal
@@ -384,12 +390,14 @@ paths:
             enum:
               - Reflection
               - PRIMM
+              - Testing
+          description: Type of assignment to retrieve
         - name: primmExampleId
           in: query
           required: false
           schema:
             $ref: '#/components/schemas/PrimmExampleId'
-          description: Required when assignmentType='PRIMM'
+          description: Required only when assignmentType='PRIMM'. Identifies the specific PRIMM example within the section.
         - $ref: '#/components/parameters/PaginationLimit'
         - $ref: '#/components/parameters/PaginationKey'
       responses:
@@ -465,11 +473,28 @@ components:
       nullable: true
       additionalProperties: true
       description: DynamoDB pagination token (opaque, pass as-is to next request)
+    SectionCompletionDetail:
+      type: object
+      required:
+        - completedAt
+        - attemptsBeforeSuccess
+      description: Details about a section completion including timestamp and attempts
+      properties:
+        completedAt:
+          $ref: '#/components/schemas/IsoTimestamp'
+          description: Timestamp when the section was completed
+        attemptsBeforeSuccess:
+          type: integer
+          minimum: 1
+          description: Number of attempts (including successful attempt) before completing the section
+          example: 3
     CompletionMap:
       type: object
-      description: SectionId → IsoTimestamp
+      description: SectionId → SectionCompletionDetail (or just IsoTimestamp for backward compatibility)
       additionalProperties:
-        $ref: '#/components/schemas/IsoTimestamp'
+        oneOf:
+          - $ref: '#/components/schemas/IsoTimestamp'
+          - $ref: '#/components/schemas/SectionCompletionDetail'
     LessonCompletionMap:
       type: object
       description: LessonId (GUID) → CompletionMap
@@ -547,6 +572,7 @@ components:
         - unitId
         - lessonId
         - sectionId
+        - attemptsBeforeSuccess
       properties:
         unitId:
           $ref: '#/components/schemas/UnitId'
@@ -554,6 +580,14 @@ components:
           $ref: '#/components/schemas/LessonId'
         sectionId:
           $ref: '#/components/schemas/SectionId'
+        attemptsBeforeSuccess:
+          type: integer
+          minimum: 1
+          description: Number of attempts (including the successful attempt) before completing the section. Minimum value is 1.
+        firstCompletionContent:
+          type: string
+          nullable: true
+          description: Optional. The student's content (e.g., code, text) on first successful completion. Used for academic integrity auditing. Only sent once per section.
     BatchCompletionsInput:
       type: object
       required:
@@ -814,6 +848,50 @@ components:
           description: List of PRIMM submissions for the student.
         lastEvaluatedKey:
           $ref: '#/components/schemas/LastEvaluatedKey'
+    StoredFirstSolutionItem:
+      type: object
+      description: A stored first solution from a Testing section for academic integrity auditing.
+      required:
+        - sectionCompositeKey
+        - userId
+        - unitId
+        - lessonId
+        - sectionId
+        - solution
+        - questionType
+        - submittedAt
+      properties:
+        sectionCompositeKey:
+          type: string
+          description: 'Composite key: unitId#lessonId#sectionId'
+          example: unit1#lesson-guid-123#section2
+        userId:
+          type: string
+          description: Student's user ID
+          example: USER#google-oauth2|1234567890
+        unitId:
+          $ref: '#/components/schemas/UnitId'
+        lessonId:
+          $ref: '#/components/schemas/LessonId'
+        sectionId:
+          $ref: '#/components/schemas/SectionId'
+        solution:
+          type: string
+          maxLength: 1000
+          description: Student's first correct solution (max 1000 characters)
+          example: |-
+            def fibonacci(n):
+                if n <= 1:
+                    return n
+                return fibonacci(n-1) + fibonacci(n-2)
+        questionType:
+          type: string
+          description: Type of question (currently always 'testing')
+          default: testing
+          example: testing
+        submittedAt:
+          $ref: '#/components/schemas/IsoTimestamp'
+          description: Timestamp when the first correct solution was submitted
     AssignmentSubmission:
       type: object
       description: Represents a student's submission for an assignment.
@@ -834,12 +912,13 @@ components:
         submissionTimestamp:
           $ref: '#/components/schemas/IsoTimestamp'
         submissionDetails:
-          description: 'For Reflection: array of ReflectionVersionItem. For PRIMM: single StoredPrimmSubmissionItem.'
+          description: 'For Reflection: array of ReflectionVersionItem. For PRIMM: single StoredPrimmSubmissionItem. For Testing: object with solution data.'
           oneOf:
             - type: array
               items:
                 $ref: '#/components/schemas/ReflectionVersionItem'
             - $ref: '#/components/schemas/StoredPrimmSubmissionItem'
+            - $ref: '#/components/schemas/StoredFirstSolutionItem'
     ListOfAssignmentSubmissionsResponse:
       type: object
       required:
@@ -854,6 +933,7 @@ components:
           enum:
             - Reflection
             - PRIMM
+            - Testing
           description: Type of assignment.
         unitId:
           $ref: '#/components/schemas/UnitId'
@@ -901,6 +981,7 @@ components:
               items:
                 $ref: '#/components/schemas/ReflectionVersionItem'
             - $ref: '#/components/schemas/StoredPrimmSubmissionItem'
+            - $ref: '#/components/schemas/StoredFirstSolutionItem'
     LessonProgressProfile:
       type: object
       required:

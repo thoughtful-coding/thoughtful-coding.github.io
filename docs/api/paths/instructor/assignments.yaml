@@ -3,7 +3,13 @@
 /instructor/units/{unitId}/lessons/{lessonId}/sections/{sectionId}/assignment-submissions:
   get:
     summary: Get Assignment Submissions
-    description: "All student submissions for section (Reflection or PRIMM)"
+    description: |
+      Retrieve all student submissions for a specific section assignment.
+
+      **Assignment Types:**
+      - `Reflection`: Student reflections with AI feedback
+      - `PRIMM`: PRIMM activity submissions with predictions and explanations
+      - `Testing`: First correct solutions from testing sections (academic integrity auditing)
     operationId: getAssignmentSubmissions
     tags: ["Instructor Portal"]
     parameters:
@@ -15,13 +21,14 @@
         required: true
         schema:
           type: string
-          enum: [Reflection, PRIMM]
+          enum: [Reflection, PRIMM, Testing]
+        description: "Type of assignment to retrieve"
       - name: primmExampleId
         in: query
         required: false
         schema:
           $ref: "../../schemas/common.yaml#/PrimmExampleId"
-        description: "Required when assignmentType='PRIMM'"
+        description: "Required only when assignmentType='PRIMM'. Identifies the specific PRIMM example within the section."
       - $ref: "../../parameters/common.yaml#/PaginationLimit"
       - $ref: "../../parameters/common.yaml#/PaginationKey"
     responses:

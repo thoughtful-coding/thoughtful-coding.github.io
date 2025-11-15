@@ -189,7 +189,8 @@ export const useTurtleTesting = ({
         // Check if all tests passed
         const allPassed = results.every((res) => res.passed);
         if (allPassed) {
-          completeSection(unitId, lessonId, sectionId);
+          // Pass userCode as firstCompletionContent for academic integrity auditing
+          completeSection(unitId, lessonId, sectionId, undefined, userCode);
         } else {
           // Increment attempt counter on test failure
           incrementAttemptCounter(unitId, lessonId, sectionId);

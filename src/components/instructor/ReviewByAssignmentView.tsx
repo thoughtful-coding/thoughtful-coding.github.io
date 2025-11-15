@@ -13,6 +13,7 @@ import type {
   InstructorStudentInfo,
   ReflectionVersionItem,
   StoredPrimmSubmissionItem,
+  StoredFirstSolutionItem,
 } from "../../types/apiServiceTypes";
 import * as dataLoader from "../../lib/dataLoader";
 import * as apiService from "../../lib/apiService";
@@ -21,6 +22,7 @@ import LoadingSpinner from "../LoadingSpinner";
 import styles from "./InstructorViews.module.css";
 import RenderReflectionVersions from "./shared/RenderReflectionVersions";
 import RenderPrimmActivity from "./shared/RenderPrimmActivity";
+import RenderTestingSolution from "./shared/RenderTestingSolution";
 
 interface ReviewByAssignmentViewProps {
   units: Unit[];
@@ -41,7 +43,7 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
     string | null
   >(null);
   const [submissions, setSubmissions] = useState<
-    AssignmentSubmission<"Reflection" | "PRIMM">[]
+    AssignmentSubmission<"Reflection" | "PRIMM" | "Testing">[]
   >([]);
   const [currentSubmissionIndex, setCurrentSubmissionIndex] = useState(0);
   const [isLoading, setIsLoadingState] = useState({
@@ -116,6 +118,17 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
               primmExampleId: example.id,
               assignmentDisplayTitle: `PRIMM: "${section.title}" (in Lesson: ${lesson.title})`,
             });
+          });
+        } else if (section.kind === "Testing") {
+          displayableAssignments.push({
+            key: `${lesson.guid}-${section.id}-testing`,
+            unitId: unit.id,
+            lessonId: lesson.guid,
+            lessonTitle: lesson.title,
+            sectionId: section.id,
+            sectionTitle: section.title,
+            assignmentType: "Testing",
+            assignmentDisplayTitle: `Testing: "${section.title}" (in Lesson: ${lesson.title})`,
           });
         }
       });
@@ -224,7 +237,8 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
     if (assignmentsInUnit.length === 0) {
       return (
         <p className={styles.placeholderMessage}>
-          No reviewable assignments (Reflections or PRIMM) found in this unit.
+          No reviewable assignments (Reflections, PRIMM, or Testing) found in
+          this unit.
         </p>
       );
     }
@@ -282,6 +296,14 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
                 <RenderPrimmActivity
                   submission={
                     currentSubmissionData.submissionDetails as StoredPrimmSubmissionItem
+                  }
+                  lessonTitle={selectedAssignmentDetails.lessonTitle}
+                  sectionId={selectedAssignmentDetails.sectionId}
+                />
+              ) : selectedAssignmentDetails.assignmentType === "Testing" ? (
+                <RenderTestingSolution
+                  submission={
+                    currentSubmissionData.submissionDetails as StoredFirstSolutionItem
                   }
                   lessonTitle={selectedAssignmentDetails.lessonTitle}
                   sectionId={selectedAssignmentDetails.sectionId}

@@ -15,6 +15,7 @@ export interface SectionCompletionInput {
   lessonId: LessonId;
   sectionId: SectionId;
   attemptsBeforeSuccess: number; // Number of attempts (including successful attempt) before completing section
+  firstCompletionContent?: string | null; // Optional: student's content on first successful completion (for auditing)
 }
 
 export interface UserProgressData {
@@ -163,6 +164,7 @@ export interface ListOfInstructorStudentsResponse {
 export interface SectionCompletionDetail {
   completedAt: IsoTimestamp;
   attemptsBeforeSuccess: number;
+  firstCompletionContent?: string | null; // Optional: student's content on first completion (for auditing)
 }
 
 export interface StudentUnitCompletionData {
@@ -221,19 +223,32 @@ export interface StoredPrimmSubmissionItem {
   createdAt: string;
 }
 
-export interface AssignmentSubmission<T extends "Reflection" | "PRIMM"> {
+export interface StoredFirstSolutionItem {
+  sectionCompositeKey: string; // Composite key: unitId#lessonId#sectionId
+  userId: UserId;
+  unitId: UnitId;
+  lessonId: LessonId;
+  sectionId: SectionId;
+  solution: string; // The student's first correct solution
+  questionType: string; // Type of question (e.g., "testing")
+  submittedAt: IsoTimestamp;
+}
+
+export interface AssignmentSubmission<
+  T extends "Reflection" | "PRIMM" | "Testing",
+> {
   studentId: UserId;
   studentName?: string | null;
   submissionTimestamp: IsoTimestamp;
   submissionDetails: T extends "Reflection"
     ? ReflectionVersionItem[]
-    : StoredPrimmSubmissionItem;
-  // If Reflection, submissionDetails will be the full ReflectionVersionItem, allowing access to iterations if needed later.
-  // If PRIMM, it's the StoredPrimmSubmissionItem.
+    : T extends "PRIMM"
+      ? StoredPrimmSubmissionItem
+      : StoredFirstSolutionItem;
 }
 
 export interface ListOfAssignmentSubmissionsResponse<
-  T extends "Reflection" | "PRIMM",
+  T extends "Reflection" | "PRIMM" | "Testing",
 > {
   assignmentType: T;
   unitId: UnitId;
@@ -255,6 +270,7 @@ export interface SectionStatusItem {
   submissionDetails?:
     | ReflectionVersionItem[]
     | StoredPrimmSubmissionItem
+    | StoredFirstSolutionItem
     | null;
 }
 

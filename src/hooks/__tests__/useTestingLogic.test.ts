@@ -99,7 +99,9 @@ describe("useTestingLogic", () => {
       expect(mockCompleteSection).toHaveBeenCalledWith(
         defaultProps.unitId,
         defaultProps.lessonId,
-        defaultProps.sectionId
+        defaultProps.sectionId,
+        undefined,
+        "def add(a, b):\n    return a + b"
       );
     });
 
@@ -264,7 +266,9 @@ describe("useTestingLogic", () => {
       expect(mockCompleteSection).toHaveBeenCalledWith(
         procedureProps.unitId,
         procedureProps.lessonId,
-        procedureProps.sectionId
+        procedureProps.sectionId,
+        undefined,
+        'def greet(name):\n    print(f"Hello, {name}!")'
       );
     });
 

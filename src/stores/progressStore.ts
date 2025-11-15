@@ -70,7 +70,8 @@ interface ProgressActions {
     unitId: UnitId,
     lessonId: LessonId,
     sectionId: SectionId,
-    attemptsBeforeSuccess?: number
+    attemptsBeforeSuccess?: number,
+    firstCompletionContent?: string | null
   ) => Promise<void>;
   isSectionComplete: (
     unitId: UnitId,
@@ -212,13 +213,16 @@ export const useProgressStore = create<ProgressState>()(
               unitId,
               lessonId,
               sectionId,
-              attemptsBeforeSuccess
+              attemptsBeforeSuccess,
+              firstCompletionContent
             ) => {
               const currentUnitCompletions = get().completion[unitId] || {};
               const currentLessonCompletions =
                 currentUnitCompletions[lessonId] || {};
 
-              if (currentLessonCompletions[sectionId]) {
+              const isAlreadyComplete = !!currentLessonCompletions[sectionId];
+
+              if (isAlreadyComplete) {
                 console.log(
                   `[ProgressStore] Section ${unitId}/${lessonId}/${sectionId} already complete locally.`
                 );
@@ -279,6 +283,11 @@ export const useProgressStore = create<ProgressState>()(
                 sectionId,
                 attemptsBeforeSuccess: finalAttempts,
               };
+
+              // Include firstCompletionContent if provided (and this is first completion)
+              if (firstCompletionContent && !isAlreadyComplete) {
+                actionToSync.firstCompletionContent = firstCompletionContent;
+              }
 
               if (navigator.onLine) {
                 try {

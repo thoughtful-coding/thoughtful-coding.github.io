@@ -32,11 +32,27 @@ LastEvaluatedKey:
   additionalProperties: true
   description: "DynamoDB pagination token (opaque, pass as-is to next request)"
 
+SectionCompletionDetail:
+  type: object
+  required: [completedAt, attemptsBeforeSuccess]
+  description: "Details about a section completion including timestamp and attempts"
+  properties:
+    completedAt:
+      $ref: "#/IsoTimestamp"
+      description: "Timestamp when the section was completed"
+    attemptsBeforeSuccess:
+      type: integer
+      minimum: 1
+      description: "Number of attempts (including successful attempt) before completing the section"
+      example: 3
+
 CompletionMap:
   type: object
-  description: "SectionId → IsoTimestamp"
+  description: "SectionId → SectionCompletionDetail (or just IsoTimestamp for backward compatibility)"
   additionalProperties:
-    $ref: "#/IsoTimestamp"
+    oneOf:
+      - $ref: "#/IsoTimestamp"
+      - $ref: "#/SectionCompletionDetail"
 
 LessonCompletionMap:
   type: object

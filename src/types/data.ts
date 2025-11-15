@@ -350,15 +350,15 @@ export interface UnitsData {
 }
 
 export interface DisplayableAssignment {
-  key: string; // A unique key for React lists, e.g., `${lessonGuid}-${sectionId}-${primmExampleId || 'reflection'}`
+  key: string; // A unique key for React lists, e.g., `${lessonGuid}-${sectionId}-${primmExampleId || 'reflection' || 'testing'}`
   unitId: UnitId;
   lessonId: LessonId; // GUID
   lessonTitle: string;
   sectionId: SectionId;
   sectionTitle: string;
-  assignmentType: "Reflection" | "PRIMM";
+  assignmentType: "Reflection" | "PRIMM" | "Testing";
   primmExampleId?: string; // Only for PRIMM
-  assignmentDisplayTitle: string; // e.g., "Reflection: Variables" or "PRIMM: Example 1 - Loops"
+  assignmentDisplayTitle: string; // e.g., "Reflection: Variables" or "PRIMM: Example 1 - Loops" or "Testing: First Solutions"
 }
 
 // Turtle

@@ -183,7 +183,7 @@ describe("ReviewByAssignmentView", () => {
     // Assert that the correct placeholder message is shown after loading
     expect(
       await screen.findByText(
-        /no reviewable assignments \(reflections or primm\) found in this unit/i
+        /no reviewable assignments \(reflections, primm, or testing\) found in this unit/i
       )
     ).toBeInTheDocument();
   });
