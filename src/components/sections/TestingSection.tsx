@@ -263,6 +263,7 @@ const TestingSection: React.FC<TestingSectionProps> = ({
             onChange={setCode}
             readOnly={isLoading}
             minHeight="200px"
+            data-testid={`code-editor-${section.id}`}
           />
           <div className={styles.editorControls}>
             <button

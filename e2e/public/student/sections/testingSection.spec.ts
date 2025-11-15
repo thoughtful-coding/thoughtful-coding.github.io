@@ -9,14 +9,11 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
     });
     await expect(sectionItem).not.toHaveClass(/sectionItemCompleted/);
 
-    await page
-      .locator("div")
-      .filter({ hasText: /^912›print\(\)print\(\)$/ })
-      .nth(1)
-      .click();
-    await page.getByText("print()print()").press("ControlOrMeta+a");
-    await page
-      .getByText("print()print()")
+    const editor = page.getByTestId("code-editor-single-vs-double-testing");
+    await editor.locator(".cm-content").click();
+    await editor.press("ControlOrMeta+a");
+    await editor
+      .locator(".cm-content")
       .fill('print("Who\'s out there?")\nprint(\'I heard Eric say "me".');
     await page
       .locator("#single-vs-double-testing")
@@ -42,11 +39,6 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
     await expect(sectionItem).not.toHaveClass(/sectionItemCompleted/);
 
     await page
-      .locator("div")
-      .filter({ hasText: /^912›print\(\)print\(\)$/ })
-      .nth(1)
-      .click();
-    await page
       .locator("#single-vs-double-testing")
       .getByRole("button", { name: "Run Tests" })
       .click();
@@ -64,14 +56,12 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
       hasText: "Challenge: Who Goes There?",
     });
     await expect(sectionItem).not.toHaveClass(/sectionItemCompleted/);
-    await page
-      .locator("div")
-      .filter({ hasText: /^912›print\(\)print\(\)$/ })
-      .nth(1)
-      .click();
-    await page.getByText("print()print()").press("ControlOrMeta+a");
-    await page
-      .getByText("print()print()")
+
+    const editor = page.getByTestId("code-editor-single-vs-double-testing");
+    await editor.locator(".cm-content").click();
+    await editor.press("ControlOrMeta+a");
+    await editor
+      .locator(".cm-content")
       .fill('print("Who\'s out there?")\nprint(\'I heard Eric say "me".\')');
     await page
       .locator("#single-vs-double-testing")
@@ -92,14 +82,11 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
     });
     await expect(sectionItem).not.toHaveClass(/sectionItemCompleted/);
 
-    await page
-      .locator("div")
-      .filter({ hasText: /^912›print\(\)print\(\)$/ })
-      .nth(1)
-      .click();
-    await page.getByText("print()print()").press("ControlOrMeta+a");
-    await page
-      .getByText("print()print()")
+    const editor = page.getByTestId("code-editor-single-vs-double-testing");
+    await editor.locator(".cm-content").click();
+    await editor.press("ControlOrMeta+a");
+    await editor
+      .locator(".cm-content")
       .fill("print(\"Who's out there?\")\nprint(\"I heard Eric say 'me'.");
     await page
       .locator("#single-vs-double-testing")
@@ -120,13 +107,10 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
     });
     await expect(sectionItem).not.toHaveClass(/sectionItemCompleted/);
 
-    await page
-      .locator("div")
-      .filter({ hasText: /^912›print\(\)print\(\)$/ })
-      .nth(1)
-      .click();
-    await page.getByText("print()print()").press("ControlOrMeta+a");
-    await page.getByText("print()print()").fill("print(a)");
+    const editor = page.getByTestId("code-editor-single-vs-double-testing");
+    await editor.locator(".cm-content").click();
+    await editor.press("ControlOrMeta+a");
+    await editor.locator(".cm-content").fill("print(a)");
     await page
       .locator("#single-vs-double-testing")
       .getByRole("button", { name: "Run Tests" })
@@ -146,22 +130,19 @@ test.describe("TestingSection `procedure` / `function_name` tests", () => {
     });
     await expect(sectionItem).not.toHaveClass(/sectionItemCompleted/);
 
-    await page
-      .locator("#multi-input-testing div")
-      .filter({ hasText: "def do_math(num_1," })
-      .nth(3)
-      .click();
-    await page
-      .getByText("def do_math(num_1, num_2): #")
-      .press("ControlOrMeta+a");
-    await page.waitForTimeout(1000);
-    await page
-      .getByText("def do_math(num_1, num_2):")
+    const editor = page.getByTestId("code-editor-multi-input-testing");
+    await editor.locator(".cm-content").click();
+    await editor.press("ControlOrMeta+a");
+    await editor
+      .locator(".cm-content")
       .fill(
         "def do_math(num_1, num_2):\n  print(num_1 * num_2 + 1)\n\n\ndo_math(2, 2)\ndo_math(4, 2)\ndo_math(4, 1)\ndo_math(6, 1)"
       );
-    await page.waitForTimeout(1000);
-    await page.getByRole("button", { name: "Run Tests" }).click();
+    await page.waitForTimeout(100);
+    await page
+      .locator("#multi-input-testing")
+      .getByRole("button", { name: "Run Tests" })
+      .click();
     await expect(page.getByText("All tests passed!")).toBeVisible();
 
     await expect(sectionItem).toHaveClass(/sectionItemCompleted/);
@@ -175,22 +156,21 @@ test.describe("TestingSection `procedure` / `function_name` tests", () => {
     });
     await expect(sectionItem).not.toHaveClass(/sectionItemCompleted/);
 
-    await page
-      .locator("#multi-input-testing div")
-      .filter({ hasText: "def do_math(num_1," })
-      .nth(3)
-      .click();
-    await page
-      .getByText("def do_math(num_1, num_2): #")
-      .press("ControlOrMeta+a");
-    await page.waitForTimeout(1000);
-    await page
-      .getByText("def do_math(num_1, num_2):")
+    // Use the data-testid to target the specific code editor
+    const editor = page.getByTestId("code-editor-multi-input-testing");
+    await editor.locator(".cm-content").click();
+    await editor.press("ControlOrMeta+a");
+    await page.waitForTimeout(100);
+    await editor
+      .locator(".cm-content")
       .fill(
         "def do_math(num_1, num_2):\n  print(5)\n\n\ndo_math(2, 2)\ndo_math(4, 2)\ndo_math(4, 1)\ndo_math(6, 1)"
       );
-    await page.waitForTimeout(1000);
-    await page.getByRole("button", { name: "Run Tests" }).click();
+    await page.waitForTimeout(100);
+    await page
+      .locator("#multi-input-testing")
+      .getByRole("button", { name: "Run Tests" })
+      .click();
     await expect(
       page.getByText("Test 2 failed. Fix the issue and try again!")
     ).toBeVisible();
@@ -228,17 +208,12 @@ test.describe("TestingSection `function` / `function_name` tests", () => {
     });
     await expect(sectionItem).not.toHaveClass(/sectionItemCompleted/);
 
-    await page
-      .locator("#return-functions-test div")
-      .filter({ hasText: "def do_math(num_1," })
-      .nth(3)
-      .click();
-    await page
-      .getByText("def do_math(num_1, num_2): #")
-      .press("ControlOrMeta+a");
-    await page.waitForTimeout(1000);
-    await page
-      .getByText("def do_math(num_1, num_2):")
+    const editor = page.getByTestId("code-editor-return-functions-test");
+    await editor.locator(".cm-content").click();
+    await editor.press("ControlOrMeta+a");
+    await page.waitForTimeout(100);
+    await editor
+      .locator(".cm-content")
       .fill(
         "def do_math(num_1, num_2):\n  return num_1 * num_2 + 1\n\n\ndo_math(2, 2)\ndo_math(4, 2)\ndo_math(4, 1)\ndo_math(6, 1)"
       );
@@ -259,17 +234,12 @@ test.describe("TestingSection `function` / `function_name` tests", () => {
     });
     await expect(sectionItem).not.toHaveClass(/sectionItemCompleted/);
 
-    await page
-      .locator("#return-functions-test div")
-      .filter({ hasText: "def do_math(num_1," })
-      .nth(3)
-      .click();
-    await page
-      .getByText("def do_math(num_1, num_2): #")
-      .press("ControlOrMeta+a");
-    await page.waitForTimeout(1000);
-    await page
-      .getByText("def do_math(num_1, num_2):")
+    const editor = page.getByTestId("code-editor-return-functions-test");
+    await editor.locator(".cm-content").click();
+    await editor.press("ControlOrMeta+a");
+    await page.waitForTimeout(100);
+    await editor
+      .locator(".cm-content")
       .fill(
         "def do_math(num_1, num_2):\n  return 5\n\n\ndo_math(2, 2)\ndo_math(4, 2)\ndo_math(4, 1)\ndo_math(6, 1)"
       );
@@ -312,15 +282,12 @@ test.describe("TestingSection for turtles", () => {
     });
     await expect(sectionItem).not.toHaveClass(/sectionItemCompleted/);
 
-    await page
-      .getByRole("textbox")
-      .filter({ hasText: "# Create make_hexagon() function here" })
-      .locator("div")
-      .nth(1)
-      .click();
-    await page
-      .getByRole("textbox")
-      .filter({ hasText: "# Create make_hexagon() function here" })
+    const editor = page.getByTestId("code-editor-hexagon-testing");
+    await editor.locator(".cm-content").click();
+    await editor.press("ControlOrMeta+a");
+    await page.waitForTimeout(100);
+    await editor
+      .locator(".cm-content")
       .fill(
         "import turtle\n\nturtle.speed(0)\ndef make_hexagon():\n  # Your code here converting the code above to a loop\n  for i in range(6):\n    turtle.forward(50)\n    turtle.right(60)\n\n\nmake_hexagon()"
       );
@@ -351,15 +318,12 @@ test.describe("TestingSection for turtles", () => {
     });
     await expect(sectionItem).not.toHaveClass(/sectionItemCompleted/);
 
-    await page
-      .getByRole("textbox")
-      .filter({ hasText: "# Create make_hexagon() function here" })
-      .locator("div")
-      .nth(1)
-      .click();
-    await page
-      .getByRole("textbox")
-      .filter({ hasText: "# Create make_hexagon() function here" })
+    const editor = page.getByTestId("code-editor-hexagon-testing");
+    await editor.locator(".cm-content").click();
+    await editor.press("ControlOrMeta+a");
+    await page.waitForTimeout(100);
+    await editor
+      .locator(".cm-content")
       .fill(
         "import turtle\n\nturtle.speed(0)\ndef make_hexagon():\n  # Your code here converting the code above to a loop\n  for i in range(6):\n    turtle.forward(50)\n    turtle.right(61)\n\n\nmake_hexagon()"
       );
@@ -390,15 +354,12 @@ test.describe("TestingSection for turtles", () => {
     });
     await expect(sectionItem).not.toHaveClass(/sectionItemCompleted/);
 
-    await page
-      .getByRole("textbox")
-      .filter({ hasText: "# Create make_hexagon() function here" })
-      .locator("div")
-      .nth(1)
-      .click();
-    await page
-      .getByRole("textbox")
-      .filter({ hasText: "# Create make_hexagon() function here" })
+    const editor = page.getByTestId("code-editor-hexagon-testing");
+    await editor.locator(".cm-content").click();
+    await editor.press("ControlOrMeta+a");
+    await page.waitForTimeout(100);
+    await editor
+      .locator(".cm-content")
       .fill(
         "import turtle\n\nturtle.speed(0)\ndef make_hexagon(size)\n  # Your code here converting the code above to a loop\n  for i in range(6):\n    turtle.forward(size)\n    turtle.right(61)\n\n\nmake_hexagon(55)"
       );
@@ -422,15 +383,12 @@ test.describe("TestingSection for turtles", () => {
     });
     await expect(sectionItem).not.toHaveClass(/sectionItemCompleted/);
 
-    await page
-      .getByRole("textbox")
-      .filter({ hasText: "# Create make_hexagon() function here" })
-      .locator("div")
-      .nth(1)
-      .click();
-    await page
-      .getByRole("textbox")
-      .filter({ hasText: "# Create make_hexagon() function here" })
+    const editor = page.getByTestId("code-editor-hexagon-testing");
+    await editor.locator(".cm-content").click();
+    await editor.press("ControlOrMeta+a");
+    await page.waitForTimeout(100);
+    await editor
+      .locator(".cm-content")
       .fill(
         "import turtle\n\nturtle.speed(0)\ndef make_hexagon(size)\n  # Your code here converting the code above to a loop\n  for i in range(6):\n    turtle.forward(size)\n    turtle.right(61)\n\n\nmake_hexagon(55)"
       );
@@ -454,15 +412,12 @@ test.describe("TestingSection for turtles", () => {
     });
     await expect(sectionItem).not.toHaveClass(/sectionItemCompleted/);
 
-    await page
-      .getByRole("textbox")
-      .filter({ hasText: "# Create make_octagon(size) function here" })
-      .locator("div")
-      .nth(1)
-      .click();
-    await page
-      .getByRole("textbox")
-      .filter({ hasText: "# Create make_octagon(size) function here" })
+    const editor = page.getByTestId("code-editor-octagon-testing");
+    await editor.locator(".cm-content").click();
+    await editor.press("ControlOrMeta+a");
+    await page.waitForTimeout(100);
+    await editor
+      .locator(".cm-content")
       .fill(
         "import turtle\n\nturtle.speed(0)\ndef make_octagon(size):\n  # Your code here converting the code above to a loop\n  for i in range(8):\n    turtle.forward(size)\n    turtle.right(45)\n\n\nmake_octagon(55)"
       );
@@ -493,15 +448,12 @@ test.describe("TestingSection for turtles", () => {
     });
     await expect(sectionItem).not.toHaveClass(/sectionItemCompleted/);
 
-    await page
-      .getByRole("textbox")
-      .filter({ hasText: "# Create make_octagon(size) function here" })
-      .locator("div")
-      .nth(1)
-      .click();
-    await page
-      .getByRole("textbox")
-      .filter({ hasText: "# Create make_octagon(size) function here" })
+    const editor = page.getByTestId("code-editor-octagon-testing");
+    await editor.locator(".cm-content").click();
+    await editor.press("ControlOrMeta+a");
+    await page.waitForTimeout(100);
+    await editor
+      .locator(".cm-content")
       .fill(
         "import turtle\n\nturtle.speed(0)\ndef make_octagon(size):\n  # Your code here converting the code above to a loop\n  for i in range(8):\n    turtle.forward(55)\n    turtle.right(45)\n\n\nmake_octagon(55)"
       );

@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test.describe("DebuggerSection tests", () => {
   test("Test can step through a simple program", async ({ page }) => {
-    await page.goto("/python/lesson/01_variables/lessons/00_var_intro");
+    await page.goto("/python/lesson/01_variables/lessons/01_var_reset");
 
     const sectionItem = page.getByRole("listitem").filter({
       hasText: "Watching Variables Change",

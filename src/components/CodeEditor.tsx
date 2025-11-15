@@ -12,6 +12,7 @@ interface CodeEditorProps {
   height?: string;
   minHeight?: string;
   preventPaste?: boolean; // New prop to control paste prevention
+  "data-testid"?: string; // Test ID for e2e testing
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = ({
@@ -21,6 +22,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   height = "auto",
   minHeight = "100px",
   preventPaste = false, // Default to false
+  "data-testid": testId,
 }) => {
   const handleChange = useCallback(
     (val: string) => {
@@ -52,40 +54,42 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   }, [preventPaste]); // Re-create extensions only if preventPaste changes
 
   return (
-    <CodeMirror
-      value={value}
-      height={height}
-      minHeight={minHeight}
-      extensions={extensions}
-      onChange={handleChange}
-      readOnly={readOnly}
-      theme={oneDark}
-      basicSetup={{
-        lineNumbers: true,
-        highlightActiveLineGutter: true,
-        highlightSpecialChars: true,
-        history: true,
-        foldGutter: true,
-        drawSelection: true,
-        dropCursor: true,
-        allowMultipleSelections: true,
-        indentOnInput: true,
-        syntaxHighlighting: true,
-        bracketMatching: true,
-        closeBrackets: true,
-        autocompletion: true,
-        rectangularSelection: true,
-        crosshairCursor: true,
-        highlightActiveLine: true,
-        highlightSelectionMatches: true,
-        closeBracketsKeymap: true,
-        searchKeymap: true,
-        historyKeymap: true,
-        foldKeymap: true,
-        completionKeymap: true,
-        lintKeymap: true,
-      }}
-    />
+    <div data-testid={testId}>
+      <CodeMirror
+        value={value}
+        height={height}
+        minHeight={minHeight}
+        extensions={extensions}
+        onChange={handleChange}
+        readOnly={readOnly}
+        theme={oneDark}
+        basicSetup={{
+          lineNumbers: true,
+          highlightActiveLineGutter: true,
+          highlightSpecialChars: true,
+          history: true,
+          foldGutter: true,
+          drawSelection: true,
+          dropCursor: true,
+          allowMultipleSelections: true,
+          indentOnInput: true,
+          syntaxHighlighting: true,
+          bracketMatching: true,
+          closeBrackets: true,
+          autocompletion: true,
+          rectangularSelection: true,
+          crosshairCursor: true,
+          highlightActiveLine: true,
+          highlightSelectionMatches: true,
+          closeBracketsKeymap: true,
+          searchKeymap: true,
+          historyKeymap: true,
+          foldKeymap: true,
+          completionKeymap: true,
+          lintKeymap: true,
+        }}
+      />
+    </div>
   );
 };
 
