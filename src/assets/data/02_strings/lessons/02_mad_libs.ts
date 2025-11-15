@@ -24,7 +24,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Did you ever play Mad Libs as a kid? They're fill-in-the-blank stories where you provide random words (like 'purple', 'elephant', or 'dance') without knowing the story. Then those words get plugged into a template, creating unexpected results. The image below shows an example of what Mad Libs look like.",
+            'Did you ever play Mad Libs as a kid? They\'re fill-in-the-blank stories where you provide random words (like "purple", "elephant", or "dance") without knowing the story. Then those words get plugged into a template, creating unexpected results. The image below shows an example of what Mad Libs look like.',
         },
         {
           kind: "image",
@@ -85,7 +85,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Now it's your turn to complete a Mad Lib! Below is a story template with some variables already defined. Add the missing variables and print statements to complete the story.\n\nYou need to:\n1. Create a variable `action` with the value 'screamed'\n2. Create a variable `number` with the value 42\n3. Print: 'Suddenly, [hero_name] [action] very loudly!'\n4. Print: 'The [creature] ran away at [number] miles per hour!'\n\nMake sure to use f-strings for your print statements!",
+            'Now it\'s your turn to create a Mad Lib! Below is a story template with some variables already defined. Add the missing variables and print statements to complete the story.\n\nYou need to:\n1. Create a variable `action` with the value "screamed"\n2. Create a variable `number` with the value 42\n3. Print: `Suddenly, [hero_name] [action] very loudly!`\n4. Print: `The [creature] ran away at [number] miles per hour!`\n\nMake sure to use f-strings for your print statements!',
         },
       ],
       example: {
@@ -162,7 +162,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Mad Libs are fun, but they also reveal something profound about how computers work.\n\nThink about what happens when you run a Mad Lib program:\n1. The computer stores raw data in variables (just words and numbers)\n2. The f-string acts as a template - a pattern for how to present that data\n3. The output combines the data with context to create meaning\n\nThe computer transforms raw data into something humans can understand and enjoy. This is what all computer programs do - they take data and present it in ways that make sense to people.\n\nNow it's your turn to reflect on this idea. Create a simple example (3-5 lines of code) that shows raw data being transformed into meaningful, human-understandable output using f-strings. Then write 4-5 sentences reflecting on these questions:\n- Why is this translation from data to meaning important?\n- How does it make programs more useful?\n- What would happen if programs only showed raw data?\n- How does this connect to the Mad Libs you created?\n\nRemember to use the phrase 'as seen in the example above' in your reflection.",
+            'Mad Libs are fun, but they also reveal something profound about how computers work.\n\nThink about what happens when you run a Mad Lib program:\n1. The computer stores raw data in variables (just words and numbers)\n2. The f-string acts as a template - a pattern for how to present that data\n3. The output combines the data with context to create meaning\n\nThe computer transforms raw data into something humans can understand and enjoy. This is what all computer programs do - they take data and present it in ways that make sense to people.\n\nNow it\'s your turn to reflect on this idea. Create a simple example (3-5 lines of code) that shows raw data being transformed into meaningful, human-understandable output using f-strings. Then write 4-5 sentences reflecting on these questions:\n- Why is this translation from data to meaning important?\n- How does it make programs more useful?\n- What would happen if programs only showed raw data?\n- How does this connect to the Mad Libs you created?\n\nRemember to use the phrase "as seen in the example above" in your reflection.',
         },
       ],
       topic: "How F-Strings Bridge Computers and Humans",
@@ -181,7 +181,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Congratulations! You've mastered f-strings and created your own Mad Libs. You've also learned a fundamental concept in programming: **templates that computers fill with data**.\n\nThis pattern is everywhere in the digital world:\n\n**Weather apps:** The template is 'The temperature in [city] is [temp] degrees with [condition].' The data comes from weather sensors. Same template, different data every day.\n\n**Game scores:** The template is '[player] scored [points] points in [time] seconds!' The data comes from the game engine. Same template for every player.\n\n**Social media:** The template is '[friend] liked your [post type].' The data comes from the platform's database. Same template for millions of notifications.\n\n**Shopping websites:** The template is 'Item: [name], Price: $[price], In stock: [quantity].' The data comes from inventory systems.\n\nEvery time you see personalized output on any device - your name in an email, your score in a game, the temperature in your city - there's a template behind it. A programmer wrote an f-string (or something like it) that takes raw data and presents it in a way humans can understand.",
+            "Congratulations! You've mastered f-strings and created your own Mad Libs. You've also learned a fundamental concept in programming: **templates that computers fill with data**. This pattern is everywhere in the digital world:\n\n- **Weather apps:** The template is `The temperature in [city] is [temp] degrees with [condition].` The data comes from weather sensors.\n\n- **Game scores:** The template is `[player] scored [points] points in [time] seconds!` The data comes from the game engine.\n\n- **Social media:** The template is `[friend] liked your [post type].` The data comes from the platform's database.\n\nEvery time you see personalized output on a device there's a template behind it. A programmer wrote an f-string (or something like it) that takes raw data and presents it in a way humans can understand.",
         },
       ],
     } as InformationSectionData,

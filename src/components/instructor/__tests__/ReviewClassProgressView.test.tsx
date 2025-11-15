@@ -11,7 +11,7 @@ import { useAuthStore } from "../../../stores/authStore";
 import type { Unit, Lesson, LessonId, UnitId } from "../../../types/data";
 import type {
   InstructorStudentInfo,
-  InstructorClassUnitProgressResponse,
+  ClassUnitProgressResponse,
 } from "../../../types/apiServiceTypes";
 
 // Mock all external dependencies
@@ -56,12 +56,18 @@ const mockLessons: (Lesson & { guid: LessonId })[] = [
   },
 ];
 
-const mockProgressResponse: InstructorClassUnitProgressResponse = {
+const mockProgressResponse: ClassUnitProgressResponse = {
+  unitId: "test-unit" as UnitId,
   studentProgressData: [
     {
       studentId: "student-1",
       completedSectionsInUnit: {
-        "lesson-1": { "sec-1a": "some-timestamp" }, // 1 of 2 sections complete
+        "lesson-1": {
+          "sec-1a": {
+            completedAt: "2024-01-15T10:30:00Z",
+            attemptsBeforeSuccess: 1,
+          },
+        }, // 1 of 2 sections complete
       },
     },
   ],
@@ -81,9 +87,19 @@ describe("ReviewClassProgressView", () => {
     vi.mocked(dataLoader.fetchLessonData)
       .mockResolvedValueOnce(mockLessons[0])
       .mockResolvedValueOnce(mockLessons[1]);
-    vi.mocked(dataLoader.getRequiredSectionsForLesson)
-      .mockReturnValueOnce(mockLessons[0].sections) // Lesson 1 has 2 required
-      .mockReturnValueOnce(mockLessons[1].sections); // Lesson 2 has 1 required
+    vi.mocked(dataLoader.getRequiredSectionsForLesson).mockImplementation(
+      (lesson) => {
+        // Return the sections for the matching lesson
+        if (lesson.guid === mockLessons[0].guid) {
+          return ["sec-1a", "sec-1b"]; // Lesson 1 has 2 required sections
+        }
+        if (lesson.guid === mockLessons[1].guid) {
+          return ["sec-2a"]; // Lesson 2 has 1 required section
+        }
+        return [];
+      }
+    );
+    vi.mocked(dataLoader.hasReviewableAssignments).mockReturnValue(false);
     // Mock apiService
     vi.mocked(apiService.getInstructorClassUnitProgress).mockResolvedValue(
       mockProgressResponse
@@ -132,13 +148,9 @@ describe("ReviewClassProgressView", () => {
       await screen.findByRole("cell", { name: "Alice" })
     ).toBeInTheDocument();
 
-    // Check for lesson headers
-    expect(
-      screen.getByRole("columnheader", { name: "First Lesson" })
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("columnheader", { name: "Second Lesson" })
-    ).toBeInTheDocument();
+    // Check for lesson headers (text should be present in headers)
+    expect(screen.getByText("First Lesson")).toBeInTheDocument();
+    expect(screen.getByText("Second Lesson")).toBeInTheDocument();
 
     // Assert on calculated percentages
     // Alice: Lesson 1 (1/2 = 50%), Lesson 2 (0/1 = 0%)

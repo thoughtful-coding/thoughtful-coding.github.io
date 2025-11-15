@@ -300,3 +300,16 @@ export interface StudentLearningEntriesResponse {
 export interface StudentPrimmSubmissionsResponse {
   submissions: StoredPrimmSubmissionItem[];
 }
+
+/**
+ * Difficulty statistics for a specific section, calculated client-side
+ * from student completion data
+ */
+export interface SectionDifficultyStats {
+  sectionId: SectionId;
+  totalCompletions: number;
+  p50: number; // Median attempts (50th percentile)
+  p95: number; // 95th percentile attempts
+  mean: number; // Average attempts
+  distribution: Record<number, number>; // Map of attempts -> count
+}

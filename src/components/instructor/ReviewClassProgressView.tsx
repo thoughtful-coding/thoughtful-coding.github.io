@@ -5,6 +5,7 @@ import { useAuthStore } from "../../stores/authStore";
 import type {
   InstructorStudentInfo,
   StudentLessonProgressItem,
+  StudentUnitCompletionData,
 } from "../../types/apiServiceTypes";
 import type {
   Unit,
@@ -19,6 +20,8 @@ import {
   getRequiredSectionsForLesson,
   hasReviewableAssignments,
 } from "../../lib/dataLoader";
+import { calculateLessonAggregateStats } from "../../lib/difficultyCalculator";
+import StatsBadge from "./StatsBadge";
 
 import LoadingSpinner from "../LoadingSpinner";
 import styles from "./InstructorViews.module.css";
@@ -56,6 +59,9 @@ const ReviewClassProgressView: React.FC<ReviewClassProgressViewProps> = ({
   const [displayableClassProgress, setDisplayableClassProgress] = useState<
     DisplayableStudentUnitProgress[]
   >([]);
+  const [rawStudentData, setRawStudentData] = useState<
+    StudentUnitCompletionData[]
+  >([]);
   const [isLoadingClassProgressLocal, setIsLoadingClassProgressLocal] =
     useState<boolean>(false);
   const [classProgressErrorLocal, setClassProgressErrorLocal] = useState<
@@ -75,6 +81,7 @@ const ReviewClassProgressView: React.FC<ReviewClassProgressViewProps> = ({
   useEffect(() => {
     if (!selectedUnitId || !isAuthenticated) {
       setDisplayableClassProgress([]);
+      setRawStudentData([]);
       setSelectedUnitLessons([]);
       return;
     }
@@ -106,6 +113,9 @@ const ReviewClassProgressView: React.FC<ReviewClassProgressViewProps> = ({
 
         const classProgressResponse =
           await apiService.getInstructorClassUnitProgress(selectedUnitId, []);
+
+        // Store raw student data for difficulty statistics calculation
+        setRawStudentData(classProgressResponse.studentProgressData);
 
         const computedProgress: DisplayableStudentUnitProgress[] =
           classProgressResponse.studentProgressData.map((studentData) => {
@@ -210,6 +220,30 @@ const ReviewClassProgressView: React.FC<ReviewClassProgressViewProps> = ({
     return `rgba(70, 180, 70, ${opacity})`;
   };
 
+  // Helper function to render difficulty statistics for a lesson
+  const renderLessonStats = (lesson: Lesson & { guid: LessonId }) => {
+    // Only show stats if we have student data
+    if (rawStudentData.length === 0) return null;
+
+    const requiredSections = getRequiredSectionsForLesson(lesson);
+    const stats = calculateLessonAggregateStats(
+      rawStudentData,
+      lesson.guid,
+      requiredSections
+    );
+
+    if (!stats) return null;
+
+    return (
+      <StatsBadge
+        p50={stats.p50}
+        p95={stats.p95}
+        compact
+        totalCompletions={rawStudentData.length}
+      />
+    );
+  };
+
   // This new helper function contains the logic to decide what to render.
   const renderContent = () => {
     if (isLoadingUnitsGlobal) {
@@ -274,16 +308,19 @@ const ReviewClassProgressView: React.FC<ReviewClassProgressViewProps> = ({
                 const lessonLink = `/python/instructor-dashboard/assignments?unit=${selectedUnitId}&lesson=${lesson.guid}`;
                 return (
                   <th key={lesson.guid} title={lesson.guid}>
-                    {hasAssignments ? (
-                      <Link
-                        to={lessonLink}
-                        title={`Review assignments for ${lesson.title}`}
-                      >
-                        {lesson.title} ↗
-                      </Link>
-                    ) : (
-                      lesson.title
-                    )}
+                    <div>
+                      {hasAssignments ? (
+                        <Link
+                          to={lessonLink}
+                          title={`Review assignments for ${lesson.title}`}
+                        >
+                          {lesson.title} ↗
+                        </Link>
+                      ) : (
+                        lesson.title
+                      )}
+                      {renderLessonStats(lesson)}
+                    </div>
                   </th>
                 );
               })}

@@ -24,7 +24,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "So far, you've learned how to work with strings and integers directly in your code. But, what if you want to use the same value multiple times? Or, what if you want to easily change a value that's used in many different locations? For example, consider the simple program below:",
+            "So far, you've learned how to work with strings and integers directly in your code. But, what if you want to use the same value multiple times? Or, what if you want to change a value that's used in many different locations? For example, consider the simple program below:",
         },
         {
           kind: "code",
@@ -34,7 +34,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "The program runs and interacts with the user `\"Eric\"` without any issues. If you wanted to alter the program to greet someone else, however, then you'd have to change every single line. That's where **variables** come in. Variables allow you to give a name to a piece of data so you can easily use and change it throughout your program.",
+            "The program runs and interacts with the user `\"Eric\"` without any issues. If you wanted to alter the program to greet someone else, however, then you'd have to change every single line. That's where **variables** come in. Variables allow you to give a piece of data a name so you can easily use and change it throughout your program.",
         },
       ],
     } as InformationSectionData,
