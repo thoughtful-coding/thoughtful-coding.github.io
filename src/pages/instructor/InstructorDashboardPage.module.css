@@ -139,6 +139,7 @@
   background-color: var(
     --bg-code
   ); /* Consistent with filter bars in child views */
+
   border-radius: 6px;
   border: 1px solid var(--border-primary);
   display: flex;

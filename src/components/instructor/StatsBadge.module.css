@@ -29,14 +29,14 @@
 /* Stat label (e.g., "Median:", "p95:") */
 .label {
   font-size: 0.85em;
-  color: #666;
+  color: var(--text-muted);
   font-weight: 500;
 }
 
 /* Student count display */
 .total {
   font-size: 0.85em;
-  color: #999;
+  color: var(--text-disabled);
   font-style: italic;
 }
 
@@ -56,79 +56,79 @@
 
 /* Color coding for badge pills (compact mode) */
 .badge-green {
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
+  background-color: var(--success-light);
+  color: var(--success-text);
+  border: 1px solid var(--success);
 }
 
 .badge-yellow {
-  background-color: #fff3cd;
-  color: #856404;
-  border: 1px solid #ffeaa7;
+  background-color: var(--warning-light);
+  color: var(--warning-text);
+  border: 1px solid var(--warning);
 }
 
 .badge-red {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
+  background-color: var(--error-light);
+  color: var(--error-text);
+  border: 1px solid var(--error-border);
 }
 
 /* Color coding for text values (full mode) */
 .value-green {
-  color: #28a745;
+  color: var(--success);
   font-weight: 600;
   font-size: 1.1em;
 }
 
 .value-yellow {
-  color: #ffc107;
+  color: var(--warning);
   font-weight: 600;
   font-size: 1.1em;
 }
 
 .value-red {
-  color: #dc3545;
+  color: var(--error);
   font-weight: 600;
   font-size: 1.1em;
 }
 
-/* Dark mode support (optional) */
+/* Dark mode support - CSS variables automatically adjust */
 @media (prefers-color-scheme: dark) {
   .badge-green {
-    background-color: rgba(40, 167, 69, 0.2);
-    color: #7dcea0;
-    border-color: rgba(40, 167, 69, 0.3);
+    background-color: var(--success-bg-subtle);
+    color: var(--success-text);
+    border-color: var(--success);
   }
 
   .badge-yellow {
-    background-color: rgba(255, 193, 7, 0.2);
-    color: #f9e79f;
-    border-color: rgba(255, 193, 7, 0.3);
+    background-color: var(--warning-light);
+    color: var(--warning-text);
+    border-color: var(--warning);
   }
 
   .badge-red {
-    background-color: rgba(220, 53, 69, 0.2);
-    color: #f1948a;
-    border-color: rgba(220, 53, 69, 0.3);
+    background-color: var(--error-bg-subtle);
+    color: var(--error-text);
+    border-color: var(--error);
   }
 
   .value-green {
-    color: #7dcea0;
+    color: var(--success-text);
   }
 
   .value-yellow {
-    color: #f9e79f;
+    color: var(--warning-text);
   }
 
   .value-red {
-    color: #f1948a;
+    color: var(--error-text);
   }
 
   .label {
-    color: #aaa;
+    color: var(--text-muted);
   }
 
   .total {
-    color: #888;
+    color: var(--text-disabled);
   }
 }

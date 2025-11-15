@@ -125,6 +125,7 @@
   background-color: var(
     --bg-code
   ); /* Light grey background for the editor area */
+
   height: 100%; /* Ensure it fills the wrapper vertically */
 }
 /* Fallback if .cm-theme doesn't work */

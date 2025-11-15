@@ -14,6 +14,7 @@ body {
     --background-color,
     #fff
   ); /* Use CSS variable with fallback */
+
   margin: 0 auto;
   padding: 2rem;
   max-width: 1200px;
