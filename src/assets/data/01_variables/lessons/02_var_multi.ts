@@ -7,6 +7,7 @@ import type {
   MultipleChoiceSectionData,
   PRIMMSectionData,
   MatchingSectionData,
+  MultipleSelectionSectionData,
 } from "../../../../types/data";
 
 const lessonData: Lesson = {
@@ -41,7 +42,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "The program below recreates the example from the video. If you were to insert the line `students_count = students_count + 16` between the first and second lines, what would be printed out?",
+            "The program below recreates the example from the video. If you were to insert the line `students_count = students_count + 16` **between the first and second lines**, what would be printed out?",
         },
         {
           kind: "code",
@@ -62,7 +63,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            'It\'s time to increase the degree of difficulty by using _multiple_ variables. This is very common when a program needs to operate on different pieces of data. When this happens, each variable has its own name and stores its own, independent value.\n\nStep line-by-line through the code below and watch how each variable maintains its own, separate value. As before, pay attention to the `Variables` and `Program Output` side-panels. If you go slow, you can see how different values pop in and out of the memory slots designated by the "variable labels".',
+            'It\'s time to increase the degree of difficulty by using _multiple variables_ in a single program. This is very common when a program needs to operate on different pieces of data as it runs. When this happens, each variable has its own unique name and stores its own independent value.\n\nStep line-by-line through the code below and watch how each variable maintains its own, separate value. As before, pay attention to the `Variables` and `Program Output` side-panels. If you go slow, you can see how different values pop in and out of the memory slots designated by the "variable labels".',
         },
       ],
       example: {
@@ -79,7 +80,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "If you were to insert the line `students_count = students_count + 16` between the first and second line of the example from the video, what would be printed out?",
+            "The program below uses **six different variables**. See if you can track the the different values of each variable in order to determine what would be printed out after the program was run.",
         },
         {
           kind: "code",
@@ -94,18 +95,6 @@ const lessonData: Lesson = {
       },
     } as MultipleChoiceSectionData,
     {
-      kind: "Information",
-      id: "variables-single",
-      title: "Short Term Memory",
-      content: [
-        {
-          kind: "text",
-          value:
-            'An important thing to understand is that variables can only remember one thing at a time. As soon as their value is updated, they have no way to "remember" what their previous value was.\n\nConsider the line of code `x = x + 1`. The computer handles this line in two distinct parts. First, it calculates what the stuff to the **right** of the equal sign (the value) should be. Then, it saves this value into the variable on the **left** side of the equal sign. In the end, there\'s no way to know what the original value of `x` was.',
-        },
-      ],
-    } as InformationSectionData,
-    {
       kind: "PRIMM",
       id: "switch-values-primm" as SectionId,
       title: "Switching Values",
@@ -113,7 +102,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "A common problem in programming is to switch (swap) the values stored in two variables. For example, if you have the variables `x` and `y`, you might want to store the value of `x` into `y` and the value of `y` into `x`. Unfortunately, the fact that variables can only store one value at a time can make this tricky.\n\nPredict what this program will output, then run it to check your prediction.",
+            'As stated in the previous lesson, variables can only remember one thing at a time. As soon as their value is updated, they have no way to "remember" what their previous value was.\n\nThis inability to remember previous values can make some things that seem easy a bit trickier than expected. For example, a common problem in programming is to switch (swap) the values stored in two variables. The program below tries to do this by saving what was in `y` into `x` (line 3) and saving what was in `y` into `x` (line 4). Unfortunately, there\'s an issue with this approach.\n\nPredict what this program will output, then run it to check your prediction.',
         },
       ],
       example: {
@@ -147,6 +136,22 @@ const lessonData: Lesson = {
           "Correct! You fist need to save the value of `x` so it doesn't later get lost.",
       },
     } as MatchingSectionData,
+    {
+      kind: "MultipleSelection",
+      id: "variable-summary",
+      title: "Variable Values",
+      content: [
+        {
+          kind: "text",
+          value: "Blah blah blah. Select all that apply.",
+        },
+      ],
+      options: ["16", "428", "1016", "Error"],
+      correctAnswers: [2],
+      feedback: {
+        correct: "Correct!",
+      },
+    } as MultipleSelectionSectionData,
     {
       kind: "Information",
       id: "variables-conclusion",

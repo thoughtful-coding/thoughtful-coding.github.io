@@ -24,7 +24,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "In previous lessons, you learned how to create variables that store both strings and integers. You also learned how to print these variables. However, there's something we carefully avoided talking about: printing integers and strings together on the same line.\n\nFor example, if you have a variable `age` that holds the integer `15` (via the code `age = 15`), we've only shown you how to print `age` by itself. We haven't shown you how to print something like `You are 15 years old` where the integer is combined with a string. In this lesson, we'll show you different ways to try and do this and how to debug any errors you encounter along the way.",
+            "In previous lessons, you learned about the string and integer data types. You've learned how to create variables that store these different data types. However, there's something we've carefully avoided talking about up until this point: printing integers and strings together _on the same line_.\n\nFor example, if you have a variable `age` that holds the integer `15` (via the code `age = 15`), we've only shown you how to print `age` by itself. We haven't shown you how to print something like `You are 15 years old` where the integer is combined with a string. In this lesson, we'll show you different ways to try and do this and how to debug any errors you encounter along the way.",
         },
       ],
     } as InformationSectionData,
@@ -36,7 +36,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Below is a simple program that tries to print out two simple sentences. It uses the `+` operator to combine strings with variables holding different data types. Predict what will happen when you run this code, then check your prediction.",
+            "Below is a simple program that tries to print out two simple sentences. It uses the `+` operator to combine strings with two different variables. The first line combines the string with a variable holding a string. The second line combines a string with a variable holding an integer. Predict what will happen when you run this code, then check your prediction.",
         },
       ],
       example: {
@@ -57,7 +57,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "The solution to the problem of printing strings and integers on the same line is something called an **f-string** (short for 'format string'). An f-string lets you easily insert variables into text, regardless of whether they're strings or integers.\n\nHere's the same program from before, but using f-strings. Notice three key parts:\n1. The letter `f` appears right before the opening quote\n2. Variable names go inside curly braces `{}`\n3. Python automatically converts the variable to text\n\nRun this code and see how smoothly it works:",
+            "The solution to the problem of printing strings and integers on the same line is something called an **f-string** (short for \"format string\"). An f-string lets you easily insert variables into text, regardless of whether they're strings or integers.\n\nHere's the same program from before, but using f-strings. Notice the three key parts:\n1. The letter `f` appears right before the opening quote\n2. The variables go inside the curly braces `{}`\n3. Python automatically converts the variables to strings\n\nRun this code and see how smoothly it works:",
         },
       ],
       example: {
@@ -95,7 +95,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Given that `score = 100`, which of the following correctly uses an f-string to print 'Score: 100'?",
+            "Getting the syntax of an f-string exactly right is very important. Given that `score = 100`, which of the following correctly uses an f-string to print 'Score: 100'?",
         },
       ],
       options: [
@@ -141,7 +141,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Remember the TypeError you saw at the beginning of this lesson? That happened because Python couldn't use `+` to combine strings and integers. You'd need to convert the integer to a string first, which is complicated and error-prone.\n\nF-strings solve this problem elegantly:\n- They automatically handle different data types (strings, integers, even calculations)\n- They're much easier to read than alternatives\n- You can see exactly what the output will look like just by reading the code\n- You can put expressions (like `{age + 1}`) directly inside the curly braces",
+            "Remember the `TypeError` you saw at the beginning of this lesson? That happened because Python couldn't use `+` to combine strings and integers. You'd need to convert the integer to a string first, which is complicated and error-prone.\n\nF-strings solve this problem elegantly:\n- They automatically handle different data types (strings, integers, even calculations)\n- They're much easier to read than alternatives\n- You can see exactly what the output will look like just by reading the code\n- You can put expressions (like `{age + 1}`) directly inside the curly braces",
         },
       ],
     } as InformationSectionData,

@@ -34,7 +34,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "The name `\"Eric\"` is used over and over. If you wanted to change your program to greet someone else, however, then you'd have to change every single line. That's where **variables** come in. Variables allow you to give a name to a piece of data so you can use it repeatedly throughout your program.",
+            "The program runs and interacts with the user `\"Eric\"` without any issues. If you wanted to alter the program to greet someone else, however, then you'd have to change every single line. That's where **variables** come in. Variables allow you to give a name to a piece of data so you can easily use and change it throughout your program.",
         },
       ],
     } as InformationSectionData,
@@ -46,7 +46,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            'You can create a variable in Python with just a single line of code. For example, `name = \"Eric\"` creates a variable named `name` and then stores the string `"Eric"` in it. You can then reference the variable `name` later in the program and it will give you back the value `"Eric"`.\n\nBased on this brief explanation, predict what the code below will output, then run it to check your prediction.',
+            'You can create a variable in Python with just a single line of code. For example, `name = "Eric"` creates a variable named `name` and then stores the string `"Eric"` in it. You can then reference the variable `name` later in the program and it will give you back the value `"Eric"`.\n\nBased on this brief explanation, predict what the code below will output, then run it to check your prediction.',
         },
       ],
       predictPrompt:
@@ -67,7 +67,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Variables are such an important concept that it's worth slowing down what just happened with the debugger. As you step line-by-line through the program pay particular attention to the following:\n- How the variable `name` shows up in the `Variables` side-panel\n- How the value stored in `name` is used throughout the program\n\nStep carefully through the program and try and form a mental image of the variable `name` holding or storing a value that can used whenever the variable is called.",
+            "Variables are such an important concept that it's worth slowing down what just happened with the debugger. As you step line-by-line through the program, pay particular attention to the following:\n- When the variable `name` shows up in the `Variables` side-panel\n- How the value stored in `name` is used throughout the program\n\nStep carefully through the program and try and form a mental image of the variable `name` holding or storing a value that can used whenever the variable is called.",
         },
       ],
       example: {
@@ -129,7 +129,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "There are two key operations for variables: **set** and **read**.\n\n- **Set:** `age = 15` \n   - This *sets* the value of `age` to be `15`\n- **Read:** `print(age)` and `print(age + 5)`\n    - These *reads* the value `10` from `points` and uses it in calculations.\n\nThese two operations - set and read - are the two core things you can do with variables. To tie it back to the debugger, you can only store values into the `Variables` slots and then get the values out of those slots.\n\nBased on this explanation, match the following lines of code with their outcome.",
+            "There are two key operations for variables: **set** and **read**.\n\n- **Set:** `age = 15` \n   - This *sets* the value of `age` to be `15`\n- **Read:** `print(age)` and `print(age + 5)`\n    - These *reads* the value `10` from `points` and use it in calculations.\n\nThese two operations - set and read - are the two core things you can do with variables. To tie it back to the debugger, you can only store values into the `Variables` slots and then get the values out of those slots.\n\nBased on this explanation, match the following lines of code with their outcome.",
         },
       ],
       prompts: [
@@ -157,7 +157,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "This quiz tests your understanding of **set** versus **read**.\n\nThe first line, `points = 10`, **sets** the value of `points`. The next three `print` lines all **read** the value of `points`\n\nWhat will the three lines print?",
+            "This program below sets the variable `points` once and then reads the value of `points` three times (sometimes doing an operation on that value). What will the three lines print?",
         },
         {
           kind: "code",

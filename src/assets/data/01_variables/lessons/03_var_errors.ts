@@ -22,7 +22,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Using variables is necessary for pretty much all programs. Therefore, it's necessary to know how to handle errors that are \"raised\" while you're using them. As stated in the previous lesson on `TypeErrors`, errors are one of the most common reasons new programmers feel overwhelmed. In this lesson, you'll learn to understand variable errors in order to make you a more confident, able programmer.",
+            "Using variables is necessary for pretty much all programs. Therefore, it's necessary to know how to handle errors that are \"raised\" when you accidentally use them incorrectly. As stated in the previous lesson on `TypeErrors`, errors are one of the most common reasons new programmers feel overwhelmed. In this lesson, you'll learn to understand variable errors in order to make you a more confident, able programmer.",
         },
       ],
     } as InformationSectionData,
@@ -34,13 +34,13 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "When you misspell a word in a string, you get a typo. When you misspell a variable name, you get a `NameError`. The error message follows the same format as the previous errors that we've encountered where the key information is in the last two lines. For example, assume you tried to run the code below.",
+            "When you misspell a word in a string, you get a typo. When you misspell a variable name, you get a `NameError`. `NameErrors` have the same format as the previous errors that we've encountered; the key information is in the last two lines. For example, assume you tried to run the code below.",
         },
         { kind: "code", value: "number = 10\nprint(numbr)\n" },
         {
           kind: "text",
           value:
-            'This would result in the following error:\n```\nNameError: Traceback (most recent call last):\n  File "/lib/python311.zip/_pyodide/_base.py", line 573, in eval_code_async\n    await CodeRunner(\n  File "/lib/python311.zip/_pyodide/_base.py", line 393, in run_async\n    coroutine = eval(self.code, globals, locals)\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "<exec>", line 2, in <module>\nNameError: name \'numbr\' is not defined\n```\nThe error is saying is that the the computer failed trying to read a non-existent variable named `numbr` on line 2. This makes sense because the program misspelled the variable `number` that was created on the previous line.',
+            'This would result in the following `NameError`:\n```\nNameError: Traceback (most recent call last):\n  File "/lib/python311.zip/_pyodide/_base.py", line 573, in eval_code_async\n    await CodeRunner(\n  File "/lib/python311.zip/_pyodide/_base.py", line 393, in run_async\n    coroutine = eval(self.code, globals, locals)\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "<exec>", line 2, in <module>\nNameError: name \'numbr\' is not defined\n```\nThe error is saying is that the the computer failed trying to read a non-existent variable named `numbr` on line 2. This makes sense because the program misspelled the variable `number` that was created on the previous line.',
         },
       ],
     } as InformationSectionData,
@@ -102,7 +102,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            'Hopefully, now you can appreciate how a computer executes a program. A computer goes line by line through the program. Every time it sees a line with a `=`, it calculates the value of the stuff on the right and stores it into the variable on the left. Every time a variable is read, the computer accesses its memory for the value stored inside it. If a variable by that name hasn\'t been created before, then the computer "raises" a `NameError`. If the operation between the data isn\'t possible, then it "raises" a `TypeError`. Finally, if there\'s something like a missing parentheses or quotation mark, it "raises" a `SyntaxError`.\n\nThis is basically how your computer is working right now. It\'s executing billions of lines of code a second, reading values in memory and using those values to calculate new things. The overall effect is a machine that seamlessly responds to your clicks and keystrokes.',
+            'Hopefully, now you can fully appreciate how a computer actually works. A computer goes line by line through the program. Every time it sees a line with a `=`, it calculates the value of the stuff on the right and stores it into the variable on the left. Every time a variable is read, the computer accesses its memory for the value stored inside it. If a variable by that name hasn\'t been created before, then the computer "raises" a `NameError`. If the operation between the data isn\'t possible, then it "raises" a `TypeError`. Finally, if there\'s something like a missing parentheses or quotation mark, it "raises" a `SyntaxError`.\n\nThis is basically how your computer is working right now. It\'s executing billions of lines of code a second, reading values in memory and using those values to calculate new things. The overall effect is a machine that seamlessly responds to your clicks and keystrokes.',
         },
       ],
     } as InformationSectionData,
@@ -156,7 +156,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Congratulations on learning about variables! You now understand how to set variables, reuse variables, and even update a variable's value throughout your programs. Variables are the foundation for creating programs that can respond to complex problems.\n\nYou should feel proud. Over the previous three lessons, you've learned some of the most important concepts in programming. They will come up over and over again. In the next lesson, we'll pause and test ourselves on everything we've learned so far.",
+            "Congratulations on learning about variables! You now understand how to set, read, and even update a variable's value throughout your programs. Variables are the foundation for creating programs that can respond to complex problems.\n\nYou should feel proud. Over the previous four lessons, you've learned some of the most important concepts in programming. They will come up over and over again. In the next lesson, we'll pause and test ourselves on everything we've learned so far.",
         },
       ],
     } as InformationSectionData,

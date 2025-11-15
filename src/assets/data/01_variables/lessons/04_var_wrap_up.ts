@@ -23,7 +23,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "You've learned a lot in the previous lessons: how to work with strings and integers, how operations affect data-types differently, and how to store values in variables. What's more, these topics build on each other in varying and subtle ways. Therefore, this review uses a learning technique called **interleaving** to help solidify your understanding of all these interrelated topics.\n\nInterleaving is technique where you answer questions about everything you've encountered so far. It forces you to utilize prior knowledge while simultaneously reviewing what you just learned. This approach helps your brain make stronger connections between concepts and mirrors how real programming works.",
+            "You've learned a lot in the previous lessons: how to work with strings and integers, how operations affect data-types differently, and how to store values in variables. What's more, these topics build on each other in varying and subtle ways. Therefore, this review uses a learning technique called **interleaving** to help solidify your understanding of all these interrelated topics.\n\nInterleaving is technique where you answer questions about everything you've encountered so far - not just the most recent unit. It forces you to utilize prior knowledge while simultaneously reviewing what you just learned. This approach helps your brain make stronger connections between concepts and mirrors how real programming works.",
         },
       ],
     } as InformationSectionData,
