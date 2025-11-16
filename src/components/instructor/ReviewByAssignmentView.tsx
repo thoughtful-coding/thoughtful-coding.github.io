@@ -106,18 +106,15 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
             assignmentDisplayTitle: `Reflection: "${section.title}" (in Lesson: ${lesson.title})`,
           });
         } else if (section.kind === "PRIMM") {
-          ((section as PRIMMSectionData).examples || []).forEach((example) => {
-            displayableAssignments.push({
-              key: `${lesson.guid}-${section.id}-primm-${example.id}`,
-              unitId: unit.id,
-              lessonId: lesson.guid,
-              lessonTitle: lesson.title,
-              sectionId: section.id,
-              sectionTitle: section.title,
-              assignmentType: "PRIMM",
-              primmExampleId: example.id,
-              assignmentDisplayTitle: `PRIMM: "${section.title}" (in Lesson: ${lesson.title})`,
-            });
+          displayableAssignments.push({
+            key: `${lesson.guid}-${section.id}-primm`,
+            unitId: unit.id,
+            lessonId: lesson.guid,
+            lessonTitle: lesson.title,
+            sectionId: section.id,
+            sectionTitle: section.title,
+            assignmentType: "PRIMM",
+            assignmentDisplayTitle: `PRIMM: "${section.title}" (in Lesson: ${lesson.title})`,
           });
         } else if (section.kind === "Testing") {
           displayableAssignments.push({

@@ -414,7 +414,7 @@ export async function getSubmissionsForAssignment<
 export async function getInstructorStudentFinalLearningEntries(
   studentId: UserId
 ): Promise<StudentLearningEntriesResponse> {
-  const endpoint = `${API_GATEWAY_BASE_URL}/instructor/students/${studentId}/learning-entries?filter=final`;
+  const endpoint = `${API_GATEWAY_BASE_URL}/instructor/students/${encodeURIComponent(studentId)}/learning-entries?filter=final`;
   const response = await fetchWithAuth(endpoint);
   return handleApiResponse(response);
 }
@@ -422,7 +422,7 @@ export async function getInstructorStudentFinalLearningEntries(
 export async function getInstructorStudentPrimmSubmissions(
   studentId: UserId
 ): Promise<StudentPrimmSubmissionsResponse> {
-  const endpoint = `${API_GATEWAY_BASE_URL}/instructor/students/${studentId}/primm-submissions`;
+  const endpoint = `${API_GATEWAY_BASE_URL}/instructor/students/${encodeURIComponent(studentId)}/primm-submissions`;
   const response = await fetchWithAuth(endpoint);
   return handleApiResponse(response);
 }
@@ -430,7 +430,7 @@ export async function getInstructorStudentPrimmSubmissions(
 export async function getStudentDetailedProgress(
   studentId: UserId
 ): Promise<StudentDetailedProgressResponse> {
-  const endpoint = `${API_GATEWAY_BASE_URL}/instructor/students/${studentId}/detailed-progress`;
+  const endpoint = `${API_GATEWAY_BASE_URL}/instructor/students/${encodeURIComponent(studentId)}/detailed-progress`;
   const response = await fetchWithAuth(endpoint);
   return handleApiResponse(response);
 }

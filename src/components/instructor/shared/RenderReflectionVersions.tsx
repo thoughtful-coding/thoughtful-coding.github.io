@@ -45,7 +45,7 @@ const RenderReflectionVersions: React.FC<RenderReflectionVersionsProps> = ({
   };
 
   const lessonPath = getLessonPathSync(lessonGuid);
-  const lessonLinkPath = lessonPath ? `/lesson/${lessonPath}` : "#";
+  const lessonLinkPath = lessonPath ? `/python/lesson/${lessonPath}` : "#";
 
   return (
     <div className={styles.submissionDetailCard}>

@@ -18,7 +18,7 @@ const RenderTestingSolution: React.FC<RenderTestingSolutionProps> = ({
 }) => {
   // Use the new sync function to get the correct path
   const lessonPath = getLessonPathSync(submission.lessonId);
-  const lessonLinkPath = lessonPath ? `/lesson/${lessonPath}` : "#";
+  const lessonLinkPath = lessonPath ? `/python/lesson/${lessonPath}` : "#";
 
   // Format the submitted timestamp
   const submittedDate = new Date(submission.submittedAt).toLocaleString();

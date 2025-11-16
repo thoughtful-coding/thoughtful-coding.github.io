@@ -65,7 +65,10 @@ describe("RenderPrimmActivity", () => {
     const link = screen.getByRole("link", {
       name: "View Original Section in Lesson",
     });
-    expect(link).toHaveAttribute("href", "/lesson/unit-1/primm-lesson-path");
+    expect(link).toHaveAttribute(
+      "href",
+      "/python/lesson/unit-1/primm-lesson-path"
+    );
   });
 
   it("handles a submission with missing optional AI feedback", () => {

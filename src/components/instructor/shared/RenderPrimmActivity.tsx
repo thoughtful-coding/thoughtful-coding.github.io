@@ -34,7 +34,7 @@ const RenderPrimmActivity: React.FC<RenderPrimmActivityProps> = ({
 
   // Use the new sync function to get the correct path
   const lessonPath = getLessonPathSync(submission.lessonId);
-  const lessonLinkPath = lessonPath ? `/lesson/${lessonPath}` : "#";
+  const lessonLinkPath = lessonPath ? `/python/lesson/${lessonPath}` : "#";
 
   return (
     <div className={styles.submissionDetailCard}>

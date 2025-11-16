@@ -12,6 +12,7 @@ import styles from "./ReviewStudentDetailView.module.css";
 import instructorStyles from "../InstructorViews.module.css";
 import RenderReflectionVersions from "../shared/RenderReflectionVersions";
 import RenderPrimmActivity from "../shared/RenderPrimmActivity";
+import RenderTestingSolution from "../shared/RenderTestingSolution";
 
 // This component no longer needs props
 const ReviewStudentDetailView: React.FC = () => {
@@ -22,8 +23,11 @@ const ReviewStudentDetailView: React.FC = () => {
     useState<StudentDetailedProgressResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [viewingSubmission, setViewingSubmission] =
-    useState<SectionStatusItem | null>(null);
+  const [viewingSubmission, setViewingSubmission] = useState<{
+    section: SectionStatusItem;
+    lessonId: string;
+    lessonTitle: string;
+  } | null>(null);
 
   const { isAuthenticated } = useAuthStore();
 
@@ -63,7 +67,7 @@ const ReviewStudentDetailView: React.FC = () => {
   }, [studentId, isAuthenticated]);
 
   const handleBack = () => {
-    navigate("/instructor-dashboard/students"); // Always navigate back to the main student list page
+    navigate("/python/instructor-dashboard/students"); // Always navigate back to the main student list page
   };
 
   // ... (renderStatusBadge and renderSubmissionModal functions remain the same)
@@ -84,10 +88,11 @@ const ReviewStudentDetailView: React.FC = () => {
   };
 
   const renderSubmissionModal = () => {
-    if (!viewingSubmission || !viewingSubmission.submissionDetails) return null;
+    if (!viewingSubmission || !viewingSubmission.section.submissionDetails)
+      return null;
 
-    const { sectionKind, submissionDetails, sectionTitle, sectionId } =
-      viewingSubmission;
+    const { section, lessonId, lessonTitle } = viewingSubmission;
+    const { sectionKind, submissionDetails, sectionTitle, sectionId } = section;
 
     return (
       <div
@@ -99,12 +104,23 @@ const ReviewStudentDetailView: React.FC = () => {
           onClick={(e) => e.stopPropagation()}
         >
           {sectionKind === "Reflection" && Array.isArray(submissionDetails) && (
-            <RenderReflectionVersions versions={submissionDetails} />
+            <RenderReflectionVersions
+              versions={submissionDetails}
+              lessonGuid={lessonId as any}
+              sectionId={sectionId}
+            />
           )}
           {sectionKind === "PRIMM" && !Array.isArray(submissionDetails) && (
             <RenderPrimmActivity
               submission={submissionDetails}
-              lessonTitle={sectionTitle}
+              lessonTitle={lessonTitle}
+              sectionId={sectionId}
+            />
+          )}
+          {sectionKind === "Testing" && !Array.isArray(submissionDetails) && (
+            <RenderTestingSolution
+              submission={submissionDetails}
+              lessonTitle={lessonTitle}
               sectionId={sectionId}
             />
           )}
@@ -158,7 +174,13 @@ const ReviewStudentDetailView: React.FC = () => {
                         {section.status === "submitted" && (
                           <button
                             className={styles.viewSubmissionButton}
-                            onClick={() => setViewingSubmission(section)}
+                            onClick={() =>
+                              setViewingSubmission({
+                                section,
+                                lessonId: lesson.lessonId,
+                                lessonTitle: lesson.lessonTitle,
+                              })
+                            }
                           >
                             View Submission
                           </button>
