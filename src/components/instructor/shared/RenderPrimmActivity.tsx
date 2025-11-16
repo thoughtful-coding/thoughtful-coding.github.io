@@ -74,13 +74,6 @@ const RenderPrimmActivity: React.FC<RenderPrimmActivityProps> = ({
             {submission.userPredictionText}
           </ReactMarkdown>
         </div>
-        <div className={styles.infoEntry}>
-          <strong>Confidence: </strong>
-          <span className={styles.infoText}>
-            {submission.userPredictionConfidence}/3
-          </span>
-          {/* Assuming 1-3 scale */}
-        </div>
         {submission.actualOutputSummary && (
           <div className={styles.infoEntry}>
             <strong>Actual Output Summary (User Reported):</strong>

@@ -17,7 +17,6 @@ const mockSubmission: StoredPrimmSubmissionItem = {
   codeSnippet: "for i in range(3):\n  print(i)",
   userPredictionPromptText: "What will this code print?",
   userPredictionText: "It will print 0, 1, 2.",
-  userPredictionConfidence: 3,
   actualOutputSummary: "It printed 0, 1, and 2, each on a new line.",
   userExplanationText: "The loop runs three times.",
   aiPredictionAssessment: "achieves",
@@ -54,7 +53,6 @@ describe("RenderPrimmActivity", () => {
     // Check for student's work
     expect(screen.getByText("It will print 0, 1, 2.")).toBeInTheDocument();
     expect(screen.getByText("The loop runs three times.")).toBeInTheDocument();
-    expect(screen.getByText("3/3")).toBeInTheDocument(); // Confidence
 
     // Check for AI evaluation
     expect(screen.getByText("ACHIEVES")).toBeInTheDocument();

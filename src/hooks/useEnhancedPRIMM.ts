@@ -118,7 +118,6 @@ export const useEnhancedPRIMM = ({
           codeSnippet,
           userPredictionPromptText: predictPrompt,
           userPredictionText: state.userEnglishPrediction,
-          userPredictionConfidence: 2, // Using a default value as before
           actualOutputSummary: state.actualPyodideOutput,
           userExplanationText: state.userExplanationText,
         };

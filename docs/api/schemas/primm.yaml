@@ -9,7 +9,6 @@ PrimmEvaluationRequest:
       codeSnippet,
       userPredictionPromptText,
       userPredictionText,
-      userPredictionConfidence,
       userExplanationText,
     ]
   allOf:
@@ -22,11 +21,6 @@ PrimmEvaluationRequest:
           type: string
         userPredictionText:
           type: string
-        userPredictionConfidence:
-          type: integer
-          minimum: 1
-          maximum: 3
-          description: "1=Low, 2=Medium, 3=High"
         userExplanationText:
           type: string
         actualOutputSummary:

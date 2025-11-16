@@ -136,7 +136,6 @@ export interface PrimmEvaluationRequest {
   codeSnippet: string;
   userPredictionPromptText: string; // The prompt shown to the user
   userPredictionText: string; // User's English prediction
-  userPredictionConfidence: number; // 1-3 for Low/Medium/High
   userExplanationText: string;
   actualOutputSummary?: string | null;
 }
@@ -214,7 +213,6 @@ export interface StoredPrimmSubmissionItem {
   codeSnippet: string;
   userPredictionPromptText: string;
   userPredictionText: string;
-  userPredictionConfidence: number;
   actualOutputSummary?: string | null;
   userExplanationText?: string | null;
   aiPredictionAssessment: AssessmentLevel;
