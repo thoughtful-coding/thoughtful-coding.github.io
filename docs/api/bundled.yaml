@@ -632,6 +632,9 @@ components:
         isFinal:
           type: boolean
           default: false
+        extraContext:
+          type: string
+          description: Optional context provided to the AI chatbot to guide feedback generation. Can be used to specify focus areas like code efficiency, readability, or specific learning objectives.
     ReflectionVersionItem:
       type: object
       description: Represents a single saved version of a reflection, including any AI feedback.

@@ -15,6 +15,11 @@ ReflectionInteractionInput: # For POST /reflections/...
     isUserCodePredefined: { type: boolean }
     userExplanation: { type: string }
     isFinal: { type: boolean, default: false }
+    extraContext:
+      {
+        type: string,
+        description: "Optional context provided to the AI chatbot to guide feedback generation. Can be used to specify focus areas like code efficiency, readability, or specific learning objectives."
+      }
     # lessonId and sectionId are path parameters for this endpoint
 
 ReflectionVersionItem: # Standard item for reflections

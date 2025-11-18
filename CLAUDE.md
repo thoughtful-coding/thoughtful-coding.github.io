@@ -2,6 +2,13 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## First and foremost
+
+- Be concise and to the point in every document you write
+- Be concise and to the point in any comments you make
+- Be concise and to the point in your analysis
+- Where ever possible, be extremely concise and sacrifice grammer for the sake of concision
+
 ## Code Quality Principles
 
 **Avoid Cruft**: This is a single-developer project currently. When refactoring or making improvements:

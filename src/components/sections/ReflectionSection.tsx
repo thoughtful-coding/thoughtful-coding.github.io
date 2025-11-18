@@ -174,6 +174,7 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = ({
       isUserCodePredefined: isCodePredefined,
       userExplanation: finalExplanation,
       isFinal: false,
+      ...(section.extraContext && { extraContext: section.extraContext }),
     };
 
     try {
@@ -208,6 +209,7 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = ({
     section.code,
     isExplanationPredefined,
     section.explanation,
+    section.extraContext,
   ]);
 
   const handleFinalSubmit = useCallback(async () => {
@@ -254,6 +256,7 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = ({
       userExplanation: finalExplanation,
       isFinal: true,
       sourceVersionId: latestDraft.versionId,
+      ...(section.extraContext && { extraContext: section.extraContext }),
     };
 
     try {
@@ -286,10 +289,13 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = ({
     fetchAndUpdateHistory,
     isTopicPredefined,
     section.topic,
+    section.isTopicPredefined,
     isCodePredefined,
     section.code,
+    section.isCodePredefined,
     isExplanationPredefined,
     section.explanation,
+    section.extraContext,
   ]);
 
   const canAttemptInteraction =

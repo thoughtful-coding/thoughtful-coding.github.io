@@ -73,6 +73,7 @@ export interface ReflectionInteractionInput {
   userExplanation: string; // As per your Swagger's ReflectionInteractionInput
   isFinal?: boolean; // Defaults to false on the server if not provided
   sourceVersionId?: string | null; // Optional from client if isFinal=true; server might look up latest draft
+  extraContext?: string; // Optional context provided to the AI chatbot for feedback
 }
 
 /**

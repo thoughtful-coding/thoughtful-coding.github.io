@@ -126,6 +126,8 @@ export interface ReflectionSectionData extends LessonSection {
 
   explanation: string;
   isExplanationPredefined: boolean;
+
+  extraContext?: string; // Optional context provided to the AI chatbot for feedback
 }
 
 export interface ReflectionResponse {
