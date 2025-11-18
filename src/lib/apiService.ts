@@ -15,7 +15,6 @@ import type {
   ClassUnitProgressResponse,
   ListOfAssignmentSubmissionsResponse,
   StudentLearningEntriesResponse,
-  StudentPrimmSubmissionsResponse,
   StudentDetailedProgressResponse,
 } from "../types/apiServiceTypes";
 import {
@@ -415,14 +414,6 @@ export async function getInstructorStudentFinalLearningEntries(
   studentId: UserId
 ): Promise<StudentLearningEntriesResponse> {
   const endpoint = `${API_GATEWAY_BASE_URL}/instructor/students/${encodeURIComponent(studentId)}/learning-entries?filter=final`;
-  const response = await fetchWithAuth(endpoint);
-  return handleApiResponse(response);
-}
-
-export async function getInstructorStudentPrimmSubmissions(
-  studentId: UserId
-): Promise<StudentPrimmSubmissionsResponse> {
-  const endpoint = `${API_GATEWAY_BASE_URL}/instructor/students/${encodeURIComponent(studentId)}/primm-submissions`;
   const response = await fetchWithAuth(endpoint);
   return handleApiResponse(response);
 }

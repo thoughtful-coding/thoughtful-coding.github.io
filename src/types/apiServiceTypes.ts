@@ -308,14 +308,6 @@ export interface StudentLearningEntriesResponse {
 }
 
 /**
- * Response from GET /instructor/students/{studentId}/primm-submissions
- * Returns all PRIMM submissions for a student
- */
-export interface StudentPrimmSubmissionsResponse {
-  submissions: StoredPrimmSubmissionItem[];
-}
-
-/**
  * Difficulty statistics for a specific section, calculated client-side
  * from student completion data
  */

@@ -105,8 +105,6 @@ components:
       $ref: "./schemas/instructor.yaml#/StudentLearningEntriesResponse"
     StoredPrimmSubmissionItem:
       $ref: "./schemas/instructor.yaml#/StoredPrimmSubmissionItem"
-    StudentPrimmSubmissionsResponse:
-      $ref: "./schemas/instructor.yaml#/StudentPrimmSubmissionsResponse"
     StoredFirstSolutionItem:
       $ref: "./schemas/instructor.yaml#/StoredFirstSolutionItem"
     AssignmentSubmission:

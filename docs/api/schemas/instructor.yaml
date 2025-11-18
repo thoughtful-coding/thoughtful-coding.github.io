@@ -99,16 +99,6 @@ StoredPrimmSubmissionItem:
         description: "Timestamp of when this record was saved.",
       }
 
-StudentPrimmSubmissionsResponse:
-  type: object
-  properties:
-    submissions:
-      type: array
-      items: { $ref: "#/StoredPrimmSubmissionItem" }
-      description: "List of PRIMM submissions for the student."
-    lastEvaluatedKey:
-      $ref: "./common.yaml#/LastEvaluatedKey"
-
 # For instructor viewing a student's first solution submissions (testing sections)
 StoredFirstSolutionItem:
   type: object
