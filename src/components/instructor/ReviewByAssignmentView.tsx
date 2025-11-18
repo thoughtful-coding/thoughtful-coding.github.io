@@ -281,7 +281,8 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
                   currentSubmissionData.studentId}
                 )
               </h4>
-              {selectedAssignmentDetails.assignmentType === "Reflection" ? (
+              {selectedAssignmentDetails.assignmentType === "Reflection" &&
+              Array.isArray(currentSubmissionData.submissionDetails) ? (
                 <RenderReflectionVersions
                   versions={
                     currentSubmissionData.submissionDetails as ReflectionVersionItem[]
@@ -289,7 +290,8 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
                   lessonGuid={selectedAssignmentDetails.lessonId}
                   sectionId={selectedAssignmentDetails.sectionId}
                 />
-              ) : selectedAssignmentDetails.assignmentType === "PRIMM" ? (
+              ) : selectedAssignmentDetails.assignmentType === "PRIMM" &&
+                !Array.isArray(currentSubmissionData.submissionDetails) ? (
                 <RenderPrimmActivity
                   submission={
                     currentSubmissionData.submissionDetails as StoredPrimmSubmissionItem
@@ -297,7 +299,8 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
                   lessonTitle={selectedAssignmentDetails.lessonTitle}
                   sectionId={selectedAssignmentDetails.sectionId}
                 />
-              ) : selectedAssignmentDetails.assignmentType === "Testing" ? (
+              ) : selectedAssignmentDetails.assignmentType === "Testing" &&
+                !Array.isArray(currentSubmissionData.submissionDetails) ? (
                 <RenderTestingSolution
                   submission={
                     currentSubmissionData.submissionDetails as StoredFirstSolutionItem
