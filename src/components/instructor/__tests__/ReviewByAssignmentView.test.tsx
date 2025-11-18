@@ -138,11 +138,12 @@ describe("ReviewByAssignmentView", () => {
     expect(setSearchParamsMock).toHaveBeenCalledWith({
       unit: "unit-1",
       lesson: "lesson-1",
+      section: "reflect-1",
     });
 
     // 3. Simulate the URL change for the selected assignment
     mockedUseSearchParams.mockReturnValue([
-      new URLSearchParams("unit=unit-1&lesson=lesson-1"),
+      new URLSearchParams("unit=unit-1&lesson=lesson-1&section=reflect-1"),
       setSearchParamsMock,
     ]);
     rerender(

@@ -136,6 +136,7 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
   useEffect(() => {
     const unitIdFromUrl = searchParams.get("unit") as UnitId;
     const lessonIdFromUrl = searchParams.get("lesson");
+    const sectionIdFromUrl = searchParams.get("section");
 
     if (unitIdFromUrl && unitIdFromUrl !== selectedUnitId) {
       setSelectedUnitId(unitIdFromUrl);
@@ -143,7 +144,9 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
 
     if (lessonIdFromUrl && assignmentsInUnit.length > 0) {
       const targetAssignment = assignmentsInUnit.find(
-        (a) => a.lessonId === lessonIdFromUrl
+        (a) =>
+          a.lessonId === lessonIdFromUrl &&
+          (!sectionIdFromUrl || a.sectionId === sectionIdFromUrl)
       );
       if (targetAssignment && targetAssignment.key !== selectedAssignmentKey) {
         setSelectedAssignmentKey(targetAssignment.key);
@@ -207,7 +210,11 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
   const handleAssignmentSelection = (assignmentKey: string) => {
     const assignment = assignmentsInUnit.find((a) => a.key === assignmentKey);
     if (assignment) {
-      setSearchParams({ unit: assignment.unitId, lesson: assignment.lessonId });
+      setSearchParams({
+        unit: assignment.unitId,
+        lesson: assignment.lessonId,
+        section: assignment.sectionId,
+      });
     }
   };
 
