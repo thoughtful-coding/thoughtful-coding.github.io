@@ -302,7 +302,7 @@ const InstructorDashboardPage: React.FC = () => {
             />
             <Route
               path="students/:studentId"
-              element={<ReviewStudentDetailView />}
+              element={<ReviewStudentDetailView units={allUnits} />}
             />
             <Route
               path="learning-entries"

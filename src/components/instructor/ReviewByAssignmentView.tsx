@@ -15,9 +15,9 @@ import type {
   StoredPrimmSubmissionItem,
   StoredFirstSolutionItem,
 } from "../../types/apiServiceTypes";
-import * as dataLoader from "../../lib/dataLoader";
 import * as apiService from "../../lib/apiService";
 import { useAuthStore } from "../../stores/authStore";
+import { useUnitLessons } from "../../hooks/useCurriculumData";
 import LoadingSpinner from "../LoadingSpinner";
 import styles from "./InstructorViews.module.css";
 import RenderReflectionVersions from "./shared/RenderReflectionVersions";
@@ -36,9 +36,6 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
   const { isAuthenticated } = useAuthStore();
 
   const [selectedUnitId, setSelectedUnitId] = useState<UnitId | "">("");
-  const [lessonsInSelectedUnit, setLessonsInSelectedUnit] = useState<
-    (Lesson & { guid: LessonId })[]
-  >([]);
   const [selectedAssignmentKey, setSelectedAssignmentKey] = useState<
     string | null
   >(null);
@@ -47,44 +44,25 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
   >([]);
   const [currentSubmissionIndex, setCurrentSubmissionIndex] = useState(0);
   const [isLoading, setIsLoadingState] = useState({
-    lessons: false,
     submissions: false,
   });
-  const [error, setError] = useState<string | null>(null);
+  const [submissionsError, setSubmissionsError] = useState<string | null>(null);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // This useEffect loads lessons when the selected unit changes
+  // Load lessons for the selected unit
+  const {
+    lessons: lessonsInSelectedUnit,
+    isLoading: isLoadingLessons,
+    error: lessonsError,
+  } = useUnitLessons(units, selectedUnitId);
+
+  // Reset selections when unit changes
   useEffect(() => {
-    if (selectedUnitId) {
-      const unit = units.find((u) => u.id === selectedUnitId);
-      if (unit) {
-        setIsLoadingState((prev) => ({ ...prev, lessons: true }));
-        setLessonsInSelectedUnit([]);
-        Promise.all(
-          unit.lessons.map((lr) => dataLoader.fetchLessonData(lr.path))
-        )
-          .then((loadedLessons) => {
-            setLessonsInSelectedUnit(
-              loadedLessons.filter((l) => l !== null) as (Lesson & {
-                guid: LessonId;
-              })[]
-            );
-          })
-          .catch((_err) =>
-            setError("Failed to load lessons for assignment list.")
-          )
-          .finally(() =>
-            setIsLoadingState((prev) => ({ ...prev, lessons: false }))
-          );
-      }
-    } else {
-      setLessonsInSelectedUnit([]);
-    }
     setSelectedAssignmentKey(null);
     setSubmissions([]);
-    setError(null);
-  }, [selectedUnitId, units]);
+    setSubmissionsError(null);
+  }, [selectedUnitId]);
 
   const assignmentsInUnit: DisplayableAssignment[] = useMemo(() => {
     if (!selectedUnitId || !lessonsInSelectedUnit.length) return [];
@@ -160,7 +138,7 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
     async (assignment: DisplayableAssignment) => {
       if (!isAuthenticated || !assignment) return;
       setIsLoadingState((prev) => ({ ...prev, submissions: true }));
-      setError(null);
+      setSubmissionsError(null);
       setSubmissions([]);
       setCurrentSubmissionIndex(0);
       try {
@@ -173,12 +151,12 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
         );
         setSubmissions(response.submissions);
         if (response.submissions.length === 0) {
-          setError(
+          setSubmissionsError(
             "No submissions found for this assignment from any student."
           );
         }
       } catch (err) {
-        setError(
+        setSubmissionsError(
           err instanceof Error ? err.message : "An unknown error occurred."
         );
       } finally {
@@ -235,8 +213,11 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
         </p>
       );
     }
-    if (isLoading.lessons) {
+    if (isLoadingLessons) {
       return <LoadingSpinner message="Loading assignments..." />;
+    }
+    if (lessonsError) {
+      return <p className={styles.errorMessage}>{lessonsError}</p>;
     }
     if (assignmentsInUnit.length === 0) {
       return (
@@ -272,11 +253,11 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
         {isLoading.submissions && (
           <LoadingSpinner message="Loading student submissions..." />
         )}
-        {error && !isLoading.submissions && (
-          <p className={styles.errorMessage}>{error}</p>
+        {submissionsError && !isLoading.submissions && (
+          <p className={styles.errorMessage}>{submissionsError}</p>
         )}
         {!isLoading.submissions &&
-          !error &&
+          !submissionsError &&
           submissions.length > 0 &&
           currentSubmissionData &&
           selectedAssignmentDetails && (

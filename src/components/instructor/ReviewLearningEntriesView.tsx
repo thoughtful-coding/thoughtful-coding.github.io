@@ -11,8 +11,8 @@ import type {
   ReflectionVersionItem,
 } from "../../types/apiServiceTypes";
 import * as apiService from "../../lib/apiService";
-import * as dataLoader from "../../lib/dataLoader";
 import { useAuthStore } from "../../stores/authStore";
+import { useLessonTitleMap } from "../../hooks/useCurriculumData";
 import LoadingSpinner from "../LoadingSpinner";
 import styles from "./InstructorViews.module.css";
 
@@ -56,32 +56,7 @@ const ReviewLearningEntriesView: React.FC<ReviewLearningEntriesViewProps> = ({
     null
   );
 
-  const [lessonTitlesMap, setLessonTitlesMap] = useState<Map<LessonId, string>>(
-    new Map()
-  );
-
-  // Pre-fetch all lesson titles for context
-  useEffect(() => {
-    const fetchAllLessonTitles = async () => {
-      const newMap = new Map<LessonId, string>();
-      if (units && units.length > 0) {
-        for (const unit of units) {
-          for (const lessonRef of unit.lessons) {
-            if (!newMap.has(lessonRef.guid)) {
-              const lessonData = await dataLoader.fetchLessonData(
-                lessonRef.path
-              );
-              if (lessonData) {
-                newMap.set(lessonRef.guid, lessonData.title);
-              }
-            }
-          }
-        }
-      }
-      setLessonTitlesMap(newMap);
-    };
-    fetchAllLessonTitles();
-  }, [units]);
+  const { lessonTitlesMap } = useLessonTitleMap(units);
 
   useEffect(() => {
     if (selectedStudentId && isAuthenticated) {

@@ -98,8 +98,21 @@ viewcontainer {
   border-bottom: none;
 }
 
+.sectionInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
 .sectionTitle {
   color: var(--text-primary);
+  font-weight: 500;
+}
+
+.sectionContext {
+  font-size: 0.85em;
+  color: var(--text-muted);
+  font-style: italic;
 }
 
 .statusBadge {

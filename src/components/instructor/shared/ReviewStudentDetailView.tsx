@@ -5,8 +5,11 @@ import { useAuthStore } from "../../../stores/authStore";
 import type {
   StudentDetailedProgressResponse,
   SectionStatusItem,
+  UnitProgressProfile,
 } from "../../../types/apiServiceTypes";
-import type { UserId } from "../../../types/data";
+import type { UserId, Unit } from "../../../types/data";
+import * as instructorHelpers from "../../../lib/instructorHelpers";
+import { useLessonDataMap } from "../../../hooks/useCurriculumData";
 import LoadingSpinner from "../../LoadingSpinner";
 import styles from "./ReviewStudentDetailView.module.css";
 import instructorStyles from "../InstructorViews.module.css";
@@ -14,13 +17,21 @@ import RenderReflectionVersions from "../shared/RenderReflectionVersions";
 import RenderPrimmActivity from "../shared/RenderPrimmActivity";
 import RenderTestingSolution from "../shared/RenderTestingSolution";
 
-// This component no longer needs props
-const ReviewStudentDetailView: React.FC = () => {
+interface ReviewStudentDetailViewProps {
+  units: Unit[];
+}
+
+const ReviewStudentDetailView: React.FC<ReviewStudentDetailViewProps> = ({
+  units,
+}) => {
   const { studentId } = useParams<{ studentId: string }>(); // Get studentId from URL
   const navigate = useNavigate(); // Get the navigate function for the back button
 
   const [studentProfile, setStudentProfile] =
     useState<StudentDetailedProgressResponse | null>(null);
+  const [enrichedProfile, setEnrichedProfile] = useState<
+    UnitProgressProfile[] | null
+  >(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [viewingSubmission, setViewingSubmission] = useState<{
@@ -30,6 +41,7 @@ const ReviewStudentDetailView: React.FC = () => {
   } | null>(null);
 
   const { isAuthenticated } = useAuthStore();
+  const { lessonDataMap } = useLessonDataMap(units);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -65,6 +77,29 @@ const ReviewStudentDetailView: React.FC = () => {
     };
     fetchProfile();
   }, [studentId, isAuthenticated]);
+
+  // Enrich the profile with actual titles from lesson data
+  useEffect(() => {
+    if (!studentProfile || lessonDataMap.size === 0) {
+      setEnrichedProfile(null);
+      return;
+    }
+
+    // Enrich with titles from lesson data
+    const enriched = instructorHelpers.enrichStudentProfile(
+      studentProfile.profile,
+      units,
+      lessonDataMap
+    );
+
+    // Sort units by curriculum order
+    const sorted = instructorHelpers.sortUnitsByCurriculumOrder(
+      enriched,
+      units
+    );
+
+    setEnrichedProfile(sorted);
+  }, [studentProfile, lessonDataMap, units]);
 
   const handleBack = () => {
     navigate("/python/instructor-dashboard/students"); // Always navigate back to the main student list page
@@ -110,20 +145,24 @@ const ReviewStudentDetailView: React.FC = () => {
               sectionId={sectionId}
             />
           )}
-          {sectionKind === "PRIMM" && !Array.isArray(submissionDetails) && (
-            <RenderPrimmActivity
-              submission={submissionDetails}
-              lessonTitle={lessonTitle}
-              sectionId={sectionId}
-            />
-          )}
-          {sectionKind === "Testing" && !Array.isArray(submissionDetails) && (
-            <RenderTestingSolution
-              submission={submissionDetails}
-              lessonTitle={lessonTitle}
-              sectionId={sectionId}
-            />
-          )}
+          {sectionKind === "PRIMM" &&
+            Array.isArray(submissionDetails) &&
+            submissionDetails[0] && (
+              <RenderPrimmActivity
+                submission={submissionDetails[0]}
+                lessonTitle={lessonTitle}
+                sectionId={sectionId}
+              />
+            )}
+          {sectionKind === "Testing" &&
+            !Array.isArray(submissionDetails) &&
+            submissionDetails && (
+              <RenderTestingSolution
+                submission={submissionDetails}
+                lessonTitle={lessonTitle}
+                sectionId={sectionId}
+              />
+            )}
           <button
             onClick={() => setViewingSubmission(null)}
             className={styles.closeButton}
@@ -138,7 +177,7 @@ const ReviewStudentDetailView: React.FC = () => {
   if (isLoading)
     return <LoadingSpinner message="Loading student's detailed progress..." />;
   if (error) return <p className={instructorStyles.errorMessage}>{error}</p>;
-  if (!studentProfile)
+  if (!studentProfile || !enrichedProfile)
     return (
       <p className={instructorStyles.placeholderMessage}>
         No profile data available for this student.
@@ -153,8 +192,7 @@ const ReviewStudentDetailView: React.FC = () => {
         </button>
         <h3>{studentProfile.studentName || studentProfile.studentId}</h3>
       </div>
-      {/* ... rest of the rendering logic remains the same ... */}
-      {studentProfile.profile.map((unit) => (
+      {enrichedProfile.map((unit) => (
         <details key={unit.unitId} className={styles.unitAccordion} open>
           <summary className={styles.unitSummary}>
             <span>{unit.unitTitle}</span>
@@ -166,9 +204,14 @@ const ReviewStudentDetailView: React.FC = () => {
                 <ul className={styles.sectionList}>
                   {lesson.sections.map((section) => (
                     <li key={section.sectionId} className={styles.sectionItem}>
-                      <span className={styles.sectionTitle}>
-                        {section.sectionTitle}
-                      </span>
+                      <div className={styles.sectionInfo}>
+                        <span className={styles.sectionTitle}>
+                          {section.sectionTitle}
+                        </span>
+                        <span className={styles.sectionContext}>
+                          {lesson.lessonTitle}
+                        </span>
+                      </div>
                       <div>
                         {renderStatusBadge(section.status)}
                         {section.status === "submitted" && (

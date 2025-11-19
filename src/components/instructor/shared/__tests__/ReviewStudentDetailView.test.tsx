@@ -11,6 +11,7 @@ import type {
   StudentDetailedProgressResponse,
   ReflectionVersionItem,
 } from "../../../../types/apiServiceTypes";
+import type { Unit, UnitId, LessonId } from "../../../../types/data";
 
 // Mock all external dependencies
 vi.mock("../../../../lib/apiService");
@@ -30,11 +31,44 @@ vi.mock("../RenderReflectionVersions", () => ({
 vi.mock("../RenderPrimmActivity", () => ({
   default: () => <div>Mocked PRIMM Submission</div>,
 }));
+// Mock the curriculum data hook to avoid loading actual lessons
+// Needs at least one entry so enrichedProfile gets populated
+vi.mock("../../../../hooks/useCurriculumData", () => ({
+  useLessonDataMap: () => ({
+    lessonDataMap: new Map([
+      [
+        "lesson-1",
+        {
+          guid: "lesson-1",
+          title: "Intro Lesson",
+          sections: [
+            { id: "sec-1", kind: "Information", title: "First Section" },
+            { id: "sec-2", kind: "Reflection", title: "Reflection Section" },
+          ],
+        },
+      ],
+    ]),
+    isLoading: false,
+  }),
+}));
+// Mock instructorHelpers to pass through profile data unchanged
+vi.mock("../../../../lib/instructorHelpers", () => ({
+  enrichStudentProfile: (profile: unknown) => profile,
+  sortUnitsByCurriculumOrder: (profile: unknown) => profile,
+}));
 
 const mockedUseParams = vi.mocked(useParams);
 const mockedUseNavigate = vi.mocked(useNavigate);
 
 // --- Mock Data ---
+const mockUnits: Unit[] = [
+  {
+    id: "unit-1" as UnitId,
+    title: "Unit 1: Basics",
+    lessons: [{ path: "01_intro/lesson_1.ts" }],
+  },
+];
+
 const mockStudentProfile: StudentDetailedProgressResponse = {
   studentId: "student-123",
   studentName: "Alice",
@@ -89,7 +123,7 @@ describe("ReviewStudentDetailView", () => {
   });
 
   it("fetches and displays student progress details", async () => {
-    render(<ReviewStudentDetailView />);
+    render(<ReviewStudentDetailView units={mockUnits} />);
 
     // Check for student name after loading
     expect(
@@ -98,7 +132,8 @@ describe("ReviewStudentDetailView", () => {
 
     // Check for unit, lesson, and section titles
     expect(screen.getByText("Unit 1: Basics")).toBeInTheDocument();
-    expect(screen.getByText("Intro Lesson")).toBeInTheDocument();
+    // "Intro Lesson" appears multiple times (lesson header + section context), use getAllByText
+    expect(screen.getAllByText("Intro Lesson").length).toBeGreaterThan(0);
     expect(screen.getByText("First Section")).toBeInTheDocument();
 
     // Check for status badges
@@ -113,7 +148,7 @@ describe("ReviewStudentDetailView", () => {
 
   it("opens and closes the submission modal", async () => {
     const user = userEvent.setup();
-    render(<ReviewStudentDetailView />);
+    render(<ReviewStudentDetailView units={mockUnits} />);
 
     // Wait for the main view to load
     const viewButton = await screen.findByRole("button", {
@@ -139,7 +174,7 @@ describe("ReviewStudentDetailView", () => {
 
   it("navigates back to the student list when the back button is clicked", async () => {
     const user = userEvent.setup();
-    render(<ReviewStudentDetailView />);
+    render(<ReviewStudentDetailView units={mockUnits} />);
 
     const backButton = await screen.findByRole("button", {
       name: /back to student list/i,
@@ -156,7 +191,7 @@ describe("ReviewStudentDetailView", () => {
     vi.mocked(apiService.getStudentDetailedProgress).mockRejectedValue(
       new Error("API Error")
     );
-    render(<ReviewStudentDetailView />);
+    render(<ReviewStudentDetailView units={mockUnits} />);
 
     // ASSERT: Check for the error message
     expect(

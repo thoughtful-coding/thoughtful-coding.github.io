@@ -5,9 +5,9 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import {
   fetchUnitById,
-  fetchLessonData,
   getRequiredSectionsForLesson,
 } from "../../lib/dataLoader";
+import * as dataHelpers from "../../lib/dataHelpers";
 import type { Unit, Lesson, UnitId, LessonId } from "../../types/data";
 import styles from "./UnitPage.module.css";
 import { useAllCompletions } from "../../stores/progressStore";
@@ -53,36 +53,16 @@ const UnitPage: React.FC = () => {
         setUnit(fetchedUnit);
         document.title = `${fetchedUnit.title} - Python Lessons`;
 
-        const lessonPromises = fetchedUnit.lessons.map((lessonReference) =>
-          fetchLessonData(lessonReference.path)
-            .then((data) => ({
-              path: lessonReference.path,
-              status: "fulfilled",
-              value: data,
-            }))
-            .catch((err) => ({
-              path: lessonReference.path,
-              status: "rejected",
-              reason: err,
-            }))
+        // Load all lessons for this unit
+        const lessons = await dataHelpers.loadLessonsForUnit(fetchedUnit);
+
+        // Create maps for quick lookups
+        const loadedLessons = dataHelpers.createGuidToLessonMap(lessons);
+        const pathToGuid = dataHelpers.createPathToGuidMap(
+          fetchedUnit,
+          lessons
         );
 
-        const results = await Promise.all(lessonPromises);
-        const loadedLessons = new Map<LessonId, Lesson | null>();
-        const pathToGuid = new Map<string, LessonId>();
-
-        results.forEach((result) => {
-          if (result.status === "fulfilled" && result.value) {
-            loadedLessons.set(result.value.guid, result.value);
-            pathToGuid.set(result.path, result.value.guid);
-          } else if (result.status === "rejected") {
-            console.error(
-              `Failed to load lesson ${result.path}:`,
-              result.reason
-            );
-            // We can't set a null entry without knowing the GUID, skip it
-          }
-        });
         setLessonsData(loadedLessons);
         setPathToGuidMap(pathToGuid);
       } catch (err) {
