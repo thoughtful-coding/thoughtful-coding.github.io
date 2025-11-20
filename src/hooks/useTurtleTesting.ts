@@ -1,9 +1,11 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useMemo } from "react";
 import type { UnitId, LessonId, SectionId, TestCase } from "../types/data";
 import type { RealTurtleInstance } from "../lib/turtleRenderer";
 import { compareTurtleImages } from "../lib/turtleComparison";
 import type { TurtleComparisonResult } from "../lib/turtleComparison";
 import { useProgressActions } from "../stores/progressStore";
+import { useTurtleExecution } from "./useTurtleExecution";
+import { resolveImagePath } from "../lib/dataHelpers";
 
 export interface TurtleTestResult {
   description: string;
@@ -224,5 +226,89 @@ export const useTurtleTesting = ({
     testResults,
     isLoading: isRunningTests,
     error,
+  };
+};
+
+/**
+ * Composite hook that bundles all turtle visualization setup.
+ * Use this instead of manually setting up turtleCanvasRef, turtleInstance,
+ * useTurtleExecution, and useTurtleTesting separately.
+ */
+interface UseTurtleVisualizationProps {
+  unitId: UnitId;
+  lessonId: LessonId;
+  sectionId: SectionId;
+  visualization: "console" | "turtle";
+  testCases: TestCase[];
+  visualThreshold?: number;
+  functionToTest?: string;
+  lessonPath?: string;
+}
+
+export const useTurtleVisualization = ({
+  unitId,
+  lessonId,
+  sectionId,
+  visualization,
+  testCases,
+  visualThreshold,
+  functionToTest,
+  lessonPath,
+}: UseTurtleVisualizationProps) => {
+  const turtleCanvasRef = useRef<HTMLDivElement>(null);
+  const [turtleInstance, setTurtleInstance] =
+    useState<RealTurtleInstance | null>(null);
+
+  const isVisualTurtleTest =
+    visualization === "turtle" && testCases.some((tc) => tc.referenceImage);
+
+  const resolvedTestCases = useMemo(() => {
+    return testCases.map((tc) => ({
+      ...tc,
+      referenceImage: tc.referenceImage
+        ? resolveImagePath(tc.referenceImage, lessonPath)
+        : undefined,
+    }));
+  }, [testCases, lessonPath]);
+
+  const {
+    runTurtleCode,
+    stopExecution,
+    isLoading: isRunningTurtle,
+    error: turtleRunError,
+  } = useTurtleExecution({
+    canvasRef: turtleCanvasRef,
+    unitId,
+    lessonId,
+    sectionId,
+    autoCompleteOnRun: false,
+    onTurtleInstanceReady: setTurtleInstance,
+  });
+
+  const turtleTestingHook = useTurtleTesting({
+    unitId,
+    lessonId,
+    sectionId,
+    testCases: resolvedTestCases,
+    visualThreshold,
+    turtleInstance,
+    runTurtleCode,
+    functionToTest,
+  });
+
+  return {
+    // Refs and state
+    turtleCanvasRef,
+    turtleInstance,
+    // Detection
+    isVisualTurtleTest,
+    resolvedTestCases,
+    // Execution
+    runTurtleCode,
+    stopExecution,
+    isRunningTurtle,
+    turtleRunError,
+    // Testing (only valid if isVisualTurtleTest)
+    turtleTestingHook,
   };
 };

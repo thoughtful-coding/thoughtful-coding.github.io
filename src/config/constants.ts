@@ -121,6 +121,36 @@ export const MOCK_API_CONFIG = {
 } as const;
 
 /**
+ * Interaction Configuration
+ * Settings for drag-and-drop, touch, and gesture interactions
+ */
+export const INTERACTION_CONFIG = {
+  /**
+   * Duration in milliseconds for long-press detection
+   * Used for touch-based drag-and-drop in Parsons and Matching sections
+   */
+  LONG_PRESS_DURATION_MS: 500, // 0.5 seconds
+
+  /**
+   * Distance in pixels before canceling long-press
+   * If finger moves more than this threshold, it's considered a scroll/swipe
+   */
+  TOUCH_MOVE_THRESHOLD_PX: 10,
+
+  /**
+   * Duration in milliseconds for haptic feedback vibration
+   * Provides tactile feedback when entering drag mode on touch devices
+   */
+  HAPTIC_FEEDBACK_DURATION_MS: 50,
+
+  /**
+   * Maximum indentation level for code blocks in Parsons problems
+   * Prevents excessive nesting
+   */
+  MAX_INDENT_LEVEL: 4,
+} as const;
+
+/**
  * Type exports for better type safety
  */
 export type PyodideConfig = typeof PYODIDE_CONFIG;
@@ -128,3 +158,4 @@ export type ProgressConfig = typeof PROGRESS_CONFIG;
 export type ApiConfig = typeof API_CONFIG;
 export type UiConfig = typeof UI_CONFIG;
 export type MockApiConfig = typeof MOCK_API_CONFIG;
+export type InteractionConfig = typeof INTERACTION_CONFIG;

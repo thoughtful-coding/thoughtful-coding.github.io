@@ -57,6 +57,7 @@ export type SectionKind =
   | "MultipleChoice"
   | "MultipleSelection"
   | "Matching"
+  | "Parsons"
   // AI Sections
   | "Reflection"
   // Executable Code Sections
@@ -98,6 +99,19 @@ export interface MatchingSectionData extends LessonSection {
   // An optional array of indices to determine the initial shuffled order of answers.
   initialOrder?: number[];
   feedback?: FeedbackText;
+}
+
+export interface ParsonsSectionData extends LessonSection, TestableFields {
+  kind: "Parsons";
+  codeBlocks: string[][]; // Array of code blocks, each can be single-line ["print(x)"] or multi-line ["def foo():", "  return 42"]
+  visualization: "console" | "turtle"; // Type of output visualization
+}
+
+// Represents a code block in Parsons problems
+export interface CodeBlockItem {
+  id: string; // Unique ID like 'block-0', 'block-1'
+  lines: string[]; // The actual code lines (single-line = [one string], multi-line = [multiple strings])
+  isMultiLine: boolean;
 }
 
 // --- AI Sections ---
@@ -173,13 +187,17 @@ export interface TestCase {
 
 export type TestMode = "procedure" | "function";
 
-export interface TestingSectionData extends LessonSection {
+/** Shared fields for sections that run tests against user code */
+export interface TestableFields {
+  testMode: TestMode;
+  functionToTest: string; // "__main__" for entire program output, or function name
+  testCases: TestCase[];
+  visualThreshold?: number; // Similarity threshold (0.0-1.0) for visual turtle tests
+}
+
+export interface TestingSectionData extends LessonSection, TestableFields {
   kind: "Testing";
   example: ExecutableCode;
-  testMode: TestMode;
-  functionToTest: string; // "__main__" for testing entire program output, function name for testing specific functions
-  testCases: TestCase[];
-  visualThreshold?: number; // Similarity threshold (0.0-1.0) for visual turtle tests. Recommended: 0.95. Only used when testCases contain referenceImage
 }
 
 export interface DebuggerSectionData extends LessonSection {
@@ -287,6 +305,7 @@ export type AnyLessonSectionData =
   | MultipleChoiceSectionData
   | MultipleSelectionSectionData
   | MatchingSectionData
+  | ParsonsSectionData
   | ReflectionSectionData
   | CoverageSectionData
   | PRIMMSectionData;

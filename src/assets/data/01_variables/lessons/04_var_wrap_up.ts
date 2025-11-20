@@ -6,7 +6,7 @@ import type {
   MultipleChoiceSectionData,
   MultipleSelectionSectionData,
   TestingSectionData,
-  MatchingSectionData,
+  ParsonsSectionData,
 } from "../../../../types/data";
 
 const lessonData: Lesson = {
@@ -28,7 +28,7 @@ const lessonData: Lesson = {
       ],
     } as InformationSectionData,
     {
-      kind: "Matching",
+      kind: "Parsons",
       id: "order-vars" as SectionId,
       title: "Order Matters",
       content: [
@@ -38,18 +38,25 @@ const lessonData: Lesson = {
             "Order the following lines of a program so the number `8` is printed out and then the number `5` is printed out.",
         },
       ],
-      prompts: [
-        { "Line 1": "x = 7" },
-        { "Line 2": "print(x + 1)" },
-        { "Line 3": "x = 3" },
-        { "Line 4": "x = x + 2" },
-        { "Line 5": "print(x)" },
+      codeBlocks: [
+        ["x = 7"],
+        ["print(x + 1)"],
+        ["x = 3"],
+        ["x = x + 2"],
+        ["print(x)"],
+        ["print(x)"],
       ],
-      feedback: {
-        correct:
-          "Correct! You can reset the value of a variable to an entirely new value.",
-      },
-    } as MatchingSectionData,
+      visualization: "console",
+      testMode: "procedure",
+      functionToTest: "__main__",
+      testCases: [
+        {
+          input: [null],
+          expected: "8\n5",
+          description: "Test 5 then 8",
+        },
+      ],
+    } as ParsonsSectionData,
     {
       kind: "MultipleChoice",
       id: "string-identification",

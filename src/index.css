@@ -412,3 +412,8 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+
+/* CodeMirror gutter separator line */
+.cm-gutters {
+  border-right: 1px solid #636d83 !important;
+}

@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef } from "react";
+import { INTERACTION_CONFIG } from "../config/constants";
 
 // Data transferred during drag-and-drop
 interface DragData {
@@ -205,7 +206,7 @@ export function useMatchingInteraction({
       touchStartPosRef.current = { x: touch.clientX, y: touch.clientY };
       isDragModeRef.current = false;
 
-      // Start long-press timer (500ms)
+      // Start long-press timer
       clearLongPressTimer();
       longPressTimerRef.current = window.setTimeout(() => {
         // Long press detected - enter drag mode
@@ -214,11 +215,11 @@ export function useMatchingInteraction({
         // Clear tap-to-select states when entering drag mode
         setSelectedOptionId(null);
         setSelectedSourcePrompt(null);
-        // Optionally: Add haptic feedback if available
+        // Add haptic feedback if available
         if (navigator.vibrate) {
-          navigator.vibrate(50);
+          navigator.vibrate(INTERACTION_CONFIG.HAPTIC_FEEDBACK_DURATION_MS);
         }
-      }, 500);
+      }, INTERACTION_CONFIG.LONG_PRESS_DURATION_MS);
     },
     [clearLongPressTimer]
   );
@@ -231,8 +232,11 @@ export function useMatchingInteraction({
       const deltaX = Math.abs(touch.clientX - touchStartPosRef.current.x);
       const deltaY = Math.abs(touch.clientY - touchStartPosRef.current.y);
 
-      // If finger moved more than 10px, cancel long-press (it's a swipe/scroll)
-      if (deltaX > 10 || deltaY > 10) {
+      // If finger moved more than threshold, cancel long-press (it's a swipe/scroll)
+      if (
+        deltaX > INTERACTION_CONFIG.TOUCH_MOVE_THRESHOLD_PX ||
+        deltaY > INTERACTION_CONFIG.TOUCH_MOVE_THRESHOLD_PX
+      ) {
         clearLongPressTimer();
       }
 

@@ -1,0 +1,355 @@
+/* ParsonsSection.module.css - Styled to match TestingSection */
+
+/* Main container - matches .exampleContainer from Section.module.css */
+.parsonsContainer {
+  composes: containerSecondary from "../../styles/common.module.css";
+  margin-top: var(--spacing-xl);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.parsonsContainer h4 {
+  margin-top: 0;
+  margin-bottom: var(--spacing-md);
+  color: var(--primary-dark-color);
+  font-size: 1.15em;
+}
+
+/* Mode indicator for 2D indentation */
+.modeIndicator {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--info-light);
+  border-left: 3px solid var(--info);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  color: var(--info-text);
+  margin-bottom: var(--spacing-md);
+}
+
+/* Solution area - matches CodeEditor background */
+.solutionArea {
+  background-color: var(--bg-code-block);
+  border-radius: var(--radius-md);
+  min-height: 200px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Continuous gutter background via pseudo-element */
+.solutionArea::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 40px;
+  background-color: var(--bg-code-block);
+  border-right: 1px solid #636d83;
+  pointer-events: none;
+}
+
+.solutionBlocks {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+  padding: var(--spacing-sm) 0;
+}
+
+.emptyDropZone {
+  margin-left: 50px; /* Offset for gutter */
+  margin-right: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+  padding: var(--spacing-xl);
+  text-align: center;
+  color: var(--text-muted);
+  font-style: italic;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed var(--border-tertiary);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.emptyDropZone:hover {
+  border-color: var(--primary-color);
+  background-color: var(--bg-secondary);
+}
+
+.emptyDropZoneActive {
+  border-color: var(--success);
+  background-color: var(--success-light);
+  color: var(--success-text);
+  font-style: normal;
+  font-weight: 500;
+}
+
+.placedBlockWrapper {
+  position: relative;
+}
+
+.dropZone {
+  height: 4px;
+  margin: 2px 0;
+  margin-left: 50px; /* Offset for gutter */
+  margin-right: var(--spacing-sm);
+  border-radius: var(--radius-xs);
+  transition: all 0.15s ease;
+}
+
+/* When a block is selected, show all drop zones clearly */
+.dropZoneActive {
+  height: 32px;
+  background-color: var(--primary-bg);
+  border: 2px dashed var(--border-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dropZoneActive::after {
+  content: "Drop here";
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-style: italic;
+}
+
+.dropZoneActive:hover,
+.dropZoneHover {
+  height: 32px;
+  background-color: var(--success-light);
+  border: 2px dashed var(--success);
+}
+
+.dropZoneActive:hover::after,
+.dropZoneHover::after {
+  content: "Drop here";
+  color: var(--success-text);
+}
+
+/* Placed block row - line number + block */
+.placedBlockRow {
+  display: flex;
+  align-items: stretch;
+  cursor: grab;
+  transition: all 0.2s ease;
+  padding-right: var(--spacing-sm);
+}
+
+.placedBlockRow:active {
+  cursor: grabbing;
+}
+
+.placedBlockRow.selected .placedBlock {
+  border-color: var(--primary-color);
+  border-width: 2px;
+}
+
+.placedBlockRow.dragging {
+  opacity: 0.5;
+}
+
+/* Line number - sits on the pseudo-element gutter */
+.lineNumber {
+  flex-shrink: 0;
+  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 40px;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: #636d83;
+  user-select: none;
+  /* Transparent so pseudo-element gutter shows through */
+  background: transparent;
+}
+
+/* The actual code block */
+.placedBlock {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--text-code-block);
+  min-width: 0;
+  border-radius: var(--radius-sm);
+  border: 1px solid #636d83;
+  background-color: var(--bg-code-block);
+  transition: all 0.2s ease;
+}
+
+.placedBlock:hover {
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.blockContent {
+  flex: 1;
+  min-width: 0; /* Prevent flex item from overflowing */
+  pointer-events: none; /* Allow drag events to bubble to parent */
+}
+
+/* Style CodeMirror within blocks - remove chrome, keep syntax highlighting */
+.blockContent :global(.cm-editor) {
+  background: transparent;
+  font-size: 0.9rem;
+}
+
+.blockContent :global(.cm-scroller) {
+  padding: 0;
+  overflow: visible;
+}
+
+.blockContent :global(.cm-content) {
+  padding: 0;
+}
+
+.blockContent :global(.cm-line) {
+  padding: 0;
+}
+
+.blockControls {
+  display: flex;
+  gap: var(--spacing-xs);
+  margin-left: auto;
+  padding-left: var(--spacing-sm);
+}
+
+.controlButton {
+  padding: 4px 8px;
+  border-radius: var(--radius-xs);
+  background-color: var(--bg-code-block);
+  color: #e06c75;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.controlButton:hover:not(:disabled) {
+  background-color: #3e4451;
+  border-color: #e06c75;
+  color: #e06c75;
+}
+
+.controlButton:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Block pool - available blocks */
+.blockPool {
+  margin-top: var(--spacing-lg);
+}
+
+.draggableBlock {
+  display: inline-block;
+  margin: var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--bg-code-block);
+  border: 1px solid #636d83;
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  cursor: grab;
+  transition: all 0.2s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  color: var(--text-code-block);
+}
+
+.draggableBlock:hover {
+  border-color: var(--primary-color);
+  transform: scale(1.02);
+  box-shadow: var(--shadow-sm);
+}
+
+.draggableBlock:active {
+  cursor: grabbing;
+}
+
+.draggableBlock.dragging {
+  opacity: 0.5;
+}
+
+.draggableBlock.selected {
+  border-color: var(--primary-color);
+  border-width: 2px;
+  background-color: var(--primary-bg);
+  transform: scale(1.02);
+}
+
+/* Style CodeMirror within pool blocks */
+.draggableBlock :global(.cm-editor) {
+  background: transparent;
+  font-size: 0.9rem;
+  pointer-events: none; /* Allow drag events to bubble to parent */
+}
+
+.draggableBlock :global(.cm-scroller) {
+  padding: 0;
+  overflow: visible;
+}
+
+.draggableBlock :global(.cm-content) {
+  padding: 0;
+}
+
+.draggableBlock :global(.cm-line) {
+  padding: 0;
+}
+
+/* Controls - matches TestingSection .editorControls */
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Run Code button - blue primary button */
+.runCodeButton {
+  composes: primaryButton from "../../styles/common.module.css";
+}
+
+/* Run Tests button - green success button */
+.testButton {
+  composes: successButton from "../../styles/common.module.css";
+}
+
+.emptyPool {
+  padding: var(--spacing-md);
+  text-align: center;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Error display - matches Section.module.css .errorFeedback */
+.errorMessage {
+  composes: errorMessage from "../../styles/common.module.css";
+  font-weight: 500;
+  white-space: pre-wrap;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .solutionArea,
+  .blockPool {
+    padding: var(--spacing-sm);
+  }
+
+  .draggableBlock {
+    display: block;
+    margin: var(--spacing-xs) 0;
+  }
+
+  .placedBlock {
+    font-size: 0.8rem;
+  }
+}

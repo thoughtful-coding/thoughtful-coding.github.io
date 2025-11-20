@@ -7,6 +7,24 @@ import * as dataLoader from "./dataLoader";
  */
 
 /**
+ * Resolves relative image paths to absolute paths based on lesson location.
+ * Returns absolute paths and URLs unchanged.
+ */
+export function resolveImagePath(
+  imagePath: string,
+  lessonPath?: string
+): string {
+  if (imagePath.startsWith("/") || imagePath.startsWith("http")) {
+    return imagePath;
+  }
+  if (lessonPath) {
+    const unitDir = lessonPath.split("/")[0];
+    return `/data/${unitDir}/${imagePath}`;
+  }
+  return imagePath;
+}
+
+/**
  * Loads all lessons for a given unit
  * Returns lessons in curriculum order (as specified in the unit manifest)
  */

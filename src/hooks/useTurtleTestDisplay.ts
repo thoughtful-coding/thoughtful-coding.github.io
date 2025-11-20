@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import type { TurtleTestResult } from "./useTurtleTesting";
 import type { TestCase } from "../types/data";
+import { resolveImagePath } from "../lib/dataHelpers";
 
 interface DisplayedTestInfo {
   referenceImage: string;
@@ -25,20 +26,6 @@ interface UseTurtleTestDisplayReturn {
   displayedTestInfo: DisplayedTestInfo | null;
   accordionResults: TurtleTestResult[];
 }
-
-/**
- * Helper function to resolve relative image paths to absolute paths
- */
-const resolveImagePath = (imagePath: string, lessonPath?: string): string => {
-  if (imagePath.startsWith("/") || imagePath.startsWith("http")) {
-    return imagePath;
-  }
-  if (lessonPath) {
-    const unitDir = lessonPath.split("/")[0];
-    return `/data/${unitDir}/${imagePath}`;
-  }
-  return imagePath;
-};
 
 /**
  * Custom hook to manage turtle test display state and logic.

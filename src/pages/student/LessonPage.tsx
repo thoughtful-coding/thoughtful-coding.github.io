@@ -28,6 +28,7 @@ import ReflectionSection from "../../components/sections/ReflectionSection";
 import CoverageSection from "../../components/sections/CoverageSection";
 import PRIMMSection from "../../components/sections/PRIMMSection";
 import DebuggerSection from "../../components/sections/DebuggerSection";
+import ParsonsSection from "../../components/sections/ParsonsSection";
 
 import LessonNavigation from "../../components/LessonNavigation";
 import LessonSidebar from "../../components/LessonSidebar";
@@ -240,6 +241,16 @@ const LessonPage: React.FC = () => {
             unitId={currentUnitGuid}
             lessonId={currentLessonGuid}
             section={sectionData}
+          />
+        );
+      case "Parsons":
+        return (
+          <ParsonsSection
+            key={sectionData.id}
+            unitId={currentUnitGuid}
+            lessonId={currentLessonGuid}
+            section={sectionData}
+            lessonPath={lessonPath}
           />
         );
       case "Reflection":

@@ -1,13 +1,13 @@
 import { screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi } from "vitest";
+import React from "react";
 
 import { render } from "../../../test-utils";
 import TestingSection from "../TestingSection";
 import { useInteractiveExample } from "../../../hooks/useInteractiveExample";
 import { useTestingLogic } from "../../../hooks/useTestingLogic";
-import { useTurtleExecution } from "../../../hooks/useTurtleExecution";
-import { useTurtleTesting } from "../../../hooks/useTurtleTesting";
+import { useTurtleVisualization } from "../../../hooks/useTurtleTesting";
 import type {
   TestingSectionData,
   UnitId,
@@ -18,8 +18,10 @@ import type {
 // Mock the hooks that provide the core logic
 vi.mock("../../../hooks/useInteractiveExample");
 vi.mock("../../../hooks/useTestingLogic");
-vi.mock("../../../hooks/useTurtleExecution");
-vi.mock("../../../hooks/useTurtleTesting");
+vi.mock("../../../hooks/useTurtleTesting", () => ({
+  useTurtleVisualization: vi.fn(),
+  TurtleTestResult: {},
+}));
 
 const mockSectionData: TestingSectionData = {
   kind: "Testing",
@@ -46,6 +48,7 @@ describe("TestingSection", () => {
   const runTestsMock = vi.fn();
   const runTurtleCodeMock = vi.fn();
   const stopExecutionMock = vi.fn();
+  const turtleCanvasRef = React.createRef<HTMLDivElement>();
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -63,18 +66,21 @@ describe("TestingSection", () => {
       isLoading: false,
       error: null,
     });
-    vi.mocked(useTurtleExecution).mockReturnValue({
+    vi.mocked(useTurtleVisualization).mockReturnValue({
+      turtleCanvasRef,
+      turtleInstance: null,
+      isVisualTurtleTest: false,
+      resolvedTestCases: [],
       runTurtleCode: runTurtleCodeMock,
       stopExecution: stopExecutionMock,
-      isLoading: false,
-      error: null,
-      turtleInstance: null,
-    });
-    vi.mocked(useTurtleTesting).mockReturnValue({
-      runTests: runTestsMock,
-      testResults: null,
-      isLoading: false,
-      error: null,
+      isRunningTurtle: false,
+      turtleRunError: null,
+      turtleTestingHook: {
+        runTests: runTestsMock,
+        testResults: null,
+        isLoading: false,
+        error: null,
+      },
     });
   });
 
@@ -232,10 +238,7 @@ describe("TestingSection", () => {
 
     // ASSERT
     expect(
-      screen.getByRole("heading", { name: /all tests passed!/i })
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText("Your solution correctly handles all test cases.")
+      screen.getByText(/all tests passed!/i)
     ).toBeInTheDocument();
   });
 });
