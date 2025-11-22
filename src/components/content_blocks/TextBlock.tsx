@@ -11,7 +11,17 @@ interface TextBlockProps {
 const TextBlock: React.FC<TextBlockProps> = ({ block }) => {
   return (
     <div className={styles.contentBlock}>
-      <ReactMarkdown children={block.value} remarkPlugins={[remarkGfm]} />
+      <ReactMarkdown
+        children={block.value}
+        remarkPlugins={[remarkGfm]}
+        components={{
+          a: ({ href, children }) => (
+            <a href={href} target="_blank" rel="noopener noreferrer">
+              {children}
+            </a>
+          ),
+        }}
+      />
     </div>
   );
 };
