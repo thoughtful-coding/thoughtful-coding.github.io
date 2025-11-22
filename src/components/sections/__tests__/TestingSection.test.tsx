@@ -237,8 +237,6 @@ describe("TestingSection", () => {
     fireEvent.click(runTestsButton);
 
     // ASSERT
-    expect(
-      screen.getByText(/all tests passed!/i)
-    ).toBeInTheDocument();
+    expect(screen.getByText(/all tests passed!/i)).toBeInTheDocument();
   });
 });

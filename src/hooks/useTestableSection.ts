@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { useInteractiveExample } from "./useInteractiveExample";
 import { useTestingLogic, TestResult } from "./useTestingLogic";
-import {
-  useTurtleVisualization,
-  TurtleTestResult,
-} from "./useTurtleTesting";
+import { useTurtleVisualization, TurtleTestResult } from "./useTurtleTesting";
 import { useTestingCompletion } from "./useTestingCompletion";
-import type { UnitId, LessonId, SectionId, TestCase, TestMode } from "../types/data";
+import type {
+  UnitId,
+  LessonId,
+  SectionId,
+  TestCase,
+  TestMode,
+} from "../types/data";
 
 export type LastAction = "run" | "test" | null;
 

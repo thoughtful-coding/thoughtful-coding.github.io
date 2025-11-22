@@ -327,49 +327,51 @@ const ParsonsSection: React.FC<ParsonsSectionProps> = ({
                             className={styles.blockContent}
                           />
                           <div className={styles.blockControls}>
-                          {indentationEnabled && (
-                            <>
-                              <button
-                                className={styles.controlButton}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  interaction.handleOutdent(
-                                    placedBlock.blockId
-                                  );
-                                }}
-                                disabled={placedBlock.indentLevel === 0}
-                                title="Decrease indentation"
-                              >
-                                ◀
-                              </button>
-                              <button
-                                className={styles.controlButton}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  interaction.handleIndent(placedBlock.blockId);
-                                }}
-                                disabled={
-                                  placedBlock.indentLevel >=
-                                  INTERACTION_CONFIG.MAX_INDENT_LEVEL
-                                }
-                                title="Increase indentation"
-                              >
-                                ▶
-                              </button>
-                            </>
-                          )}
-                          <button
-                            className={styles.controlButton}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              interaction.handleRemoveBlock(
-                                placedBlock.blockId
-                              );
-                            }}
-                            title="Remove from solution"
-                          >
-                            ✕
-                          </button>
+                            {indentationEnabled && (
+                              <>
+                                <button
+                                  className={styles.controlButton}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    interaction.handleOutdent(
+                                      placedBlock.blockId
+                                    );
+                                  }}
+                                  disabled={placedBlock.indentLevel === 0}
+                                  title="Decrease indentation"
+                                >
+                                  ◀
+                                </button>
+                                <button
+                                  className={styles.controlButton}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    interaction.handleIndent(
+                                      placedBlock.blockId
+                                    );
+                                  }}
+                                  disabled={
+                                    placedBlock.indentLevel >=
+                                    INTERACTION_CONFIG.MAX_INDENT_LEVEL
+                                  }
+                                  title="Increase indentation"
+                                >
+                                  ▶
+                                </button>
+                              </>
+                            )}
+                            <button
+                              className={styles.controlButton}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                interaction.handleRemoveBlock(
+                                  placedBlock.blockId
+                                );
+                              }}
+                              title="Remove from solution"
+                            >
+                              ✕
+                            </button>
                           </div>
                         </div>
                       </div>
