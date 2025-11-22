@@ -19,6 +19,11 @@
   --bg-elevated: #fff;
   --bg-code: #f8f9fa;
   --bg-code-block: #2e3440;
+  /* CodeMirror oneDark theme colors */
+  --cm-gutter-text: #636d83;
+  --cm-gutter-border: #636d83;
+  --cm-red: #e06c75;
+  --cm-hover-bg: #3e4451;
 
   /* Text */
   --text-primary: #213547;
@@ -173,6 +178,11 @@
     --bg-elevated: #2d2d2d;
     --bg-code: #1e1e1e;
     --bg-code-block: #2e3440;
+    /* CodeMirror oneDark theme colors */
+    --cm-gutter-text: #636d83;
+    --cm-gutter-border: #636d83;
+    --cm-red: #e06c75;
+    --cm-hover-bg: #3e4451;
 
     /* Text - Much higher contrast for readability */
     --text-primary: #fff;
@@ -276,6 +286,11 @@
   --bg-elevated: #2d2d2d;
   --bg-code: #1e1e1e;
   --bg-code-block: #2e3440;
+  /* CodeMirror oneDark theme colors */
+  --cm-gutter-text: #636d83;
+  --cm-gutter-border: #636d83;
+  --cm-red: #e06c75;
+  --cm-hover-bg: #3e4451;
 
   /* Text - Much higher contrast for readability */
   --text-primary: #fff;
@@ -415,5 +430,5 @@ button:focus-visible {
 
 /* CodeMirror gutter separator line */
 .cm-gutters {
-  border-right: 1px solid #636d83 !important;
+  border-right: 1px solid var(--cm-gutter-border) !important;
 }
