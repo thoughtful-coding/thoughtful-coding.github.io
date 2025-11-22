@@ -229,7 +229,10 @@ const ParsonsSection: React.FC<ParsonsSectionProps> = ({
 
         {/* Solution area - where blocks are placed */}
         <h4>Your Solution:</h4>
-        <div className={styles.solutionArea}>
+        <div
+          className={styles.solutionArea}
+          data-testid="parsons-solution-area"
+        >
           <div className={styles.solutionBlocks}>
             {sortedPlacedBlocks.length === 0 ? (
               <div
@@ -238,6 +241,7 @@ const ParsonsSection: React.FC<ParsonsSectionProps> = ({
                     ? styles.emptyDropZoneActive
                     : ""
                 }`}
+                data-testid="parsons-empty-drop-zone"
                 data-drop-position="0"
                 onClick={() => interaction.handlePositionClick(0)}
                 onDragOver={(e) => interaction.handleDragOver(e, 0)}
@@ -278,6 +282,7 @@ const ParsonsSection: React.FC<ParsonsSectionProps> = ({
                             ? styles.dropZoneHover
                             : ""
                         }`}
+                        data-testid={`parsons-drop-zone-${index}`}
                         data-drop-position={index}
                         onClick={() => interaction.handlePositionClick(index)}
                         onDragOver={(e) => interaction.handleDragOver(e, index)}
@@ -289,6 +294,7 @@ const ParsonsSection: React.FC<ParsonsSectionProps> = ({
                         className={`${styles.placedBlockRow} ${
                           isSelected ? styles.selected : ""
                         } ${isDragging ? styles.dragging : ""}`}
+                        data-testid={`parsons-placed-block-${index}`}
                         style={{
                           marginLeft: `${placedBlock.indentLevel * 24}px`,
                         }}
@@ -389,6 +395,7 @@ const ParsonsSection: React.FC<ParsonsSectionProps> = ({
                       ? styles.dropZoneHover
                       : ""
                   }`}
+                  data-testid={`parsons-drop-zone-${sortedPlacedBlocks.length}`}
                   data-drop-position={sortedPlacedBlocks.length}
                   onClick={() =>
                     interaction.handlePositionClick(sortedPlacedBlocks.length)
@@ -407,12 +414,12 @@ const ParsonsSection: React.FC<ParsonsSectionProps> = ({
         </div>
 
         {/* Block pool - unplaced blocks */}
-        <div className={styles.blockPool}>
+        <div className={styles.blockPool} data-testid="parsons-block-pool">
           <h4>Code Blocks:</h4>
           {unplacedBlocks.length === 0 ? (
             <div className={styles.emptyPool}>All blocks have been placed!</div>
           ) : (
-            unplacedBlocks.map((block) => {
+            unplacedBlocks.map((block, index) => {
               const isSelected = interaction.selectedBlockId === block.id;
               const isDragging = interaction.draggingBlockId === block.id;
 
@@ -422,6 +429,7 @@ const ParsonsSection: React.FC<ParsonsSectionProps> = ({
                   className={`${styles.draggableBlock} ${
                     isSelected ? styles.selected : ""
                   } ${isDragging ? styles.dragging : ""}`}
+                  data-testid={`parsons-unplaced-block-${index}`}
                   draggable
                   onClick={() => interaction.handleBlockClick(block.id, "pool")}
                   onDragStart={(e) =>
@@ -448,6 +456,7 @@ const ParsonsSection: React.FC<ParsonsSectionProps> = ({
         <div className={styles.controls}>
           <button
             className={styles.runCodeButton}
+            data-testid="parsons-run-code-button"
             disabled={sortedPlacedBlocks.length === 0 || isLoading}
             onClick={handleRunCode}
           >
@@ -459,6 +468,7 @@ const ParsonsSection: React.FC<ParsonsSectionProps> = ({
           </button>
           <button
             className={styles.testButton}
+            data-testid="parsons-run-tests-button"
             disabled={sortedPlacedBlocks.length === 0 || isLoading}
             onClick={handleRunTests}
           >
