@@ -219,7 +219,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "You've now seen two ways computers are 'stupid':\n1.  **Mindless Execution:** They'll run 'useless' code like `print()` over and over\n2.  **Literal Rule-Following:** They'll crash on a simple typo like `printt`\n\nThis is the core challenge of programming! The computer is a powerful but *literal* tool. Our job as programmers is to provide **perfect, step-by-step** instructions.\n\nIn the next section, you'll investigate how to output your own custom text and write your first few Python programs.",
+            "You've now seen two ways computers are \"stupid\":\n1.  **Mindless Execution:** They'll run \"useless\" code like `print()` over and over\n2.  **Literal Rule-Following:** They'll crash on a simple typo like `printt`\n\nThis is the core challenge of programming! The computer is a powerful but *literal* tool. Our job as programmers is to provide **perfect, step-by-step** instructions.\n\nIn the next section, you'll investigate how to output your own custom text and write your first few Python programs.",
         },
       ],
     } as InformationSectionData,

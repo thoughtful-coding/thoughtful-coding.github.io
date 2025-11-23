@@ -163,7 +163,7 @@ TypeError: unsupported operand type(s) for +: 'int' and 'str'\n\`\`\``,
         {
           kind: "text",
           value:
-            "Congratulations on completing the strings vs. integers lesson. As stated above, it is a major source of confusion and frustration. If you ever see a `TypeError`, take your time and think about what line the error is identifying as the problem and what data types are on that line.",
+            "Congratulations on the lesson on errors in Python. As stated above, it is a major source of confusion and frustration. If you ever see a `TypeError`, take your time and think about what line the error is identifying as the problem and what data types are on that line.",
         },
       ],
     } as InformationSectionData,

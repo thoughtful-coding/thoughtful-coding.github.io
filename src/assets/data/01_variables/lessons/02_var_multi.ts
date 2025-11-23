@@ -8,6 +8,7 @@ import type {
   PRIMMSectionData,
   MatchingSectionData,
   MultipleSelectionSectionData,
+  ParsonsSectionData,
 } from "../../../../types/data";
 
 const lessonData: Lesson = {
@@ -35,26 +36,41 @@ const lessonData: Lesson = {
       ],
     } as InformationSectionData,
     {
-      kind: "MultipleChoice",
-      id: "variable-reassignment",
-      title: "Variable Values",
+      kind: "Parsons",
+      id: "order-vars" as SectionId,
+      title: "Order Matters",
       content: [
         {
           kind: "text",
           value:
-            "The program below recreates the example from the video. If you were to insert the line `students_count = students_count + 16` **between the first and second lines**, what would be printed out?",
+            "The program below recreates the example from the video. On the first line, it creates a variable named `students_count` and stores the integer `1000` in it. One the second line, it uses a `print()` statement to output the value stored inside `students_count`. If you ran it, it would output the number `1000`.",
         },
         {
           kind: "code",
           value: "students_count = 1000\nprint(students_count)\n",
         },
+        {
+          kind: "text",
+          value:
+            "Your goal for this section is to modify the program above so that it outputs the number `1016`. In the space below you have three lines of code that you can arrange to try and output the number `1016`. Once you think you have placed them correctly, click the `Run Code` button to see what the output would be. Once you're happy with the output, click `Run Tests` to have the website verify you did everything correctly.",
+        },
       ],
-      options: ["16", "428", "1016", "Error"],
-      correctAnswer: 2,
-      feedback: {
-        correct: "Correct!",
-      },
-    } as MultipleChoiceSectionData,
+      codeBlocks: [
+        ["students_count = 1000"],
+        ["print(students_count)"],
+        ["students_count = students_count + 16"],
+      ],
+      visualization: "console",
+      testMode: "procedure",
+      functionToTest: "__main__",
+      testCases: [
+        {
+          input: [null],
+          expected: "1016",
+          description: "Test 1016",
+        },
+      ],
+    } as ParsonsSectionData,
     {
       kind: "Debugger",
       id: "multiple-variables-debugging" as SectionId,
@@ -133,23 +149,30 @@ const lessonData: Lesson = {
       ],
       feedback: {
         correct:
-          "Correct! You fist need to save the value of `x` so it doesn't later get lost.",
+          "Correct! You first need to save the value of `x` so it doesn't later get lost.",
       },
     } as MatchingSectionData,
     {
       kind: "MultipleSelection",
       id: "variable-summary",
-      title: "Variable Values",
+      title: "Variable Summary",
       content: [
         {
           kind: "text",
-          value: "Blah blah blah. Select all that apply.",
+          value:
+            "Based on what you've learned about multiple variables, select all the statements below that are true.",
         },
       ],
-      options: ["16", "428", "1016", "Error"],
-      correctAnswers: [2],
+      options: [
+        "Variables with different names act as independent storage slots",
+        "Changing one variable automatically changes other variables nearby",
+        "To swap two variables, you need a third 'holder' variable",
+        "The computer can remember previous values of a variable after you update it",
+      ],
+      correctAnswers: [0, 2],
       feedback: {
-        correct: "Correct!",
+        correct:
+          "Correct! Variables are independent, and swapping them requires a temporary holding spot because updates overwrite old values immediately.",
       },
     } as MultipleSelectionSectionData,
     {

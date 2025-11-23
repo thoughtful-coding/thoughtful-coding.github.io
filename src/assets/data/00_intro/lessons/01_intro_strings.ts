@@ -54,7 +54,7 @@ const lessonData: Lesson = {
     {
       kind: "Testing",
       id: "hello-testing" as SectionId,
-      title: "Challenge: Hello, World!",
+      title: "Modify: Hello, World!",
       content: [
         {
           kind: "text",
@@ -143,7 +143,7 @@ const lessonData: Lesson = {
     {
       kind: "Testing",
       id: "single-vs-double-testing" as SectionId,
-      title: "Challenge: Who Goes There?",
+      title: "Make: Who Goes There?",
       content: [
         {
           kind: "text",
