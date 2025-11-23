@@ -107,24 +107,10 @@ export const useActiveTestSuite = (
       }));
       setActiveTests(initialTestStates);
 
-      try {
-        const mainCodeResult = await runPythonCode(mainCode);
-        if (!mainCodeResult.success && mainCodeResult.error) {
-          throw new Error(
-            `Error in main code: ${mainCodeResult.error.type}: ${mainCodeResult.error.message}`
-          );
-        }
-      } catch (e) {
-        console.error("Error executing mainCode:", e);
-        const errorMessage = `Error in main code: ${
-          e instanceof Error ? e.message : String(e)
-        }`;
-        setActiveTests((prev) =>
-          prev.map((t) => ({ ...t, status: "error", output: errorMessage }))
-        );
-        setIsRunningTests(false);
-        return;
-      }
+      // Escape mainCode once for all tests
+      const escapedMainCode = mainCode
+        .replace(/\\/g, "\\\\")
+        .replace(/'/g, "\\'");
 
       const updatedResults: ActiveTest[] = [];
 
@@ -138,43 +124,52 @@ export const useActiveTestSuite = (
         const testFunctionToCall =
           extractTestFunctionName(currentTest.code) || currentTest.name;
 
+        const escapedTestCode = currentTest.code
+          .replace(/\\/g, "\\\\")
+          .replace(/'/g, "\\'");
+
+        // Similar pattern to useTestingLogic.ts - each test runs in isolated namespace
         const singleTestExecutionScript = `
-# ... (Python script for single test execution remains the same)
 import traceback
 import json
 
-# ==== Current Test Snippet Start ====
-${currentTest.code}
-# ==== Current Test Snippet End ====
-
-# ==== Runner for a single test function ====
+_test_globals = {}
 result_data = {"name": "${testFunctionToCall.replace(
           /"/g,
           '\\"'
-        )}", "status": "ERROR", "output": "Test function '${testFunctionToCall.replace(
-          /"/g,
-          '\\"'
-        )}' not found or not callable after executing its snippet."}
+        )}", "status": "ERROR", "output": ""}
 
-if "${testFunctionToCall.replace(
+try:
+    # Execute main code in isolated namespace
+    exec('''${escapedMainCode}''', _test_globals)
+
+    # Execute test code in same namespace (can access main code's definitions)
+    exec('''${escapedTestCode}''', _test_globals)
+
+    # Check if test function exists
+    if '${testFunctionToCall.replace(
+      /"/g,
+      '\\"'
+    )}' not in _test_globals or not callable(_test_globals['${testFunctionToCall.replace(
           /"/g,
           '\\"'
-        )}" in globals() and callable(globals()["${testFunctionToCall.replace(
+        )}']):
+        result_data["output"] = "Test function '${testFunctionToCall.replace(
           /"/g,
           '\\"'
-        )}"]):
-    try:
-        globals()["${testFunctionToCall.replace(/"/g, '\\"')}"]()
+        )}' not found or not callable."
+    else:
+        # Run the test function
+        _test_globals['${testFunctionToCall.replace(/"/g, '\\"')}']()
         result_data["status"] = "PASSED"
         result_data["output"] = ""
-    except AssertionError as e_assert:
-        result_data["status"] = "FAILED"
-        result_data["output"] = f"AssertionError: {e_assert}"
-    except Exception as e_general:
-        result_data["status"] = "ERROR"
-        result_data["output"] = traceback.format_exc()
-else:
-    pass
+
+except AssertionError as e_assert:
+    result_data["status"] = "FAILED"
+    result_data["output"] = f"AssertionError: {e_assert}"
+except Exception as e_general:
+    result_data["status"] = "ERROR"
+    result_data["output"] = f"{type(e_general).__name__}: {e_general}"
 
 print("===PYTEST_SINGLE_RESULT_JSON===")
 print(json.dumps(result_data))

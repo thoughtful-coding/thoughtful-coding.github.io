@@ -94,7 +94,7 @@ except Exception as e:
     
     result = {
         "success": False,
-        "error": str(e),
+        "error": f"{type(e).__name__}: {e}",
         "actual": "",
         "expected": '''${testCase.expected
           .replace(/\\/g, "\\\\")
@@ -135,7 +135,7 @@ print(json.dumps(result))
                   results.push({
                     description: testCase.description,
                     passed: false,
-                    actual: `Error: ${parsedResult.error}`,
+                    actual: parsedResult.error,
                     expected: parsedResult.expected,
                   });
                   testPassed = false;
@@ -158,31 +158,11 @@ print(json.dumps(result))
           }
         } else {
           // Test individual function (either capture stdout for "procedure" or return value for "function")
+          // Each test is self-contained: executes user code, then tests the function
+          const escapedUserCode = userCode
+            .replace(/\\/g, "\\\\")
+            .replace(/'/g, "\\'");
 
-          // First, execute the user code to define the function
-          const setupScript = `
-import sys
-from io import StringIO
-
-# Execute user code
-exec('''${userCode.replace(/\\/g, "\\\\").replace(/'/g, "\\'")}''')
-
-# Check if function exists
-if '${functionToTest}' not in globals():
-    raise NameError("Function '${functionToTest}' is not defined.")
-
-"Setup complete"
-`;
-
-          const setupResult = await runPythonCode(setupScript);
-          if (!setupResult.success) {
-            const errorMsg = setupResult.error
-              ? `${setupResult.error.type}: ${setupResult.error.message}`
-              : "Unknown error";
-            throw new Error(errorMsg);
-          }
-
-          // Now run each test case
           for (const testCase of testCases) {
             if (testMode === "procedure") {
               // Capture stdout from function call
@@ -197,7 +177,19 @@ captured_output = StringIO()
 sys.stdout = captured_output
 
 try:
-    user_func = globals()['${functionToTest}']
+    # Execute user code to define the function
+    _user_globals = {}
+    exec('''${escapedUserCode}''', _user_globals)
+
+    # Clear output from user code (e.g., example function calls at bottom)
+    captured_output.truncate(0)
+    captured_output.seek(0)
+
+    # Check if function exists
+    if '${functionToTest}' not in _user_globals:
+        raise NameError("Function '${functionToTest}' is not defined.")
+
+    user_func = _user_globals['${functionToTest}']
     test_input = ${JSON.stringify(testCase.input)}
     expected = ${JSON.stringify(testCase.expected)}
 
@@ -224,7 +216,7 @@ except Exception as e:
 
     result = {
         "success": False,
-        "error": str(e),
+        "error": f"{type(e).__name__}: {e}",
         "input": ${JSON.stringify(testCase.input)},
         "expected": ${JSON.stringify(testCase.expected)}
     }
@@ -265,7 +257,7 @@ print(json.dumps(result))
                     results.push({
                       description: testCase.description,
                       passed: false,
-                      actual: `Error: ${parsedResult.error}`,
+                      actual: parsedResult.error,
                       expected: parsedResult.expected,
                       input: parsedResult.input,
                     });
@@ -299,7 +291,15 @@ old_stdout = sys.stdout
 sys.stdout = StringIO()
 
 try:
-    user_func = globals()['${functionToTest}']
+    # Execute user code to define the function
+    _user_globals = {}
+    exec('''${escapedUserCode}''', _user_globals)
+
+    # Check if function exists
+    if '${functionToTest}' not in _user_globals:
+        raise NameError("Function '${functionToTest}' is not defined.")
+
+    user_func = _user_globals['${functionToTest}']
     test_input = ${JSON.stringify(testCase.input)}
     expected = ${JSON.stringify(testCase.expected)}
 
@@ -326,7 +326,7 @@ except Exception as e:
 
     result = {
         "success": False,
-        "error": str(e),
+        "error": f"{type(e).__name__}: {e}",
         "input": ${JSON.stringify(testCase.input)},
         "expected": ${JSON.stringify(testCase.expected)}
     }
@@ -367,7 +367,7 @@ print(json.dumps(result))
                     results.push({
                       description: testCase.description,
                       passed: false,
-                      actual: `Error: ${parsedResult.error}`,
+                      actual: parsedResult.error,
                       expected: parsedResult.expected,
                       input: parsedResult.input,
                     });
