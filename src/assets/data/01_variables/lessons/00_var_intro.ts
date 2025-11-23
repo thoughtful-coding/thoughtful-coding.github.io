@@ -129,7 +129,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "There are two key operations for variables: **set** and **read**.\n\n- **Set:** `age = 15` \n   - This *sets* the value of `age` to be `15`\n- **Read:** `print(age)` and `print(age + 5)`\n    - These *reads* the value `10` from `points` and use it in calculations.\n\nThese two operations - set and read - are the two core things you can do with variables. To tie it back to the debugger, you can only store values into the `Variables` slots and then get the values out of those slots.\n\nBased on this explanation, match the following lines of code with their outcome.",
+            "There are two key operations for variables: **set** and **read**.\n\n- **Set:** `age = 15` \n   - This *sets* the value of `age` to be `15`\n- **Read:** `print(age)` and `print(age + 5)`\n    - These *read* the value `10` from `age` and use it in calculations.\n\nThese two operations - set and read - are the two core things you can do with variables. To tie it back to the debugger, you can only store values into the `Variables` slots and then get the values out of those slots.\n\nBased on this explanation, match the following lines of code with their outcome.",
         },
       ],
       prompts: [

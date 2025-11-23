@@ -136,7 +136,7 @@ const lessonData: Lesson = {
       correctAnswer: 1,
       feedback: {
         correct:
-          "Correct! Calling a two line function three times is equivalent to 6 lines of code.",
+          "Correct! Function definitions always end with a colon `:`, and function calls always require parentheses `()`",
       },
     } as MultipleChoiceSectionData,
     {
