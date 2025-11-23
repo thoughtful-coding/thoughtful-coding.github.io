@@ -11,6 +11,7 @@ const unitManifest: UnitManifest = {
     "lessons/01_func_turtles",
     "lessons/02_func_turtle_inputs",
     "lessons/03_func_neighbors",
+    "lessons/04_adv_func_wrap_up",
   ],
 };
 
