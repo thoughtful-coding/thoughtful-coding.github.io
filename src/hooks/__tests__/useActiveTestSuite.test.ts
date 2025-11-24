@@ -258,8 +258,18 @@ describe("useActiveTestSuite", () => {
     it("should run multiple tests independently", async () => {
       // Load initial tests via localStorage mock (avoids uuid issues)
       const initialTests: ActiveTest[] = [
-        { id: "1", name: "test_one", code: "def test_one(): pass", status: "pending" },
-        { id: "2", name: "test_two", code: "def test_two(): assert False", status: "pending" },
+        {
+          id: "1",
+          name: "test_one",
+          code: "def test_one(): pass",
+          status: "pending",
+        },
+        {
+          id: "2",
+          name: "test_two",
+          code: "def test_two(): assert False",
+          status: "pending",
+        },
       ];
       mockedLoadProgress.mockReturnValue(initialTests);
 

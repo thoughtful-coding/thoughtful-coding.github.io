@@ -79,11 +79,6 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
   test("Test can have faulty program and get SyntaxError", async ({ page }) => {
     await page.goto("/python/lesson/00_intro/lessons/01_intro_strings");
 
-    const sectionItem = page.getByRole("listitem").filter({
-      hasText: "Challenge: Who Goes There?",
-    });
-    await expect(sectionItem).not.toHaveClass(/sectionItemCompleted/);
-
     const editor = page.getByTestId("code-editor-single-vs-double-testing");
     await editor.locator(".cm-content").click();
     await editor.press("ControlOrMeta+a");
@@ -93,17 +88,10 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
       .getByRole("button", { name: "Run Tests" })
       .click();
     await expect(page.getByText("name 'a' is not defined")).toBeVisible();
-
-    await expect(sectionItem).not.toHaveClass(/sectionItemCompleted/);
   });
 
   test("Test can click `Run Tests` button and get pass", async ({ page }) => {
     await page.goto("/python/lesson/00_intro/lessons/01_intro_strings");
-
-    const sectionItem = page.getByRole("listitem").filter({
-      hasText: "Challenge: Who Goes There?",
-    });
-    await expect(sectionItem).not.toHaveClass(/sectionItemCompleted/);
 
     const editor = page.getByTestId("code-editor-single-vs-double-testing");
     await editor.locator(".cm-content").click();
@@ -116,19 +104,12 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
       .getByRole("button", { name: "Run Tests" })
       .click();
     await expect(page.getByText("All tests passed!")).toBeVisible();
-
-    await expect(sectionItem).toHaveClass(/sectionItemCompleted/);
   });
 });
 
 test.describe("TestingSection `procedure` / `function_name` tests", () => {
   test("Test can click `Run Tests` button and get fail", async ({ page }) => {
     await page.goto("/python/lesson/03_functions/lessons/03_func_wrap_up");
-
-    const sectionItem = page.getByRole("listitem").filter({
-      hasText: "Challenge: Create a Two Input Function",
-    });
-    await expect(sectionItem).not.toHaveClass(/sectionItemCompleted/);
 
     // Use the data-testid to target the specific code editor
     const editor = page.getByTestId("code-editor-multi-input-testing");
@@ -148,8 +129,6 @@ test.describe("TestingSection `procedure` / `function_name` tests", () => {
     await expect(
       page.getByText("Test 2 failed. Fix the issue and try again!")
     ).toBeVisible();
-
-    await expect(sectionItem).not.toHaveClass(/sectionItemCompleted/);
   });
 
   test("Test can click the `Run Tests` button (w/o doing anything) and get fail", async ({

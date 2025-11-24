@@ -151,9 +151,9 @@ try:
       /"/g,
       '\\"'
     )}' not in _test_globals or not callable(_test_globals['${testFunctionToCall.replace(
-          /"/g,
-          '\\"'
-        )}']):
+      /"/g,
+      '\\"'
+    )}']):
         result_data["output"] = "Test function '${testFunctionToCall.replace(
           /"/g,
           '\\"'

@@ -626,7 +626,8 @@ describe("useTestingLogic", () => {
         success: true,
         stdout: JSON.stringify({
           success: false,
-          error: "IndentationError: expected an indented block after function definition on line 1",
+          error:
+            "IndentationError: expected an indented block after function definition on line 1",
           input: [2, 3],
           expected: 5,
         }),
@@ -643,7 +644,9 @@ describe("useTestingLogic", () => {
 
       expect(result.current.testResults![0].passed).toBe(false);
       // Should show "IndentationError:" not just "Error:"
-      expect(result.current.testResults![0].actual).toContain("IndentationError:");
+      expect(result.current.testResults![0].actual).toContain(
+        "IndentationError:"
+      );
       expect(result.current.testResults![0].actual).not.toMatch(/^Error:/);
     });
 
@@ -664,7 +667,9 @@ describe("useTestingLogic", () => {
       const { result } = renderHook(() => useTestingLogic(defaultProps));
 
       await act(async () => {
-        await result.current.runTests("def add(a, b):\n    return undefined_var");
+        await result.current.runTests(
+          "def add(a, b):\n    return undefined_var"
+        );
       });
 
       expect(result.current.testResults![0].actual).toContain("NameError:");
@@ -705,7 +710,9 @@ describe("useTestingLogic", () => {
 
       await act(async () => {
         // Code that might leave state if not isolated
-        await result.current.runTests("leaked_var = 999\ndef add(a, b):\n    return a + b");
+        await result.current.runTests(
+          "leaked_var = 999\ndef add(a, b):\n    return a + b"
+        );
       });
 
       // Both tests should pass - if isolation failed, test 2 might see leaked_var
@@ -725,7 +732,11 @@ describe("useTestingLogic", () => {
         testMode: "procedure" as const,
         functionToTest: "greet",
         testCases: [
-          { input: ["Alice"], expected: "Hello, Alice!", description: "greets Alice" },
+          {
+            input: ["Alice"],
+            expected: "Hello, Alice!",
+            description: "greets Alice",
+          },
         ] as TestCase[],
       };
 
