@@ -1,7 +1,28 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("TestingSection `procedure` / `__main__` output tests", () => {
-  test("Test can click `Run Code` button", async ({ page }) => {
+  test("Test can click `Run Code` button an get **empty** output", async ({
+    page,
+  }) => {
+    await page.goto("/python/lesson/00_intro/lessons/01_intro_strings");
+
+    await expect(
+      page
+        .getByTestId("code-editor-single-vs-double-testing")
+        .locator("div")
+        .filter({ hasText: "print()print()" })
+        .nth(1)
+    ).toBeVisible();
+    await page
+      .locator("#single-vs-double-testing")
+      .getByRole("button", { name: "Run Code" })
+      .click();
+    await expect(page.locator("pre")).toBeVisible();
+  });
+
+  test("Test can click `Run Code` button and get **non-empty** output", async ({
+    page,
+  }) => {
     await page.goto("/python/lesson/00_intro/lessons/01_intro_strings");
 
     const editor = page.getByTestId("code-editor-single-vs-double-testing");

@@ -45,7 +45,7 @@ describe("useInteractiveExample", () => {
   it("should initialize with default state", () => {
     const { result } = renderHook(() => useInteractiveExample(defaultProps));
 
-    expect(result.current.output).toBe("");
+    expect(result.current.output).toBeNull(); // null = hasn't run yet
     expect(result.current.isLoading).toBe(false);
     expect(result.current.error).toBeNull();
     expect(result.current.isSectionComplete).toBe(false);

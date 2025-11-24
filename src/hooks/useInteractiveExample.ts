@@ -19,8 +19,9 @@ function formatExecutionOutput(result: PythonExecutionResult): string {
   const parts: string[] = [];
 
   // Add stdout first (output that occurred before any error)
+  // Don't trim - preserve newlines from empty print() calls
   if (result.stdout) {
-    parts.push(result.stdout.trim());
+    parts.push(result.stdout);
   }
 
   // Add stderr if present
@@ -49,12 +50,12 @@ export const useInteractiveExample = ({
     isLoading: isPyodideLoading,
     error: pyodideError,
   } = usePyodide();
-  const [output, setOutput] = useState<string>(""); // Changed from string | null
+  const [output, setOutput] = useState<string | null>(null);
   const { completeSection } = useProgressActions();
 
   const runCode = useCallback(
     async (code: string) => {
-      setOutput(""); // Reset to empty string
+      setOutput(null); // Reset while running
       const result = await runPythonCode(code);
 
       // Format output with proper stream ordering

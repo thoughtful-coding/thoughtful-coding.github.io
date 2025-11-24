@@ -7,7 +7,7 @@ interface InteractiveExampleDisplayProps {
   onChange: (newCode: string) => void;
   onRunCode: () => Promise<{ output: string; error: string | null }>;
   isLoading: boolean;
-  output: string;
+  output: string | null;
   error: Error | null;
   isReadOnly: boolean;
 }
@@ -23,9 +23,9 @@ const InteractiveExampleDisplay: React.FC<InteractiveExampleDisplayProps> = ({
 }) => {
   // Check if output contains Python error indicators
   const isPythonError =
-    output.includes("Traceback (most recent call last):") ||
-    output.includes("Error:") ||
-    output.includes("Exception:");
+    output?.includes("Traceback (most recent call last):") ||
+    output?.includes("Error:") ||
+    output?.includes("Exception:");
 
   return (
     <div className={styles.interactiveExampleContainer}>
@@ -44,7 +44,7 @@ const InteractiveExampleDisplay: React.FC<InteractiveExampleDisplayProps> = ({
           {isLoading ? "Executing..." : "Run Code"}
         </button>
       </div>
-      {(output || error) && (
+      {(output !== null || error) && (
         <div>
           <h4>Output:</h4>
           <div className={styles.outputArea}>
