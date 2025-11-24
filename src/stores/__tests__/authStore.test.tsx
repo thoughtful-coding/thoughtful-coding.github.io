@@ -68,7 +68,8 @@ describe("authStore", () => {
         user: null,
         accessToken: null,
         refreshToken: null,
-        isSyncingProgress: false,
+        isLoggingIn: false,
+        isLoggingOut: false,
         sessionHasExpired: false,
       });
     });
@@ -114,7 +115,7 @@ describe("authStore", () => {
     expect(syncProgressAfterLoginMock).toHaveBeenCalledWith([]);
     expect(mergeDraftsAfterLoginMock).toHaveBeenCalledWith({});
     expect(mergeAttemptCountersAfterLoginMock).toHaveBeenCalledWith({});
-    expect(state.isSyncingProgress).toBe(false); // Should be false at the end
+    expect(state.isLoggingIn).toBe(false); // Should be false at the end
   });
 
   it("should migrate anonymous progress when logging in", async () => {

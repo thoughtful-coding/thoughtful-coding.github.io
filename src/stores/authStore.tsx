@@ -18,7 +18,8 @@ interface AuthState {
   user: UserProfile | null;
   accessToken: AccessTokenId | null;
   refreshToken: RefreshTokenId | null;
-  isSyncingProgress: boolean;
+  isLoggingIn: boolean;
+  isLoggingOut: boolean;
   sessionHasExpired: boolean;
   actions: {
     login: (googleIdToken: string) => Promise<void>;
@@ -38,7 +39,8 @@ const initialAuthState = {
   user: null,
   accessToken: null,
   refreshToken: null,
-  isSyncingProgress: false,
+  isLoggingIn: false,
+  isLoggingOut: false,
   sessionHasExpired: false,
 };
 
@@ -50,6 +52,9 @@ export const useAuthStore = create<AuthState>()(
           ...initialAuthState,
           actions: {
             login: async (googleIdToken: string) => {
+              // Show loading overlay immediately
+              set({ isLoggingIn: true });
+
               // Step 1: Extract any anonymous progress, drafts, and attempt counters before logging in
               const progressOps = getProgressSyncOperations();
               const anonymousCompletions =
@@ -76,7 +81,6 @@ export const useAuthStore = create<AuthState>()(
                 accessToken,
                 refreshToken,
                 user: userProfile,
-                isSyncingProgress: true,
                 sessionHasExpired: false,
               });
 
@@ -105,12 +109,15 @@ export const useAuthStore = create<AuthState>()(
               } catch (error) {
                 console.error("Failed to sync progress after login:", error);
               } finally {
-                set({ isSyncingProgress: false });
+                set({ isLoggingIn: false });
               }
 
               // The page does not need to reload.
             },
             logout: async () => {
+              // Show loading overlay immediately
+              set({ isLoggingOut: true });
+
               const { refreshToken } = get();
               if (refreshToken) {
                 try {

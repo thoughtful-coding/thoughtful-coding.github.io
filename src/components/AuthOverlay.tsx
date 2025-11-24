@@ -1,16 +1,20 @@
 import React from "react";
 import LoadingSpinner from "./LoadingSpinner";
-import styles from "./SyncingOverlay.module.css";
+import styles from "./AuthOverlay.module.css";
 
-const SyncingOverlay: React.FC = () => {
+interface AuthOverlayProps {
+  message: string;
+}
+
+const AuthOverlay: React.FC<AuthOverlayProps> = ({ message }) => {
   return (
     <div className={styles.overlayBackdrop}>
       <div className={styles.overlayContent}>
         <LoadingSpinner />
-        <p>Syncing your progress...</p>
+        <p>{message}</p>
       </div>
     </div>
   );
 };
 
-export default SyncingOverlay;
+export default AuthOverlay;

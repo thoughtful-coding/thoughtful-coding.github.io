@@ -17,7 +17,7 @@ import { useThemeStore } from "./stores/themeStore";
 import { useProgressStore, useProgressActions } from "./stores/progressStore";
 import { useAuthStore } from "./stores/authStore";
 import StudentLayout from "./components/StudentLayout";
-import SyncingOverlay from "./components/SyncingOverlay";
+import AuthOverlay from "./components/AuthOverlay";
 import SessionExpiredModal from "./components/SessionExpiredModal";
 import { PROGRESS_CONFIG } from "./config/constants";
 import { useStoreCoordination } from "./hooks/useStoreCoordination";
@@ -27,7 +27,8 @@ function App() {
   useStoreCoordination();
 
   const theme = useThemeStore((state) => state.theme);
-  const isSyncingProgress = useAuthStore((state) => state.isSyncingProgress);
+  const isLoggingIn = useAuthStore((state) => state.isLoggingIn);
+  const isLoggingOut = useAuthStore((state) => state.isLoggingOut);
   const sessionHasExpired = useAuthStore((state) => state.sessionHasExpired);
   const { logout, setSessionExpired } = useAuthStore((state) => state.actions);
   const penaltyEndTime = useProgressStore((state) => state.penaltyEndTime);
@@ -69,7 +70,8 @@ function App() {
 
   return (
     <>
-      {isSyncingProgress && <SyncingOverlay />}
+      {isLoggingIn && <AuthOverlay message="Signing in..." />}
+      {isLoggingOut && <AuthOverlay message="Signing out..." />}
       <SessionExpiredModal
         isOpen={sessionHasExpired}
         onClose={handleModalClose}

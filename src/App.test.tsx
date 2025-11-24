@@ -36,19 +36,34 @@ describe("App Component", () => {
 
   // Test suite for UI elements that appear based on global state
   describe("State-driven UI", () => {
-    test("should display SyncingOverlay when isSyncingProgress is true", () => {
+    test("should display AuthOverlay when isLoggingIn is true", () => {
       renderWithRouter();
 
       // The overlay should not be visible initially
-      expect(screen.queryByText("Syncing...")).not.toBeInTheDocument();
+      expect(screen.queryByText("Signing in...")).not.toBeInTheDocument();
 
-      // Manually set the isSyncingProgress state to true
+      // Manually set the isLoggingIn state to true
       act(() => {
-        useAuthStore.setState({ isSyncingProgress: true });
+        useAuthStore.setState({ isLoggingIn: true });
       });
 
       // Assert that the overlay's content is now visible
-      expect(screen.getByText("Syncing your progress...")).toBeInTheDocument();
+      expect(screen.getByText("Signing in...")).toBeInTheDocument();
+    });
+
+    test("should display AuthOverlay when isLoggingOut is true", () => {
+      renderWithRouter();
+
+      // The overlay should not be visible initially
+      expect(screen.queryByText("Signing out...")).not.toBeInTheDocument();
+
+      // Manually set the isLoggingOut state to true
+      act(() => {
+        useAuthStore.setState({ isLoggingOut: true });
+      });
+
+      // Assert that the overlay's content is now visible
+      expect(screen.getByText("Signing out...")).toBeInTheDocument();
     });
 
     test("should display the SessionExpiredModal when sessionHasExpired is true", () => {
