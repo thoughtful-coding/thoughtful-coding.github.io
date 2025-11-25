@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route, NavLink, useNavigate, Link } from "react-router-dom"; // Import routing components
-import {
-  CredentialResponse,
-  GoogleLogin,
-  googleLogout,
-} from "@react-oauth/google";
+import { Routes, Route, NavLink, Link } from "react-router-dom";
 
 import * as apiService from "../../lib/apiService";
-import { useAuthStore, useAuthActions } from "../../stores/authStore";
+import { useAuthStore } from "../../stores/authStore";
 import type { InstructorStudentInfo } from "../../types/apiServiceTypes";
 import type { Unit } from "../../types/data";
 import { fetchUnitsData } from "../../lib/dataLoader";
 import { BASE_PATH } from "../../config";
+import { useAuthHandlers } from "../../hooks/useAuthHandlers";
+import SettingsIcon from "../../components/icons/SettingsIcon";
+import AuthSection from "../../components/auth/AuthSection";
 
 // Import the page/view components
 import ReviewClassProgressView from "../../components/instructor/ReviewClassProgressView";
@@ -22,23 +20,6 @@ import ReviewByStudentView from "../../components/instructor/ReviewByStudentView
 import Footer from "../../components/Footer";
 import styles from "./InstructorDashboardPage.module.css";
 import ReviewLearningEntriesView from "../../components/instructor/ReviewLearningEntriesView";
-
-const SettingsIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <circle cx="12" cy="12" r="3"></circle>
-    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V15A1.65 1.65 0 0 0 19.4 15z"></path>
-  </svg>
-);
 
 const navLinks = [
   { path: "/python/instructor-dashboard/progress", label: "Class Progress" },
@@ -52,8 +33,8 @@ const navLinks = [
 
 const InstructorDashboardPage: React.FC = () => {
   const { isAuthenticated, user } = useAuthStore();
-  const { login, logout } = useAuthActions();
-  const navigate = useNavigate();
+  const { handleLoginSuccess, handleLoginError, handleLogout } =
+    useAuthHandlers({ redirectOnLogout: "/python/" });
 
   // States to fetch shared data now live here
   const [permittedStudents, setPermittedStudents] = useState<
@@ -90,24 +71,6 @@ const InstructorDashboardPage: React.FC = () => {
     loadCommonData();
   }, [isAuthenticated]);
 
-  const handleLogout = () => {
-    googleLogout();
-    logout();
-    navigate("/python/");
-  };
-
-  const handleLoginSuccess = async (credentialResponse: CredentialResponse) => {
-    if (credentialResponse.credential) {
-      try {
-        await login(credentialResponse.credential);
-      } catch (e) {
-        console.error("Login process failed:", e);
-      }
-    } else {
-      console.error("Login failed: No credential returned from Google.");
-    }
-  };
-
   const getNavLinkClass = ({ isActive }: { isActive: boolean }): string => {
     return isActive
       ? `${styles.instructorNavLink} ${styles.instructorNavLinkActive}`
@@ -125,12 +88,17 @@ const InstructorDashboardPage: React.FC = () => {
                 &larr; Back to Student View
               </Link>
             </div>
-            <div className={styles.authSection}>
-              <GoogleLogin
-                onSuccess={handleLoginSuccess}
-                onError={() => console.error("Google Login Failed")}
-              />
-            </div>
+            <AuthSection
+              onLoginSuccess={handleLoginSuccess}
+              onLoginError={handleLoginError}
+              onLogout={handleLogout}
+              styles={{
+                authSection: styles.authSection,
+                profileImage: styles.profileImage,
+                userName: styles.userName,
+                authButton: styles.authButton,
+              }}
+            />
           </div>
           <nav className={styles.instructorNav}>
             {navLinks.map((link) => (
@@ -193,22 +161,19 @@ const InstructorDashboardPage: React.FC = () => {
               &larr; Back to Student View
             </Link>
           </div>
-          <div className={styles.authSection}>
-            {user && (
-              <>
-                {user.picture && (
-                  <img
-                    src={user.picture}
-                    alt={user.name || "User"}
-                    className={styles.profileImage}
-                  />
-                )}
-                <span className={styles.userName}>
-                  {user.name || user.email}
-                </span>
-              </>
-            )}
-          </div>
+          <AuthSection
+            onLoginSuccess={handleLoginSuccess}
+            onLoginError={handleLoginError}
+            onLogout={handleLogout}
+            styles={{
+              authSection: styles.authSection,
+              profileImage: styles.profileImage,
+              userName: styles.userName,
+              authButton: styles.authButton,
+            }}
+            showGoogleLoginWhenUnauthenticated={false}
+            showLogoutButton={false}
+          />
           <div className={styles.settingsArea}>
             {user && (
               <button onClick={handleLogout} className={styles.authButton}>

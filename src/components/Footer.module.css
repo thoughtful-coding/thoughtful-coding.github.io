@@ -1,6 +1,6 @@
 /* src/components/Footer.module.css */
 .footer {
-  background-color: var(--primary-dark-color);
+  background-color: var(--primary-color);
   color: white;
   padding: var(--spacing-xl) 0 var(--spacing-lg) 0;
   margin-top: var(--spacing-2xl);
@@ -8,8 +8,21 @@
 }
 
 .instructorFooter {
-  background-color: var(--bg-secondary);
+  background-color: var(--primary-dark);
   margin-top: 0;
+  color: white;
+}
+
+.instructorFooter .columnTitle {
+  color: white;
+}
+
+.instructorFooter .link {
+  color: white;
+}
+
+.instructorFooter .copyright {
+  color: white;
 }
 
 .container {
