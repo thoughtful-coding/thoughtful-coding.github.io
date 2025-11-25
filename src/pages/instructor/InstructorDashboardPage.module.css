@@ -46,7 +46,7 @@
   color: white;
   border: 1px solid var(--glass-border-medium);
   padding: 0.4rem 0.8rem;
-  border-radius: 4px;
+  border-radius: var(--radius-md);
   cursor: pointer;
   font-size: 0.9rem;
   transition: background-color 0.3s;
@@ -54,6 +54,28 @@
 
 .authButton:hover {
   background-color: var(--glass-bg-strong);
+}
+
+.settingsArea {
+  padding-left: 0.5rem; /* Adjust spacing from auth button */
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.settingsLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white; /* Icon/text color */
+  text-decoration: none;
+  padding: 0.5rem; /* Clickable area */
+  border-radius: 50%; /* Make it circular if it's just an icon */
+  transition: background-color 0.3s;
+}
+
+.settingsLink:hover {
+  background-color: var(--glass-bg-light);
 }
 
 /* Ensure the nav is below the headerMain section */
@@ -73,16 +95,17 @@
 }
 
 .backToStudentLink {
-  color: var(--link-hover); /* Lighter blue for the link */
+  color: white;
   text-decoration: none;
   font-size: 0.9em;
   margin-bottom: 1.5rem;
   display: inline-block;
+  opacity: 0.85;
 }
 
 .backToStudentLink:hover {
   text-decoration: underline;
-  color: var(--text-on-primary);
+  opacity: 1;
 }
 
 .instructorNav {
