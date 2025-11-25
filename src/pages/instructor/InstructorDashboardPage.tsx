@@ -108,6 +108,12 @@ const InstructorDashboardPage: React.FC = () => {
                 &larr; Back to Student View
               </Link>
             </div>
+            <div className={styles.authSection}>
+              <GoogleLogin
+                onSuccess={handleLoginSuccess}
+                onError={() => console.error("Google Login Failed")}
+              />
+            </div>
           </div>
           <nav className={styles.instructorNav}>
             {navLinks.map((link) => (
@@ -126,83 +132,33 @@ const InstructorDashboardPage: React.FC = () => {
           className={styles.mainContentArea}
           style={{ textAlign: "center", padding: "1rem 1rem" }}
         >
-          <h2>Please Log In to Continue</h2>
-          <p style={{ maxWidth: "600px", margin: "1rem auto 2rem auto" }}>
-            Access to the instructor dashboard is restricted. Please log in with
-            your authorized Google account to view student data.
-          </p>
-          {/* Added styling for the GoogleLogin button */}
-          <div
+          <h2>Instructor Dashboard Demo</h2>
+          <p
             style={{
-              display: "flex",
-              justifyContent: "center",
-              width: "100%",
-              marginBottom: "2rem",
+              maxWidth: "600px",
+              margin: "1rem auto 0.5rem auto",
+              fontSize: "1.1em",
             }}
           >
-            <div style={{ width: "300px" }}>
-              <GoogleLogin
-                onSuccess={handleLoginSuccess}
-                onError={() => console.error("Google Login Failed")}
-                render={(renderProps) => (
-                  <button
-                    onClick={renderProps.onClick}
-                    disabled={renderProps.disabled}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      width: "100%",
-                      padding: "0.75rem",
-                      border: "1px solid #ccc",
-                      borderRadius: "4px",
-                      backgroundColor: "#fff",
-                      color: "#333",
-                      cursor: "pointer",
-                      boxShadow: "0 1px 3px rgba(0, 0, 0, 0.05)",
-                    }}
-                  >
-                    <img
-                      src="https://developers.google.com/identity/images/g-logo.png"
-                      alt="Google logo"
-                      style={{ marginRight: "0.5rem", height: "20px" }}
-                    />
-                    Sign in with Google
-                  </button>
-                )}
-              />
-            </div>
-          </div>
-          {/* Added the example image */}
+            Click the "Sign in with Google" button in the header to explore a
+            live demo of the instructor dashboard with three sample students.
+          </p>
+          {/* Example image */}
           <div
             style={{
-              maxWidth: "800px",
+              maxWidth: "1200px",
               margin: "2rem auto",
-              border: "1px solid #eee",
+              border: "1px solid var(--color-border)",
               borderRadius: "8px",
               overflow: "hidden",
+              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
             }}
           >
-            <h3>Example Dashboard View (Logged In)</h3>
             <img
               src={`${BASE_PATH}images/instructor-dashboard-example.png`}
-              alt="Example Instructor Dashboard"
+              alt="Instructor Dashboard Preview"
               style={{ display: "block", width: "100%" }}
             />
-            <p
-              style={{
-                padding: "1rem",
-                backgroundColor: "#f9f9f9",
-                fontSize: "0.9em",
-                color: "#777",
-                textAlign: "left",
-              }}
-            >
-              This is an example of what the instructor dashboard looks like
-              when you are logged in and have student data available. You will
-              be able to see progress overviews, review submissions by
-              assignment or student, and view individual student details.
-            </p>
           </div>
         </main>
         <Footer variant="instructor" />
