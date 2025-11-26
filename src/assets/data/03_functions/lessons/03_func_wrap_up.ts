@@ -48,7 +48,7 @@ Execution Error: Traceback (most recent call last):
 TypeError: unsupported operand type(s) for +: 'int' and 'str'\n\`\`\``,
         },
       ],
-      options: ["line 33", "line 393", "line 573", "line 1"],
+      options: ["line 31", "line 393", "line 573", "line 1"],
       correctAnswer: 0,
       feedback: {
         correct: "Correct!",
@@ -230,7 +230,7 @@ TypeError: unsupported operand type(s) for +: 'int' and 'str'\n\`\`\``,
         {
           kind: "text",
           value:
-            "Create a function that takes two inputs that matches the following input/output patterns:\n- 2 and 2 outputs 5\n- 4 and 2 outputs 9\n- 4 and 1 outputs 5\n- 6 and 1 outputs 7",
+            "Create a function that takes two inputs, adds them together, and then prints their result. To be very clear, this is what inputs should lead to which outputs:\n- 2 and 2 prints 4\n- 4 and 2 prints 6\n- 4 and 1 prints 5\n- 2 and 6 prints 8",
         },
       ],
       example: {
@@ -242,13 +242,13 @@ TypeError: unsupported operand type(s) for +: 'int' and 'str'\n\`\`\``,
       testCases: [
         {
           input: [2, 2],
-          expected: "5",
-          description: "Test 2, 2 -> 5",
+          expected: "4",
+          description: "Test 2, 2 -> 4",
         },
         {
           input: [4, 2],
-          expected: "9",
-          description: "Test 4, 2 -> 9",
+          expected: "6",
+          description: "Test 4, 2 -> 6",
         },
         {
           input: [4, 1],
@@ -256,14 +256,26 @@ TypeError: unsupported operand type(s) for +: 'int' and 'str'\n\`\`\``,
           description: "Test 4, 1 -> 5",
         },
         {
-          input: [6, 1],
-          expected: "7",
-          description: "Test 6, 1 -> 7",
+          input: [2, 6],
+          expected: "8",
+          description: "Test 6, 1 -> 8",
         },
       ],
       testMode: "procedure",
       functionToTest: "do_math",
     } as TestingSectionData,
+    {
+      kind: "Information",
+      id: "review-outro",
+      title: "Wrapping Up Functions",
+      content: [
+        {
+          kind: "text",
+          value:
+            "Great job! Functions are one of the most important concepts in programming. They allow you to think about creating something once and then use it over and over. This is a very powerful concept that, when taken to the extreme, allows for you to use **other people's code** to do things you could never do alone. In the next unit, we'll dive into how this works and start to create programs that can actually draw and create patterns.",
+        },
+      ],
+    } as InformationSectionData,
   ],
 };
 

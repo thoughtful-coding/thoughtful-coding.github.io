@@ -7,6 +7,7 @@ import type {
   MultipleSelectionSectionData,
   MatchingSectionData,
   TestingSectionData,
+  ParsonsSectionData,
 } from "../../../../types/data";
 
 const lessonData: Lesson = {
@@ -23,7 +24,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Over the past three lessons, you've learned how to use f-strings to create informative, human-readable output. You've also reviewed and reinforced your understanding of data types (strings and integers) and variables from earlier units.\n\nThis wrap-up lesson uses **interleaving** to mix questions about all these topics together. By switching between concepts, your brain has to actively recall what you've learned rather than following a single pattern. This creates stronger, more durable learning. Take your time with each question. Think carefully about what you've learned, and remember: struggling a bit is how you learn!",
+            "Over the past three lessons, you've learned how to use f-strings to create informative, human-readable output. You've also reviewed and reinforced your understanding of data types (strings and integers) and variables from earlier units.\n\nThis wrap-up lesson again uses **interleaving** to mix questions about all these topics together. By switching between concepts, your brain has to actively recall what you've learned rather than following a single pattern. This creates stronger, more durable learning.\n\nTake your time with each question. Think carefully about what you've learned, and remember: struggling is how you learn!",
         },
       ],
     } as InformationSectionData,
@@ -38,49 +39,13 @@ const lessonData: Lesson = {
             "Understanding data types is fundamental to programming. Which of the following is a string?",
         },
       ],
-      options: ['"42"', "42", 'f"{42}"', 'var = "42"'],
+      options: ['`"42"`', "`42`", '`print(f"{42}")`', '`var = "42"`'],
       correctAnswer: 0,
       feedback: {
         correct:
           'Correct! "42" is a string because it has quotes around it. The f-string like f"{42}" produces a string as output, but the f-string syntax itself is not a data type - it\'s a way to create strings.',
       },
     } as MultipleChoiceSectionData,
-    {
-      kind: "Information",
-      id: "wrap-up-intro",
-      title: "Bringing It All Together",
-      content: [
-        {
-          kind: "text",
-          value:
-            "TODO: https://drive.google.com/drive/folders/15AdutAgRgxRVO6XqqS_0-Z_KIAS1CTzW : Hello World program",
-        },
-      ],
-    } as InformationSectionData,
-    {
-      kind: "MultipleSelection",
-      id: "valid-strings",
-      title: "Valid String Syntax",
-      content: [
-        {
-          kind: "text",
-          value:
-            "Being able to identify valid strings is crucial for avoiding syntax errors. Select all of the following that are valid strings in Python:",
-        },
-      ],
-      options: [
-        '"Hello, world!"',
-        "'It's a nice day'",
-        '"She said "hi" to me"',
-        "'Python is fun!'",
-        "\"She said 'hi' to me\"",
-        '"It\'s cool"',
-      ],
-      correctAnswers: [0, 3, 4, 5],
-      feedback: {
-        correct: "Correct!",
-      },
-    } as MultipleSelectionSectionData,
     {
       kind: "MultipleChoice",
       id: "fstring-vs-concat",
@@ -111,7 +76,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "One of the benefits of f-strings is how much cleaner they are than old-style concatenation. Match each concatenation attempt with its correct f-string equivalent. Assume all variables are already defined.",
+            "One of the benefits of f-strings is how much clearly they show how the variables will be output within the string. Match each concatenation attempt with its correct f-string equivalent. Assume all variables are already defined.",
         },
       ],
       prompts: [
@@ -177,31 +142,41 @@ const lessonData: Lesson = {
       },
     } as MultipleSelectionSectionData,
     {
-      kind: "Testing",
+      kind: "Parsons",
       id: "profile-card" as SectionId,
       title: "Challenge: Profile Card",
       content: [
         {
           kind: "text",
           value:
-            "Create a profile card display using f-strings. You are given three variables: `name`, `age`,and `hobby`.\n\nYour program should print exactly three lines:\n1. 'Name: [name]'\n2. 'Age: [age]'\n3. 'Favorite hobby: [hobby]'\n\nMake sure to use f-strings for all your print statements.\n\nExample with name='Maya', age=16, hobby='photography':\n```\nName: Maya\nAge: 16\nFavorite hobby: photography\n```",
+            "Create a profile card display using f-strings. Choose from the blocks of code below to have the program properly output the following sentence: `Name: Maya, Age: 16, Hobby: photography`",
         },
       ],
-      example: {
-        visualization: "console",
-        initialCode:
-          '# Variables provided\nname = "Maya"\nage = 16\nhobby = "photography"\n\n# Write your three print statements using f-strings\n',
-      },
+      codeBlocks: [
+        ['name = "Maya"'],
+        ["name = \"Maya'"],
+
+        ["age = 16"],
+        ["Age = 16"],
+
+        ['hobby = "photography"'],
+        ["hobby = photography"],
+
+        ['print("Name: {name}, Age: {age}, Hobby: {hobby}")'],
+        ['print(f"Name: {name}, Age: {age}, Hobby: {hobby}")'],
+        ['printf("Name: {name}, Age: {age}, Hobby: {hobby}")'],
+      ],
+      visualization: "console",
+      testMode: "procedure",
+      functionToTest: "__main__",
       testCases: [
         {
           input: [null],
-          expected: "Name: Maya\nAge: 16\nFavorite hobby: photography",
+          expected: "Name: Maya, Age: 16, Hobby: photography",
           description: "Test profile card output",
         },
       ],
-      testMode: "procedure",
-      functionToTest: "__main__",
-    } as TestingSectionData,
+    } as ParsonsSectionData,
     {
       kind: "Matching",
       id: "expression-results" as SectionId,
@@ -258,7 +233,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Create a price calculator that shows an item's original price, discount amount, and final price. You are given three variables: `item`, `price`, and `discount`.\n\nYour program should print exactly four lines:\n1. 'Item: [item]'\n2. 'Original price: $[price]'\n3. 'Discount: $[discount]'\n4. 'Final price: $[price minus discount]'\n\nUse f-strings with an expression to calculate the final price.\n\nExample with item='Headphones', price=50, discount=10:\n```\nItem: Headphones\nOriginal price: $50\nDiscount: $10\nFinal price: $40\n```",
+            "Create a price calculator that shows an item's original price, discount amount, and final price. You are given three variables: `item`, `price`, and `discount`.\n\nUsing f-strings, your program should print the following four lines exactly:\n```\nItem: Headphones\nOriginal price: $50\nDiscount: $10\nFinal price: $40\n```",
         },
       ],
       example: {

@@ -5,10 +5,10 @@ import type {
   MultipleChoiceSectionData,
   MultipleSelectionSectionData,
   ObservationSectionData,
+  ParsonsSectionData,
   PRIMMSectionData,
   ReflectionSectionData,
   SectionId,
-  TestingSectionData,
 } from "../../../../types/data";
 
 const lessonData: Lesson = {
@@ -169,7 +169,7 @@ Run the code and see what happens!`,
             'What is the proper way to "call" a function that will say goodbye?',
         },
       ],
-      options: ["`goodbye`", "`   goodbye`", "`goodbye()`", "`goodbye():`"],
+      options: ["`goodbye`", "`goodbye:`", "`goodbye()`", "`goodbye():`"],
       correctAnswer: 2,
       feedback: {
         correct:
@@ -177,21 +177,29 @@ Run the code and see what happens!`,
       },
     } as MultipleChoiceSectionData,
     {
-      kind: "Testing",
+      kind: "Parsons",
       id: "birthday-practice" as SectionId,
       title: "Challenge: Happy Birthday Song",
       content: [
         {
           kind: "text",
           value:
-            'Now it\'s your turn to work with functions! Create a program that:\n\n1. Calls the existing `verse()` and `chorus()` functions to "sing" happy birthday to Alex.',
+            'Now it\'s your turn to work with functions! Select and order the blocks below properly to sing "Happy Birthday" to Alex.',
         },
       ],
-      example: {
-        visualization: "console",
-        initialCode:
-          'def verse():\n  print("Happy birthday to you")\n\ndef chorus():\n  print("Happy birthday dear Alex")\n\n# Your code here\n',
-      },
+      codeBlocks: [
+        ["verse()"],
+        ["verse()"],
+        ["verse()"],
+        ["chorus()"],
+        ["chorus()"],
+        ["chorus()"],
+        ["def verse:", '    print("Happy birthday to you")'],
+        ["def verse():", '    print("Happy birthday to you")'],
+        ["def chorus():", '   print("Happy birthday dear Alex")'],
+        ["def chorus():", 'print("Happy birthday dear Alex")'],
+      ],
+      visualization: "console",
       testCases: [
         {
           input: [null],
@@ -202,7 +210,7 @@ Run the code and see what happens!`,
       ],
       testMode: "procedure",
       functionToTest: "__main__",
-    } as TestingSectionData,
+    } as ParsonsSectionData,
     {
       kind: "Reflection",
       id: "function-reflection" as SectionId,

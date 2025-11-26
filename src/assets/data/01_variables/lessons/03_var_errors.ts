@@ -6,6 +6,7 @@ import type {
   TestingSectionData,
   ReflectionSectionData,
   MatchingSectionData,
+  ParsonsSectionData,
 } from "../../../../types/data";
 
 const lessonData: Lesson = {
@@ -40,7 +41,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            'This would result in the following `NameError`:\n```\nNameError: Traceback (most recent call last):\n  File "/lib/python311.zip/_pyodide/_base.py", line 573, in eval_code_async\n    await CodeRunner(\n  File "/lib/python311.zip/_pyodide/_base.py", line 393, in run_async\n    coroutine = eval(self.code, globals, locals)\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "<exec>", line 2, in <module>\nNameError: name \'numbr\' is not defined\n```\nThe error is saying is that the the computer failed trying to read a non-existent variable named `numbr` on line 2. This makes sense because the program misspelled the variable `number` that was created on the previous line.',
+            'This would result in the following `NameError`:\n```\nNameError: Traceback (most recent call last):\n  File "/lib/python311.zip/_pyodide/_base.py", line 573, in eval_code_async\n    await CodeRunner(\n  File "/lib/python311.zip/_pyodide/_base.py", line 393, in run_async\n    coroutine = eval(self.code, globals, locals)\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "<exec>", line 2, in <module>\nNameError: name \'numbr\' is not defined\n```\nThe error is saying is that the the computer failed because it couldn\'t find a variable named `numbr` on line 2. This makes sense because the program misspelled the variable `number` that was created on the previous line.',
         },
       ],
     } as InformationSectionData,
@@ -71,29 +72,34 @@ const lessonData: Lesson = {
       functionToTest: "__main__",
     } as TestingSectionData,
     {
-      kind: "Matching",
+      kind: "Parsons",
       id: "partial-program" as SectionId,
       title: "Different Error Types",
       content: [
         {
           kind: "text",
           value:
-            'Computers will execute Python programs up until they hit an error. This means that you can end up with a program that partially works, and then breaks in the middle.\n\nOrder the following lines of a program so that the program would print out `8`, `15` and then "raise" a `NameError`',
+            'Computers will execute Python programs up until they hit an error. This means that you can end up with a program that partially works, and then breaks in the middle.\n\nOrder the following lines of a program so that the program would print out `8`, `13` and then "raise" a `NameError`',
         },
       ],
-      prompts: [
-        { "Line 1": "x = 6" },
-        { "Line 2": "x = x + 2" },
-        { "Line 3": "print(x)" },
-        { "Line 4": "x = x + 6" },
-        { "Line 5": "print(x + 1)" },
-        { "Line 6": "x = x + y" },
+      codeBlocks: [
+        ["x = 8"],
+        ["print(x)"],
+        ["x = x + 4"],
+        ["print(x + 1)"],
+        ["x = x + y"],
       ],
-      feedback: {
-        correct:
-          "Correct! The computer runs lines 1 - 5 and then raises an error on line 6 because the variable `y` hasn't been created yet.",
-      },
-    } as MatchingSectionData,
+      visualization: "console",
+      testMode: "procedure",
+      functionToTest: "__main__",
+      testCases: [
+        {
+          input: [null],
+          expected: "8\n13\n\nNameError: name 'y' is not defined",
+          description: "Test NameError",
+        },
+      ],
+    } as ParsonsSectionData,
     {
       kind: "Information",
       id: "all-variable-pieces",
@@ -107,20 +113,32 @@ const lessonData: Lesson = {
       ],
     } as InformationSectionData,
     {
-      kind: "Testing",
+      kind: "Parsons",
       id: "variable-practice" as SectionId,
       title: "Challenge: Personal Information",
       content: [
         {
           kind: "text",
           value:
-            'Now it\'s your turn to pull all the pieces together! Write a program that:\n1. Creates a variable called `favorite_color` and stores the color `"green"` in it\n2. Creates a variable called `lucky_number` that stores the number `7` in it\n3. Prints out the color\n4. Prints out the lucky number\n5. Prints out the lucky number plus 10',
+            'Now it\'s your turn to pull all the pieces together! Create a program that:\n1. Creates a variable called `favorite_color` and stores the color `"green"` in it\n2. Creates a variable called `lucky_number` that stores the number `7` in it\n3. Prints out the color\n4. Prints out the lucky number\n5. Prints out the lucky number plus 10',
         },
       ],
-      example: {
-        visualization: "console",
-        initialCode: "favorite_color = \nlucky_number =\n",
-      },
+      codeBlocks: [
+        ['favorite_color = "green"'],
+        ['fav_color = "green"'],
+        ["lucky_number = 7"],
+        ["lucky_number = 10"],
+        ["print(favorite_color)"],
+        ["print(lucky_number)"],
+        ["print(lucky_number + 1)"],
+        ["print(number)"],
+        ["print(number + 10)"],
+        ["lucky_number + 10"],
+        ["lucky_number = lucky_number + 9"],
+      ],
+      visualization: "console",
+      testMode: "procedure",
+      functionToTest: "__main__",
       testCases: [
         {
           input: [null],
@@ -128,9 +146,7 @@ const lessonData: Lesson = {
           description: "Test with favorite_color='green' and lucky_number=7",
         },
       ],
-      testMode: "procedure",
-      functionToTest: "__main__",
-    } as TestingSectionData,
+    } as ParsonsSectionData,
     {
       kind: "Reflection",
       id: "variables-errors-reflection" as SectionId,

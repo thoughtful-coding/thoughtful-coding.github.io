@@ -24,7 +24,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "In previous lessons, you learned about the string and integer data types. You learned how to create variables that store these different data types. However, there's something we've carefully avoided talking about up until this point: printing integers and strings together **on the same line**.\n\nFor example, if you have a variable `age` that holds the integer `15` (via the code `age = 15`), we've only shown you how to print `age` by itself. We haven't shown you how to print something like `You are 15 years old` where the integer is combined with a string.\n\nIn this lesson, we'll show you different ways to try and do this and how to debug any errors you encounter along the way.",
+            "In previous lessons, you learned about the string and integer data types. You learned how to create variables that store these different data types. However, there's something we've carefully avoided talking about up until this point: printing integers and strings together **on the same line**.\n\nFor example, if you have a variable `age` that holds the integer `15` (`age = 15`)\n- We've **have** shown you how to print `age` by itself\n- We **haven't** shown you how to print `You are 15 years old` where the integer is combined with a string.\n\nIn this lesson, we'll show you different ways to try and do this and how to debug any errors you encounter along the way.",
         },
       ],
     } as InformationSectionData,
@@ -178,7 +178,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Now it's your turn! Create a program that:\n1. Uses the three variables `name`, `age`, and `state`\n2. Uses an f-string\n3. Prints out the sentence: `Mary is 12 years old and lives in New Jersey'",
+            "Now it's your turn! Create a program that:\n1. Uses the three variables `name`, `age`, and `state`\n2. Uses an f-string\n3. Prints out the sentence: `Mary is 12 years old and lives in New Jersey`",
         },
       ],
       example: {
@@ -204,7 +204,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Congratulations on learning about f-strings! You now have a powerful tool for creating clear, readable output that mixes text and variables.\n\nKey takeaways:\n- F-strings start with `f` before the opening quote\n- Variables go inside curly braces `{}`\n- Python automatically handles different data types\n- F-strings are cleaner and easier to read than using `+`\n\nIn the next few lessons, you'll use f-strings to build more complex outputs and even create your own Mad Libs game!",
+            "Congratulations on learning about f-strings! You now have a powerful tool for creating clear, readable output that mixes text and variables.\n\nKey takeaways:\n- F-strings start with `f` before the opening quote\n- Variables go inside curly braces `{}`\n- Python automatically handles different data types\n\nIn the next few lessons, you'll use f-strings to build more complex outputs and even create your own Mad Libs game!",
         },
       ],
     } as InformationSectionData,

@@ -39,12 +39,11 @@ const lessonData: Lesson = {
         },
       ],
       codeBlocks: [
-        ["x = 7"],
-        ["print(x + 1)"],
         ["x = 3"],
+        ["x = 7"],
         ["x = x + 2"],
         ["print(x)"],
-        ["print(x)"],
+        ["print(x + 1)"],
       ],
       visualization: "console",
       testMode: "procedure",
@@ -263,7 +262,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Excellent job working through these interleaved practice problems! By mixing questions about strings, integers, and variables together, your brain had to actively recall and apply different concepts rather than just follow a single pattern. This type of practice - where you switch between related topics - has been proven to create stronger, more durable learning.\n\nYou've demonstrated your understanding of all the foundational concepts and you're ready to move on to more advanced topics!",
+            "Excellent job working through these interleaved practice problems! By mixing questions about strings, integers, and variables together, your brain had to actively recall and apply different concepts rather than just reproducing a single pattern. This type of practice - where you switch between related topics - has been proven to create stronger, more durable learning.\n\nYou've demonstrated your understanding of all the foundational concepts and you're ready to move on to more advanced topics!",
         },
       ],
     } as InformationSectionData,

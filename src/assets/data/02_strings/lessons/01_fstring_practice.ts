@@ -76,7 +76,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Here's where f-strings get really powerful: you can do math directly inside the curly braces! Python will calculate the result first, then insert it into the string.\n\nFor example:",
+            "Here's where f-strings get really powerful: you can do math directly inside the curly braces! Python will calculate the result first, then insert it into the string.\n\nFor example the program below reads the value of age and adds one to it inside the curly braces.",
         },
         {
           kind: "code",
@@ -85,7 +85,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "You can use any arithmetic operations:\n- Addition: `{price + tax}`\n- Subtraction: `{score - 10}`\n- Multiplication: `{hours * rate}`\n- Division: `{total / count}`\n\nThe key is that Python evaluates (calculates) the expression first, then converts the result to text and inserts it.",
+            "You can use any arithmetic operations:\n- Addition: `{price + tax}`\n- Subtraction: `{score - 10}`\n- Multiplication: `{hours * rate}`\n- Division: `{total / count}`\n\nThe key is that Python evaluates (calculates) the expression first, then converts the result to text and inserts it into the f-string.",
         },
       ],
     } as InformationSectionData,
@@ -118,7 +118,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Create a shopping cart calculator. You are given three variables: `item`, `price`, and `quantity`.\n\nYour program should print exactly four lines:\n1. 'Item: [item]'\n2. 'Price per item: $[price]'\n3. 'Quantity: [quantity]'\n4. 'Total cost: $[price times quantity]'\n\nUse f-strings with an expression for the total calculation.\n\nExample: item='Widget', price=15, quantity=4, output:\n```\nItem: Widget\nPrice per item: $15\nQuantity: 4\nTotal cost: $60\n```",
+            "You goal in this section is to create a shopping cart calculator. In the program below, we have already given you three variables: `item`, `price`, and `quantity`.\n\nYour program should use f-strings to exactly the follow four lines:\n```\nItem: Widget\nPrice per item: $15\nQuantity: 4\nTotal cost: $60\n```",
         },
       ],
       example: {
@@ -150,7 +150,7 @@ const lessonData: Lesson = {
       ],
       topic: "How F-Strings Make Output Clear",
       isTopicPredefined: true,
-      code: "Create an example with 3+ variables and 1+ calculation in braces",
+      code: "# Create an example with 3+ variables and 1+ calculation in braces",
       isCodePredefined: false,
       explanation:
         "Explain how f-strings make your output informative (3-4 sentences)",

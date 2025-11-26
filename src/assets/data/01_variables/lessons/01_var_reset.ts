@@ -13,7 +13,7 @@ const lessonData: Lesson = {
   title: "Updating Data",
   guid: "44356f3b-722f-4b19-b3ed-d532b7961f92" as LessonId,
   description:
-    "Learn how to update the value of variables that are stored in your program to adapt to changing environments.",
+    "Learn how to reset the value of variables that are stored in your program to adapt to changing environments.",
   sections: [
     {
       kind: "Information",
@@ -23,7 +23,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            'In the previous lesson, you saw how you can **set** and **read** variables within a program. In this lesson, you\'ll see how to set the same variable _multiple times_. This ability to "reset" a variable means that you can do things like counting. In this case you would **read** the value of a variable and then **set** its new value to be this old value plus one.\n\nVariables are called variables because they have the ability to change over the course of the program. As you work through the following lessons, imagine new values going in and out of the slot provided by the variable.',
+            "In the previous lesson, you saw how you can **set** and **read** a variable's value within a program. In this lesson, you'll see how to set the a variable's value _multiple times_. This ability to \"reset\" a variable means that variables can track values as they change throughout a program's execution.\n\nVariables are called variables because they have the ability to change over the course of the program. As you work through the following lessons, imagine new values going in and out of the slot provided by the variable.",
         },
       ],
     } as InformationSectionData,
@@ -57,13 +57,13 @@ const lessonData: Lesson = {
     } as MultipleChoiceSectionData,
     {
       kind: "PRIMM",
-      id: "variable-update-primm" as SectionId,
-      title: "Updating Variables",
+      id: "variable-reset-primm" as SectionId,
+      title: "Resetting Variables",
       content: [
         {
           kind: "text",
           value:
-            "When you (re)set the value of an existing variable, the old value is overwritten. Variables can only remember one thing, so the old value is lost forever. What's really interesting, however, is that you can read the value of a variable and then use that value to (re)set that same variable.\n\nThe problem below has this pattern. On the first line, the value of `x` is set to `10`. On the second line, the value of `x` is read and then used to calculate the new value of `x`. Predict what you think will happen when the program is run.",
+            "When you reset the value of an existing variable, its old value is overwritten. Variables can only remember one thing, so the old value is lost forever. What's really interesting, however, is that if you do things carefully, you can read the value of a variable and then use that value to when resetting the variable.\n\nThe problem below illustrates this read and reset pattern. On the first line, the value of `x` is set to `10`. On the second line, the value of `x` is read and then this original value of `x` is used to calculate the new value of `x`. Based on this explanation, predict what you think will happen when the program is run.",
         },
       ],
       example: {
@@ -83,7 +83,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "The program below initially sets the value of `var` to be `3`. It then updates the value three times before printing out the final value stored in `var. What will the program output?",
+            "The program below initially sets the value of `var` to be `3`. It then resets the value three times before printing out the final value stored in `var. What will the program output?",
         },
         {
           kind: "code",
@@ -95,7 +95,7 @@ const lessonData: Lesson = {
       correctAnswer: 2,
       feedback: {
         correct:
-          "Correct! Each time the var is updated, it uses the old value of var to calculate what the new value should be.",
+          "Correct! Each time the var is reset, it uses the old value of var to calculate what the new value should be.",
       },
     } as MultipleChoiceSectionData,
     {
@@ -106,7 +106,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "The program below has an example of a set, a reset, and an update. Use the debugging tool to step line-by-line through the code and observe how the value of the `score` variable **changes**. Pay particular attention to the following:\n- When `score` is set, it shows up in the `Variables` side-panel with its given, initial value\n- When the value of `score` is reset, the variable is highlighted in the `Variables` side-panel with its new value",
+            "The program below has all the different patterns we've seen so far: a set, a read, and a reset. Use the debugging tool to step line-by-line through the code and observe how the value of the `score` variable changes. Pay particular attention to the following:\n- When `score` is set, it shows up in the `Variables` side-panel with its given, initial value\n- When the value of `score` is reset, the variable is highlighted in the `Variables` side-panel with its new value",
         },
       ],
       example: {
@@ -134,7 +134,7 @@ const lessonData: Lesson = {
       correctAnswer: 2,
       feedback: {
         correct:
-          "Correct! The variable starts at 100, gets sets to 50, then gets updated to 50 + 25 = 75.",
+          "Correct! The variable starts at 100, gets resets to 50, then gets reset once more to be 50 + 25 = 75.",
       },
     } as MultipleChoiceSectionData,
     {
@@ -145,7 +145,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Just like with integers, you can update the string value that a variable is holding. And, just like with integers, you can use the old string value when calculating what new value to store in the variable.\n\nThe program below has a set, reset, and an update. Predict what it will output, then run it to check your prediction.",
+            "Just like with integers, you can reset the string value that a variable is holding. And, just like with integers, you can use the old string value when calculating what new value to store in the variable.\n\nThe program below has a set, a read, and a reset. Predict what it will output, then run it to check your prediction.",
         },
       ],
       example: {
@@ -154,7 +154,7 @@ const lessonData: Lesson = {
           'greeting = "Hello"\nprint(greeting)\ngreeting = "Goodbye"\nprint(greeting)\ngreeting = greeting + "!"\nprint(greeting)\n',
       },
       predictPrompt:
-        'The variable `greeting` is initially set to "Hello" but gets updated twice. What do you think each print statement will output?',
+        'The variable `greeting` is initially set to "Hello" but gets reset twice. What do you think each print statement will output?',
       conclusion:
         "Just like with integers, you can reassign string variables and even use the variables in their own (re)assignment!",
     } as PRIMMSectionData,
@@ -166,7 +166,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            'Variables are fundamental to programming because they allow programs to set, reset, and update data. Without variables, every bit of data would have to be written directly into the code, making programs inflexible and hard to maintain.\n\nNow it\'s time to reflect in order to formalize your knowledge. Create a simple 3-4 line code example that demonstrates how variables can make a program more useful, and write 3-4 sentences explaining how your program works. Remember to use the phrase "as seen in the example above".',
+            'Variables are fundamental to programming because they allow programs to set, read, and reset data. Without variables, every bit of data would have to be written directly into the code, making programs inflexible and hard to maintain.\n\nNow it\'s time to reflect in order to formalize your knowledge. Create a simple 3-4 line code example that demonstrates how variables can make a program more useful, and write 3-4 sentences explaining how your program works. Remember to use the phrase "as seen in the example above".',
         },
       ],
       topic: "Why Variables Matter",
@@ -184,7 +184,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Great job! You have now seen the core ways that variables are used in programs. They can be **set** and *read**. Then, if you combine these two abilities, they can be updated based on their previous values.\n\nIn the next lesson you'll learn how to use multiple variables in a single program.",
+            "Great job! You have now seen the core ways that variables are used in programs. They can be **set** and *read**. They can also be reset with new values - even using their old values in the process. In the next lesson you'll learn how to use multiple variables in a single program.",
         },
       ],
     } as InformationSectionData,

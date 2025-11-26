@@ -64,7 +64,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            'Let\'s revisit the parts of a function from the previous lesson... mostly because we lied to you a bit. There\'s really **five** pieces:\n1. `def` starts "defining" the function\n2. `greet_person` is name of the function\n3. The **input variables** inside the parentheses are variables, waiting to be set by the function call\n4. The indented code below the `def greet_person(name):` is the code the function will run\n5. The unindented `greet_person()` "calls" the function with a particular **input values**',
+            'Let\'s revisit the parts of a function from the previous lesson... mostly because we lied to you a bit. There\'s really **five** pieces:\n1. `def` starts "defining" the function\n2. `greet_person` is name of the function\n3. The **input variables** inside the parentheses are variables, waiting to be set by the function call\n4. The indented code below the `def greet_person(name):` is the code the function will run\n5. The unindented `greet_person()` "calls" the function with particular **input values**',
         },
       ],
     } as InformationSectionData,

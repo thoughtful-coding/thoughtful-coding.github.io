@@ -147,7 +147,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            'Now it\'s your turn to work with functions! Create a program that uses the minimal number of function calls to print the word "banana". Hint: you can do it with just four function calls.',
+            'Now it\'s your turn to work with functions! Create a program that uses the minimal number of function calls to print the word "banana". Hint: you can do it with **just four** function calls.',
         },
       ],
       example: {
