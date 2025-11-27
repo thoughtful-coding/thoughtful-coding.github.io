@@ -1,5 +1,5 @@
 // src/components/sections/MultipleChoiceSection.tsx
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import type {
@@ -41,6 +41,17 @@ const MultipleChoiceSection: React.FC<MultipleChoiceSectionProps> = ({
     section,
     isMultiSelect: false, // Explicitly false for multiple choice
   });
+
+  // Force re-render every second while penalty is active to show countdown
+  const [, setTick] = useState(0);
+  useEffect(() => {
+    if (isLocallyDisabled && remainingPenaltyTime > 0) {
+      const interval = setInterval(() => {
+        setTick((prev) => prev + 1);
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [isLocallyDisabled, remainingPenaltyTime]);
 
   const selectedOption = selectedIndices.length > 0 ? selectedIndices[0] : null;
 

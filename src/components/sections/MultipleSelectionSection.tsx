@@ -1,5 +1,5 @@
 // src/components/sections/MultipleSelectionSection.tsx
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import type {
@@ -42,6 +42,17 @@ const MultipleSelectionSection: React.FC<MultipleSelectionSectionProps> = ({
     section,
     isMultiSelect: true, // Explicitly true for multiple selection
   });
+
+  // Force re-render every second while penalty is active to show countdown
+  const [, setTick] = useState(0);
+  useEffect(() => {
+    if (isLocallyDisabled && remainingPenaltyTime > 0) {
+      const interval = setInterval(() => {
+        setTick((prev) => prev + 1);
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [isLocallyDisabled, remainingPenaltyTime]);
 
   // Click handler for the div/label to toggle the checkbox
   const handleQuizOptionClick = useCallback(
