@@ -190,7 +190,8 @@ TypeError: unsupported operand type(s) for +: 'int' and 'str'\n\`\`\``,
         },
         {
           kind: "image",
-          src: "",
+          src: "images/function_pieces.png",
+          maxWidthPercentage: 70,
         },
       ],
       prompts: [
@@ -199,6 +200,7 @@ TypeError: unsupported operand type(s) for +: 'int' and 'str'\n\`\`\``,
         { C: "Inputs to function" },
         { D: 'Code "inside" function' },
         { E: "Function call" },
+        { F: "Function input values" },
       ],
     } as MatchingSectionData,
     {

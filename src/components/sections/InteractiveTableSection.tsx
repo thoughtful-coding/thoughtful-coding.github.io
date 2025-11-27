@@ -21,12 +21,14 @@ type InteractiveTableSectionProps =
       section: CoverageSectionData;
       unitId: UnitId;
       lessonId: LessonId;
+      lessonPath: string;
     }
   | {
       mode: "prediction";
       section: PredictionSectionData;
       unitId: UnitId;
       lessonId: LessonId;
+      lessonPath: string;
     };
 
 /**
@@ -39,7 +41,7 @@ type InteractiveTableSectionProps =
 const InteractiveTableSection: React.FC<InteractiveTableSectionProps> = (
   props
 ) => {
-  const { mode, section, unitId, lessonId } = props;
+  const { mode, section, unitId, lessonId, lessonPath } = props;
   const { completeSection } = useProgressActions();
 
   // Get the table data based on mode
@@ -107,6 +109,7 @@ const InteractiveTableSection: React.FC<InteractiveTableSectionProps> = (
       sectionId={section.id}
       title={section.title}
       content={section.content}
+      lessonPath={lessonPath}
     >
       <div className={tableStyles.coverageCodeDisplayContainer}>
         <div className={styles.exampleContainer}>

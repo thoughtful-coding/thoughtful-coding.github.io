@@ -44,6 +44,7 @@ const mockSectionData: TestingSectionData = {
 };
 
 describe("TestingSection", () => {
+  const mockLessonPath = "00_intro/lessons/intro_strings";
   const runCodeMock = vi.fn();
   const runTestsMock = vi.fn();
   const runTurtleCodeMock = vi.fn();
@@ -90,6 +91,7 @@ describe("TestingSection", () => {
         section={mockSectionData}
         unitId={"unit-1" as UnitId}
         lessonId={"lesson-1" as LessonId}
+        lessonPath={mockLessonPath}
       />
     );
 
@@ -114,6 +116,7 @@ describe("TestingSection", () => {
         section={mockSectionData}
         unitId={"unit-1" as UnitId}
         lessonId={"lesson-1" as LessonId}
+        lessonPath={mockLessonPath}
       />
     );
 
@@ -133,6 +136,7 @@ describe("TestingSection", () => {
         section={mockSectionData}
         unitId={"unit-1" as UnitId}
         lessonId={"lesson-1" as LessonId}
+        lessonPath={mockLessonPath}
       />
     );
 
@@ -159,6 +163,7 @@ describe("TestingSection", () => {
         section={mockSectionData}
         unitId={"unit-1" as UnitId}
         lessonId={"lesson-1" as LessonId}
+        lessonPath={mockLessonPath}
       />
     );
 
@@ -192,6 +197,7 @@ describe("TestingSection", () => {
         section={mockSectionData}
         unitId={"unit-1" as UnitId}
         lessonId={"lesson-1" as LessonId}
+        lessonPath={mockLessonPath}
       />
     );
 
@@ -229,6 +235,7 @@ describe("TestingSection", () => {
         section={mockSectionData}
         unitId={"unit-1" as UnitId}
         lessonId={"lesson-1" as LessonId}
+        lessonPath={mockLessonPath}
       />
     );
 

@@ -19,12 +19,14 @@ interface PRIMMSectionProps {
   section: PRIMMSectionData;
   unitId: UnitId;
   lessonId: LessonId;
+  lessonPath: string;
 }
 
 const PRIMMSection: React.FC<PRIMMSectionProps> = ({
   section,
   unitId,
   lessonId,
+  lessonPath,
 }) => {
   const {
     state,
@@ -115,7 +117,7 @@ const PRIMMSection: React.FC<PRIMMSectionProps> = ({
     <section id={section.id} className={styles.section}>
       <h2 className={styles.title}>{section.title}</h2>
       <div className={styles.content}>
-        <ContentRenderer content={section.content} />
+        <ContentRenderer content={section.content} lessonPath={lessonPath} />
       </div>
 
       <div className={styles.exampleContainer}>

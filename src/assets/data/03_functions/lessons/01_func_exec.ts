@@ -34,7 +34,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Let's revisit the parts of a function from the previous lesson. Match up each part of the function with the order they come in when you're defining and calling a function.",
+            "Let's revisit the parts of a function from the previous lesson. Match up each part of the function with **the order they come in** when you're defining and calling a function.",
         },
       ],
       prompts: [
@@ -48,6 +48,33 @@ const lessonData: Lesson = {
         { Eighth: "Function Call" },
       ],
     } as MatchingSectionData,
+    {
+      kind: "Testing",
+      id: "indentation-practice" as SectionId,
+      title: "On Indentation",
+      content: [
+        {
+          kind: "text",
+          value:
+            'We\'ve use the word "indentation" a lot, but now let\'s define what we mean by that. Indentation means using two spaces before you start typing you code. This indentation of two spaces shows that a bit of code is "inside" or "within" something else. This is an important concept that will come up later.\n\nLet\'s return to the "Happy Birthday" program from before. In this case, it\'s your goal to do the following:\n1. Fix the indentation errors in the functions below\n2. Call the `verse()` and `chorus()` functions to "sing" happy birthday to Alex',
+        },
+      ],
+      example: {
+        visualization: "console",
+        initialCode:
+          'def verse():\nprint("Happy birthday to you")\n\ndef chorus():\nprint("Happy birthday dear Alex")\n\n# Your code here\n',
+      },
+      testCases: [
+        {
+          input: [null],
+          expected:
+            "Happy birthday to you\nHappy birthday to you\nHappy birthday dear Alex\nHappy birthday to you",
+          description: "Test happy birthday song to a Alex",
+        },
+      ],
+      testMode: "procedure",
+      functionToTest: "__main__",
+    } as TestingSectionData,
     {
       kind: "Information",
       id: "function-summary",

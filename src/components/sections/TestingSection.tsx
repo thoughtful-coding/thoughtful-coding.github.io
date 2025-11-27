@@ -12,7 +12,7 @@ interface TestingSectionProps {
   section: TestingSectionData;
   unitId: UnitId;
   lessonId: LessonId;
-  lessonPath?: string;
+  lessonPath: string;
 }
 
 const TestingSection: React.FC<TestingSectionProps> = ({
@@ -64,7 +64,7 @@ const TestingSection: React.FC<TestingSectionProps> = ({
     <section id={section.id} className={styles.section}>
       <h2 className={styles.title}>{section.title}</h2>
       <div className={styles.content}>
-        <ContentRenderer content={section.content} />
+        <ContentRenderer content={section.content} lessonPath={lessonPath} />
       </div>
 
       <div className={styles.exampleContainer}>

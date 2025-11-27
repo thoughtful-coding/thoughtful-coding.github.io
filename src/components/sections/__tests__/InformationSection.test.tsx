@@ -6,6 +6,8 @@ import type { InformationSectionData } from "../../../types/data";
 // Mock data that matches the structure the component expects
 
 describe("InformationSection", () => {
+  const mockLessonPath = "00_intro/lessons/intro_strings";
+
   it("should render the title and content from its props", () => {
     // ARRANGE: Render the component with the mock data.
     // Note: The props now correctly match the component's interface.
@@ -20,7 +22,7 @@ describe("InformationSection", () => {
         },
       ],
     };
-    render(<InformationSection section={mockSectionData} />);
+    render(<InformationSection section={mockSectionData} lessonPath={mockLessonPath} />);
 
     // ASSERT
     expect(
@@ -44,7 +46,7 @@ describe("InformationSection", () => {
       ],
     };
 
-    render(<InformationSection section={mockSectionWithCode} />);
+    render(<InformationSection section={mockSectionWithCode} lessonPath={mockLessonPath} />);
 
     // ASSERT
     // The syntax highlighter can break code into multiple elements,

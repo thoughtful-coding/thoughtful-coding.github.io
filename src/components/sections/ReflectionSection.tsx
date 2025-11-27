@@ -34,12 +34,14 @@ interface ReflectionSectionProps {
   section: ReflectionSectionData;
   unitId: UnitId;
   lessonId: LessonId;
+  lessonPath: string;
 }
 
 const ReflectionSection: React.FC<ReflectionSectionProps> = ({
   section,
   unitId,
   lessonId,
+  lessonPath,
 }) => {
   const { id: sectionId, title } = section;
   const { isTopicPredefined, isCodePredefined, isExplanationPredefined } =
@@ -323,7 +325,7 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = ({
     <section id={sectionId} className={styles.section}>
       <h2 className={styles.title}>{title}</h2>
       <div className={styles.content}>
-        <ContentRenderer content={section.content} />
+        <ContentRenderer content={section.content} lessonPath={lessonPath} />
       </div>
 
       <div className={styles.reflectionContainer}>

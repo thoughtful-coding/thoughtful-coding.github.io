@@ -13,6 +13,7 @@ interface MatchingSectionProps {
   section: MatchingSectionData;
   unitId: UnitId;
   lessonId: LessonId;
+  lessonPath: string;
 }
 
 // Define the shape of a draggable option, giving each a unique ID
@@ -30,6 +31,7 @@ const MatchingSection: React.FC<MatchingSectionProps> = ({
   section,
   unitId,
   lessonId,
+  lessonPath,
 }) => {
   const storageKey = `matchingState_${unitId}_${lessonId}_${section.id}`;
 
@@ -167,7 +169,7 @@ const MatchingSection: React.FC<MatchingSectionProps> = ({
         </ReactMarkdown>
       </h2>
       <div className={styles.content}>
-        <ContentRenderer content={section.content} />
+        <ContentRenderer content={section.content} lessonPath={lessonPath} />
       </div>
 
       <div className={styles.matchingContainer}>

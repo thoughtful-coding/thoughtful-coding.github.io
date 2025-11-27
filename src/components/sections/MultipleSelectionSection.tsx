@@ -15,12 +15,14 @@ interface MultipleSelectionSectionProps {
   section: MultipleSelectionSectionData;
   unitId: UnitId;
   lessonId: LessonId;
+  lessonPath: string;
 }
 
 const MultipleSelectionSection: React.FC<MultipleSelectionSectionProps> = ({
   section,
   unitId,
   lessonId,
+  lessonPath,
 }) => {
   const {
     // selectedIndices, // Not directly used, use selectedOptionsSet instead
@@ -86,7 +88,7 @@ const MultipleSelectionSection: React.FC<MultipleSelectionSectionProps> = ({
       <div
         className={!hasRequiredPhrase ? styles.questionError : styles.content}
       >
-        <ContentRenderer content={section.content} />
+        <ContentRenderer content={section.content} lessonPath={lessonPath} />
       </div>
 
       {isLocallyDisabled && !isCorrect && (

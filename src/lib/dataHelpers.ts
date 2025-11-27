@@ -12,16 +12,13 @@ import * as dataLoader from "./dataLoader";
  */
 export function resolveImagePath(
   imagePath: string,
-  lessonPath?: string
+  lessonPath: string
 ): string {
   if (imagePath.startsWith("/") || imagePath.startsWith("http")) {
     return imagePath;
   }
-  if (lessonPath) {
-    const unitDir = lessonPath.split("/")[0];
-    return `/data/${unitDir}/${imagePath}`;
-  }
-  return imagePath;
+  const unitDir = lessonPath.split("/")[0];
+  return `/data/${unitDir}/${imagePath}`;
 }
 
 /**

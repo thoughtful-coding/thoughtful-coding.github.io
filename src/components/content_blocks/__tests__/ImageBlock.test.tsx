@@ -1,29 +1,25 @@
 import { screen } from "@testing-library/react";
-import { vi } from "vitest";
 
 import { render } from "../../../test-utils";
 import ImageBlock from "../ImageBlock";
 import type { ImageBlock as ImageBlockData } from "../../../types/data";
 
-// Mock the config module to provide a consistent BASE_PATH for tests
-vi.mock("../../../config", () => ({
-  BASE_PATH: "/mock-base-path/",
-}));
-
 describe("ImageBlock", () => {
+  const mockLessonPath = "00_intro/lessons/intro_strings";
+
   it("constructs the correct URL for a local image source", () => {
     const mockBlock: ImageBlockData = {
       kind: "image",
-      src: "local/python-logo.png",
+      src: "images/python-logo.png",
       alt: "A local Python logo",
     };
 
-    render(<ImageBlock block={mockBlock} />);
+    render(<ImageBlock block={mockBlock} lessonPath={mockLessonPath} />);
 
     const img = screen.getByAltText("A local Python logo");
     expect(img).toBeInTheDocument();
-    // Verify that the BASE_PATH prefix is added
-    expect(img).toHaveAttribute("src", "/mock-base-path/local/python-logo.png");
+    // Verify that the path is resolved relative to the unit directory
+    expect(img).toHaveAttribute("src", "/data/00_intro/images/python-logo.png");
   });
 
   it("uses the source URL directly for an external image", () => {
@@ -33,7 +29,7 @@ describe("ImageBlock", () => {
       alt: "An external image",
     };
 
-    render(<ImageBlock block={mockBlock} />);
+    render(<ImageBlock block={mockBlock} lessonPath={mockLessonPath} />);
 
     const img = screen.getByAltText("An external image");
     expect(img).toBeInTheDocument();
@@ -44,12 +40,12 @@ describe("ImageBlock", () => {
   it("applies the maxWidth style when maxWidthPercentage is provided", () => {
     const mockBlock: ImageBlockData = {
       kind: "image",
-      src: "local/another-image.png",
+      src: "images/another-image.png",
       alt: "A sized image",
       maxWidthPercentage: 50,
     };
 
-    render(<ImageBlock block={mockBlock} />);
+    render(<ImageBlock block={mockBlock} lessonPath={mockLessonPath} />);
 
     const img = screen.getByAltText("A sized image");
     // Use .toHaveStyle to check for inline styles
@@ -59,11 +55,11 @@ describe("ImageBlock", () => {
   it("does not apply the maxWidth style when maxWidthPercentage is not provided", () => {
     const mockBlock: ImageBlockData = {
       kind: "image",
-      src: "local/full-width-image.png",
+      src: "images/full-width-image.png",
       alt: "A full-width image",
     };
 
-    render(<ImageBlock block={mockBlock} />);
+    render(<ImageBlock block={mockBlock} lessonPath={mockLessonPath} />);
 
     const img = screen.getByAltText("A full-width image");
     // FIX: Directly check the style property on the element. If it wasn't set,

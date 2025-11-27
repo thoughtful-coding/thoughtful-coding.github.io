@@ -6,6 +6,7 @@ interface PredictionSectionProps {
   section: PredictionSectionData;
   unitId: UnitId;
   lessonId: LessonId;
+  lessonPath: string;
 }
 
 /**
@@ -16,6 +17,7 @@ const PredictionSection: React.FC<PredictionSectionProps> = ({
   section,
   unitId,
   lessonId,
+  lessonPath,
 }) => {
   return (
     <InteractiveTableSection
@@ -23,6 +25,7 @@ const PredictionSection: React.FC<PredictionSectionProps> = ({
       section={section}
       unitId={unitId}
       lessonId={lessonId}
+      lessonPath={lessonPath}
     />
   );
 };

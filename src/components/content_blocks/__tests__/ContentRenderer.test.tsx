@@ -24,6 +24,8 @@ vi.mock("../VideoBlock", () => ({
 }));
 
 describe("ContentRenderer", () => {
+  const mockLessonPath = "00_intro/lessons/intro_strings";
+
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -37,7 +39,7 @@ describe("ContentRenderer", () => {
       { kind: "video", src: "video.mp4" },
     ];
 
-    render(<ContentRenderer content={mockContent} />);
+    render(<ContentRenderer content={mockContent} lessonPath={mockLessonPath} />);
 
     // ASSERT: Check that each mocked child was rendered
     expect(screen.getByText("Mocked TextBlock")).toBeInTheDocument();
@@ -55,6 +57,7 @@ describe("ContentRenderer", () => {
     });
     expect(vi.mocked(ImageBlock).mock.calls[0][0]).toEqual({
       block: mockContent[2],
+      lessonPath: mockLessonPath,
     });
     expect(vi.mocked(VideoBlock).mock.calls[0][0]).toEqual({
       block: mockContent[3],
@@ -68,7 +71,7 @@ describe("ContentRenderer", () => {
       { kind: "unsupported_kind" } as any,
     ];
 
-    render(<ContentRenderer content={mockContent} />);
+    render(<ContentRenderer content={mockContent} lessonPath={mockLessonPath} />);
 
     // ASSERT
     expect(screen.getByText("Unsupported content block")).toBeInTheDocument();

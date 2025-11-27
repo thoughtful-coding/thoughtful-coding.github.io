@@ -11,12 +11,14 @@ interface DebuggerSectionProps {
   section: DebuggerSectionData;
   unitId: UnitId;
   lessonId: LessonId;
+  lessonPath: string;
 }
 
 const DebuggerSection: React.FC<DebuggerSectionProps> = ({
   section,
   unitId,
   lessonId,
+  lessonPath,
 }) => {
   const [userCode, setUserCode] = useState<string>(section.example.initialCode);
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(-1);
@@ -126,7 +128,7 @@ const DebuggerSection: React.FC<DebuggerSectionProps> = ({
     <section id={section.id} className={sectionStyles.section}>
       <h2 className={sectionStyles.title}>{section.title}</h2>
       <div className={sectionStyles.content}>
-        <ContentRenderer content={section.content} />
+        <ContentRenderer content={section.content} lessonPath={lessonPath} />
       </div>
 
       <div className={styles.editorContainer}>

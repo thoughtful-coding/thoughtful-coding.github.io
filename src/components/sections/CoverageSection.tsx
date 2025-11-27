@@ -6,6 +6,7 @@ interface CoverageSectionProps {
   section: CoverageSectionData;
   unitId: UnitId;
   lessonId: LessonId;
+  lessonPath: string;
 }
 
 /**
@@ -16,6 +17,7 @@ const CoverageSection: React.FC<CoverageSectionProps> = ({
   section,
   unitId,
   lessonId,
+  lessonPath,
 }) => {
   return (
     <InteractiveTableSection
@@ -23,6 +25,7 @@ const CoverageSection: React.FC<CoverageSectionProps> = ({
       section={section}
       unitId={unitId}
       lessonId={lessonId}
+      lessonPath={lessonPath}
     />
   );
 };

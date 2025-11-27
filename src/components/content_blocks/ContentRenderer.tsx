@@ -7,9 +7,10 @@ import VideoBlock from "./VideoBlock";
 
 interface ContentRendererProps {
   content: ContentBlockData[];
+  lessonPath: string;
 }
 
-const ContentRenderer: React.FC<ContentRendererProps> = ({ content }) => {
+const ContentRenderer: React.FC<ContentRendererProps> = ({ content, lessonPath }) => {
   return (
     <div>
       {content.map((block, index) => {
@@ -19,7 +20,7 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({ content }) => {
           case "code":
             return <CodeBlock key={index} block={block} />;
           case "image":
-            return <ImageBlock key={index} block={block} />;
+            return <ImageBlock key={index} block={block} lessonPath={lessonPath} />;
           case "video":
             return <VideoBlock key={index} block={block} />;
           default: {

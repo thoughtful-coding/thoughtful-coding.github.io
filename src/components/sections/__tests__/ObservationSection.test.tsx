@@ -29,6 +29,8 @@ const mockSectionData: ObservationSectionData = {
 };
 
 describe("ObservationSection", () => {
+  const mockLessonPath = "00_intro/lessons/intro_strings";
+
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -42,6 +44,7 @@ describe("ObservationSection", () => {
         section={mockSectionData}
         unitId={unitId}
         lessonId={lessonId}
+        lessonPath={mockLessonPath}
       />
     );
 

@@ -26,7 +26,7 @@ interface ParsonsSectionProps {
   section: ParsonsSectionData;
   unitId: UnitId;
   lessonId: LessonId;
-  lessonPath?: string;
+  lessonPath: string;
 }
 
 const ParsonsSection: React.FC<ParsonsSectionProps> = ({
@@ -216,7 +216,7 @@ const ParsonsSection: React.FC<ParsonsSectionProps> = ({
         </ReactMarkdown>
       </h2>
       <div className={sectionStyles.content}>
-        <ContentRenderer content={section.content} />
+        <ContentRenderer content={section.content} lessonPath={lessonPath} />
       </div>
 
       <div className={styles.parsonsContainer}>

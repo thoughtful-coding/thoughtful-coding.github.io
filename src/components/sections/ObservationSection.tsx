@@ -14,7 +14,8 @@ const ObservationSection: React.FC<{
   section: ObservationSectionData;
   unitId: UnitId;
   lessonId: LessonId;
-}> = ({ section, unitId, lessonId }) => {
+  lessonPath: string;
+}> = ({ section, unitId, lessonId, lessonPath }) => {
   const [turtleInstance, setTurtleInstance] =
     useState<RealTurtleInstance | null>(null);
 
@@ -32,7 +33,7 @@ const ObservationSection: React.FC<{
       <h2 className={styles.title}>{section.title}</h2>
 
       <div className={styles.content}>
-        <ContentRenderer content={section.content} />
+        <ContentRenderer content={section.content} lessonPath={lessonPath} />
       </div>
 
       <div className={styles.exampleContainer}>

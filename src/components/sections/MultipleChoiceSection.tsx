@@ -15,12 +15,14 @@ interface MultipleChoiceSectionProps {
   section: MultipleChoiceSectionData;
   unitId: UnitId;
   lessonId: LessonId;
+  lessonPath: string;
 }
 
 const MultipleChoiceSection: React.FC<MultipleChoiceSectionProps> = ({
   section,
   unitId,
   lessonId,
+  lessonPath,
 }) => {
   const {
     selectedIndices,
@@ -77,7 +79,7 @@ const MultipleChoiceSection: React.FC<MultipleChoiceSectionProps> = ({
         </ReactMarkdown>
       </h2>
       <div className={styles.content}>
-        <ContentRenderer content={section.content} />
+        <ContentRenderer content={section.content} lessonPath={lessonPath} />
       </div>
 
       {isLocallyDisabled && !isCorrect && (

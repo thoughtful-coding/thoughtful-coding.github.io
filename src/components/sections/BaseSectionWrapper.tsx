@@ -10,6 +10,7 @@ interface BaseSectionWrapperProps {
   sectionId: SectionId;
   title: string;
   content: ContentBlock[];
+  lessonPath: string;
   children: ReactNode;
 }
 
@@ -21,6 +22,7 @@ const BaseSectionWrapper: React.FC<BaseSectionWrapperProps> = ({
   sectionId,
   title,
   content,
+  lessonPath,
   children,
 }) => {
   return (
@@ -35,7 +37,7 @@ const BaseSectionWrapper: React.FC<BaseSectionWrapperProps> = ({
         </ReactMarkdown>
       </h2>
       <div className={styles.content}>
-        <ContentRenderer content={content} />
+        <ContentRenderer content={content} lessonPath={lessonPath} />
       </div>
       {children}
     </section>

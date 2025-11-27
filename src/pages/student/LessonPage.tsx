@@ -186,7 +186,7 @@ const LessonPage: React.FC = () => {
     switch (sectionData.kind) {
       case "Information":
         return (
-          <InformationSection key={sectionData.id} section={sectionData} />
+          <InformationSection key={sectionData.id} section={sectionData} lessonPath={lessonPath} />
         );
       case "Observation":
         return (
@@ -195,6 +195,7 @@ const LessonPage: React.FC = () => {
             unitId={currentUnitGuid}
             lessonId={currentLessonGuid}
             section={sectionData}
+            lessonPath={lessonPath}
           />
         );
       case "Testing":
@@ -214,6 +215,7 @@ const LessonPage: React.FC = () => {
             unitId={currentUnitGuid}
             lessonId={currentLessonGuid}
             section={sectionData}
+            lessonPath={lessonPath}
           />
         );
       case "MultipleChoice":
@@ -223,6 +225,7 @@ const LessonPage: React.FC = () => {
             unitId={currentUnitGuid}
             lessonId={currentLessonGuid}
             section={sectionData}
+            lessonPath={lessonPath}
           />
         );
       case "MultipleSelection":
@@ -232,6 +235,7 @@ const LessonPage: React.FC = () => {
             unitId={currentUnitGuid}
             lessonId={currentLessonGuid}
             section={sectionData}
+            lessonPath={lessonPath}
           />
         );
       case "Matching":
@@ -241,6 +245,7 @@ const LessonPage: React.FC = () => {
             unitId={currentUnitGuid}
             lessonId={currentLessonGuid}
             section={sectionData}
+            lessonPath={lessonPath}
           />
         );
       case "Parsons":
@@ -260,6 +265,7 @@ const LessonPage: React.FC = () => {
             unitId={currentUnitGuid}
             lessonId={currentLessonGuid}
             section={sectionData}
+            lessonPath={lessonPath}
           />
         );
       case "Coverage":
@@ -269,6 +275,7 @@ const LessonPage: React.FC = () => {
             unitId={currentUnitGuid}
             lessonId={currentLessonGuid}
             section={sectionData}
+            lessonPath={lessonPath}
           />
         );
       case "PRIMM":
@@ -278,6 +285,7 @@ const LessonPage: React.FC = () => {
             unitId={currentUnitGuid}
             lessonId={currentLessonGuid}
             section={sectionData}
+            lessonPath={lessonPath}
           />
         );
       case "Debugger":
@@ -287,6 +295,7 @@ const LessonPage: React.FC = () => {
             unitId={currentUnitGuid}
             lessonId={currentLessonGuid}
             section={sectionData}
+            lessonPath={lessonPath}
           />
         );
       default:
