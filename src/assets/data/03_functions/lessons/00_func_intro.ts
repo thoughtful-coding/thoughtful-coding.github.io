@@ -7,7 +7,6 @@ import type {
   ObservationSectionData,
   ParsonsSectionData,
   PRIMMSectionData,
-  ReflectionSectionData,
   SectionId,
 } from "../../../../types/data";
 
@@ -55,7 +54,7 @@ Run the code and see what happens!`,
         {
           kind: "text",
           value:
-            'As you can see, a function is a small chunk of code sitting there, waiting to be used. The function is "defined" with the line `def greet():` and then all the code that\'s **indented under the function** will be run once the function is "called". Once a function has been defined, it can be called over and over again.\n\nBased on this explanation, which of the following lines of code "calls" the function?',
+            'As you can see, a function is a small chunk of code sitting there, waiting to be used. The function is **defined** with the line `def greet():` and then all the code that\'s **indented under the function** will be run once the function is **called**. Once a function has been defined, it can be called over and over again.\n\nBased on this explanation, which of the following lines of code "calls" the function?',
         },
       ],
       options: [
@@ -98,7 +97,7 @@ Run the code and see what happens!`,
         {
           kind: "text",
           value:
-            'There are seemingly a lot of parts to creating/using a function, but it\'s really just four main pieces:\n- `def` starts "defining" the function\n- `greet` is the name of the function\n- The indented code below the `def greet():` is the code the function will run\n- The unindented `greet()` "calls" the function\n\nFor another perspective about functions, watch the video below (ignore the talk about pep-8, we\'ll talk about that later).',
+            "There are seemingly a lot of parts to creating/using a function, but it's really just four main pieces:\n- `def` starts **defining** the function\n- `greet` is the name of the function\n- The indented code below the `def greet():` is the code the function will run\n- The unindented `greet()` **calls** the function\n\nFor another perspective about functions, watch the video below (ignore the talk about pep-8, we'll talk about that later).",
         },
         {
           kind: "video",
@@ -122,8 +121,8 @@ Run the code and see what happens!`,
       ],
       options: [
         "You start **defining** a function with the word `def`",
-        "Indented code **above** `def` will be run when the function is called",
-        "Indented code **below** `def` will be run when the function is called",
+        "Indented code _above_ `def` will be run when the function is called",
+        "Indented code _below_ `def` will be run when the function is called",
         "A function **call** must be indented",
         "Functions can only have two lines of code inside them",
         "You can **call** a function as many times as you'd like",
@@ -142,7 +141,7 @@ Run the code and see what happens!`,
         {
           kind: "text",
           value:
-            'What is the proper way to start "defining" a function that will say goodbye?',
+            "What is the proper way to start **defining** a function that will say goodbye?",
         },
       ],
       options: [
@@ -166,7 +165,7 @@ Run the code and see what happens!`,
         {
           kind: "text",
           value:
-            'What is the proper way to "call" a function that will say goodbye?',
+            "What is the proper way to **call** a function that will say goodbye?",
         },
       ],
       options: ["`goodbye`", "`goodbye:`", "`goodbye()`", "`goodbye():`"],
@@ -184,7 +183,7 @@ Run the code and see what happens!`,
         {
           kind: "text",
           value:
-            'Now it\'s your turn to work with functions! Select and order the blocks below properly to sing "Happy Birthday" to Alex.',
+            'Now it\'s your turn to work with functions! Select and order the blocks below properly to sing "Happy Birthday" to Alex. The song should follow the [common format](https://en.wikipedia.org/wiki/Happy_Birthday_to_You#Lyrics).',
         },
       ],
       codeBlocks: [
@@ -211,24 +210,6 @@ Run the code and see what happens!`,
       testMode: "procedure",
       functionToTest: "__main__",
     } as ParsonsSectionData,
-    {
-      kind: "Reflection",
-      id: "function-reflection" as SectionId,
-      title: "Functions Reflection",
-      content: [
-        {
-          kind: "text",
-          value:
-            'Functions are fundamental to programming because they allow you to break your program up into understandable chunks. Without functions, every program would be one large blob of code. Functions allow you to "fold" your code to make it smaller and easier to understand.\n\nNow it\'s time to reflect to formalize your knowledge. Create a simple 3-4 line code example that demonstrates how functions work. Then, write 3-4 sentences explaining how your program works, pointing out key parts such as the function definition and function call. Remember to use the phrase "as seen in the example above".',
-        },
-      ],
-      topic: "How Functions Work",
-      isTopicPredefined: true,
-      code: "Create an example showing how functions work.",
-      isCodePredefined: false,
-      explanation: "Explain how the code in example works (3-4 sentences)",
-      isExplanationPredefined: false,
-    } as ReflectionSectionData,
     {
       kind: "Information",
       id: "functions-conclusion",

@@ -5,6 +5,7 @@ import type {
   LessonId,
   MatchingSectionData,
   MultipleChoiceSectionData,
+  ReflectionSectionData,
   SectionId,
   TestingSectionData,
 } from "../../../../types/data";
@@ -56,7 +57,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            'We\'ve use the word "indentation" a lot, but now let\'s define what we mean by that. Indentation means using two spaces before you start typing you code. This indentation of two spaces shows that a bit of code is "inside" or "within" something else. This is an important concept that will come up later.\n\nLet\'s return to the "Happy Birthday" program from before. In this case, it\'s your goal to do the following:\n1. Fix the indentation errors in the functions below\n2. Call the `verse()` and `chorus()` functions to "sing" happy birthday to Alex',
+            'We\'ve use the word "indentation" a lot, but now let\'s define what we mean by that. Indentation means using **two spaces** before you start typing the actual code. This indentation of two spaces shows that a bit of code is "inside" or "within" something else. Note: indentation is an important concept that will come up later.\n\nLet\'s return to the "Happy Birthday" program from before. In this case, your goal is to do the following:\n1. Fix the indentation errors in the functions below\n2. Call the `verse()` and `chorus()` functions to "sing" happy birthday to Alex',
         },
       ],
       example: {
@@ -192,6 +193,24 @@ const lessonData: Lesson = {
       testMode: "procedure",
       functionToTest: "__main__",
     } as TestingSectionData,
+    {
+      kind: "Reflection",
+      id: "function-reflection" as SectionId,
+      title: "Functions Reflection",
+      content: [
+        {
+          kind: "text",
+          value:
+            'Functions are fundamental to programming because they allow you to break your program up into understandable chunks. Without functions, every program would be one large blob of code. Functions allow you to "fold" your code to make it smaller and easier to understand.\n\nNow it\'s time to reflect to formalize your knowledge. Create a simple 3-4 line code example that demonstrates how functions work. Then, write 3-4 sentences explaining how your program works, pointing out key parts such as the function definition and function call. Remember to use the phrase "as seen in the example above".',
+        },
+      ],
+      topic: "How Functions Work",
+      isTopicPredefined: true,
+      code: "Create an example showing how functions work.",
+      isCodePredefined: false,
+      explanation: "Explain how the code in example works (3-4 sentences)",
+      isExplanationPredefined: false,
+    } as ReflectionSectionData,
     {
       kind: "Information",
       id: "variables-conclusion",

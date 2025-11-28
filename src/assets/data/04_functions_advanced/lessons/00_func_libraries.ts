@@ -76,7 +76,7 @@ const lessonData: Lesson = {
     {
       kind: "Information",
       id: "functions-into-libraries",
-      title: "Arranging Functions",
+      title: "Libraries of Functions",
       content: [
         {
           kind: "text",
@@ -170,7 +170,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Python also provides a `math` library with advanced mathematical functions. Just like with `random`, you need to import the `math` library first. Once you've imported the library, you can any one of the dozens of different advanced mathematical functions within it.\n\nRun the code below and observe what a few of the functions inside the `math` library do:",
+            "Python also provides a `math` library with advanced mathematical functions. Just like with `random`, you need to import the `math` library first. Once you've imported the library, you can use any one of the dozens of different advanced mathematical functions within it.\n\nRun the code below and observe what a few of the functions inside the `math` library do:",
         },
       ],
       example: {

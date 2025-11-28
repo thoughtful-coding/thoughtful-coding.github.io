@@ -111,7 +111,7 @@ const lessonData: Lesson = {
     {
       kind: "MultipleChoice",
       id: "problem-function-input-1-question",
-      title: "What's the Output?",
+      title: "Single Input, What's the Output?",
       content: [
         {
           kind: "text",
@@ -132,7 +132,7 @@ const lessonData: Lesson = {
     {
       kind: "MultipleChoice",
       id: "problem-function-input-2-question",
-      title: "What's the Output?",
+      title: "Multiple Inputs, What's the Output?",
       content: [
         {
           kind: "text",

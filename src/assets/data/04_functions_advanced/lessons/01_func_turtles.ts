@@ -130,7 +130,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Now it's your turn! Write a program that draws an equilateral triangle (all sides the same length).\n\nHint: The exterior angles add up to 360 degrees.",
+            "Now it's your turn! Write a program that draws an equilateral triangle (all sides the same length). We have provided a lot of the code for you already; you just need to fill in the function's code. If you're confused about exactly what commands to use, look at the programs above for inspiration.\n\nHint: The exterior angles add up to 360 degrees.",
         },
       ],
       example: {
