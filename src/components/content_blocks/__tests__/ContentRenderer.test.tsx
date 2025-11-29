@@ -39,7 +39,9 @@ describe("ContentRenderer", () => {
       { kind: "video", src: "video.mp4" },
     ];
 
-    render(<ContentRenderer content={mockContent} lessonPath={mockLessonPath} />);
+    render(
+      <ContentRenderer content={mockContent} lessonPath={mockLessonPath} />
+    );
 
     // ASSERT: Check that each mocked child was rendered
     expect(screen.getByText("Mocked TextBlock")).toBeInTheDocument();
@@ -71,7 +73,9 @@ describe("ContentRenderer", () => {
       { kind: "unsupported_kind" } as any,
     ];
 
-    render(<ContentRenderer content={mockContent} lessonPath={mockLessonPath} />);
+    render(
+      <ContentRenderer content={mockContent} lessonPath={mockLessonPath} />
+    );
 
     // ASSERT
     expect(screen.getByText("Unsupported content block")).toBeInTheDocument();

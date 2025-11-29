@@ -110,13 +110,15 @@ const lessonData: Lesson = {
             "When we run the high-level function `draw_ocean_scene()`, what happens inside the computer? Place these events in the order they logically **start**.",
         },
       ],
-      codeBlocks: [
-        ["draw_ocean_scene() starts"],
-        ["draw_boat() is called"],
-        ["draw_triangle() is called"],
-        ["turtle.forward() moves the turtle"],
-      ],
-      visualization: "console",
+      puzzle: {
+        codeBlocks: [
+          ["draw_ocean_scene() starts"],
+          ["draw_boat() is called"],
+          ["draw_triangle() is called"],
+          ["turtle.forward() moves the turtle"],
+        ],
+        visualization: "console",
+      },
       testMode: "procedure",
       functionToTest: "__main__",
       testCases: [

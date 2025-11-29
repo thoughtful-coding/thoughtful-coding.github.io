@@ -101,10 +101,16 @@ export interface MatchingSectionData extends LessonSection {
   feedback?: FeedbackText;
 }
 
-export interface ParsonsSectionData extends LessonSection, TestableFields {
-  kind: "Parsons";
+// Configuration for Parsons puzzle code blocks
+export interface ParsonsPuzzleConfig {
   codeBlocks: string[][]; // Array of code blocks, each can be single-line ["print(x)"] or multi-line ["def foo():", "  return 42"]
   visualization: "console" | "turtle"; // Type of output visualization
+  libraryCode?: string; // Hidden code injected as 'thoughtful_code' module
+}
+
+export interface ParsonsSectionData extends LessonSection, TestableFields {
+  kind: "Parsons";
+  puzzle: ParsonsPuzzleConfig; // Grouped puzzle configuration (consistent with 'example' in other sections)
 }
 
 // Represents a code block in Parsons problems
@@ -171,6 +177,7 @@ export interface ExecutableCode {
   initialCode: string;
   visualization: "console" | "turtle";
   allowImageDownload?: boolean;
+  libraryCode?: string; // Hidden code injected as 'thoughtful_code' module
 }
 
 export interface ObservationSectionData extends LessonSection {

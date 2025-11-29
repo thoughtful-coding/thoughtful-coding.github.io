@@ -55,12 +55,14 @@ const lessonData: Lesson = {
             "Your goal for this section is to **modify the program above** so that it outputs the number `1016`. In the space below you have three lines of code that you can arrange to try and output the number `1016`. Once you think you have placed them correctly, click the `Run Code` button to see what the output would be. Once you're happy with the output, click `Run Tests` to have the website verify you did everything correctly.",
         },
       ],
-      codeBlocks: [
-        ["students_count = 1000"],
-        ["print(students_count)"],
-        ["students_count = students_count + 16"],
-      ],
-      visualization: "console",
+      puzzle: {
+        codeBlocks: [
+          ["students_count = 1000"],
+          ["print(students_count)"],
+          ["students_count = students_count + 16"],
+        ],
+        visualization: "console",
+      },
       testMode: "procedure",
       functionToTest: "__main__",
       testCases: [
@@ -121,15 +123,17 @@ const lessonData: Lesson = {
             "Your goal for this section is to order the lines of code so that the program outputs `10`, then `11`, then `15`. In the space below you have seven lines of code that you can arrange to try and output the correct numbers. Once you think you have placed them correctly, click the `Run Code` button to see what the output would be. Once you're happy with the output, click `Run Tests` to have the website verify you did everything correctly.",
         },
       ],
-      codeBlocks: [
-        ["print(var)"],
-        ["print(var)"],
-        ["print(var + 1)"],
-        ["var = 10"],
-        ["var = var + 1"],
-        ["var = var + 3"],
-      ],
-      visualization: "console",
+      puzzle: {
+        codeBlocks: [
+          ["print(var)"],
+          ["print(var)"],
+          ["print(var + 1)"],
+          ["var = 10"],
+          ["var = var + 1"],
+          ["var = var + 3"],
+        ],
+        visualization: "console",
+      },
       testMode: "procedure",
       functionToTest: "__main__",
       testCases: [

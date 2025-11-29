@@ -38,7 +38,7 @@ const DebuggerSection: React.FC<DebuggerSectionProps> = ({
   }, [section.id, section.example.initialCode]);
 
   const handleRunAndTrace = () => {
-    runAndTrace(userCode).then((newTrace) => {
+    runAndTrace(userCode, section.example.libraryCode).then((newTrace) => {
       if (newTrace?.success && newTrace.steps.length > 0) {
         setCurrentStepIndex(0);
       }

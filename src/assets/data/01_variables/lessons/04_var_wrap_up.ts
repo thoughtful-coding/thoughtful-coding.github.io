@@ -38,14 +38,16 @@ const lessonData: Lesson = {
             "Order the following lines of a program so the number `8` is printed out and then the number `5` is printed out.",
         },
       ],
-      codeBlocks: [
-        ["x = 3"],
-        ["x = 7"],
-        ["x = x + 2"],
-        ["print(x)"],
-        ["print(x + 1)"],
-      ],
-      visualization: "console",
+      puzzle: {
+        codeBlocks: [
+          ["x = 3"],
+          ["x = 7"],
+          ["x = x + 2"],
+          ["print(x)"],
+          ["print(x + 1)"],
+        ],
+        visualization: "console",
+      },
       testMode: "procedure",
       functionToTest: "__main__",
       testCases: [

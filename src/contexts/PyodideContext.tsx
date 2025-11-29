@@ -33,7 +33,10 @@ interface PyodideContextType {
   isLoading: boolean; // True while initializing OR if not started
   isInitializing: boolean; // True only during the async initialization phase
   error: Error | null; // Holds any initialization error
-  runPythonCode: (code: string) => Promise<PythonExecutionResult>;
+  runPythonCode: (
+    code: string,
+    libraryCode?: string
+  ) => Promise<PythonExecutionResult>;
   loadPackages: (packages: string[]) => Promise<void>; // Function to load packages
 }
 
@@ -189,7 +192,10 @@ export const PyodideProvider: React.FC<PyodideProviderProps> = ({
   }, [loadPyodideScript, pyodide, isInitializing]); // Include dependencies used inside effect
 
   const runPythonCode = useCallback(
-    async (code: string): Promise<PythonExecutionResult> => {
+    async (
+      code: string,
+      libraryCode?: string
+    ): Promise<PythonExecutionResult> => {
       if (!pyodide || isInitializing) {
         const message = `Python environment is ${
           isInitializing ? "initializing" : "not ready"
@@ -240,6 +246,33 @@ export const PyodideProvider: React.FC<PyodideProviderProps> = ({
               interruptBuffer.current[0] = 2;
             }
           }, PYODIDE_CONFIG.EXECUTION_TIMEOUT_MS);
+        }
+
+        // Manage virtual module lifecycle: clean up old, create new if needed
+        if (libraryCode) {
+          const moduleSetupCode = `
+import sys
+import types
+
+# Clean up any existing module from previous execution
+if 'thoughtful_code' in sys.modules:
+    del sys.modules['thoughtful_code']
+
+# Create virtual module 'thoughtful_code'
+_module = types.ModuleType('thoughtful_code')
+exec(${JSON.stringify(libraryCode)}, _module.__dict__)
+sys.modules['thoughtful_code'] = _module
+del _module  # Clean up temporary variable
+`;
+          await pyodide.runPythonAsync(moduleSetupCode);
+        } else {
+          // No library code for this section - remove any lingering module
+          const cleanupCode = `
+import sys
+if 'thoughtful_code' in sys.modules:
+    del sys.modules['thoughtful_code']
+`;
+          await pyodide.runPythonAsync(cleanupCode);
         }
 
         const resultProxy = await pyodide.runPythonAsync(code);

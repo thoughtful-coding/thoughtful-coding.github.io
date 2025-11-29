@@ -58,6 +58,7 @@ const TestingSection: React.FC<TestingSectionProps> = ({
     functionToTest: section.functionToTest,
     visualThreshold: section.visualThreshold,
     lessonPath,
+    libraryCode: section.example.libraryCode,
   });
 
   return (

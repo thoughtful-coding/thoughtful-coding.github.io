@@ -58,7 +58,7 @@ const TurtleDisplay: React.FC<CodeExecutorProps> = ({
       />
       <div className={styles.editorControls}>
         <button
-          onClick={() => runTurtleCode(code)}
+          onClick={() => runTurtleCode(code, example.libraryCode)}
           disabled={isLoading}
           className={styles.runButton}
         >
@@ -110,7 +110,7 @@ const ConsoleDisplay: React.FC<CodeExecutorProps> = ({
 
   // Create a new handler function that calls runCode with the current state
   const handleRunCode = () => {
-    return runCode(code);
+    return runCode(code, example.libraryCode);
   };
 
   return (

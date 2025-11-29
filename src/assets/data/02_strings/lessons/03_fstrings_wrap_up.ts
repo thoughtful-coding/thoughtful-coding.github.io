@@ -152,21 +152,23 @@ const lessonData: Lesson = {
             "Create a profile card display using f-strings. Choose from the blocks of code below to have the program properly output the following sentence: `Name: Maya, Age: 16, Hobby: photography`",
         },
       ],
-      codeBlocks: [
-        ['name = "Maya"'],
-        ["name = \"Maya'"],
+      puzzle: {
+        codeBlocks: [
+          ['name = "Maya"'],
+          ["name = \"Maya'"],
 
-        ["age = 16"],
-        ["Age = 16"],
+          ["age = 16"],
+          ["Age = 16"],
 
-        ['hobby = "photography"'],
-        ["hobby = photography"],
+          ['hobby = "photography"'],
+          ["hobby = photography"],
 
-        ['print("Name: {name}, Age: {age}, Hobby: {hobby}")'],
-        ['print(f"Name: {name}, Age: {age}, Hobby: {hobby}")'],
-        ['printf("Name: {name}, Age: {age}, Hobby: {hobby}")'],
-      ],
-      visualization: "console",
+          ['print("Name: {name}, Age: {age}, Hobby: {hobby}")'],
+          ['print(f"Name: {name}, Age: {age}, Hobby: {hobby}")'],
+          ['printf("Name: {name}, Age: {age}, Hobby: {hobby}")'],
+        ],
+        visualization: "console",
+      },
       testMode: "procedure",
       functionToTest: "__main__",
       testCases: [

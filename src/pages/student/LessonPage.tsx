@@ -186,7 +186,11 @@ const LessonPage: React.FC = () => {
     switch (sectionData.kind) {
       case "Information":
         return (
-          <InformationSection key={sectionData.id} section={sectionData} lessonPath={lessonPath} />
+          <InformationSection
+            key={sectionData.id}
+            section={sectionData}
+            lessonPath={lessonPath}
+          />
         );
       case "Observation":
         return (

@@ -22,7 +22,12 @@ describe("InformationSection", () => {
         },
       ],
     };
-    render(<InformationSection section={mockSectionData} lessonPath={mockLessonPath} />);
+    render(
+      <InformationSection
+        section={mockSectionData}
+        lessonPath={mockLessonPath}
+      />
+    );
 
     // ASSERT
     expect(
@@ -46,7 +51,12 @@ describe("InformationSection", () => {
       ],
     };
 
-    render(<InformationSection section={mockSectionWithCode} lessonPath={mockLessonPath} />);
+    render(
+      <InformationSection
+        section={mockSectionWithCode}
+        lessonPath={mockLessonPath}
+      />
+    );
 
     // ASSERT
     // The syntax highlighter can break code into multiple elements,

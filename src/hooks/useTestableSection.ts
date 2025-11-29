@@ -23,6 +23,7 @@ interface UseTestableSectionProps {
   functionToTest: string;
   visualThreshold?: number;
   lessonPath?: string;
+  libraryCode?: string;
 }
 
 interface UseTestableSectionResult {
@@ -68,6 +69,7 @@ export function useTestableSection({
   functionToTest,
   visualThreshold,
   lessonPath,
+  libraryCode,
 }: UseTestableSectionProps): UseTestableSectionResult {
   const [lastAction, setLastAction] = useState<LastAction>(null);
 
@@ -135,15 +137,15 @@ export function useTestableSection({
   const handleRunCode = (code: string) => {
     setLastAction("run");
     if (isVisualTurtleTest) {
-      runTurtleCode(code);
+      runTurtleCode(code, libraryCode);
     } else {
-      runCode(code);
+      runCode(code, libraryCode);
     }
   };
 
   const handleRunTests = async (code: string) => {
     setLastAction("test");
-    await runTests(code);
+    await runTests(code, libraryCode);
   };
 
   const isLoading = isRunningCode || isRunningTests || isRunningTurtle;

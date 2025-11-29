@@ -67,7 +67,10 @@ describe("useInteractiveExample", () => {
       returnValue = await result.current.runCode('print("Hello, World!")');
     });
 
-    expect(mockRunPythonCode).toHaveBeenCalledWith('print("Hello, World!")');
+    expect(mockRunPythonCode).toHaveBeenCalledWith(
+      'print("Hello, World!")',
+      undefined
+    );
     expect(result.current.output).toBe("Hello, World!");
     expect(returnValue).toEqual({
       output: "Hello, World!",

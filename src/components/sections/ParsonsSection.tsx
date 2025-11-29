@@ -40,12 +40,12 @@ const ParsonsSection: React.FC<ParsonsSectionProps> = ({
   // --- Data Derivation ---
   // Convert codeBlocks to CodeBlockItems with unique IDs
   const codeBlockItems = useMemo<CodeBlockItem[]>(() => {
-    return section.codeBlocks.map((block, index) => ({
+    return section.puzzle.codeBlocks.map((block, index) => ({
       id: `block-${index}`,
       lines: block,
       isMultiLine: block.length > 1,
     }));
-  }, [section.codeBlocks]);
+  }, [section.puzzle.codeBlocks]);
 
   // Detect if indentation mode should be enabled (check for control flow keywords at block start)
   const indentationEnabled = useMemo(() => {
@@ -62,7 +62,7 @@ const ParsonsSection: React.FC<ParsonsSectionProps> = ({
       "finally",
       "with",
     ];
-    return section.codeBlocks.some((block) => {
+    return section.puzzle.codeBlocks.some((block) => {
       if (block.length === 0) return false;
       const firstLine = block[0].trim();
       return keywords.some((keyword) => {
@@ -74,7 +74,7 @@ const ParsonsSection: React.FC<ParsonsSectionProps> = ({
         );
       });
     });
-  }, [section.codeBlocks]);
+  }, [section.puzzle.codeBlocks]);
 
   // --- State and Completion Logic ---
   const checkCompletion = (state: SavedParsonsState): boolean => {
@@ -115,7 +115,7 @@ const ParsonsSection: React.FC<ParsonsSectionProps> = ({
     unitId,
     lessonId,
     sectionId: section.id,
-    visualization: section.visualization,
+    visualization: section.puzzle.visualization,
     testCases: section.testCases,
     visualThreshold: section.visualThreshold,
     functionToTest: section.functionToTest,
@@ -183,9 +183,9 @@ const ParsonsSection: React.FC<ParsonsSectionProps> = ({
   const handleRunCode = () => {
     setLastAction("run");
     if (isVisualTurtleTest) {
-      runTurtleCode(reconstructedCode);
+      runTurtleCode(reconstructedCode, section.puzzle.libraryCode);
     } else {
-      runCode(reconstructedCode);
+      runCode(reconstructedCode, section.puzzle.libraryCode);
     }
   };
 
@@ -193,7 +193,7 @@ const ParsonsSection: React.FC<ParsonsSectionProps> = ({
   const handleRunTests = async () => {
     setLastAction("test");
     try {
-      await runTests(reconstructedCode);
+      await runTests(reconstructedCode, section.puzzle.libraryCode);
     } catch (error) {
       console.error("Failed to run tests:", error);
     }

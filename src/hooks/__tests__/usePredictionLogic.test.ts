@@ -121,7 +121,8 @@ describe("usePredictionLogic", () => {
     });
 
     expect(mockRunPythonCode).toHaveBeenCalledWith(
-      "def add(a, b):\n    print(a + b)\n\nprint(add(2, 3))"
+      "def add(a, b):\n    print(a + b)\n\nprint(add(2, 3))",
+      undefined
     );
 
     expect(mockSetSavedState).toHaveBeenCalled();

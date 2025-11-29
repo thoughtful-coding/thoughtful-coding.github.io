@@ -179,7 +179,7 @@ export const useDebuggerLogic = () => {
   const [error, setError] = useState<string | null>(null);
 
   const runAndTrace = useCallback(
-    async (userCode: string) => {
+    async (userCode: string, libraryCode?: string) => {
       setIsTracing(true);
       setTrace(null);
       setError(null);
@@ -188,7 +188,10 @@ export const useDebuggerLogic = () => {
         "{user_code}",
         userCode
       );
-      const { stdout, error: runError } = await runPythonCode(scriptToRun);
+      const { stdout, error: runError } = await runPythonCode(
+        scriptToRun,
+        libraryCode
+      );
 
       let resultPayload: PythonExecutionPayload | null = null;
       if (runError) {

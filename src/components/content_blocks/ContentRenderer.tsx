@@ -10,7 +10,10 @@ interface ContentRendererProps {
   lessonPath: string;
 }
 
-const ContentRenderer: React.FC<ContentRendererProps> = ({ content, lessonPath }) => {
+const ContentRenderer: React.FC<ContentRendererProps> = ({
+  content,
+  lessonPath,
+}) => {
   return (
     <div>
       {content.map((block, index) => {
@@ -20,7 +23,9 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({ content, lessonPath }
           case "code":
             return <CodeBlock key={index} block={block} />;
           case "image":
-            return <ImageBlock key={index} block={block} lessonPath={lessonPath} />;
+            return (
+              <ImageBlock key={index} block={block} lessonPath={lessonPath} />
+            );
           case "video":
             return <VideoBlock key={index} block={block} />;
           default: {

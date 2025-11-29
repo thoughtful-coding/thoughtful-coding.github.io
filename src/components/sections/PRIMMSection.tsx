@@ -62,10 +62,16 @@ const PRIMMSection: React.FC<PRIMMSectionProps> = ({
     setIsRunningCode(true);
 
     if (isTurtle) {
-      await runTurtleCode(section.example.initialCode);
+      await runTurtleCode(
+        section.example.initialCode,
+        section.example.libraryCode
+      );
       actions.setActualOutput("Turtle drawing was displayed.");
     } else {
-      const result = await runPythonCode(section.example.initialCode);
+      const result = await runPythonCode(
+        section.example.initialCode,
+        section.example.libraryCode
+      );
 
       // Format output with proper stream ordering
       const parts: string[] = [];

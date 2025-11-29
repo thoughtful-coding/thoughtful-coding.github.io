@@ -54,9 +54,9 @@ export const useInteractiveExample = ({
   const { completeSection } = useProgressActions();
 
   const runCode = useCallback(
-    async (code: string) => {
+    async (code: string, libraryCode?: string) => {
       setOutput(null); // Reset while running
-      const result = await runPythonCode(code);
+      const result = await runPythonCode(code, libraryCode);
 
       // Format output with proper stream ordering
       const formattedOutput = formatExecutionOutput(result);

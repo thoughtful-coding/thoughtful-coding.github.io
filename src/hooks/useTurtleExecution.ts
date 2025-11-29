@@ -151,7 +151,10 @@ export const useTurtleExecution = ({
   }, [canvasRef, isPyodideLoading]);
 
   const runTurtleCode = useCallback(
-    async (codeToRun: string): Promise<JsTurtleCommand[]> => {
+    async (
+      codeToRun: string,
+      libraryCode?: string
+    ): Promise<JsTurtleCommand[]> => {
       if (isPyodideLoading) {
         setError("Python environment is not ready.");
         return [];
@@ -193,7 +196,7 @@ json.dumps(_js_turtle_commands_)
 
       let parsedJsCommands: JsTurtleCommand[] = [];
       try {
-        const result = await runPythonCode(fullPythonScript);
+        const result = await runPythonCode(fullPythonScript, libraryCode);
         console.log(result);
 
         // Check if execution failed

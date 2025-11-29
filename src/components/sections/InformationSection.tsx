@@ -8,7 +8,10 @@ interface InformationSectionProps {
   lessonPath: string;
 }
 
-const InformationSection: React.FC<InformationSectionProps> = ({ section, lessonPath }) => {
+const InformationSection: React.FC<InformationSectionProps> = ({
+  section,
+  lessonPath,
+}) => {
   return (
     <section id={section.id} className={styles.section}>
       <h2 className={styles.title}>{section.title}</h2>

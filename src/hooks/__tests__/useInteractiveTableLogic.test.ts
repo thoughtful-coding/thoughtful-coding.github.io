@@ -127,7 +127,8 @@ describe("useInteractiveTableLogic", () => {
       });
 
       expect(mockRunPythonCode).toHaveBeenCalledWith(
-        "def add(a, b):\n  return a + b\n\nprint(add(2, 3))"
+        "def add(a, b):\n  return a + b\n\nprint(add(2, 3))",
+        undefined
       );
 
       const state = result.current.savedState as any;
@@ -231,7 +232,8 @@ describe("useInteractiveTableLogic", () => {
       });
 
       expect(mockRunPythonCode).toHaveBeenCalledWith(
-        "def add(a, b):\n  return a + b\n\nprint(add(3.5, 3.5))"
+        "def add(a, b):\n  return a + b\n\nprint(add(3.5, 3.5))",
+        undefined
       );
     });
 
@@ -280,7 +282,8 @@ describe("useInteractiveTableLogic", () => {
 
         // Should call with Python True, not JavaScript true
         expect(mockRunPythonCode).toHaveBeenCalledWith(
-          expect.stringContaining("free_entry(25, True)")
+          expect.stringContaining("free_entry(25, True)"),
+          undefined
         );
       });
 
@@ -308,7 +311,8 @@ describe("useInteractiveTableLogic", () => {
 
         // Should call with Python False, not JavaScript false
         expect(mockRunPythonCode).toHaveBeenCalledWith(
-          expect.stringContaining("free_entry(25, False)")
+          expect.stringContaining("free_entry(25, False)"),
+          undefined
         );
       });
 
@@ -335,7 +339,8 @@ describe("useInteractiveTableLogic", () => {
         });
 
         expect(mockRunPythonCode).toHaveBeenCalledWith(
-          expect.stringContaining("free_entry(25, True)")
+          expect.stringContaining("free_entry(25, True)"),
+          undefined
         );
       });
 
@@ -362,7 +367,8 @@ describe("useInteractiveTableLogic", () => {
         });
 
         expect(mockRunPythonCode).toHaveBeenCalledWith(
-          expect.stringContaining("free_entry(25, False)")
+          expect.stringContaining("free_entry(25, False)"),
+          undefined
         );
       });
 
@@ -406,7 +412,8 @@ describe("useInteractiveTableLogic", () => {
 
         // Should use fixed boolean value (Python False)
         expect(mockRunPythonCode).toHaveBeenCalledWith(
-          expect.stringContaining("free_entry(5, False)")
+          expect.stringContaining("free_entry(5, False)"),
+          undefined
         );
       });
 
@@ -450,7 +457,8 @@ describe("useInteractiveTableLogic", () => {
 
         // Should use fixed boolean value (Python True)
         expect(mockRunPythonCode).toHaveBeenCalledWith(
-          expect.stringContaining("free_entry(25, True)")
+          expect.stringContaining("free_entry(25, True)"),
+          undefined
         );
       });
     });
@@ -542,7 +550,8 @@ describe("useInteractiveTableLogic", () => {
 
         // Should call with fixed 'a' value of 2 and editable 'b' value of 5
         expect(mockRunPythonCode).toHaveBeenCalledWith(
-          "def add(a, b):\n  return a + b\n\nprint(add(2, 5))"
+          "def add(a, b):\n  return a + b\n\nprint(add(2, 5))",
+          undefined
         );
       });
 
@@ -564,7 +573,8 @@ describe("useInteractiveTableLogic", () => {
         });
 
         expect(mockRunPythonCode).toHaveBeenCalledWith(
-          "def add(a, b):\n  return a + b\n\nprint(add(5, 5))"
+          "def add(a, b):\n  return a + b\n\nprint(add(5, 5))",
+          undefined
         );
 
         const state = result.current.savedState as any;
@@ -647,7 +657,8 @@ describe("useInteractiveTableLogic", () => {
       });
 
       expect(mockRunPythonCode).toHaveBeenCalledWith(
-        "def add(a, b):\n  return a + b\n\nprint(add(2, 3))"
+        "def add(a, b):\n  return a + b\n\nprint(add(2, 3))",
+        undefined
       );
 
       const state = result.current.savedState as any;

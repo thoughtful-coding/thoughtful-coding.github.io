@@ -17,6 +17,7 @@ interface UsePredictionLogicProps {
   testMode: TestMode;
   functionCode: string;
   predictionRows: PredictionTableRow[];
+  libraryCode?: string;
 }
 
 export const usePredictionLogic = ({
@@ -26,6 +27,7 @@ export const usePredictionLogic = ({
   testMode,
   functionCode,
   predictionRows,
+  libraryCode,
 }: UsePredictionLogicProps) => {
   const {
     runPythonCode,
@@ -107,7 +109,7 @@ export const usePredictionLogic = ({
           script = `${functionCode}\n\n${functionCall}`;
         }
 
-        const result = await runPythonCode(script);
+        const result = await runPythonCode(script, libraryCode);
 
         // Format output based on execution result
         if (result.success) {

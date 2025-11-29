@@ -125,7 +125,8 @@ describe("TestingSection", () => {
 
     expect(runCodeMock).toHaveBeenCalledTimes(1);
     expect(runCodeMock).toHaveBeenCalledWith(
-      mockSectionData.example.initialCode
+      mockSectionData.example.initialCode,
+      undefined
     );
   });
 
@@ -145,7 +146,8 @@ describe("TestingSection", () => {
 
     expect(runTestsMock).toHaveBeenCalledTimes(1);
     expect(runTestsMock).toHaveBeenCalledWith(
-      mockSectionData.example.initialCode
+      mockSectionData.example.initialCode,
+      undefined
     );
   });
 

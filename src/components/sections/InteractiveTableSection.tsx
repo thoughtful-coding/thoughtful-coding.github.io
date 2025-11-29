@@ -68,6 +68,7 @@ const InteractiveTableSection: React.FC<InteractiveTableSectionProps> = (
     functionToTest: section.functionToTest,
     columns: tableData.columns,
     rows: tableData.rows,
+    libraryCode: section.example.libraryCode,
   });
 
   // Get the state data based on mode

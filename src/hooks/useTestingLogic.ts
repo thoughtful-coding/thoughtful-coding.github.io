@@ -46,7 +46,7 @@ export const useTestingLogic = ({
   const [error, setError] = useState<string | null>(null);
 
   const runTests = useCallback(
-    async (userCode: string) => {
+    async (userCode: string, libraryCode?: string) => {
       setIsRunningTests(true);
       setTestResults(null);
       setError(null);
@@ -104,7 +104,7 @@ except Exception as e:
 print(json.dumps(result))
 `;
 
-            const testResult = await runPythonCode(testScript);
+            const testResult = await runPythonCode(testScript, libraryCode);
 
             let testPassed = false;
 
@@ -224,7 +224,7 @@ except Exception as e:
 print(json.dumps(result))
 `;
 
-              const testResult = await runPythonCode(testScript);
+              const testResult = await runPythonCode(testScript, libraryCode);
 
               let testPassed = false;
 
@@ -334,7 +334,7 @@ except Exception as e:
 print(json.dumps(result))
 `;
 
-              const testResult = await runPythonCode(testScript);
+              const testResult = await runPythonCode(testScript, libraryCode);
 
               let testPassed = false;
 

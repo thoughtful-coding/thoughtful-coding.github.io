@@ -26,6 +26,7 @@ interface UseInteractiveTableLogicProps {
   functionToTest: string;
   columns: InputParam[];
   rows: (CoverageTableRow | PredictionTableRow)[];
+  libraryCode?: string;
 }
 
 type TableState = SavedCoverageState | SavedPredictionState;
@@ -40,6 +41,7 @@ export const useInteractiveTableLogic = ({
   functionToTest,
   columns,
   rows,
+  libraryCode,
 }: UseInteractiveTableLogicProps) => {
   const {
     runPythonCode,
@@ -151,7 +153,7 @@ export const useInteractiveTableLogic = ({
           script = `${functionCode}\n\n${functionCall}`;
         }
 
-        const result = await runPythonCode(script);
+        const result = await runPythonCode(script, libraryCode);
 
         // Format output based on execution result
         if (result.success) {

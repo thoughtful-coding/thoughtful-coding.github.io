@@ -148,7 +148,8 @@ describe("PRIMMSection", () => {
 
     expect(mockActions.lockPrediction).toHaveBeenCalledTimes(1);
     expect(mockRunPythonCode).toHaveBeenCalledWith(
-      mockSectionData.example.initialCode
+      mockSectionData.example.initialCode,
+      undefined
     );
     await waitFor(() => {
       expect(mockActions.setActualOutput).toHaveBeenCalledWith("Hello, PRIMM!");
