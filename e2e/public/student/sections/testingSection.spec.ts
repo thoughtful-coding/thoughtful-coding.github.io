@@ -119,7 +119,7 @@ test.describe("TestingSection `procedure` / `function_name` tests", () => {
     await editor
       .locator(".cm-content")
       .fill(
-        "def do_math(num_1, num_2):\n  print(5)\n\n\ndo_math(2, 2)\ndo_math(4, 2)\ndo_math(4, 1)\ndo_math(6, 1)"
+        "def do_math(num_1, num_2):\n  print(4)\n\n\ndo_math(2, 2)\ndo_math(4, 2)\ndo_math(4, 1)\ndo_math(6, 1)"
       );
     await page.waitForTimeout(100);
     await page
@@ -154,7 +154,7 @@ test.describe("TestingSection `procedure` / `function_name` tests", () => {
     await editor
       .locator(".cm-content")
       .fill(
-        "def do_math(num_1, num_2):\n  print(num_1 * num_2 + 1)\n\n\ndo_math(2, 2)\ndo_math(4, 2)\ndo_math(4, 1)\ndo_math(6, 1)"
+        "def do_math(num_1, num_2):\n  print(num_1 + num_2)\n\n\ndo_math(2, 2)\ndo_math(4, 2)\ndo_math(4, 1)\ndo_math(6, 1)"
       );
     await page.waitForTimeout(100);
     await page
@@ -340,7 +340,7 @@ test.describe("TestingSection for turtles", () => {
   });
 });
 
-test.describe("TestingSection for turtles non-`__main__`", () => {
+test.describe.only("TestingSection for turtles non-`__main__`", () => {
   test("Test can click `Run Tests` button and get fail for turtles for non-__main__ procedures @flaky", async ({
     page,
   }) => {

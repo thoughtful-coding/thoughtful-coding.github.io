@@ -1,8 +1,5 @@
 import type { Unit, Lesson, LessonId } from "../types/data";
-import type {
-  UnitProgressProfile,
-  LessonProgressProfile,
-} from "../types/apiServiceTypes";
+import type { UnitProgressProfile } from "../types/apiServiceTypes";
 import * as dataHelpers from "./dataHelpers";
 
 /**

@@ -279,7 +279,7 @@ const handleApiResponse = async (response: Response) => {
       } else {
         errorData = parsed as ErrorResponse;
       }
-    } catch (_e) {
+    } catch {
       // If body is not valid JSON, create a fallback error
       errorData = {
         message: `HTTP error ${response.status}: ${response.statusText}`,
@@ -380,7 +380,7 @@ export async function getInstructorPermittedStudents(): Promise<ListOfInstructor
 
 export async function getInstructorClassUnitProgress(
   unitId: UnitId,
-  studentIds: UserId[] // Optional: Server could get permitted students itself, or client sends IDs
+  _studentIds: UserId[] // Optional: Server could get permitted students itself, or client sends IDs
 ): Promise<ClassUnitProgressResponse> {
   // For this version, let's assume the server will determine permitted students based on the instructor's idToken.
   // If you wanted client to send studentIds, you'd add it to query params or request body (if POST).

@@ -140,7 +140,7 @@ print(json.dumps(result))
                   });
                   testPassed = false;
                 }
-              } catch (e) {
+              } catch {
                 results.push({
                   description: testCase.description,
                   passed: false,
@@ -263,7 +263,7 @@ print(json.dumps(result))
                     });
                     testPassed = false;
                   }
-                } catch (e) {
+                } catch {
                   results.push({
                     description: testCase.description,
                     passed: false,
@@ -373,7 +373,7 @@ print(json.dumps(result))
                     });
                     testPassed = false;
                   }
-                } catch (e) {
+                } catch {
                   results.push({
                     description: testCase.description,
                     passed: false,
@@ -403,7 +403,7 @@ print(json.dumps(result))
           // Increment attempt counter on test failure
           incrementAttemptCounter(unitId, lessonId, sectionId);
         }
-      } catch (e) {
+      } catch {
         // Increment attempt counter on error (code failed to execute)
         incrementAttemptCounter(unitId, lessonId, sectionId);
         const errorMessage =

@@ -1,13 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
-import type {
-  Unit,
-  Lesson,
-  LessonId,
-  PRIMMSectionData,
-  DisplayableAssignment,
-  UnitId,
-} from "../../types/data";
+import type { Unit, DisplayableAssignment, UnitId } from "../../types/data";
 import type {
   AssignmentSubmission,
   InstructorStudentInfo,

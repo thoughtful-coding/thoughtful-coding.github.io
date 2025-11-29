@@ -127,7 +127,7 @@ const ReviewStudentDetailView: React.FC<ReviewStudentDetailViewProps> = ({
       return null;
 
     const { section, lessonId, lessonTitle } = viewingSubmission;
-    const { sectionKind, submissionDetails, sectionTitle, sectionId } = section;
+    const { sectionKind, submissionDetails, sectionId } = section;
 
     return (
       <div

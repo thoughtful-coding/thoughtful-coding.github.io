@@ -302,7 +302,7 @@ const LessonPage: React.FC = () => {
             lessonPath={lessonPath}
           />
         );
-      default:
+      default: {
         const _exhaustiveCheck: never = sectionData;
         console.warn(`Unknown section kind: ${(_exhaustiveCheck as any).kind}`);
         return (
@@ -310,6 +310,7 @@ const LessonPage: React.FC = () => {
             Unsupported section kind: {(_exhaustiveCheck as any).kind}
           </div>
         );
+      }
     }
   };
 

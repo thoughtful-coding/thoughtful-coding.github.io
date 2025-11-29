@@ -166,10 +166,6 @@ export const useTurtleTesting = ({
               break;
             }
           } catch (testError) {
-            const errorMsg =
-              testError instanceof Error
-                ? testError.message
-                : "Unknown error during test";
             results.push({
               description: testCase.description,
               passed: false,

@@ -200,9 +200,6 @@ const ParsonsSection: React.FC<ParsonsSectionProps> = ({
   };
 
   const isLoading = isRunningCode || isRunningTests || isRunningTurtle;
-  const displayError = isVisualTurtleTest
-    ? turtleRunError || testError
-    : testError;
 
   return (
     <section id={section.id} className={sectionStyles.section}>

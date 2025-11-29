@@ -222,7 +222,7 @@ json.dumps(_js_turtle_commands_)
             const errorInfo = JSON.parse(jsonString.trim());
             const friendlyMessage = `Error on line ${errorInfo.line}: ${errorInfo.type}\n${errorInfo.message}`;
             setError(friendlyMessage);
-          } catch (_e) {
+          } catch {
             setError("A Python error occurred, but it could not be displayed.");
           }
           return [];

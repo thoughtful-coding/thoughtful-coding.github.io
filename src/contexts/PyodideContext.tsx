@@ -160,7 +160,7 @@ export const PyodideProvider: React.FC<PyodideProviderProps> = ({
           interruptBuffer.current = new Uint8Array(new SharedArrayBuffer(1));
           pyodideInstance.setInterruptBuffer(interruptBuffer.current);
           console.log("Interrupt buffer initialized for timeout handling.");
-        } catch (err) {
+        } catch {
           console.warn(
             "SharedArrayBuffer not available - timeout interruption disabled. " +
               "Code execution will still work but infinite loops may hang the browser. " +

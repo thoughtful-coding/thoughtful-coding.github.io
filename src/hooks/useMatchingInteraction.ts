@@ -61,8 +61,8 @@ interface UseMatchingInteractionReturn {
 }
 
 export function useMatchingInteraction({
-  allOptions,
-  prompts,
+  allOptions: _allOptions,
+  prompts: _prompts,
   savedState,
   setSavedState,
 }: UseMatchingInteractionProps): UseMatchingInteractionReturn {
@@ -128,7 +128,7 @@ export function useMatchingInteraction({
     []
   );
 
-  const handleDragLeave = useCallback((promptId: string) => {
+  const handleDragLeave = useCallback((_promptId: string) => {
     setHoveredPromptId(null);
   }, []);
 
@@ -200,7 +200,7 @@ export function useMatchingInteraction({
     (
       e: React.TouchEvent<HTMLDivElement>,
       optionId: string,
-      sourcePrompt?: string
+      _sourcePrompt?: string
     ) => {
       const touch = e.touches[0];
       touchStartPosRef.current = { x: touch.clientX, y: touch.clientY };

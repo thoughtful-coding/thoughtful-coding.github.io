@@ -11,7 +11,7 @@ import type {
   StudentDetailedProgressResponse,
   ReflectionVersionItem,
 } from "../../../../types/apiServiceTypes";
-import type { Unit, UnitId, LessonId } from "../../../../types/data";
+import type { Unit, UnitId } from "../../../../types/data";
 
 // Mock all external dependencies
 vi.mock("../../../../lib/apiService");
