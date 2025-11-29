@@ -9,9 +9,10 @@ const unitManifest: UnitManifest = {
   lessons: [
     "lessons/00_func_libraries",
     "lessons/01_func_turtles",
-    "lessons/02_func_turtle_inputs",
-    "lessons/03_func_neighbors",
-    "lessons/04_adv_func_wrap_up",
+    "lessons/02_draw_house",
+    "lessons/03_draw_suburbs",
+    "lessons/04_draw_wall",
+    "lessons/05_adv_func_wrap_up",
   ],
 };
 
