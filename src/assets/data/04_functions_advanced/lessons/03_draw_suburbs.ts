@@ -5,7 +5,10 @@ import type {
   SectionId,
   TestingSectionData,
   PRIMMSectionData,
+  MultipleSelectionSectionData,
   MatchingSectionData,
+  ReflectionSectionData,
+  MultipleChoiceSectionData,
 } from "../../../../types/data";
 
 const lessonData: Lesson = {
@@ -27,6 +30,26 @@ const lessonData: Lesson = {
       ],
     } as InformationSectionData,
     {
+      kind: "PRIMM",
+      id: "street-primm",
+      title: "Building a Street",
+      content: [
+        {
+          kind: "text",
+          value:
+            "Read the code below. It calls `draw_house()` three times. Predict what the output will look like on the screen.",
+        },
+      ],
+      example: {
+        visualization: "turtle",
+        initialCode:
+          "import turtle\n# draw_house() is hidden\n\ndraw_house()\nturtle.penup()\nturtle.forward(150)\nturtle.pendown()\n\ndraw_house()\nturtle.penup()\nturtle.forward(150)\nturtle.pendown()\n\ndraw_house()",
+      },
+      predictPrompt: "Will the houses be stacked? In a row? Overlapping?",
+      conclusion:
+        "They are in a row! The `forward(150)` moves the start position for the next house.",
+    } as PRIMMSectionData,
+    {
       kind: "Testing",
       id: "linear-neighborhood" as SectionId,
       title: "Challenge: The Street",
@@ -34,13 +57,13 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Create a row of 3 houses. \n\n1. We have provided your `draw_house()` function from the last lesson.\n2. Write code to draw a house, move the turtle forward 150 pixels, and repeat 3 times.\n3. Ensure you use `penup()` so you don't draw lines between the houses.",
+            "Create a row of 3 houses yourself. \n\n1. Use the provided `draw_house()` function.\n2. Space them out so they don't touch (at least 150 pixels apart).\n3. Ensure you use `penup()` so you don't draw lines between the houses.",
         },
       ],
       example: {
         visualization: "turtle",
         initialCode:
-          "import turtle\n\n# draw_house() is provided hidden in the background\n\n# House 1\ndraw_house()\n\n# Move to next spot\n\n# House 2\n\n# Move to next spot\n\n# House 3",
+          "import turtle\n\n# draw_house() is provided\n\n# House 1\n\n# Move to next spot\n\n# House 2\n\n# Move to next spot\n\n# House 3",
       },
       testMode: "procedure",
       functionToTest: "__main__",
@@ -66,6 +89,28 @@ const lessonData: Lesson = {
       ],
     } as InformationSectionData,
     {
+      kind: "MultipleChoice",
+      id: "abstraction-benefit-quiz",
+      title: "Why Use Functions?",
+      content: [
+        {
+          kind: "text",
+          value:
+            "Imagine you drew 50 houses manually (without a function). Now your boss says 'Make all the roofs red instead of black.' How many lines of code would you have to change?",
+        },
+      ],
+      options: [
+        "1 line (The definition)",
+        "50 lines (Every single house)",
+        "0 lines (The computer knows what you want)",
+      ],
+      correctAnswer: 1,
+      feedback: {
+        correct:
+          "Exactly! Without functions, you'd have to edit 50 places. With functions, you edit the definition once, and all 50 houses update.",
+      },
+    } as MultipleChoiceSectionData,
+    {
       kind: "PRIMM",
       id: "random-house-primm" as SectionId,
       title: "Randomizing the House",
@@ -86,27 +131,6 @@ const lessonData: Lesson = {
       conclusion:
         "Every house is now a different random color! We updated the 'Definition' (the blueprint), so every 'Call' (the house) got the upgrade automatically.",
     } as PRIMMSectionData,
-    {
-      kind: "Matching",
-      id: "abstraction-levels-match" as SectionId,
-      title: "Levels of Abstraction",
-      content: [
-        {
-          kind: "text",
-          value:
-            "We are now working with functions inside functions. Match the code to its 'Level' of abstraction.",
-        },
-      ],
-      prompts: [
-        { "`turtle.forward(10)`": "Low Level (Tiny Details)" },
-        { "`draw_square(50)`": "Mid Level (Building Blocks)" },
-        { "`draw_neighborhood()`": "High Level (Big Picture)" },
-      ],
-      feedback: {
-        correct:
-          "Perfect! High-level functions call mid-level functions, which call low-level commands. Good programmers spend most of their time at the High Level.",
-      },
-    } as MatchingSectionData,
     {
       kind: "Testing",
       id: "random-neighborhood-challenge" as SectionId,
@@ -134,6 +158,69 @@ const lessonData: Lesson = {
         },
       ],
     } as TestingSectionData,
+    {
+      kind: "Matching",
+      id: "abstraction-levels-match" as SectionId,
+      title: "Levels of Abstraction",
+      content: [
+        {
+          kind: "text",
+          value:
+            "We are now working with functions inside functions. Match the code to its 'Level' of abstraction.",
+        },
+      ],
+      prompts: [
+        { "`turtle.forward(10)`": "Low Level (Tiny Details)" },
+        { "`draw_square(50)`": "Mid Level (Building Blocks)" },
+        { "`draw_neighborhood()`": "High Level (Big Picture)" },
+      ],
+      feedback: {
+        correct:
+          "Perfect! High-level functions call mid-level functions, which call low-level commands. Good programmers spend most of their time at the High Level.",
+      },
+    } as MatchingSectionData,
+    {
+      kind: "MultipleSelection",
+      id: "function-purpose-check",
+      title: "Function Roles",
+      content: [
+        {
+          kind: "text",
+          value:
+            "Which of these are responsibilities of the `draw_house` function? Select all that apply.",
+        },
+      ],
+      options: [
+        "Choosing the color of the house",
+        "Deciding WHERE on the screen the house goes",
+        "Combining a square and a triangle",
+        "Drawing the entire neighborhood",
+      ],
+      correctAnswers: [0, 2],
+      feedback: {
+        correct:
+          "Correct! `draw_house` decides what a house LOOKS like (color, shape). It does NOT decide WHERE it goes (that's the job of the code calling it).",
+      },
+    } as MultipleSelectionSectionData,
+    {
+      kind: "Reflection",
+      id: "blueprint-reflection",
+      title: "Reflection: The Blueprint",
+      content: [
+        {
+          kind: "text",
+          value:
+            "Think about the difference between the **Definition** (`def draw_house(): ...`) and the **Call** (`draw_house()`). \n\nOne is the Blueprint. One is the House.\n\nExplain why separating the Blueprint from the House allows us to create 100 *different* houses (random colors) without writing 100 different functions.",
+        },
+      ],
+      topic: "Definitions vs Calls",
+      isTopicPredefined: true,
+      code: "draw_house() # Calls the blueprint",
+      isCodePredefined: true,
+      explanation:
+        "Explain how one definition creates many unique instances (3-4 sentences)",
+      isExplanationPredefined: false,
+    } as ReflectionSectionData,
   ],
 };
 

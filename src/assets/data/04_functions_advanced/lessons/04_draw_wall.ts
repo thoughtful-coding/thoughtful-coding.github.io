@@ -4,8 +4,10 @@ import type {
   LessonId,
   SectionId,
   TestingSectionData,
-  ParsonsSectionData,
   ReflectionSectionData,
+  MultipleChoiceSectionData,
+  MultipleSelectionSectionData,
+  MatchingSectionData,
 } from "../../../../types/data";
 
 const lessonData: Lesson = {
@@ -54,76 +56,118 @@ const lessonData: Lesson = {
       ],
     } as TestingSectionData,
     {
-      kind: "Parsons",
-      id: "row-logic-parsons",
-      title: "Step 2: Designing the Rows",
+      kind: "Matching",
+      id: "row-logic-match" as SectionId,
+      title: "Planning the Rows",
       content: [
         {
           kind: "text",
           value:
-            "We need two types of rows to make the pattern work. \n- **Row A:** Big, Big, Big, Small\n- **Row B:** Small, Big, Big, Big\n\nArrange the code to define `draw_row_a`.",
+            "We need two types of rows to make the pattern work. Match the Row Name to the correct pattern.",
         },
       ],
-      codeBlocks: [
-        ["def draw_row_a():"],
-        ["  draw_big_brick()"],
-        ["  draw_big_brick()"],
-        ["  draw_big_brick()"],
-        ["  draw_small_brick()"],
+      prompts: [
+        { "Row A": "Big, Big, Big, Small (Ends with half)" },
+        { "Row B": "Small, Big, Big, Big (Starts with half)" },
+        { Wall: "Stack of Row A, Row B, Row A..." },
       ],
-      visualization: "turtle",
-      testMode: "procedure",
-      functionToTest: "draw_row_a",
-      testCases: [
-        {
-          input: [null],
-          expected: "SHAPE:row_a",
-          description: "Define Row A",
-        },
-      ],
-    } as ParsonsSectionData,
+      feedback: {
+        correct:
+          "Correct! By alternating these two row types, the 'seams' of the bricks won't line up, making the wall strong.",
+      },
+    } as MatchingSectionData,
     {
       kind: "Testing",
-      id: "create-rows" as SectionId,
-      title: "Step 3: Build the Rows",
+      id: "create-row-a" as SectionId,
+      title: "Step 2: Define Row A",
       content: [
         {
           kind: "text",
           value:
-            "Now define both row functions in code.\n\n**Row A:** 3 Big Bricks, then 1 Small Brick.\n**Row B:** 1 Small Brick, then 3 Big Bricks.\n\n(Note: In a real wall, we'd use loops, but for now, just copy/paste the function calls!).",
+            "Define `draw_row_a()`. It should draw **3 Big Bricks** followed by **1 Small Brick**.\n\n(Since we don't have loops yet, just call the brick functions one after another!).",
         },
       ],
       example: {
         visualization: "turtle",
         initialCode:
-          "import turtle\n\ndef draw_row_a():\n    # 3 Big, 1 Small\n    pass\n\ndef draw_row_b():\n    # 1 Small, 3 Big\n    pass\n\n# Test both\ndraw_row_a()\nturtle.penup(); turtle.goto(0, -30); turtle.pendown()\ndraw_row_b()",
+          "import turtle\n# Helpers provided\n\ndef draw_row_a():\n    # Big, Big, Big, Small\n    pass\n\ndraw_row_a()",
       },
       testMode: "procedure",
-      functionToTest: "__main__",
+      functionToTest: "draw_row_a",
       visualThreshold: 0.95,
       testCases: [
         {
           input: [null],
-          expected: "SHAPE:both_rows",
-          description: "Draw both row types",
+          expected: "SHAPE:row_a",
+          description: "Draw Row A",
         },
       ],
     } as TestingSectionData,
     {
       kind: "Testing",
-      id: "draw-wall-challenge" as SectionId,
-      title: "Step 4: The Wall (High Level)",
+      id: "create-row-b" as SectionId,
+      title: "Step 3: Define Row B",
       content: [
         {
           kind: "text",
           value:
-            "Finally, create the `draw_wall` function. It should stack the rows on top of each other:\n\n1. Draw Row A\n2. Move up and back to start\n3. Draw Row B\n4. Move up and back to start\n5. Draw Row A\n\nNotice how simple `draw_wall` is to read? That is the beauty of abstraction!",
+            "Now define `draw_row_b()`. It should start with **1 Small Brick**, followed by **3 Big Bricks**.",
         },
       ],
       example: {
         visualization: "turtle",
         initialCode:
-          "import turtle\n\n# ... assume row functions are defined ...\n\ndef draw_wall():\n    # 1. Row A\n    # 2. Move up (y + 20) and back (x = 0)\n    # 3. Row B\n    # 4. Move up\n    # 5. Row A\n    pass\n\ndraw_wall()",
+          "import turtle\n# Helpers provided\n\ndef draw_row_b():\n    # Small, Big, Big, Big\n    pass\n\ndraw_row_b()",
+      },
+      testMode: "procedure",
+      functionToTest: "draw_row_b",
+      visualThreshold: 0.95,
+      testCases: [
+        {
+          input: [null],
+          expected: "SHAPE:row_b",
+          description: "Draw Row B",
+        },
+      ],
+    } as TestingSectionData,
+    {
+      kind: "MultipleSelection",
+      id: "hierarchy-check",
+      title: "Checking the Hierarchy",
+      content: [
+        {
+          kind: "text",
+          value:
+            "We are about to build the Wall. Which functions will `draw_wall` call directly? Select all that apply.",
+        },
+      ],
+      options: [
+        "`draw_row_a`",
+        "`draw_row_b`",
+        "`draw_small_brick`",
+        "`turtle.forward`",
+      ],
+      correctAnswers: [0, 1],
+      feedback: {
+        correct:
+          "Correct! The Wall talks to the Rows. The Rows talk to the Bricks. The Bricks talk to the Turtle. This is a Hierarchy.",
+      },
+    } as MultipleSelectionSectionData,
+    {
+      kind: "Testing",
+      id: "draw-wall-challenge" as SectionId,
+      title: "Step 4: The Wall",
+      content: [
+        {
+          kind: "text",
+          value:
+            "Finally, create the `draw_wall` function. It should stack the rows:\n\n1. Draw Row A\n2. Move up (y + 20) and back to start (x = 0)\n3. Draw Row B\n4. Move up and back\n5. Draw Row A\n\nNotice how simple `draw_wall` is to read? That is the beauty of abstraction!",
+        },
+      ],
+      example: {
+        visualization: "turtle",
+        initialCode:
+          "import turtle\n\n# ... assume row functions are defined ...\n\ndef draw_wall():\n    # 1. Row A\n    # 2. Move up and back\n    # 3. Row B\n    # 4. Move up and back\n    # 5. Row A\n    pass\n\ndraw_wall()",
       },
       testMode: "procedure",
       functionToTest: "draw_wall",
@@ -136,6 +180,29 @@ const lessonData: Lesson = {
         },
       ],
     } as TestingSectionData,
+    {
+      kind: "MultipleChoice",
+      id: "maintenance-quiz",
+      title: "The Lazy Programmer",
+      content: [
+        {
+          kind: "text",
+          value:
+            "Suppose you decide the wall is too short. You want to make the bricks TALLER (30px instead of 20px). Where do you have to change the code?",
+        },
+      ],
+      options: [
+        "In `draw_wall` (because it draws the wall)",
+        "In `draw_row_a` and `draw_row_b` (because they draw lines of bricks)",
+        "In `draw_small_brick` and `draw_big_brick` (because they draw the shape)",
+        "In every single line of code",
+      ],
+      correctAnswer: 2,
+      feedback: {
+        correct:
+          "Correct! You change the 'Low Level' brick functions. The Rows and the Wall will automatically use the new, taller bricks!",
+      },
+    } as MultipleChoiceSectionData,
     {
       kind: "Reflection",
       id: "wall-reflection" as SectionId,

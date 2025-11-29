@@ -4,9 +4,12 @@ import type {
   LessonId,
   SectionId,
   ObservationSectionData,
+  PRIMMSectionData,
   TestingSectionData,
   MultipleChoiceSectionData,
-  ParsonsSectionData,
+  MultipleSelectionSectionData,
+  MatchingSectionData,
+  ReflectionSectionData,
 } from "../../../../types/data";
 
 const lessonData: Lesson = {
@@ -45,35 +48,70 @@ const lessonData: Lesson = {
       },
     } as ObservationSectionData,
     {
-      kind: "Parsons",
-      id: "house-logic-parsons",
-      title: "Logic: Building a House",
+      kind: "MultipleChoice",
+      id: "abstraction-check",
+      title: "Where is the Code?",
       content: [
         {
           kind: "text",
           value:
-            "We want to create a `draw_house()` function. We need to draw a square body, move to the top-left corner, and then draw a triangle roof. Organize the code blocks to achieve this.",
+            "In the example above, you used `draw_square(50, 'blue')`. Why didn't you see the lines `turtle.forward` or `turtle.right`?",
         },
       ],
-      codeBlocks: [
-        ["def draw_house():"],
-        ["  draw_square(100, 'gray')"],
-        ["  turtle.left(90)"],
-        ["  turtle.forward(100)"],
-        ["  turtle.right(90)"],
-        ["  draw_triangle(100, 'black')"],
+      options: [
+        "Because the computer forgot them",
+        "Because `draw_square` is a built-in Python command like `print`",
+        "Because the detailed code is 'hidden' inside the function definition provided by the teacher",
+        "Because `draw_square` uses magic, not code",
       ],
-      visualization: "turtle",
-      testMode: "procedure",
-      functionToTest: "draw_house",
-      testCases: [
+      correctAnswer: 2,
+      feedback: {
+        correct:
+          "Correct! This is Abstraction. You use the tool without needing to see exactly how it was built every time.",
+      },
+    } as MultipleChoiceSectionData,
+    {
+      kind: "PRIMM",
+      id: "house-logic-primm",
+      title: "Planning the House",
+      content: [
         {
-          input: [null],
-          expected: "SHAPE:house_basic",
-          description: "Draw a square with a triangle on top",
+          kind: "text",
+          value:
+            "We want to combine these shapes to make a house. Read the code below. It draws a square and a triangle, but something is wrong with the positioning. Predict what it will look like:",
         },
       ],
-    } as ParsonsSectionData,
+      example: {
+        visualization: "turtle",
+        initialCode:
+          'import turtle\n# draw_square and draw_triangle are provided\n\ndraw_square(100, "gray")\ndraw_triangle(100, "black")',
+      },
+      predictPrompt:
+        "The code draws a square, then immediately draws a triangle. Where will the triangle appear relative to the square?",
+      conclusion:
+        "The triangle draws right on top of the square's bottom line! This is because the turtle ended at the bottom-left corner after the square. We need to move it!",
+    } as PRIMMSectionData,
+    {
+      kind: "Matching",
+      id: "position-planning" as SectionId,
+      title: "Navigating the House",
+      content: [
+        {
+          kind: "text",
+          value:
+            "To put the roof on top, we need to move the turtle from where the square finishes (bottom-left) to where the roof starts (top-left). Match the turtle command to the movement needed:",
+        },
+      ],
+      prompts: [
+        { "`turtle.left(90)`": "Face Up" },
+        { "`turtle.forward(100)`": "Move to Top Corner" },
+        { "`turtle.right(90)`": "Face Right (Ready to draw roof)" },
+      ],
+      feedback: {
+        correct:
+          "Perfect! Drawing complex objects is mostly about moving the turtle to the right start position between shapes.",
+      },
+    } as MatchingSectionData,
     {
       kind: "Testing",
       id: "create-house-func" as SectionId,
@@ -82,13 +120,13 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Now write the actual function. Create `draw_house()` using the helper functions. \n\n1. Draw a gray square (size 100)\n2. Move the turtle to the top-left corner of the square\n3. Draw a black triangle (size 100) for the roof",
+            "Now write the actual function. Create `draw_house()` using the helper functions. \n\n1. Draw a gray square (size 100)\n2. Move the turtle to the top-left corner of the square (don't draw lines while moving!)\n3. Draw a black triangle (size 100) for the roof",
         },
       ],
       example: {
         visualization: "turtle",
         initialCode:
-          "import turtle\n\n# draw_square(size, color) and draw_triangle(size, color) are provided\n\ndef draw_house():\n    # 1. Draw Body\n\n    # 2. Move to top-left\n\n    # 3. Draw Roof\n\n# Test it\ndraw_house()",
+          "import turtle\n\n# draw_square(size, color) and draw_triangle(size, color) are provided\n\ndef draw_house():\n    # 1. Draw Body\n\n    # 2. Move to top-left (Use left, forward, right)\n\n    # 3. Draw Roof\n\n# Test it\ndraw_house()",
       },
       testMode: "procedure",
       functionToTest: "draw_house",
@@ -102,28 +140,40 @@ const lessonData: Lesson = {
       ],
     } as TestingSectionData,
     {
-      kind: "MultipleChoice",
+      kind: "MultipleSelection",
       id: "naming-conventions",
       title: "Naming Functions",
       content: [
         {
           kind: "text",
           value:
-            "You just created a function called `draw_house`. Why didn't we call it `function_one` or `do_it`?",
+            "You just created a function called `draw_house`. Which of the following are good reasons for this name? Select all that apply.",
         },
       ],
       options: [
-        "Python requires functions to have underscores",
-        "It doesn't matter, the computer ignores names",
-        "Descriptive names help humans understand what the 'Black Box' does",
-        "Functions must be named after the shape they draw",
+        "It describes WHAT the function creates",
+        "It hides the details of squares and triangles",
+        "It is short (like `d_h`) so it is fast to type",
+        "It follows the `verb_noun` pattern (draw + house)",
       ],
-      correctAnswer: 2,
+      correctAnswers: [0, 1, 3],
       feedback: {
         correct:
-          "Correct! Abstraction is about hiding details. A good name tells the programmer WHAT the function does so they don't have to look at HOW it does it.",
+          "Correct! A good name is descriptive. `d_h` is bad because no one knows what it means. `draw_house` is perfect because it explains the 'Black Box'.",
       },
-    } as MultipleChoiceSectionData,
+    } as MultipleSelectionSectionData,
+    {
+      kind: "Information",
+      id: "adding-detail",
+      title: "Adding Complexity",
+      content: [
+        {
+          kind: "text",
+          value:
+            "One of the best things about functions is that you can upgrade them later. Right now, your `draw_house` is simple. But if we add a door to the `draw_house` function, *every time* we use it, we get a door. We don't have to rewrite the rest of our program.",
+        },
+      ],
+    } as InformationSectionData,
     {
       kind: "Testing",
       id: "modify-house-door" as SectionId,
@@ -132,13 +182,13 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Let's upgrade our abstraction. Modify your `draw_house` function to add a door.\n\n1. Use the provided `draw_rectangle(width, height, color)` helper.\n2. After drawing the house body, move the turtle to the bottom-center.\n3. Draw a brown door (width 20, height 40).\n\nNotice: You are making the house more complex, but anyone *calling* `draw_house()` doesn't need to know that!",
+            "Let's upgrade our abstraction. Modify your `draw_house` function to add a door.\n\n1. Use the provided `draw_rectangle(width, height, color)` helper.\n2. After drawing the house body, move the turtle to the bottom-center.\n3. Draw a brown door (width 20, height 40).\n\nHint: The square is 100 wide. The door is 20 wide. To center it, how far should you move in?",
         },
       ],
       example: {
         visualization: "turtle",
         initialCode:
-          "import turtle\n\ndef draw_house():\n    # ... previous house code ...\n    draw_square(100, 'gray')\n    \n    # Add code to move to position (40, 0) and draw a door\n    # draw_rectangle(20, 40, 'brown')",
+          "import turtle\n\ndef draw_house():\n    # ... previous house code ...\n    draw_square(100, 'gray')\n    # ... roof code ...\n    \n    # Move back to start of square\n    # Move forward to center the door\n    # draw_rectangle(20, 40, 'brown')",
       },
       testMode: "procedure",
       functionToTest: "draw_house",
@@ -151,6 +201,25 @@ const lessonData: Lesson = {
         },
       ],
     } as TestingSectionData,
+    {
+      kind: "Reflection",
+      id: "composition-reflection",
+      title: "Reflection: Combining Tools",
+      content: [
+        {
+          kind: "text",
+          value:
+            "You just built a House out of a Square, a Triangle, and a Rectangle. You didn't really write much 'drawing' code yourself; you mostly organized other functions.\n\nWhy is this 'organizing' approach better than writing one giant list of `forward` and `right` commands? Think about what would happen if you messed up the Door size. Where would you fix it?",
+        },
+      ],
+      topic: "Composition and Organization",
+      isTopicPredefined: true,
+      code: "draw_house() # Made of square, triangle, rectangle",
+      isCodePredefined: true,
+      explanation:
+        "Explain why building with helper functions is easier than writing raw code (3-4 sentences)",
+      isExplanationPredefined: false,
+    } as ReflectionSectionData,
   ],
 };
 
