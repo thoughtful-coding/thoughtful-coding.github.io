@@ -4,7 +4,9 @@ test.describe("ObservationSection tests for regular code", () => {
   test("Test can click the `Run Code` button for regular code", async ({
     page,
   }) => {
-    await page.goto("/python/lesson/xx_learning/lessons/00_learning_primm");
+    await page.goto(
+      "/python/lesson/12_end_to_end_tests/lessons/05_observation_tests"
+    );
 
     const sectionItem = page
       .getByRole("listitem")
@@ -23,7 +25,9 @@ test.describe("ObservationSection tests for regular code", () => {
   test("Test can get a Syntax error when clicking `Run Code` for faulty code", async ({
     page,
   }) => {
-    await page.goto("/python/lesson/xx_learning/lessons/00_learning_primm");
+    await page.goto(
+      "/python/lesson/12_end_to_end_tests/lessons/05_observation_tests"
+    );
 
     const sectionItem = page
       .getByRole("listitem")
@@ -55,7 +59,7 @@ test.describe("ObservationSection tests for regular code", () => {
 test.describe("ObservationSection tests for turtles code", () => {
   test("Test can click the `Run Code` button for Turtle", async ({ page }) => {
     await page.goto(
-      "/python/lesson/04_functions_advanced/lessons/01_func_turtles"
+      "/python/lesson/12_end_to_end_tests/lessons/05_observation_tests"
     );
 
     const sectionItem = page
@@ -80,7 +84,7 @@ test.describe("ObservationSection tests for turtles code", () => {
     page,
   }) => {
     await page.goto(
-      "/python/lesson/04_functions_advanced/lessons/01_func_turtles"
+      "/python/lesson/12_end_to_end_tests/lessons/05_observation_tests"
     );
 
     const sectionItem = page
@@ -107,7 +111,7 @@ test.describe("ObservationSection tests for turtles code", () => {
     page,
   }) => {
     await page.goto(
-      "/python/lesson/04_functions_advanced/lessons/01_func_turtles"
+      "/python/lesson/12_end_to_end_tests/lessons/05_observation_tests"
     );
 
     const sectionItem = page

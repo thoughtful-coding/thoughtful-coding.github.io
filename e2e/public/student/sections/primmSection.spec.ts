@@ -4,7 +4,9 @@ test.describe("PrimmSection tests with regular code", () => {
   test("Test can run the PRIMM section up to requiring AI", async ({
     page,
   }) => {
-    await page.goto("/python/lesson/xx_learning/lessons/00_learning_primm");
+    await page.goto(
+      "/python/lesson/12_end_to_end_tests/lessons/08_primm_tests"
+    );
 
     const sectionItem = page
       .getByRole("listitem")
@@ -41,7 +43,7 @@ test.describe("PrimmSection tests with turtles", () => {
     page,
   }) => {
     await page.goto(
-      "/python/lesson/04_functions_advanced/lessons/01_func_turtles"
+      "/python/lesson/12_end_to_end_tests/lessons/08_primm_tests"
     );
 
     const sectionItem = page

@@ -4,7 +4,9 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
   test("Test can click `Run Code` button an get **empty** output", async ({
     page,
   }) => {
-    await page.goto("/python/lesson/00_intro/lessons/01_intro_strings");
+    await page.goto(
+      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+    );
 
     await expect(
       page
@@ -23,7 +25,9 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
   test("Test can click `Run Code` button and get **non-empty** output", async ({
     page,
   }) => {
-    await page.goto("/python/lesson/00_intro/lessons/01_intro_strings");
+    await page.goto(
+      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+    );
 
     const editor = page.getByTestId("code-editor-single-vs-double-testing");
     await editor.locator(".cm-content").click();
@@ -45,7 +49,9 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
   test("Test can click `Run Tests` button (w/o doing anything) and get failure", async ({
     page,
   }) => {
-    await page.goto("/python/lesson/00_intro/lessons/01_intro_strings");
+    await page.goto(
+      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+    );
 
     await page
       .locator("#single-vs-double-testing")
@@ -59,7 +65,9 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
   test("Test can click `Run Tests` button and get failure", async ({
     page,
   }) => {
-    await page.goto("/python/lesson/00_intro/lessons/01_intro_strings");
+    await page.goto(
+      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+    );
 
     const editor = page.getByTestId("code-editor-single-vs-double-testing");
     await editor.locator(".cm-content").click();
@@ -77,7 +85,9 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
   });
 
   test("Test can have faulty program and get SyntaxError", async ({ page }) => {
-    await page.goto("/python/lesson/00_intro/lessons/01_intro_strings");
+    await page.goto(
+      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+    );
 
     const editor = page.getByTestId("code-editor-single-vs-double-testing");
     await editor.locator(".cm-content").click();
@@ -91,7 +101,9 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
   });
 
   test("Test can click `Run Tests` button and get pass", async ({ page }) => {
-    await page.goto("/python/lesson/00_intro/lessons/01_intro_strings");
+    await page.goto(
+      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+    );
 
     const editor = page.getByTestId("code-editor-single-vs-double-testing");
     await editor.locator(".cm-content").click();
@@ -109,7 +121,9 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
 
 test.describe("TestingSection `procedure` / `function_name` tests", () => {
   test("Test can click `Run Tests` button and get fail", async ({ page }) => {
-    await page.goto("/python/lesson/03_functions/lessons/03_func_wrap_up");
+    await page.goto(
+      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+    );
 
     // Use the data-testid to target the specific code editor
     const editor = page.getByTestId("code-editor-multi-input-testing");
@@ -134,14 +148,21 @@ test.describe("TestingSection `procedure` / `function_name` tests", () => {
   test("Test can click the `Run Tests` button (w/o doing anything) and get fail", async ({
     page,
   }) => {
-    await page.goto("/python/lesson/03_functions/lessons/03_func_wrap_up");
+    await page.goto(
+      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+    );
 
-    await page.getByRole("button", { name: "Run Tests" }).click();
+    await page
+      .locator("#multi-input-testing")
+      .getByRole("button", { name: "Run Tests" })
+      .click();
     await expect(page.getByText("IndentationError")).toBeVisible();
   });
 
   test("Test can click `Run Tests` button and get pass", async ({ page }) => {
-    await page.goto("/python/lesson/03_functions/lessons/03_func_wrap_up");
+    await page.goto(
+      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+    );
 
     const sectionItem = page.getByRole("listitem").filter({
       hasText: "Challenge: Create a Two Input Function",
@@ -170,7 +191,7 @@ test.describe("TestingSection `procedure` / `function_name` tests", () => {
 test.describe("TestingSection `function` / `function_name` tests", () => {
   test("Test can click `Run Tests` button and get fail", async ({ page }) => {
     await page.goto(
-      "/python/lesson/10_functions_return/lessons/00_return_intro"
+      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
     );
 
     const editor = page.getByTestId("code-editor-return-functions-test");
@@ -183,7 +204,10 @@ test.describe("TestingSection `function` / `function_name` tests", () => {
         "def do_math(num_1, num_2):\n  return 5\n\n\ndo_math(2, 2)\ndo_math(4, 2)\ndo_math(4, 1)\ndo_math(6, 1)"
       );
     await page.waitForTimeout(1000);
-    await page.getByRole("button", { name: "Run Tests" }).click();
+    await page
+      .locator("#return-functions-test")
+      .getByRole("button", { name: "Run Tests" })
+      .click();
     await expect(
       page.getByText("Test 2 failed. Fix the issue and try again!")
     ).toBeVisible();
@@ -193,10 +217,13 @@ test.describe("TestingSection `function` / `function_name` tests", () => {
     page,
   }) => {
     await page.goto(
-      "/python/lesson/10_functions_return/lessons/00_return_intro"
+      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
     );
 
-    await page.getByRole("button", { name: "Run Tests" }).click();
+    await page
+      .locator("#return-functions-test")
+      .getByRole("button", { name: "Run Tests" })
+      .click();
     await expect(page.getByText("IndentationError")).toBeVisible();
   });
 
@@ -204,11 +231,11 @@ test.describe("TestingSection `function` / `function_name` tests", () => {
     page,
   }) => {
     await page.goto(
-      "/python/lesson/10_functions_return/lessons/00_return_intro"
+      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
     );
 
     const sectionItem = page.getByRole("listitem").filter({
-      hasText: "Challenge: Create a Two Input Function",
+      hasText: "Challenge: Create a Two Input Return Function",
     });
     await expect(sectionItem).not.toHaveClass(/sectionItemCompleted/);
 
@@ -222,7 +249,10 @@ test.describe("TestingSection `function` / `function_name` tests", () => {
         "def do_math(num_1, num_2):\n  return num_1 * num_2 + 1\n\n\ndo_math(2, 2)\ndo_math(4, 2)\ndo_math(4, 1)\ndo_math(6, 1)"
       );
     await page.waitForTimeout(1000);
-    await page.getByRole("button", { name: "Run Tests" }).click();
+    await page
+      .locator("#return-functions-test")
+      .getByRole("button", { name: "Run Tests" })
+      .click();
     await expect(page.getByText("All tests passed!")).toBeVisible();
 
     await expect(sectionItem).toHaveClass(/sectionItemCompleted/);
@@ -233,7 +263,9 @@ test.describe("TestingSection for turtles", () => {
   test("Test that can click `Run Tests` button and get fail for turtles for __main__ procedures", async ({
     page,
   }) => {
-    await page.goto("/python/lesson/06_loops/lessons/01_loops_challenges");
+    await page.goto(
+      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+    );
 
     const editor = page.getByTestId("code-editor-hexagon-testing");
     await editor.locator(".cm-content").click();
@@ -262,7 +294,9 @@ test.describe("TestingSection for turtles", () => {
   test("Test that an error in the program shows up when `Run Button` clicked ", async ({
     page,
   }) => {
-    await page.goto("/python/lesson/06_loops/lessons/01_loops_challenges");
+    await page.goto(
+      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+    );
 
     const editor = page.getByTestId("code-editor-hexagon-testing");
     await editor.locator(".cm-content").click();
@@ -284,7 +318,9 @@ test.describe("TestingSection for turtles", () => {
   test("Test that an error in the program shows up when `Run Tests` clicked ", async ({
     page,
   }) => {
-    await page.goto("/python/lesson/06_loops/lessons/01_loops_challenges");
+    await page.goto(
+      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+    );
 
     const editor = page.getByTestId("code-editor-hexagon-testing");
     await editor.locator(".cm-content").click();
@@ -306,7 +342,9 @@ test.describe("TestingSection for turtles", () => {
   test("Test can click `Run Tests` button and get pass for turtles for __main__ procedures @flaky", async ({
     page,
   }) => {
-    await page.goto("/python/lesson/06_loops/lessons/01_loops_challenges");
+    await page.goto(
+      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+    );
 
     const sectionItem = page.getByRole("listitem").filter({
       hasText: "Challenge: Hexagon",
@@ -340,11 +378,13 @@ test.describe("TestingSection for turtles", () => {
   });
 });
 
-test.describe.only("TestingSection for turtles non-`__main__`", () => {
+test.describe("TestingSection for turtles non-`__main__`", () => {
   test("Test can click `Run Tests` button and get fail for turtles for non-__main__ procedures @flaky", async ({
     page,
   }) => {
-    await page.goto("/python/lesson/06_loops/lessons/01_loops_challenges");
+    await page.goto(
+      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+    );
 
     const editor = page.getByTestId("code-editor-octagon-testing");
     await editor.locator(".cm-content").click();
@@ -373,7 +413,9 @@ test.describe.only("TestingSection for turtles non-`__main__`", () => {
   test("Test can click `Run Tests` button and get pass for turtles for non-__main__ procedures @flaky", async ({
     page,
   }) => {
-    await page.goto("/python/lesson/06_loops/lessons/01_loops_challenges");
+    await page.goto(
+      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+    );
 
     const sectionItem = page.getByRole("listitem").filter({
       hasText: "Challenge: Octagon with Input",
