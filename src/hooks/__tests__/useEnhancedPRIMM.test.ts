@@ -53,7 +53,7 @@ describe("useEnhancedPRIMM", () => {
       isAuthenticated: true,
     } as any);
 
-    mockedUseSectionProgress.mockImplementation((() => {
+    mockedUseSectionProgress.mockImplementation(((..._args) => {
       const state = {
         exampleStates: {
           "example-1": initialState,
@@ -162,7 +162,7 @@ describe("useEnhancedPRIMM", () => {
 
     mockedSubmitPrimmEvaluation.mockResolvedValue(mockAiResponse);
 
-    mockedUseSectionProgress.mockImplementation((() => {
+    mockedUseSectionProgress.mockImplementation(((..._args) => {
       const state = {
         exampleStates: {
           "example-1": {
@@ -377,7 +377,7 @@ describe("useEnhancedPRIMM", () => {
   });
 
   it("should handle missing example state gracefully", () => {
-    mockedUseSectionProgress.mockImplementation((() => {
+    mockedUseSectionProgress.mockImplementation(((..._args) => {
       const state = {
         exampleStates: {},
       };
@@ -391,7 +391,7 @@ describe("useEnhancedPRIMM", () => {
   });
 
   it("should update only the specific example state", () => {
-    mockedUseSectionProgress.mockImplementation((() => {
+    mockedUseSectionProgress.mockImplementation(((..._args) => {
       const state = {
         exampleStates: {
           "example-1": initialState,

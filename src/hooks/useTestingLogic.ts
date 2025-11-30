@@ -403,7 +403,7 @@ print(json.dumps(result))
           // Increment attempt counter on test failure
           incrementAttemptCounter(unitId, lessonId, sectionId);
         }
-      } catch {
+      } catch (e) {
         // Increment attempt counter on error (code failed to execute)
         incrementAttemptCounter(unitId, lessonId, sectionId);
         const errorMessage =

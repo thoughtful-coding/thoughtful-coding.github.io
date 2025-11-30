@@ -42,7 +42,7 @@ describe("usePredictionLogic", () => {
       loadPackages: vi.fn(),
     });
 
-    mockedUseSectionProgress.mockImplementation((() => {
+    mockedUseSectionProgress.mockImplementation(((...args) => {
       const checkCompletion = args[5];
       const initialState = args[4];
       let state = initialState;
@@ -109,7 +109,7 @@ describe("usePredictionLogic", () => {
       result: null,
     });
 
-    mockedUseSectionProgress.mockImplementation((() => {
+    mockedUseSectionProgress.mockImplementation(((..._args) => {
       const state = { predictions: { 0: { userAnswer: "5" } } };
       return [state, mockSetSavedState, false];
     }) as any);
@@ -142,7 +142,7 @@ describe("usePredictionLogic", () => {
       result: null,
     });
 
-    mockedUseSectionProgress.mockImplementation((() => {
+    mockedUseSectionProgress.mockImplementation(((..._args) => {
       const state = { predictions: { 0: { userAnswer: "10" } } };
       return [state, mockSetSavedState, false];
     }) as any);
@@ -172,7 +172,7 @@ describe("usePredictionLogic", () => {
       result: null,
     });
 
-    mockedUseSectionProgress.mockImplementation((() => {
+    mockedUseSectionProgress.mockImplementation(((..._args) => {
       const state = { predictions: { 0: { userAnswer: "5" } } };
       return [state, mockSetSavedState, false];
     }) as any);
@@ -196,7 +196,7 @@ describe("usePredictionLogic", () => {
       functionCode: "not a valid function",
     };
 
-    mockedUseSectionProgress.mockImplementation((() => {
+    mockedUseSectionProgress.mockImplementation(((..._args) => {
       const state = { predictions: { 0: { userAnswer: "5" } } };
       return [state, mockSetSavedState, false];
     }) as any);
@@ -223,7 +223,7 @@ describe("usePredictionLogic", () => {
     });
     mockRunPythonCode.mockReturnValue(promise);
 
-    mockedUseSectionProgress.mockImplementation((() => {
+    mockedUseSectionProgress.mockImplementation(((..._args) => {
       const state = { predictions: { 0: { userAnswer: "5" } } };
       return [state, mockSetSavedState, false];
     }) as any);
@@ -255,7 +255,7 @@ describe("usePredictionLogic", () => {
   });
 
   it("should check completion when all predictions are correct", () => {
-    mockedUseSectionProgress.mockImplementation((() => {
+    mockedUseSectionProgress.mockImplementation(((...args) => {
       const checkCompletion = args[5];
       const state = {
         predictions: {
@@ -272,7 +272,7 @@ describe("usePredictionLogic", () => {
   });
 
   it("should not be complete if any prediction is incorrect", () => {
-    mockedUseSectionProgress.mockImplementation((() => {
+    mockedUseSectionProgress.mockImplementation(((...args) => {
       const checkCompletion = args[5];
       const state = {
         predictions: {
@@ -297,7 +297,7 @@ describe("usePredictionLogic", () => {
       result: null,
     });
 
-    mockedUseSectionProgress.mockImplementation((() => {
+    mockedUseSectionProgress.mockImplementation(((..._args) => {
       const state = { predictions: {} };
       return [state, mockSetSavedState, false];
     }) as any);
@@ -324,7 +324,7 @@ describe("usePredictionLogic", () => {
       result: null,
     });
 
-    mockedUseSectionProgress.mockImplementation((() => {
+    mockedUseSectionProgress.mockImplementation(((..._args) => {
       const state = { predictions: { 0: { userAnswer: "  5  " } } };
       return [state, mockSetSavedState, false];
     }) as any);
@@ -350,7 +350,7 @@ describe("usePredictionLogic", () => {
       result: null,
     });
 
-    mockedUseSectionProgress.mockImplementation((() => {
+    mockedUseSectionProgress.mockImplementation(((..._args) => {
       const state = { predictions: { 0: { userAnswer: "None" } } };
       return [state, mockSetSavedState, false];
     }) as any);
