@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 test.describe("MultipleSelectionSection tests", () => {
   test("Can get answer right with multiple selection", async ({ page }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/04_multiple_selection_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/04_multiple_selection_tests"
     );
 
     const sectionItem = page.getByRole("listitem").filter({
@@ -25,7 +25,7 @@ test.describe("MultipleSelectionSection tests", () => {
 
   test("Can get answer wrong with multiple selection", async ({ page }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/04_multiple_selection_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/04_multiple_selection_tests"
     );
 
     const sectionItem = page.getByRole("listitem").filter({

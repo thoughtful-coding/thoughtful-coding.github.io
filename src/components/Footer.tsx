@@ -37,7 +37,7 @@ const Footer: React.FC<FooterProps> = ({ variant = "default" }) => {
 
             <div className={styles.linkColumn}>
               <h3 className={styles.columnTitle}>For Teachers</h3>
-              <Link to="/python/instructor-dashboard" className={styles.link}>
+              <Link to="/instructor-dashboard" className={styles.link}>
                 Teacher Portal
               </Link>
               <a

@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 test.describe("DebuggerSection tests", () => {
   test("Test can step through a simple program", async ({ page }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/01_debugger_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/01_debugger_tests"
     );
 
     const sectionItem = page.getByRole("listitem").filter({

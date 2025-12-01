@@ -305,7 +305,7 @@ const ReviewClassProgressView: React.FC<ReviewClassProgressViewProps> = ({
               <th>Student</th>
               {selectedUnitLessons.map((lesson) => {
                 const hasAssignments = hasReviewableAssignments(lesson);
-                const lessonLink = `/python/instructor-dashboard/assignments?unit=${selectedUnitId}&lesson=${lesson.guid}`;
+                const lessonLink = `/instructor-dashboard/assignments?unit=${selectedUnitId}&lesson=${lesson.guid}`;
                 return (
                   <th key={lesson.guid} title={lesson.guid}>
                     <div>
@@ -332,7 +332,7 @@ const ReviewClassProgressView: React.FC<ReviewClassProgressViewProps> = ({
               <tr key={studentProgress.studentId}>
                 <td className={styles.studentNameCell}>
                   <Link
-                    to={`/python/instructor-dashboard/students/${studentProgress.studentId}`}
+                    to={`/instructor-dashboard/students/${studentProgress.studentId}`}
                   >
                     {studentProgress.studentName || studentProgress.studentId}
                   </Link>

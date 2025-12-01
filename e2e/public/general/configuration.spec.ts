@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test.describe("Test can configure website", () => {
   test("Test that can switch to Dark Mode", async ({ page }) => {
-    await page.goto("/python/");
+    await page.goto("/");
     await page.getByRole("button", { name: "I'm a Student" }).click();
 
     // Configure Dark Mode and save it
@@ -15,7 +15,7 @@ test.describe("Test can configure website", () => {
     await page.getByRole("button", { name: "Save Configuration" }).click();
 
     // Go Home
-    await page.getByRole("link", { name: "Home" }).click();
+    await page.getByRole("link", { name: "Thoughtful Code" }).click();
 
     // Verify still in Dark Mode
     await page.getByRole("link", { name: "Configure Settings" }).click();

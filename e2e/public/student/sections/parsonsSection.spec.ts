@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 test.describe("Parsons `procedure` / `__main__` output tests", () => {
   test("Test can click `Run Code` button", async ({ page }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/06_parsons_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/06_parsons_tests"
     );
 
     await page.getByTestId("parsons-unplaced-block-1").click();
@@ -25,7 +25,7 @@ test.describe("Parsons `procedure` / `__main__` output tests", () => {
     page,
   }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/06_parsons_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/06_parsons_tests"
     );
 
     await page.getByTestId("parsons-unplaced-block-3").click();
@@ -41,7 +41,7 @@ test.describe("Parsons `procedure` / `__main__` output tests", () => {
     page,
   }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/06_parsons_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/06_parsons_tests"
     );
 
     await page.getByTestId("parsons-unplaced-block-3").click();
@@ -57,7 +57,7 @@ test.describe("Parsons `procedure` / `__main__` output tests", () => {
     page,
   }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/06_parsons_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/06_parsons_tests"
     );
 
     await page.getByTestId("parsons-unplaced-block-0").click();
@@ -78,7 +78,7 @@ test.describe("Parsons `procedure` / `__main__` output tests", () => {
 
   test("Test can click `Run Tests` button and get pass", async ({ page }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/06_parsons_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/06_parsons_tests"
     );
 
     const sectionItem = page.getByRole("listitem").filter({

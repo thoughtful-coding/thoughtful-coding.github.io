@@ -3,11 +3,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import {
-  fetchLessonData,
-  fetchUnitsData,
-  getLessonGuidByPath,
-} from "../../lib/dataLoader";
+import { loadLesson, getCourse } from "../../lib/dataLoader";
 import type {
   Lesson,
   AnyLessonSectionData,
@@ -16,6 +12,7 @@ import type {
   LessonPath,
   LessonId,
   SectionId,
+  CourseId,
 } from "../../types/data";
 
 import InformationSection from "../../components/sections/InformationSection";
@@ -40,7 +37,8 @@ import MatchingSection from "../../components/sections/MatchingSection";
 
 const LessonPage: React.FC = () => {
   const params = useParams();
-  const lessonPath = params["*"] as LessonPath;
+  const courseId = params.courseId as CourseId;
+  const lessonPath = params["*"] as string;
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -66,6 +64,14 @@ const LessonPage: React.FC = () => {
         return;
       }
 
+      if (!courseId) {
+        if (isMounted) {
+          setError("No Course ID provided in URL.");
+          setIsLoading(false);
+        }
+        return;
+      }
+
       setIsLoading(true);
       setError(null);
       setLesson(null);
@@ -75,27 +81,21 @@ const LessonPage: React.FC = () => {
       setParentUnitId(null);
 
       try {
-        const guid = await getLessonGuidByPath(lessonPath);
+        // Load lesson using new course-aware API
+        const fetchedLesson = await loadLesson(courseId, lessonPath);
         if (!isMounted) return;
 
-        if (!guid) {
-          setError(
-            `Lesson not found for path: '${lessonPath}'. Please check the URL or unit manifest.`
-          );
+        setLessonGuid(fetchedLesson.guid);
+        setLesson(fetchedLesson);
+        document.title = `${fetchedLesson.title} - Python Lesson`;
+
+        // Get course data for navigation
+        const course = getCourse(courseId);
+        if (!course) {
+          setError(`Course not found: ${courseId}`);
           setIsLoading(false);
           return;
         }
-
-        setLessonGuid(guid);
-        const [fetchedLesson, unitsData] = await Promise.all([
-          fetchLessonData(lessonPath),
-          fetchUnitsData(),
-        ]);
-
-        if (!isMounted) return;
-
-        setLesson(fetchedLesson);
-        document.title = `${fetchedLesson.title} - Python Lesson`;
 
         // Handle hash fragment scrolling after lesson loads
         if (window.location.hash) {
@@ -109,13 +109,17 @@ const LessonPage: React.FC = () => {
           }, 100);
         }
 
+        // Find the lesson in the course units for navigation context
         let foundUnitLessons: LessonReference[] | null = null;
         let foundIndex = -1;
         let foundUnitId: UnitId | null = null;
 
-        for (const unit of unitsData.units) {
+        // Build full path for comparison (courseId/lessonPath)
+        const fullLessonPath = `${courseId}/${lessonPath}` as LessonPath;
+
+        for (const unit of course.units) {
           const index = unit.lessons.findIndex(
-            (lessonRef) => lessonRef.path === lessonPath
+            (lessonRef) => lessonRef.path === fullLessonPath
           );
           if (index !== -1) {
             foundUnitLessons = unit.lessons;
@@ -151,7 +155,7 @@ const LessonPage: React.FC = () => {
     return () => {
       isMounted = false;
     };
-  }, [lessonPath]);
+  }, [courseId, lessonPath]);
 
   const completedSectionsSet: Set<SectionId> = useMemo(() => {
     if (!completedSectionsMap) {
@@ -327,11 +331,14 @@ const LessonPage: React.FC = () => {
         <h2>Error Loading Lesson</h2>
         <p>{error}</p>
         {parentUnitId ? (
-          <Link to={`/unit/${parentUnitId}`} className={styles.backLink}>
+          <Link
+            to={`/${courseId}/unit/${parentUnitId}`}
+            className={styles.backLink}
+          >
             &larr; Back to Unit
           </Link>
         ) : (
-          <Link to="/" className={styles.backLink}>
+          <Link to={`/${courseId}`} className={styles.backLink}>
             &larr; Back to Home
           </Link>
         )}
@@ -344,11 +351,14 @@ const LessonPage: React.FC = () => {
         <h2>Lesson Not Found</h2>
         <p>Could not find data for lesson '{lessonPath}'.</p>
         {parentUnitId ? (
-          <Link to={`/unit/${parentUnitId}`} className={styles.backLink}>
+          <Link
+            to={`/${courseId}/unit/${parentUnitId}`}
+            className={styles.backLink}
+          >
             &larr; Back to Unit
           </Link>
         ) : (
-          <Link to="/" className={styles.backLink}>
+          <Link to={`/${courseId}`} className={styles.backLink}>
             &larr; Back to Home
           </Link>
         )}
@@ -361,7 +371,7 @@ const LessonPage: React.FC = () => {
       <aside className={styles.lessonSidebar}>
         {parentUnitId && (
           <Link
-            to={`/python/unit/${parentUnitId}`}
+            to={`/${courseId}/unit/${parentUnitId}`}
             className={styles.backToUnitLink}
           >
             &larr; Back to Unit Overview
@@ -382,6 +392,7 @@ const LessonPage: React.FC = () => {
           </h1>
           {totalLessonsInUnit > 0 && (
             <LessonNavigation
+              courseId={courseId}
               prevLessonPath={prevLessonReference?.path}
               nextLessonPath={nextLessonReference?.path}
               currentPosition={currentPositionInUnit}
@@ -408,6 +419,7 @@ const LessonPage: React.FC = () => {
           >
             <div style={{ flexGrow: 1 }}></div>
             <LessonNavigation
+              courseId={courseId}
               prevLessonPath={prevLessonReference?.path}
               nextLessonPath={nextLessonReference?.path}
               currentPosition={currentPositionInUnit}

@@ -16,7 +16,7 @@ const WelcomeModal: React.FC<WelcomeModalProps> = ({ onClose }) => {
     localStorage.setItem(MODAL_SEEN_KEY, "true");
 
     if (role === "instructor") {
-      navigate("/python/instructor-dashboard");
+      navigate("/instructor-dashboard");
     }
 
     // Close the modal for both choices
@@ -26,7 +26,7 @@ const WelcomeModal: React.FC<WelcomeModalProps> = ({ onClose }) => {
   return (
     <div className={styles.modalBackdrop}>
       <div className={styles.modalContent}>
-        <h2>Welcome to Thoughtful Python!</h2>
+        <h2>Welcome to Thoughtful Code!</h2>
         <p>To help us tailor your experience, please let us know your role.</p>
         <div className={styles.buttonContainer}>
           <button

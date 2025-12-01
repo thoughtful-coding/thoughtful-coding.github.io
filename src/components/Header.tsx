@@ -1,12 +1,13 @@
 // src/components/Header.tsx
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import styles from "./Header.module.css";
 import SettingsIcon from "./icons/SettingsIcon";
 import AuthSection from "./auth/AuthSection";
 import { useAuthHandlers } from "../hooks/useAuthHandlers";
 
 const Header: React.FC = () => {
+  const { courseId } = useParams<{ courseId?: string }>();
   const { handleLoginSuccess, handleLoginError, handleLogout } =
     useAuthHandlers();
 
@@ -16,38 +17,50 @@ const Header: React.FC = () => {
   return (
     <header className={styles.header}>
       <div className={styles.headerContent}>
-        <NavLink to="/python/" className={styles.titleLink}>
+        <NavLink to="/" className={styles.titleLink}>
           {" "}
-          {/* Wrap title in NavLink */}
-          <h1 className={styles.title}>Thoughtful Python</h1>
+          {/* Logo links to all courses homepage */}
+          <h1 className={styles.title}>Thoughtful Code</h1>
         </NavLink>
         <nav className={styles.nav}>
           <ul className={styles.navList}>
-            <li>
-              <NavLink to="/python/" className={getNavLinkClass} end>
-                Home
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/python/editor" className={getNavLinkClass}>
-                Code Editor
-              </NavLink>
-            </li>
-            <li>
-              {" "}
-              {/* Added <li> wrapper for consistency */}
-              <NavLink to="/python/progress" className={getNavLinkClass}>
-                Progress
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/python/learning-entries"
-                className={getNavLinkClass}
-              >
-                Learning Entries
-              </NavLink>
-            </li>
+            {/* Show Code Editor and Learning Entries when NOT in a course */}
+            {!courseId && (
+              <>
+                <li>
+                  <NavLink to="/code-editor" className={getNavLinkClass}>
+                    Code Editor
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/learning-entries" className={getNavLinkClass}>
+                    Learning Entries
+                  </NavLink>
+                </li>
+              </>
+            )}
+
+            {/* Show Progress and Learning Entries only when IN a course */}
+            {courseId && (
+              <>
+                <li>
+                  <NavLink
+                    to={`/${courseId}/progress`}
+                    className={getNavLinkClass}
+                  >
+                    Progress
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/learning-entries"
+                    className={getNavLinkClass}
+                  >
+                    Learning Entries
+                  </NavLink>
+                </li>
+              </>
+            )}
           </ul>
         </nav>
 

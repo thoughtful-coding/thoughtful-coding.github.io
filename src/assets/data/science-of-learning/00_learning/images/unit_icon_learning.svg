@@ -1,0 +1,26 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- White background circle with black border -->
+  <circle cx="100" cy="100" r="90" fill="white" stroke="black" stroke-width="3"/>
+  
+  <!-- Wooden legs -->
+  <rect x="68" y="130" width="6" height="35" fill="#8b4513" stroke="#654321" stroke-width="1"/>
+  <rect x="126" y="130" width="6" height="35" fill="#8b4513" stroke="#654321" stroke-width="1"/>
+  
+  <!-- Wooden frame -->
+  <rect x="55" y="60" width="90" height="70" fill="#8b4513" stroke="#654321" stroke-width="2"/>
+  
+  <!-- Green blackboard (sharp 90 degree corners) -->
+  <rect x="62" y="67" width="76" height="56" fill="#2d5016" stroke="#1a3009" stroke-width="1"/>
+  
+  <!-- PRIMM text in chalk style -->
+  <text x="100" y="100" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#e8f5e8" font-weight="bold">PRIMM</text>
+  
+  <!-- Small chalk dust effects on the blackboard -->
+  <circle cx="75" cy="80" r="0.5" fill="#e8f5e8" opacity="0.4"/>
+  <circle cx="125" cy="110" r="0.5" fill="#e8f5e8" opacity="0.3"/>
+  <circle cx="90" cy="110" r="0.5" fill="#e8f5e8" opacity="0.5"/>
+  
+  <!-- Wood grain effect on frame -->
+  <line x1="60" y1="70" x2="140" y2="70" stroke="#654321" stroke-width="0.5" opacity="0.3"/>
+  <line x1="60" y1="120" x2="140" y2="120" stroke="#654321" stroke-width="0.5" opacity="0.3"/>
+</svg>

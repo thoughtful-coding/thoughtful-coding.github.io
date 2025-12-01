@@ -102,7 +102,7 @@ const ReviewStudentDetailView: React.FC<ReviewStudentDetailViewProps> = ({
   }, [studentProfile, lessonDataMap, units]);
 
   const handleBack = () => {
-    navigate("/python/instructor-dashboard/students"); // Always navigate back to the main student list page
+    navigate("/instructor-dashboard/students"); // Always navigate back to the main student list page
   };
 
   // ... (renderStatusBadge and renderSubmissionModal functions remain the same)

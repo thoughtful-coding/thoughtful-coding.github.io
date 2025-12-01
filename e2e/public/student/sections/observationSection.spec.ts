@@ -5,7 +5,7 @@ test.describe("ObservationSection tests for regular code", () => {
     page,
   }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/05_observation_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/05_observation_tests"
     );
 
     const sectionItem = page
@@ -26,7 +26,7 @@ test.describe("ObservationSection tests for regular code", () => {
     page,
   }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/05_observation_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/05_observation_tests"
     );
 
     const sectionItem = page
@@ -59,7 +59,7 @@ test.describe("ObservationSection tests for regular code", () => {
 test.describe("ObservationSection tests for turtles code", () => {
   test("Test can click the `Run Code` button for Turtle", async ({ page }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/05_observation_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/05_observation_tests"
     );
 
     const sectionItem = page
@@ -84,7 +84,7 @@ test.describe("ObservationSection tests for turtles code", () => {
     page,
   }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/05_observation_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/05_observation_tests"
     );
 
     const sectionItem = page
@@ -111,7 +111,7 @@ test.describe("ObservationSection tests for turtles code", () => {
     page,
   }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/05_observation_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/05_observation_tests"
     );
 
     const sectionItem = page

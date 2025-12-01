@@ -9,6 +9,7 @@ export type IsoTimestamp = string & { readonly __brand: "IsoTimestamp" };
 export type AccessTokenId = string & { readonly __brand: "AccessTokenId" };
 export type RefreshTokenId = string & { readonly __brand: "RefreshTokenId" };
 
+export type CourseId = string & { readonly __brand: "CourseId" };
 export type UnitId = string & { readonly __brand: "UnitId" };
 export type LessonId = string & { readonly __brand: "LessonId" };
 export type LessonPath = string & { readonly __brand: "LessonPath" };
@@ -334,6 +335,49 @@ export interface Unit {
   description: string;
   lessons: LessonReference[];
   image: string;
+  courseId?: CourseId; // Optional, for bi-directional references
+}
+
+export interface Course {
+  id: CourseId;
+  title: string;
+  description: string;
+  image: string;
+  difficulty?: "beginner" | "intermediate" | "advanced";
+  units: Unit[];
+}
+
+/**
+ * Course manifest schema for course.ts files.
+ * Contains course metadata and unit ordering.
+ * All paths in the manifest are relative to the course directory.
+ *
+ * Example course.ts file:
+ * ```typescript
+ * import type { CourseManifest, CourseId } from "../../types/data";
+ *
+ * const courseData: CourseManifest = {
+ *   id: "intro-python" as CourseId,
+ *   title: "Introduction to Python",
+ *   description: "Learn Python programming...",
+ *   image: "images/python-logo.png",
+ *   difficulty: "beginner",
+ *   units: [
+ *     "00_intro",
+ *     "01_variables",
+ *   ],
+ * };
+ *
+ * export default courseData;
+ * ```
+ */
+export interface CourseManifest {
+  id: CourseId;
+  title: string;
+  description: string;
+  image: string; // Relative to course directory (e.g., "images/python-logo.png")
+  difficulty?: "beginner" | "intermediate" | "advanced";
+  units: string[]; // Relative paths to unit directories (e.g., "00_intro")
 }
 
 /**

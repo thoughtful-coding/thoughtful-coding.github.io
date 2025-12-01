@@ -1,38 +1,42 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { fetchUnitsData } from "../lib/dataLoader";
-import type { Unit } from "../types/data";
-import styles from "./HomePage.module.css";
+import { getCoursesAsync } from "../lib/dataLoader";
+import type { Unit, CourseId } from "../types/data";
+import styles from "./CourseHomePage.module.css";
 import loadingStyles from "../components/LoadingSpinner.module.css";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { BASE_PATH } from "../config";
-import WelcomeModal from "../components/WelcomeModal";
 
-const MODAL_SEEN_KEY = "hasSeenRoleSelector";
-
-const HomePage: React.FC = () => {
+const CourseHomePage: React.FC = () => {
+  const { courseId } = useParams<{ courseId: string }>();
   const [units, setUnits] = useState<Unit[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [showRoleModal, setShowRoleModal] = useState(false);
 
   useEffect(() => {
-    // Check if the user has seen the modal before
-    const hasSeenModal = localStorage.getItem(MODAL_SEEN_KEY);
-    if (!hasSeenModal) {
-      setShowRoleModal(true);
-    }
-
     const loadData = async () => {
       try {
         setError(null);
         setIsLoading(true);
-        const unitsData = await fetchUnitsData();
-        setUnits(unitsData.units);
+
+        if (!courseId) {
+          setError("No course specified");
+          return;
+        }
+
+        const courses = await getCoursesAsync();
+        const course = courses.find((c) => c.id === courseId);
+
+        if (!course) {
+          setError(`Course not found: ${courseId}`);
+          return;
+        }
+
+        setUnits(course.units);
       } catch (err) {
-        console.error("HomePage Error:", err);
+        console.error("CourseHomePage Error:", err);
         setError(
           err instanceof Error ? err.message : "An unknown error occurred"
         );
@@ -41,7 +45,7 @@ const HomePage: React.FC = () => {
       }
     };
     loadData();
-  }, []);
+  }, [courseId]);
 
   const defaultImagePath = `${BASE_PATH}images/unit_icon_default.svg`;
 
@@ -78,16 +82,14 @@ const HomePage: React.FC = () => {
       <div className={styles.unitsGrid}>
         {units.map((unit) => (
           <Link
-            to={`/python/unit/${unit.id}`}
+            to={`/${courseId}/unit/${unit.id}`}
             key={unit.id}
             className={styles.unitCardLink}
           >
             <div className={styles.unitCard}>
               <div className={styles.unitImageContainer}>
                 <img
-                  src={`${BASE_PATH}data/${
-                    unit.image || "images/unit_icon_default.svg"
-                  }`}
+                  src={unit.image || `${BASE_PATH}images/unit_icon_default.svg`}
                   alt={`${unit.title} image`}
                   className={styles.unitImage}
                   onError={handleImageError}
@@ -115,11 +117,7 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <>
-      {showRoleModal && (
-        <WelcomeModal onClose={() => setShowRoleModal(false)} />
-      )}
-      <div className={styles.homePageContainer}>
+    <div className={styles.homePageContainer}>
         <section className={styles.welcome}>
           <h2>A Thoughtful Approach to Learning Python</h2>
         </section>
@@ -168,8 +166,7 @@ const HomePage: React.FC = () => {
           {renderContent()}
         </section>
       </div>
-    </>
   );
 };
 
-export default HomePage;
+export default CourseHomePage;

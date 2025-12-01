@@ -5,7 +5,7 @@ test.describe("CoverageSection tests", () => {
     page,
   }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/00_coverage_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/00_coverage_tests"
     );
 
     const sectionItem = page.getByRole("listitem").filter({
@@ -64,7 +64,7 @@ test.describe("CoverageSection tests", () => {
 
   test("Test get 2/3 if coverage are mostly right", async ({ page }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/00_coverage_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/00_coverage_tests"
     );
 
     const sectionItem = page.getByRole("listitem").filter({
@@ -125,7 +125,7 @@ test.describe("CoverageSection tests", () => {
 
   test("Test get full coverage for `return` statements", async ({ page }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/00_coverage_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/00_coverage_tests"
     );
 
     const sectionItem = page.getByRole("listitem").filter({
@@ -170,7 +170,7 @@ test.describe("CoverageSection tests", () => {
 
   test("Test fixed inputs are read-only and pre-filled", async ({ page }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/00_coverage_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/00_coverage_tests"
     );
 
     const sectionItem = page.getByRole("listitem").filter({

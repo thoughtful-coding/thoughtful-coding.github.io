@@ -19,7 +19,10 @@ type CompletionStatus = {
 };
 
 const UnitPage: React.FC = () => {
-  const { unitId } = useParams<{ unitId: UnitId }>();
+  const { courseId, unitId } = useParams<{
+    courseId: string;
+    unitId: UnitId;
+  }>();
   const [unit, setUnit] = useState<Unit | null>(null);
   const [lessonsData, setLessonsData] = useState<Map<LessonId, Lesson | null>>(
     new Map()
@@ -149,7 +152,7 @@ const UnitPage: React.FC = () => {
     return (
       <div className={styles.error}>
         <p>Error loading unit: {error}</p>
-        <Link to="/python/" className={styles.backLink}>
+        <Link to={`/${courseId}`} className={styles.backLink}>
           &larr; Back to Learning Paths
         </Link>
       </div>
@@ -160,7 +163,7 @@ const UnitPage: React.FC = () => {
     return (
       <div className={styles.error}>
         <p>Unit data could not be loaded.</p>
-        <Link to="/python/" className={styles.backLink}>
+        <Link to={`/${courseId}`} className={styles.backLink}>
           &larr; Back to Learning Paths
         </Link>
       </div>
@@ -169,7 +172,7 @@ const UnitPage: React.FC = () => {
 
   return (
     <div className={styles.unitContainer}>
-      <Link to="/python/" className={styles.backLink}>
+      <Link to={`/${courseId}`} className={styles.backLink}>
         &larr; Back to Learning Paths
       </Link>
       <div className={styles.unitHeader}>
@@ -214,9 +217,14 @@ const UnitPage: React.FC = () => {
             );
           }
 
+          // Strip courseId prefix from lesson path since it's already in the URL
+          const lessonPathWithoutCourseId = lessonReference.path.startsWith(`${courseId}/`)
+            ? lessonReference.path.slice(`${courseId}/`.length)
+            : lessonReference.path;
+
           return (
             <Link
-              to={`/python/lesson/${lessonReference.path}`}
+              to={`/${courseId}/lesson/${lessonPathWithoutCourseId}`}
               key={lessonReference.path}
               className={styles.lessonCardLink}
             >

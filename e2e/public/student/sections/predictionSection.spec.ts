@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 test.describe("PredictionSection tests for procedures", () => {
   test("Test get complete if all predictions are right", async ({ page }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/07_prediction_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/07_prediction_tests"
     );
 
     const sectionItem = page.getByRole("listitem").filter({
@@ -65,7 +65,7 @@ test.describe("PredictionSection tests for procedures", () => {
 
   test("Test get 2/3 if predictions are mostly right", async ({ page }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/07_prediction_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/07_prediction_tests"
     );
 
     const sectionItem = page.getByRole("listitem").filter({
@@ -131,7 +131,7 @@ test.describe("PredictionSection tests for functions that return", () => {
     page,
   }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/07_prediction_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/07_prediction_tests"
     );
 
     const sectionItem = page.getByRole("listitem").filter({

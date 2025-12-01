@@ -5,7 +5,7 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
     page,
   }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/10_testing_tests"
     );
 
     await expect(
@@ -26,7 +26,7 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
     page,
   }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/10_testing_tests"
     );
 
     const editor = page.getByTestId("code-editor-single-vs-double-testing");
@@ -50,7 +50,7 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
     page,
   }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/10_testing_tests"
     );
 
     await page
@@ -66,7 +66,7 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
     page,
   }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/10_testing_tests"
     );
 
     const editor = page.getByTestId("code-editor-single-vs-double-testing");
@@ -86,7 +86,7 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
 
   test("Test can have faulty program and get SyntaxError", async ({ page }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/10_testing_tests"
     );
 
     const editor = page.getByTestId("code-editor-single-vs-double-testing");
@@ -102,7 +102,7 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
 
   test("Test can click `Run Tests` button and get pass", async ({ page }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/10_testing_tests"
     );
 
     const editor = page.getByTestId("code-editor-single-vs-double-testing");
@@ -122,7 +122,7 @@ test.describe("TestingSection `procedure` / `__main__` output tests", () => {
 test.describe("TestingSection `procedure` / `function_name` tests", () => {
   test("Test can click `Run Tests` button and get fail", async ({ page }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/10_testing_tests"
     );
 
     // Use the data-testid to target the specific code editor
@@ -149,7 +149,7 @@ test.describe("TestingSection `procedure` / `function_name` tests", () => {
     page,
   }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/10_testing_tests"
     );
 
     await page
@@ -161,7 +161,7 @@ test.describe("TestingSection `procedure` / `function_name` tests", () => {
 
   test("Test can click `Run Tests` button and get pass", async ({ page }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/10_testing_tests"
     );
 
     const sectionItem = page.getByRole("listitem").filter({
@@ -191,7 +191,7 @@ test.describe("TestingSection `procedure` / `function_name` tests", () => {
 test.describe("TestingSection `function` / `function_name` tests", () => {
   test("Test can click `Run Tests` button and get fail", async ({ page }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/10_testing_tests"
     );
 
     const editor = page.getByTestId("code-editor-return-functions-test");
@@ -217,7 +217,7 @@ test.describe("TestingSection `function` / `function_name` tests", () => {
     page,
   }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/10_testing_tests"
     );
 
     await page
@@ -231,7 +231,7 @@ test.describe("TestingSection `function` / `function_name` tests", () => {
     page,
   }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/10_testing_tests"
     );
 
     const sectionItem = page.getByRole("listitem").filter({
@@ -264,7 +264,7 @@ test.describe("TestingSection for turtles", () => {
     page,
   }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/10_testing_tests"
     );
 
     const editor = page.getByTestId("code-editor-hexagon-testing");
@@ -295,7 +295,7 @@ test.describe("TestingSection for turtles", () => {
     page,
   }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/10_testing_tests"
     );
 
     const editor = page.getByTestId("code-editor-hexagon-testing");
@@ -319,7 +319,7 @@ test.describe("TestingSection for turtles", () => {
     page,
   }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/10_testing_tests"
     );
 
     const editor = page.getByTestId("code-editor-hexagon-testing");
@@ -343,7 +343,7 @@ test.describe("TestingSection for turtles", () => {
     page,
   }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/10_testing_tests"
     );
 
     const sectionItem = page.getByRole("listitem").filter({
@@ -383,7 +383,7 @@ test.describe("TestingSection for turtles non-`__main__`", () => {
     page,
   }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/10_testing_tests"
     );
 
     const editor = page.getByTestId("code-editor-octagon-testing");
@@ -414,7 +414,7 @@ test.describe("TestingSection for turtles non-`__main__`", () => {
     page,
   }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/10_testing_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/10_testing_tests"
     );
 
     const sectionItem = page.getByRole("listitem").filter({

@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 test.describe("MultipleChoiceSection tests", () => {
   test("Can get answer right with multiple choice", async ({ page }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/03_multiple_choice_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/03_multiple_choice_tests"
     );
 
     const sectionItem = page
@@ -23,7 +23,7 @@ test.describe("MultipleChoiceSection tests", () => {
 
   test("Can get answer wrong with multiple choice", async ({ page }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/03_multiple_choice_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/03_multiple_choice_tests"
     );
 
     const sectionItem = page

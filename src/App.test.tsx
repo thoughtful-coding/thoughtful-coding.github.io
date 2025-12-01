@@ -23,13 +23,14 @@ const renderWithRouter = (initialEntries = ["/"]) => {
 describe("App Component", () => {
   // Test suite for routing behavior
   describe("Routing", () => {
-    test("should display a 404 page for a non-existent route", () => {
+    test("should display an error for a non-existent course", async () => {
       const badRoute = "/this-route-does-not-exist";
       renderWithRouter([badRoute]);
 
-      // Check for the heading of the 404 page
+      // The route matches /:courseId pattern, so CourseHomePage shows course not found error
+      // Use findByText (async) since the error appears after data loading
       expect(
-        screen.getByRole("heading", { name: "404 - Page Not Found" })
+        await screen.findByText(/Course not found: this-route-does-not-exist/i)
       ).toBeInTheDocument();
     });
   });

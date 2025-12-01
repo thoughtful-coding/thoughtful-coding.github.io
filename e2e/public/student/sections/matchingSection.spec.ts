@@ -5,7 +5,7 @@ test.describe("MatchingSection tests", () => {
     page,
   }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/02_matching_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/02_matching_tests"
     );
 
     const sectionItem = page
@@ -57,7 +57,7 @@ test.describe("MatchingSection tests", () => {
     page,
   }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/02_matching_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/02_matching_tests"
     );
 
     const sectionItem = page

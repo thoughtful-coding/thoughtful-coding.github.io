@@ -5,7 +5,7 @@ test.describe("PrimmSection tests with regular code", () => {
     page,
   }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/08_primm_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/08_primm_tests"
     );
 
     const sectionItem = page
@@ -43,7 +43,7 @@ test.describe("PrimmSection tests with turtles", () => {
     page,
   }) => {
     await page.goto(
-      "/python/lesson/12_end_to_end_tests/lessons/08_primm_tests"
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/08_primm_tests"
     );
 
     const sectionItem = page

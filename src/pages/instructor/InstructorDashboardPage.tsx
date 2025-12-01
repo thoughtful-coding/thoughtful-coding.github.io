@@ -22,11 +22,11 @@ import styles from "./InstructorDashboardPage.module.css";
 import ReviewLearningEntriesView from "../../components/instructor/ReviewLearningEntriesView";
 
 const navLinks = [
-  { path: "/python/instructor-dashboard/progress", label: "Class Progress" },
-  { path: "/python/instructor-dashboard/assignments", label: "By Assignment" },
-  { path: "/python/instructor-dashboard/students", label: "By Student" },
+  { path: "/instructor-dashboard/progress", label: "Class Progress" },
+  { path: "/instructor-dashboard/assignments", label: "By Assignment" },
+  { path: "/instructor-dashboard/students", label: "By Student" },
   {
-    path: "/python/instructor-dashboard/learning-entries",
+    path: "/instructor-dashboard/learning-entries",
     label: "Final Learning Entries",
   },
 ];
@@ -34,7 +34,7 @@ const navLinks = [
 const InstructorDashboardPage: React.FC = () => {
   const { isAuthenticated, user } = useAuthStore();
   const { handleLoginSuccess, handleLoginError, handleLogout } =
-    useAuthHandlers({ redirectOnLogout: "/python/" });
+    useAuthHandlers({ redirectOnLogout: "/" });
 
   // States to fetch shared data now live here
   const [permittedStudents, setPermittedStudents] = useState<

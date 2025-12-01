@@ -3,9 +3,10 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 // Import the new CSS Module
 import styles from "./LessonNavigation.module.css";
-import { LessonPath } from "../types/data";
+import { LessonPath, CourseId } from "../types/data";
 
 interface LessonNavigationProps {
+  courseId: CourseId;
   prevLessonPath: LessonPath | null;
   nextLessonPath: LessonPath | null;
   currentPosition: number;
@@ -13,7 +14,7 @@ interface LessonNavigationProps {
 }
 
 const LessonNavigation: React.FC<LessonNavigationProps> = ({
-  // lessonId,
+  courseId,
   prevLessonPath,
   nextLessonPath,
   currentPosition,
@@ -23,6 +24,17 @@ const LessonNavigation: React.FC<LessonNavigationProps> = ({
   const handleNavigation = () => {
     window.scrollTo(0, 0);
   };
+
+  // Strip courseId prefix from lesson paths since it's already in the URL
+  const stripCourseIdPrefix = (path: LessonPath | null): string | null => {
+    if (!path) return null;
+    return path.startsWith(`${courseId}/`)
+      ? path.slice(`${courseId}/`.length)
+      : path;
+  };
+
+  const prevPath = stripCourseIdPrefix(prevLessonPath);
+  const nextPath = stripCourseIdPrefix(nextLessonPath);
 
   // Helper to get link classes (including disabled state)
   const getNavLinkClass = (isTargetAvailable: boolean): string => {
@@ -40,10 +52,9 @@ const LessonNavigation: React.FC<LessonNavigationProps> = ({
   return (
     // Use the container class from the new CSS module
     <div className={styles.navigationContainer}>
-      {prevLessonPath ? (
+      {prevPath ? (
         <NavLink
-          // Use path relative to basename
-          to={`/python/lesson/${prevLessonPath}`}
+          to={`/${courseId}/lesson/${prevPath}`}
           className={getNavLinkClass(true)}
           aria-label="Previous Lesson"
           onClick={handleNavigation}
@@ -59,10 +70,9 @@ const LessonNavigation: React.FC<LessonNavigationProps> = ({
         Lesson {currentPosition} of {totalInUnit}
       </span>
 
-      {nextLessonPath ? (
+      {nextPath ? (
         <NavLink
-          // Use path relative to basename
-          to={`/python/lesson/${nextLessonPath}`}
+          to={`/${courseId}/lesson/${nextPath}`}
           className={getNavLinkClass(true)}
           aria-label="Next Lesson"
           onClick={handleNavigation}

@@ -182,7 +182,7 @@ describe("ReviewStudentDetailView", () => {
     await user.click(backButton);
 
     expect(navigateMock).toHaveBeenCalledWith(
-      "/python/instructor-dashboard/students"
+      "/instructor-dashboard/students"
     );
   });
 

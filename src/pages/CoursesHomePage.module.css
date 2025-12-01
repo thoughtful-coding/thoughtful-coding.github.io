@@ -1,0 +1,203 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.welcome {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.welcome h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+.subtitle {
+  font-size: 1.5rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.philosophySection {
+  background: var(--background-secondary);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 3rem;
+}
+
+.philosophySection h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+.philosophySection ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.philosophySection li {
+  padding: 0.5rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  color: var(--text-color);
+}
+
+.philosophySection li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+.coursesSection {
+  margin-top: 3rem;
+}
+
+.coursesSection h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+}
+
+.coursesIntro {
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+
+.coursesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.courseCardLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  height: 100%;
+}
+
+.courseCard {
+  background: var(--background-secondary);
+  border-radius: 12px;
+  overflow: hidden;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+  box-shadow: var(--shadow-sm);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.courseCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.courseImageContainer {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background: var(--background-tertiary);
+}
+
+.courseImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.courseContent {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.courseTitle {
+  font-size: 1.75rem;
+  margin: 0 0 1rem;
+  color: var(--text-color);
+}
+
+.courseDescription {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  flex: 1;
+}
+
+.difficultyBadge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-transform: capitalize;
+}
+
+.difficultyBadge.beginner {
+  background: var(--success-light);
+  color: var(--success-text);
+}
+
+.difficultyBadge.intermediate {
+  background: var(--warning-light);
+  color: var(--warning-text);
+}
+
+.difficultyBadge.advanced {
+  background: var(--error-light);
+  color: var(--error-text);
+}
+
+.courseFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.unitCount {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.startButton {
+  color: var(--primary-color);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+@media (width <= 768px) {
+  .welcome h1 {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1.2rem;
+  }
+
+  .coursesSection h2 {
+    font-size: 2rem;
+  }
+
+  .coursesGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}

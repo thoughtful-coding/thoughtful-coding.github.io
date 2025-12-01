@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import HomePage from "./pages/HomePage";
+import CoursesHomePage from "./pages/CoursesHomePage";
+import CourseHomePage from "./pages/CourseHomePage";
 import UnitPage from "./pages/student/UnitPage";
 import LessonPage from "./pages/student/LessonPage";
 import CodeEditorPage from "./pages/student/CodeEditorPage";
@@ -77,24 +78,33 @@ function App() {
         onClose={handleModalClose}
       />
       <Routes>
-        {/* Root redirect to default curriculum */}
-        <Route path="/" element={<Navigate to="/python/" replace />} />
-
-        {/* General/shared routes (available across all curricula) */}
+        {/* General/shared routes (available globally) */}
         <Route element={<Layout />}>
+          <Route index element={<CoursesHomePage />} />
           <Route path="/configure" element={<ConfigurationPage />} />
           <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
           <Route path="/terms-of-service" element={<TermsOfServicePage />} />
           <Route path="/faq" element={<FAQPage />} />
         </Route>
 
-        {/* Python curriculum routes */}
-        <Route path="/python" element={<StudentLayout />}>
+        {/* Code Editor and Learning Entries need Pyodide, so wrap with StudentLayout */}
+        <Route path="/code-editor" element={<StudentLayout />}>
           <Route element={<Layout />}>
-            <Route index element={<HomePage />} />
+            <Route index element={<CodeEditorPage />} />
+          </Route>
+        </Route>
+        <Route path="/learning-entries" element={<StudentLayout />}>
+          <Route element={<Layout />}>
+            <Route index element={<LearningEntriesPage />} />
+          </Route>
+        </Route>
+
+        {/* Course-specific routes (courseId parameter) */}
+        <Route path="/:courseId" element={<StudentLayout />}>
+          <Route element={<Layout />}>
+            <Route index element={<CourseHomePage />} />
             <Route path="unit/:unitId" element={<UnitPage />} />
             <Route path="lesson/*" element={<LessonPage />} />
-            <Route path="editor" element={<CodeEditorPage />} />
             <Route path="learning-entries" element={<LearningEntriesPage />} />
             <Route
               path="progress"
@@ -115,14 +125,11 @@ function App() {
           </Route>
         </Route>
 
-        {/* Instructor dashboard (separate from student layout) */}
+        {/* Instructor dashboard (will be updated for multi-course in future) */}
         <Route
-          path="/python/instructor-dashboard/*"
+          path="/instructor-dashboard/*"
           element={<InstructorDashboardPage />}
         />
-
-        {/* Future: Scratch curriculum would go here */}
-        {/* <Route path="/scratch" element={<StudentLayout />}>...</Route> */}
 
         {/* Catch-all 404 for unknown routes */}
         <Route
