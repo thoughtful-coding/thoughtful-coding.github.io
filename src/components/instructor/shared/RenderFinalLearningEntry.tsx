@@ -5,6 +5,7 @@ import remarkGfm from "remark-gfm";
 import type { AssessmentLevel } from "../../../types/data";
 import { ReflectionVersionItem } from "../../../types/apiServiceTypes";
 import { getLessonPathSync } from "../../../lib/dataLoader";
+import { isCustomReflection } from "../../../types/customReflections";
 
 // Import the consolidated CSS file
 import styles from "../InstructorViews.module.css";
@@ -27,6 +28,7 @@ const RenderFinalLearningEntry: React.FC<RenderFinalLearningEntryProps> = ({
 
   const lessonPath = getLessonPathSync(entry.lessonId);
   const lessonLinkPath = lessonPath ? `/lesson/${lessonPath}` : "#";
+  const isCustom = isCustomReflection(entry);
 
   const formatDate = (timestamp: string) =>
     new Date(timestamp).toLocaleString();
@@ -45,16 +47,22 @@ const RenderFinalLearningEntry: React.FC<RenderFinalLearningEntryProps> = ({
           </span>
         </div>
         <span className={styles.entryLesson}>
-          <Link
-            to={lessonLinkPath}
-            target="_blank"
-            rel="noopener noreferrer"
-            title={
-              lessonPath ? "View original lesson" : "Lesson path not found"
-            }
-          >
-            from section: {entry.sectionId}
-          </Link>
+          {isCustom ? (
+            <span title="Custom reflection entry not tied to a lesson">
+              Custom Entry
+            </span>
+          ) : (
+            <Link
+              to={lessonLinkPath}
+              target="_blank"
+              rel="noopener noreferrer"
+              title={
+                lessonPath ? "View original lesson" : "Lesson path not found"
+              }
+            >
+              from section: {entry.sectionId}
+            </Link>
+          )}
         </span>
       </div>
 

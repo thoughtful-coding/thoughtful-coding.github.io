@@ -59,3 +59,53 @@
 .primaryButton:hover {
   background-color: var(--primary-dark);
 }
+
+/* Entry wrapper with badge */
+.entryWrapper {
+  position: relative;
+}
+
+.customBadge {
+  display: inline-block;
+  background-color: var(--accent);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+/* Custom Entry Section */
+.customEntrySection {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 2px solid var(--border-secondary);
+}
+
+.customEntryToggle {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  text-align: center;
+}
+
+.customEntryToggle:hover {
+  background-color: var(--primary-dark);
+}
+
+.customEntryContainer {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background-color: var(--bg-code);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-secondary);
+}

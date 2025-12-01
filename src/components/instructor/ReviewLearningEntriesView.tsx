@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import type {
   UserId,
   LessonId,
@@ -15,8 +15,11 @@ import { useAuthStore } from "../../stores/authStore";
 import { useLessonTitleMap } from "../../hooks/useCurriculumData";
 import LoadingSpinner from "../LoadingSpinner";
 import styles from "./InstructorViews.module.css";
+import { isCustomReflection } from "../../types/customReflections";
 
 import RenderFinalLearningEntry from "./shared/RenderFinalLearningEntry";
+
+type EntryFilter = "all" | "lesson" | "custom";
 
 // Type for the list items in this view
 interface DisplayableFinalEntryItem {
@@ -42,6 +45,7 @@ const ReviewLearningEntriesView: React.FC<ReviewLearningEntriesViewProps> = ({
   const { isAuthenticated } = useAuthStore();
 
   const [selectedStudentId, setSelectedStudentId] = useState<UserId | "">("");
+  const [entryFilter, setEntryFilter] = useState<EntryFilter>("all");
   const [finalLearningEntries, setFinalLearningEntries] = useState<
     ReflectionVersionItem[]
   >([]);
@@ -103,7 +107,9 @@ const ReviewLearningEntriesView: React.FC<ReviewLearningEntriesViewProps> = ({
         key: `final-reflection-${entry.versionId}`,
         title: entry.userTopic || `Reflection for Section ${entry.sectionId}`,
         lessonGuid: entry.lessonId,
-        lessonTitle: lessonTitlesMap.get(entry.lessonId) || "Unknown Lesson",
+        lessonTitle: isCustomReflection(entry)
+          ? "Custom Entry"
+          : (lessonTitlesMap.get(entry.lessonId) || "Unknown Lesson"),
         sectionId: entry.sectionId,
         date: entry.createdAt, // This is the final submission date
         sortDate: new Date(entry.createdAt),
@@ -120,17 +126,27 @@ const ReviewLearningEntriesView: React.FC<ReviewLearningEntriesViewProps> = ({
     }
   }, [finalLearningEntries, lessonTitlesMap]); // Removed currentEntryIndex from deps
 
+  // Filter entries based on selected filter
+  const filteredDisplayableEntries = useMemo(() => {
+    if (entryFilter === "all") return displayableFinalEntries;
+    if (entryFilter === "lesson")
+      return displayableFinalEntries.filter((e) => !isCustomReflection(e.data));
+    if (entryFilter === "custom")
+      return displayableFinalEntries.filter((e) => isCustomReflection(e.data));
+    return displayableFinalEntries;
+  }, [displayableFinalEntries, entryFilter]);
+
   const selectedStudentInfo = permittedStudents.find(
     (s) => s.studentId === selectedStudentId
   );
   const currentEntryToDisplay =
     currentEntryIndex !== null
-      ? displayableFinalEntries[currentEntryIndex]
+      ? filteredDisplayableEntries[currentEntryIndex]
       : null;
 
   const handleNextEntry = () => {
     setCurrentEntryIndex((prev) =>
-      prev !== null && prev < displayableFinalEntries.length - 1
+      prev !== null && prev < filteredDisplayableEntries.length - 1
         ? prev + 1
         : prev
     );
@@ -164,6 +180,21 @@ const ReviewLearningEntriesView: React.FC<ReviewLearningEntriesViewProps> = ({
             </option>
           ))}
         </select>
+
+        <select
+          id="entry-type-filter"
+          value={entryFilter}
+          onChange={(e) => {
+            setEntryFilter(e.target.value as EntryFilter);
+            setCurrentEntryIndex(null);
+          }}
+          className={styles.filterSelect}
+          disabled={!selectedStudentId}
+        >
+          <option value="all">All Entries</option>
+          <option value="lesson">Lesson Reflections</option>
+          <option value="custom">Custom Entries</option>
+        </select>
       </div>
 
       {isLoadingData && (
@@ -177,7 +208,7 @@ const ReviewLearningEntriesView: React.FC<ReviewLearningEntriesViewProps> = ({
 
       {selectedStudentId && !isLoadingData && !error && (
         <>
-          {displayableFinalEntries.length > 0 ? (
+          {filteredDisplayableEntries.length > 0 ? (
             <div
               className={styles.assignmentListContainer}
               style={{ maxHeight: "300px", marginBottom: "1rem" }}
@@ -190,10 +221,10 @@ const ReviewLearningEntriesView: React.FC<ReviewLearningEntriesViewProps> = ({
                   color: "#555",
                 }}
               >
-                Select a final learning entry to view details:
+                Select a final learning entry to view details ({filteredDisplayableEntries.length} {entryFilter === "all" ? "total" : entryFilter} {filteredDisplayableEntries.length === 1 ? "entry" : "entries"}):
               </p>
               <ul className={styles.assignmentList}>
-                {displayableFinalEntries.map((item, index) => (
+                {filteredDisplayableEntries.map((item, index) => (
                   <li
                     key={item.key}
                     className={`${styles.assignmentListItem} ${
@@ -201,7 +232,12 @@ const ReviewLearningEntriesView: React.FC<ReviewLearningEntriesViewProps> = ({
                     }`}
                     onClick={() => setCurrentEntryIndex(index)}
                   >
-                    <span className={styles.assignmentTitle}>{item.title}</span>
+                    <span className={styles.assignmentTitle}>
+                      {isCustomReflection(item.data) && (
+                        <span className={styles.customEntryBadge}>Custom </span>
+                      )}
+                      {item.title}
+                    </span>
                     <span className={styles.assignmentMeta}>
                       {item.lessonTitle} -{" "}
                       {new Date(item.date).toLocaleDateString()}
@@ -212,7 +248,7 @@ const ReviewLearningEntriesView: React.FC<ReviewLearningEntriesViewProps> = ({
             </div>
           ) : (
             <p className={styles.placeholderMessage}>
-              No final learning entries found for this student.
+              No {entryFilter === "all" ? "" : entryFilter} learning entries found for this student.
             </p>
           )}
 
@@ -225,7 +261,7 @@ const ReviewLearningEntriesView: React.FC<ReviewLearningEntriesViewProps> = ({
                 lessonTitle={currentEntryToDisplay.lessonTitle}
               />
 
-              {displayableFinalEntries.length > 1 && (
+              {filteredDisplayableEntries.length > 1 && (
                 <div className={styles.navigationButtons}>
                   <button
                     onClick={handlePrevEntry}
@@ -238,13 +274,13 @@ const ReviewLearningEntriesView: React.FC<ReviewLearningEntriesViewProps> = ({
                   <span>
                     Entry{" "}
                     {currentEntryIndex !== null ? currentEntryIndex + 1 : "-"}/
-                    {displayableFinalEntries.length}
+                    {filteredDisplayableEntries.length}
                   </span>
                   <button
                     onClick={handleNextEntry}
                     disabled={
                       currentEntryIndex === null ||
-                      currentEntryIndex >= displayableFinalEntries.length - 1
+                      currentEntryIndex >= filteredDisplayableEntries.length - 1
                     }
                   >
                     Next Entry &rarr;

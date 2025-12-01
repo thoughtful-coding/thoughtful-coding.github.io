@@ -90,7 +90,7 @@ describe("ReviewLearningEntriesView", () => {
     ).toBeInTheDocument();
 
     // 2. Select a student
-    const studentSelect = screen.getByRole("combobox");
+    const studentSelect = document.getElementById("student-select-learning-entries") as HTMLSelectElement;
     await user.selectOptions(studentSelect, "student-1");
 
     // 3. Assert that the API was called
@@ -121,7 +121,8 @@ describe("ReviewLearningEntriesView", () => {
     );
 
     // Select a student to load the data
-    await user.selectOptions(screen.getByRole("combobox"), "student-1");
+    const studentSelect = document.getElementById("student-select-learning-entries") as HTMLSelectElement;
+    await user.selectOptions(studentSelect, "student-1");
 
     // Wait for the initial view to render
     expect(
@@ -167,12 +168,13 @@ describe("ReviewLearningEntriesView", () => {
     );
 
     // Select a student
-    await user.selectOptions(screen.getByRole("combobox"), "student-1");
+    const studentSelect = document.getElementById("student-select-learning-entries") as HTMLSelectElement;
+    await user.selectOptions(studentSelect, "student-1");
 
     // Assert that the placeholder message is shown
     expect(
       await screen.findByText(
-        /no final learning entries found for this student/i
+        /no.*learning entries found for this student/i
       )
     ).toBeInTheDocument();
   });

@@ -1,54 +1,47 @@
-// src/components/sections/ReflectionSection.tsx
+// Custom Reflection Entry: Standalone reflection not tied to any lesson
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import type { ReflectionSectionData, LessonId, UnitId } from "../../types/data";
-import styles from "./Section.module.css";
+import styles from "../sections/Section.module.css";
 import CodeEditor from "../CodeEditor";
 import { useAuthStore } from "../../stores/authStore";
-import {
-  useProgressActions,
-  useProgressStore,
-} from "../../stores/progressStore";
 import LoadingSpinner from "../LoadingSpinner";
-import ContentRenderer from "../content_blocks/ContentRenderer";
 import { useReflectionWorkflow } from "../../hooks/useReflectionWorkflow";
+import { CUSTOM_REFLECTION_LESSON_ID } from "../../types/customReflections";
+import { useProgressActions } from "../../stores/progressStore";
 
-interface ReflectionSectionProps {
-  section: ReflectionSectionData;
-  unitId: UnitId;
-  lessonId: LessonId;
-  lessonPath: string;
+interface CustomReflectionEntryProps {
+  onSuccess?: () => void;
 }
 
-const ReflectionSection: React.FC<ReflectionSectionProps> = ({
-  section,
-  unitId,
-  lessonId,
-  lessonPath,
+const CustomReflectionEntry: React.FC<CustomReflectionEntryProps> = ({
+  onSuccess,
 }) => {
-  const { id: sectionId, title } = section;
-  const { isTopicPredefined, isCodePredefined, isExplanationPredefined } =
-    section;
-
   const { isAuthenticated } = useAuthStore();
-  const { completeSection } = useProgressActions();
-  const isSectionMarkedCompleteInStore = useProgressStore((state) =>
-    state.actions.isSectionComplete(unitId, lessonId, sectionId)
-  );
+  const { getCurrentCustomReflectionId, clearCustomReflectionDraft } =
+    useProgressActions();
 
-  // Use shared reflection workflow hook
+  // Get current custom reflection draft ID from store (user-specific)
+  // Note: ID is frozen at first call and persists in localStorage for draft recovery
+  const currentSectionId = getCurrentCustomReflectionId();
+
+  // Use shared reflection workflow with unique sectionId
   const reflection = useReflectionWorkflow({
-    lessonId,
-    sectionId,
-    isTopicPredefined,
-    isCodePredefined,
-    isExplanationPredefined,
-    defaultTopic: section.topic,
-    defaultCode: section.code,
-    defaultExplanation: section.explanation,
-    extraContext: section.extraContext,
-    onFinalSubmit: () => completeSection(unitId, lessonId, sectionId, 1),
+    lessonId: CUSTOM_REFLECTION_LESSON_ID,
+    sectionId: currentSectionId,
+    isTopicPredefined: false,
+    isCodePredefined: false,
+    isExplanationPredefined: false,
+    defaultTopic: "",
+    defaultCode: "# Your code example here\n",
+    defaultExplanation: "",
+    onFinalSubmit: () => {
+      // Clear draft and generate new ID for next custom reflection
+      clearCustomReflectionDraft();
+      if (onSuccess) {
+        onSuccess();
+      }
+    },
   });
 
   const {
@@ -78,34 +71,41 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = ({
     return trimmedTopic.charAt(0).toUpperCase() + trimmedTopic.slice(1);
   };
 
-  return (
-    <section id={sectionId} className={styles.section}>
-      <h2 className={styles.title}>{title}</h2>
-      <div className={styles.content}>
-        <ContentRenderer content={section.content} lessonPath={lessonPath} />
+  if (!isAuthenticated) {
+    return (
+      <div className={styles.section}>
+        <p className={styles.infoMessage}>
+          Please log in to create custom reflection entries.
+        </p>
       </div>
+    );
+  }
+
+  return (
+    <div className={styles.section}>
+      <h3 className={styles.title}>Create Custom Reflection Entry</h3>
+      <p className={styles.infoMessage}>
+        Use this to create standalone reflections not tied to any specific
+        lesson. These will appear in your Learning Entries journal.
+      </p>
 
       <div className={styles.reflectionContainer}>
         {/* Input Fields for Topic, Code, Explanation */}
         <div className={styles.reflectionInputGroup}>
           <label
-            htmlFor={`${sectionId}-topic`}
+            htmlFor="custom-topic"
             className={styles.reflectionLabel}
           >
             Title of Journal Entry
           </label>
           <input
             type="text"
-            id={`${sectionId}-topic`}
+            id="custom-topic"
             className={styles.topicInput}
             value={currentTopic}
-            onChange={
-              isTopicPredefined
-                ? undefined
-                : (e) => setCurrentTopic(e.target.value)
-            }
-            readOnly={isTopicPredefined || isLoading}
-            placeholder={isTopicPredefined ? undefined : section.topic}
+            onChange={(e) => setCurrentTopic(e.target.value)}
+            readOnly={isLoading}
+            placeholder="Enter a title for your reflection..."
           />
         </div>
 
@@ -116,8 +116,8 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = ({
           <div className={styles.reflectionCodeEditorWrapper}>
             <CodeEditor
               value={currentCode}
-              onChange={isCodePredefined ? () => {} : setCurrentCode}
-              readOnly={isLoading || isCodePredefined}
+              onChange={setCurrentCode}
+              readOnly={isLoading}
               minHeight="150px"
             />
           </div>
@@ -125,24 +125,18 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = ({
 
         <div className={styles.reflectionInputGroup}>
           <label
-            htmlFor={`${sectionId}-explanation`}
+            htmlFor="custom-explanation"
             className={styles.reflectionLabel}
           >
             Explanation
           </label>
           <textarea
-            id={`${sectionId}-explanation`}
+            id="custom-explanation"
             className={styles.reflectionExplanation}
             value={currentExplanation}
-            onChange={
-              isExplanationPredefined
-                ? undefined
-                : (e) => setCurrentExplanation(e.target.value)
-            }
-            readOnly={isLoading || isExplanationPredefined}
-            placeholder={
-              isExplanationPredefined ? undefined : section.explanation
-            }
+            onChange={(e) => setCurrentExplanation(e.target.value)}
+            readOnly={isLoading}
+            placeholder="Explain your understanding of this topic..."
             rows={4}
           />
         </div>
@@ -150,60 +144,35 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = ({
         <div className={styles.reflectionButtons}>
           <button
             onClick={handleGetFeedback}
-            disabled={isLoading || !canAttemptInteraction || !isAuthenticated}
+            disabled={isLoading || !canAttemptInteraction}
             className={styles.reflectionFeedbackBtn}
             title={
               !canAttemptInteraction
                 ? "Please fill in all fields"
-                : !isAuthenticated
-                  ? "Please log in"
-                  : "Get AI feedback"
+                : "Get AI feedback"
             }
           >
-            {isLoading && !submitError
-              ? "Processing..."
-              : !isAuthenticated
-                ? "Please Log In to Get AI Feedback"
-                : "Get Feedback"}
+            {isLoading && !submitError ? "Processing..." : "Get Feedback"}
           </button>
           <button
             onClick={handleFinalSubmit}
-            disabled={
-              isLoading ||
-              !canAttemptInteraction ||
-              !canSubmitToJournal ||
-              !isAuthenticated ||
-              isSectionMarkedCompleteInStore
-            }
+            disabled={isLoading || !canAttemptInteraction || !canSubmitToJournal}
             className={styles.reflectionSubmitBtn}
             title={
-              !isAuthenticated
-                ? "Please log in"
-                : !canAttemptInteraction
-                  ? "Please fill in all fields"
-                  : !canSubmitToJournal
-                    ? "Get qualifying AI feedback first ('achieves' or 'mostly')"
-                    : isSectionMarkedCompleteInStore
-                      ? "Section already completed"
-                      : "Submit to Journal"
+              !canAttemptInteraction
+                ? "Please fill in all fields"
+                : !canSubmitToJournal
+                  ? "Get qualifying AI feedback first ('achieves' or 'mostly')"
+                  : "Submit to Journal"
             }
           >
-            {isLoading && !submitError
-              ? "Submitting..."
-              : !isAuthenticated
-                ? "Please Log In to Submit to Journal"
-                : isSectionMarkedCompleteInStore
-                  ? "Submitted ✓"
-                  : "Submit to Journal"}
+            {isLoading && !submitError ? "Submitting..." : "Submit to Journal"}
           </button>
         </div>
         {submitError && <p className={styles.apiError}>{submitError}</p>}
 
         <div className={styles.reflectionHistory}>
-          <h4>
-            Feedback History{" "}
-            {isSectionMarkedCompleteInStore ? "(Section Complete ✓)" : ""}
-          </h4>
+          <h4>Feedback History</h4>
           {fetchError && (
             <p className={styles.apiError} style={{ textAlign: "center" }}>
               {fetchError}
@@ -277,8 +246,8 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = ({
           ))}
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 
-export default ReflectionSection;
+export default CustomReflectionEntry;

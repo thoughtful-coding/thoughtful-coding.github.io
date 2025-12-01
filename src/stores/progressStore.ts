@@ -63,6 +63,7 @@ interface ProgressStateData {
   offlineActionQueue: SectionCompletionInput[]; // Now uses the extended SectionCompletionInput
   isSyncing: boolean;
   lastSyncError: string | null;
+  currentCustomReflectionDraftId: SectionId | null; // Current in-progress custom reflection
 }
 
 interface ProgressActions {
@@ -130,6 +131,10 @@ interface ProgressActions {
   ) => SectionDraftContent | null;
   extractAnonymousDrafts: () => ProgressStateData["drafts"];
   mergeDraftsAfterLogin: (anonymousDrafts: ProgressStateData["drafts"]) => void;
+  // Custom reflection draft ID management
+  getCurrentCustomReflectionId: () => SectionId;
+  startNewCustomReflection: () => SectionId;
+  clearCustomReflectionDraft: () => void;
 }
 
 interface ProgressState extends ProgressStateData {
@@ -144,6 +149,7 @@ const initialProgressData: ProgressStateData = {
   offlineActionQueue: [],
   isSyncing: false,
   lastSyncError: null,
+  currentCustomReflectionDraftId: null,
 };
 
 const createUserSpecificStorage = (baseKey: string): StateStorage => {
@@ -746,6 +752,35 @@ export const useProgressStore = create<ProgressState>()(
                   "[ProgressStore] Attempt counters merged after login."
                 );
               });
+            },
+            // Custom reflection draft ID management
+            getCurrentCustomReflectionId: () => {
+              const state = get();
+              if (!state.currentCustomReflectionDraftId) {
+                // Generate new ID if none exists
+                const newId = crypto.randomUUID() as SectionId;
+                set({ currentCustomReflectionDraftId: newId });
+                console.log(
+                  `[ProgressStore] Started new custom reflection with ID: ${newId}`
+                );
+                return newId;
+              }
+              return state.currentCustomReflectionDraftId;
+            },
+            startNewCustomReflection: () => {
+              const newId = crypto.randomUUID() as SectionId;
+              set({ currentCustomReflectionDraftId: newId });
+              console.log(
+                `[ProgressStore] Started new custom reflection with ID: ${newId}`
+              );
+              return newId;
+            },
+            clearCustomReflectionDraft: () => {
+              const newId = crypto.randomUUID() as SectionId;
+              set({ currentCustomReflectionDraftId: newId });
+              console.log(
+                `[ProgressStore] Cleared custom reflection draft, new ID: ${newId}`
+              );
             },
           },
         }),

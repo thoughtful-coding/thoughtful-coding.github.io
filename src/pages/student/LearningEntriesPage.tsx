@@ -6,11 +6,16 @@ import * as apiService from "../../lib/apiService";
 import { ReflectionVersionItem } from "../../types/apiServiceTypes";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import RenderFinalLearningEntry from "../../components/instructor/shared/RenderFinalLearningEntry";
+import CustomReflectionEntry from "../../components/custom/CustomReflectionEntry";
+import { isCustomReflection } from "../../types/customReflections";
 
 const LearningEntriesPage: React.FC = () => {
   const [finalEntries, setFinalEntries] = useState<ReflectionVersionItem[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isAddingCustomEntry, setIsAddingCustomEntry] =
+    useState<boolean>(false);
+  const [refreshKey, setRefreshKey] = useState<number>(0);
 
   const { isAuthenticated } = useAuthStore();
 
@@ -46,7 +51,7 @@ const LearningEntriesPage: React.FC = () => {
     };
 
     fetchEntries();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, refreshKey]);
 
   if (!isAuthenticated && !isLoading) {
     return (
@@ -88,13 +93,42 @@ const LearningEntriesPage: React.FC = () => {
       </p>
 
       {finalEntries.length === 0 ? (
-        <div className={styles.noEntriesMessage}>{/* ... */}</div>
+        <div className={styles.noEntriesMessage}>
+          <p>No learning entries yet. Complete reflection activities in lessons or create custom entries below.</p>
+        </div>
       ) : (
         <div className={styles.entriesList}>
-          {/* 2. Replace the large block of rendering logic with the reusable component */}
           {finalEntries.map((entry) => (
-            <RenderFinalLearningEntry key={entry.versionId} entry={entry} />
+            <div key={entry.versionId} className={styles.entryWrapper}>
+              {isCustomReflection(entry) && (
+                <span className={styles.customBadge}>Custom Entry</span>
+              )}
+              <RenderFinalLearningEntry entry={entry} />
+            </div>
           ))}
+        </div>
+      )}
+
+      {/* Custom Reflection Entry Section */}
+      {isAuthenticated && (
+        <div className={styles.customEntrySection}>
+          <button
+            onClick={() => setIsAddingCustomEntry(!isAddingCustomEntry)}
+            className={styles.customEntryToggle}
+          >
+            {isAddingCustomEntry ? "− Hide" : "+ Add New Custom Entry"}
+          </button>
+
+          {isAddingCustomEntry && (
+            <div className={styles.customEntryContainer}>
+              <CustomReflectionEntry
+                onSuccess={() => {
+                  setRefreshKey((k) => k + 1);
+                  setIsAddingCustomEntry(false);
+                }}
+              />
+            </div>
+          )}
         </div>
       )}
     </div>

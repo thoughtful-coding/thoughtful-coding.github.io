@@ -581,3 +581,15 @@
   margin: 0;
   border: 1px solid var(--border-secondary);
 }
+
+/* Custom Entry Badge */
+.customEntryBadge {
+  display: inline-block;
+  background-color: var(--accent);
+  color: white;
+  padding: 0.125rem 0.5rem;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-right: 0.5rem;
+}
