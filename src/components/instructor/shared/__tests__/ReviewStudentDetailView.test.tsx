@@ -181,9 +181,7 @@ describe("ReviewStudentDetailView", () => {
     });
     await user.click(backButton);
 
-    expect(navigateMock).toHaveBeenCalledWith(
-      "/instructor-dashboard/students"
-    );
+    expect(navigateMock).toHaveBeenCalledWith("/instructor-dashboard/students");
   });
 
   it("displays an error message if fetching fails", async () => {

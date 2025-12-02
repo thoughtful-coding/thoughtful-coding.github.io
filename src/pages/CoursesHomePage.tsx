@@ -29,9 +29,7 @@ const CoursesHomePage: React.FC = () => {
         setCourses(loadedCourses);
       } catch (err) {
         console.error("Error loading courses:", err);
-        setError(
-          err instanceof Error ? err.message : "Failed to load courses"
-        );
+        setError(err instanceof Error ? err.message : "Failed to load courses");
       } finally {
         setIsLoading(false);
       }
@@ -46,66 +44,72 @@ const CoursesHomePage: React.FC = () => {
         <WelcomeModal onClose={() => setShowRoleModal(false)} />
       )}
       <div className={styles.container}>
-      <section className={styles.welcome}>
-        <h1>Welcome to Thoughtful Code</h1>
-        <p className={styles.subtitle}>
-          Learn programming through interactive, thoughtful lessons
-        </p>
-      </section>
+        <section className={styles.welcome}>
+          <h1>Welcome to Thoughtful Code</h1>
+          <p className={styles.subtitle}>
+            Learn programming through interactive, thoughtful lessons
+          </p>
+        </section>
 
-      <section className={styles.philosophySection}>
-        <h2>Philosophy</h2>
-        <ul>
-          <li>Anyone can learn to code.</li>
-          <li>
-            Programming is a wonderful way to order your thoughts and accomplish
-            complex tasks.
-          </li>
-          <li>
-            Like any language, learning to code takes concentration and
-            practice.
-          </li>
-          <li>
-            The best way to learn is PRIMM: Predict, Run, Investigate, Modify,
-            Make.
-          </li>
-          <li>The best way to solidify knowledge is through reflection.</li>
-          <li>
-            There are many powerful coding tools, but they can be overwhelming
-            for beginners.
-          </li>
-          <li>
-            Once you have a base understanding, it's easy to jump to more
-            powerful tools.
-          </li>
-        </ul>
-      </section>
+        <section className={styles.philosophySection}>
+          <h2>Philosophy</h2>
+          <ul>
+            <li>Anyone can learn to code.</li>
+            <li>
+              Programming is a wonderful way to order your thoughts and
+              accomplish complex tasks.
+            </li>
+            <li>
+              Like any language, learning to code takes concentration and
+              practice.
+            </li>
+            <li>
+              The best way to learn is PRIMM: Predict, Run, Investigate, Modify,
+              Make.
+            </li>
+            <li>The best way to solidify knowledge is through reflection.</li>
+            <li>
+              There are many powerful coding tools, but they can be overwhelming
+              for beginners.
+            </li>
+            <li>
+              Once you have a base understanding, it's easy to jump to more
+              powerful tools.
+            </li>
+          </ul>
+        </section>
 
-      <section className={styles.coursesSection}>
-        <h2>Available Courses</h2>
-        <p className={styles.coursesIntro}>
-          Choose a course to begin your learning journey
-        </p>
+        <section className={styles.coursesSection}>
+          <h2>Available Courses</h2>
+          <p className={styles.coursesIntro}>
+            Choose a course to begin your learning journey
+          </p>
 
-        {isLoading ? (
-          <LoadingSpinner message="Loading courses..." />
-        ) : error ? (
-          <div style={{ textAlign: "center", padding: "2rem", color: "var(--error-color)" }}>
-            Error loading courses: {error}
-          </div>
-        ) : courses.length === 0 ? (
-          <div style={{ textAlign: "center", padding: "2rem" }}>
-            No courses available yet. Check back soon!
-          </div>
-        ) : (
-          <div className={styles.coursesGrid}>
-            {courses.map((course) => (
-              <CourseCard key={course.id} course={course} />
-            ))}
-          </div>
-        )}
-      </section>
-    </div>
+          {isLoading ? (
+            <LoadingSpinner message="Loading courses..." />
+          ) : error ? (
+            <div
+              style={{
+                textAlign: "center",
+                padding: "2rem",
+                color: "var(--error-color)",
+              }}
+            >
+              Error loading courses: {error}
+            </div>
+          ) : courses.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "2rem" }}>
+              No courses available yet. Check back soon!
+            </div>
+          ) : (
+            <div className={styles.coursesGrid}>
+              {courses.map((course) => (
+                <CourseCard key={course.id} course={course} />
+              ))}
+            </div>
+          )}
+        </section>
+      </div>
     </>
   );
 };

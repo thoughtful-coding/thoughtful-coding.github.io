@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { getCoursesAsync } from "../lib/dataLoader";
-import type { Unit, CourseId } from "../types/data";
+import type { Unit } from "../types/data";
 import styles from "./CourseHomePage.module.css";
 import loadingStyles from "../components/LoadingSpinner.module.css";
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -118,54 +118,53 @@ const CourseHomePage: React.FC = () => {
 
   return (
     <div className={styles.homePageContainer}>
-        <section className={styles.welcome}>
-          <h2>A Thoughtful Approach to Learning Python</h2>
-        </section>
-        <section className={styles.philosophySection}>
-          <p>
-            This website can be viewed as the first step on your programming
-            journey. It will help you establish a strong foundation in Python
-            fundamentals and effective learning processes. Once you feel more
-            confident, you will be well-prepared to explore other, more powerful
-            tools.
-          </p>
-          <h3>Philosophy:</h3>
-          <ul>
-            <li>Anyone can learn Python.</li>
-            <li>
-              Python is a wonderful way to order your thoughts and accomplish
-              complex tasks.
-            </li>
-            <li>
-              Like any language, learning Python takes concentration and
-              practice.
-            </li>
-            <li>
-              The best way to learn a programming language is PRIMM: Predict,
-              Run, Investigate, Modify, Make.
-            </li>
-            <li>
-              The best way to solidify your knowledge is through reflection.
-            </li>
-            <li>
-              There are many powerful coding tools, but they are overwhelming
-              for first time learners.
-            </li>
-            <li>
-              Once you have a base understanding, it's easy to jump to more
-              powerful tools.
-            </li>
-          </ul>
-        </section>
-        <section className={styles.learningPaths}>
-          <h2>Learning Paths</h2>
-          <p className={styles.learningPathsIntro}>
-            {" "}
-            Choose a learning path to begin your Python journey.
-          </p>
-          {renderContent()}
-        </section>
-      </div>
+      <section className={styles.welcome}>
+        <h2>A Thoughtful Approach to Learning Python</h2>
+      </section>
+      <section className={styles.philosophySection}>
+        <p>
+          This website can be viewed as the first step on your programming
+          journey. It will help you establish a strong foundation in Python
+          fundamentals and effective learning processes. Once you feel more
+          confident, you will be well-prepared to explore other, more powerful
+          tools.
+        </p>
+        <h3>Philosophy:</h3>
+        <ul>
+          <li>Anyone can learn Python.</li>
+          <li>
+            Python is a wonderful way to order your thoughts and accomplish
+            complex tasks.
+          </li>
+          <li>
+            Like any language, learning Python takes concentration and practice.
+          </li>
+          <li>
+            The best way to learn a programming language is PRIMM: Predict, Run,
+            Investigate, Modify, Make.
+          </li>
+          <li>
+            The best way to solidify your knowledge is through reflection.
+          </li>
+          <li>
+            There are many powerful coding tools, but they are overwhelming for
+            first time learners.
+          </li>
+          <li>
+            Once you have a base understanding, it's easy to jump to more
+            powerful tools.
+          </li>
+        </ul>
+      </section>
+      <section className={styles.learningPaths}>
+        <h2>Learning Paths</h2>
+        <p className={styles.learningPathsIntro}>
+          {" "}
+          Choose a learning path to begin your Python journey.
+        </p>
+        {renderContent()}
+      </section>
+    </div>
   );
 };
 

@@ -67,13 +67,16 @@ export function useReflectionWorkflow({
   extraContext,
   onFinalSubmit,
 }: UseReflectionWorkflowParams): UseReflectionWorkflowReturn {
-  const [currentTopic, setCurrentTopic] = useState<string>(() =>
+  const { isAuthenticated } = useAuthStore();
+
+  // Initialize state with defaults
+  const [currentTopic, setCurrentTopic] = useState<string>(
     isTopicPredefined ? defaultTopic : ""
   );
-  const [currentCode, setCurrentCode] = useState<string>(() =>
+  const [currentCode, setCurrentCode] = useState<string>(
     isCodePredefined ? defaultCode : defaultCode || ""
   );
-  const [currentExplanation, setCurrentExplanation] = useState<string>(() =>
+  const [currentExplanation, setCurrentExplanation] = useState<string>(
     isExplanationPredefined ? defaultExplanation : ""
   );
 
@@ -82,8 +85,6 @@ export function useReflectionWorkflow({
   const [isLoadingHistory, setIsLoadingHistory] = useState<boolean>(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
-
-  const { isAuthenticated } = useAuthStore();
 
   const fetchAndUpdateHistory = useCallback(async () => {
     if (!isAuthenticated || !lessonId || !sectionId) {
@@ -120,6 +121,34 @@ export function useReflectionWorkflow({
     fetchAndUpdateHistory();
   }, [fetchAndUpdateHistory]);
 
+  // Populate fields from latest server draft on mount (for recovery after refresh)
+  useEffect(() => {
+    if (draftHistory.length > 0 && !isLoadingHistory) {
+      const latestDraft = draftHistory[0];
+
+      // Only populate non-predefined fields that are still at defaults
+      if (!isTopicPredefined && !currentTopic.trim() && latestDraft.userTopic) {
+        setCurrentTopic(latestDraft.userTopic);
+      }
+      if (
+        !isCodePredefined &&
+        currentCode === (defaultCode || "") &&
+        latestDraft.userCode
+      ) {
+        setCurrentCode(latestDraft.userCode);
+      }
+      if (
+        !isExplanationPredefined &&
+        !currentExplanation.trim() &&
+        latestDraft.userExplanation
+      ) {
+        setCurrentExplanation(latestDraft.userExplanation);
+      }
+    }
+    // Run when draft history loads or when it changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoadingHistory, draftHistory.length]);
+
   // Reset fields when defaults change
   useEffect(() => {
     setCurrentTopic(isTopicPredefined ? defaultTopic : currentTopic);
@@ -137,37 +166,34 @@ export function useReflectionWorkflow({
     isExplanationPredefined,
   ]);
 
-  const handleApiError = useCallback(
-    (err: unknown, defaultMessage: string) => {
-      if (err instanceof ApiError) {
-        switch (err.data.errorCode) {
-          case ErrorCode.RATE_LIMIT_EXCEEDED:
-            setSubmitError(
-              "You've submitted feedback too frequently. Please wait a moment before trying again."
-            );
-            break;
-          case ErrorCode.AI_SERVICE_UNAVAILABLE:
-            setSubmitError(
-              "AI service is temporarily unavailable. Please try again later."
-            );
-            break;
-          case ErrorCode.AUTHENTICATION_FAILED:
-            setSubmitError("Authentication failed. Please log in again.");
-            break;
-          case ErrorCode.AUTHORIZATION_FAILED:
-            setSubmitError("You don't have permission to perform this action.");
-            break;
-          default:
-            setSubmitError(err.data.message);
-        }
-      } else if (err instanceof Error) {
-        setSubmitError(`${defaultMessage}: ${err.message}`);
-      } else {
-        setSubmitError(`${defaultMessage}: An unknown error occurred.`);
+  const handleApiError = useCallback((err: unknown, defaultMessage: string) => {
+    if (err instanceof ApiError) {
+      switch (err.data.errorCode) {
+        case ErrorCode.RATE_LIMIT_EXCEEDED:
+          setSubmitError(
+            "You've submitted feedback too frequently. Please wait a moment before trying again."
+          );
+          break;
+        case ErrorCode.AI_SERVICE_UNAVAILABLE:
+          setSubmitError(
+            "AI service is temporarily unavailable. Please try again later."
+          );
+          break;
+        case ErrorCode.AUTHENTICATION_FAILED:
+          setSubmitError("Authentication failed. Please log in again.");
+          break;
+        case ErrorCode.AUTHORIZATION_FAILED:
+          setSubmitError("You don't have permission to perform this action.");
+          break;
+        default:
+          setSubmitError(err.data.message);
       }
-    },
-    []
-  );
+    } else if (err instanceof Error) {
+      setSubmitError(`${defaultMessage}: ${err.message}`);
+    } else {
+      setSubmitError(`${defaultMessage}: An unknown error occurred.`);
+    }
+  }, []);
 
   const handleGetFeedback = useCallback(async () => {
     if (!isAuthenticated) {

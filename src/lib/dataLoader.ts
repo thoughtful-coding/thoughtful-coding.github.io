@@ -141,7 +141,7 @@ async function processUnitsData(): Promise<void> {
         }
 
         // Resolve course image path
-        const resolvedImagePath = manifest.image.startsWith('/')
+        const resolvedImagePath = manifest.image.startsWith("/")
           ? manifest.image
           : `/data/${courseDir}/${manifest.image}`;
 
@@ -158,7 +158,10 @@ async function processUnitsData(): Promise<void> {
         courses.push(course);
         console.log(`Loaded course: ${manifest.title} (${courseDir})`);
       } catch (error) {
-        console.error(`Error loading course manifest from ${courseDir}/course.ts:`, error);
+        console.error(
+          `Error loading course manifest from ${courseDir}/course.ts:`,
+          error
+        );
       }
     }
 

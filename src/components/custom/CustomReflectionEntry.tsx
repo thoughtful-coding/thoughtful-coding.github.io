@@ -22,8 +22,10 @@ const CustomReflectionEntry: React.FC<CustomReflectionEntryProps> = ({
     useProgressActions();
 
   // Get current custom reflection draft ID from store (user-specific)
-  // Note: ID is frozen at first call and persists in localStorage for draft recovery
-  const currentSectionId = getCurrentCustomReflectionId();
+  // Use useState to freeze the ID for this component instance
+  const [currentSectionId] = React.useState(() =>
+    getCurrentCustomReflectionId()
+  );
 
   // Use shared reflection workflow with unique sectionId
   const reflection = useReflectionWorkflow({
@@ -92,10 +94,7 @@ const CustomReflectionEntry: React.FC<CustomReflectionEntryProps> = ({
       <div className={styles.reflectionContainer}>
         {/* Input Fields for Topic, Code, Explanation */}
         <div className={styles.reflectionInputGroup}>
-          <label
-            htmlFor="custom-topic"
-            className={styles.reflectionLabel}
-          >
+          <label htmlFor="custom-topic" className={styles.reflectionLabel}>
             Title of Journal Entry
           </label>
           <input
@@ -156,7 +155,9 @@ const CustomReflectionEntry: React.FC<CustomReflectionEntryProps> = ({
           </button>
           <button
             onClick={handleFinalSubmit}
-            disabled={isLoading || !canAttemptInteraction || !canSubmitToJournal}
+            disabled={
+              isLoading || !canAttemptInteraction || !canSubmitToJournal
+            }
             className={styles.reflectionSubmitBtn}
             title={
               !canAttemptInteraction

@@ -218,7 +218,9 @@ const UnitPage: React.FC = () => {
           }
 
           // Strip courseId prefix from lesson path since it's already in the URL
-          const lessonPathWithoutCourseId = lessonReference.path.startsWith(`${courseId}/`)
+          const lessonPathWithoutCourseId = lessonReference.path.startsWith(
+            `${courseId}/`
+          )
             ? lessonReference.path.slice(`${courseId}/`.length)
             : lessonReference.path;
 

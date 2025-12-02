@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-test.describe.only("Check can navigate into and out of lessons", () => {
+test.describe("Check can navigate into and out of lessons", () => {
   test("Can go from units -> lessons -> lesson -> home", async ({ page }) => {
     await page.goto("/");
 

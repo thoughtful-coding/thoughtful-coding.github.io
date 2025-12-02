@@ -109,7 +109,7 @@ const ReviewLearningEntriesView: React.FC<ReviewLearningEntriesViewProps> = ({
         lessonGuid: entry.lessonId,
         lessonTitle: isCustomReflection(entry)
           ? "Custom Entry"
-          : (lessonTitlesMap.get(entry.lessonId) || "Unknown Lesson"),
+          : lessonTitlesMap.get(entry.lessonId) || "Unknown Lesson",
         sectionId: entry.sectionId,
         date: entry.createdAt, // This is the final submission date
         sortDate: new Date(entry.createdAt),
@@ -221,7 +221,11 @@ const ReviewLearningEntriesView: React.FC<ReviewLearningEntriesViewProps> = ({
                   color: "#555",
                 }}
               >
-                Select a final learning entry to view details ({filteredDisplayableEntries.length} {entryFilter === "all" ? "total" : entryFilter} {filteredDisplayableEntries.length === 1 ? "entry" : "entries"}):
+                Select a final learning entry to view details (
+                {filteredDisplayableEntries.length}{" "}
+                {entryFilter === "all" ? "total" : entryFilter}{" "}
+                {filteredDisplayableEntries.length === 1 ? "entry" : "entries"}
+                ):
               </p>
               <ul className={styles.assignmentList}>
                 {filteredDisplayableEntries.map((item, index) => (
@@ -248,7 +252,8 @@ const ReviewLearningEntriesView: React.FC<ReviewLearningEntriesViewProps> = ({
             </div>
           ) : (
             <p className={styles.placeholderMessage}>
-              No {entryFilter === "all" ? "" : entryFilter} learning entries found for this student.
+              No {entryFilter === "all" ? "" : entryFilter} learning entries
+              found for this student.
             </p>
           )}
 

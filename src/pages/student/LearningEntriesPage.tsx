@@ -2,12 +2,13 @@
 import React, { useState, useEffect } from "react";
 import styles from "./LearningEntriesPage.module.css";
 import { useAuthStore } from "../../stores/authStore";
+import { useProgressActions } from "../../stores/progressStore";
 import * as apiService from "../../lib/apiService";
 import { ReflectionVersionItem } from "../../types/apiServiceTypes";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import RenderFinalLearningEntry from "../../components/instructor/shared/RenderFinalLearningEntry";
 import CustomReflectionEntry from "../../components/custom/CustomReflectionEntry";
-import { isCustomReflection } from "../../types/customReflections";
+import { CUSTOM_REFLECTION_LESSON_ID } from "../../types/customReflections";
 
 const LearningEntriesPage: React.FC = () => {
   const [finalEntries, setFinalEntries] = useState<ReflectionVersionItem[]>([]);
@@ -18,6 +19,30 @@ const LearningEntriesPage: React.FC = () => {
   const [refreshKey, setRefreshKey] = useState<number>(0);
 
   const { isAuthenticated } = useAuthStore();
+  const { getCurrentCustomReflectionId } = useProgressActions();
+
+  // Check for pending custom reflection draft on mount and auto-open if exists
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    const checkPendingCustomDraft = async () => {
+      try {
+        const currentSectionId = getCurrentCustomReflectionId();
+        const response = await apiService.getReflectionDraftVersions(
+          CUSTOM_REFLECTION_LESSON_ID,
+          currentSectionId
+        );
+        // If there are drafts (user got feedback but didn't submit), auto-open
+        if (response.versions.length > 0) {
+          setIsAddingCustomEntry(true);
+        }
+      } catch {
+        // Silently fail - if there's no draft or error, just don't auto-open
+      }
+    };
+
+    checkPendingCustomDraft();
+  }, [isAuthenticated, getCurrentCustomReflectionId]);
 
   useEffect(() => {
     // ... data fetching logic remains the same ...
@@ -94,17 +119,15 @@ const LearningEntriesPage: React.FC = () => {
 
       {finalEntries.length === 0 ? (
         <div className={styles.noEntriesMessage}>
-          <p>No learning entries yet. Complete reflection activities in lessons or create custom entries below.</p>
+          <p>
+            No learning entries yet. Complete reflection activities in lessons
+            or create custom entries below.
+          </p>
         </div>
       ) : (
         <div className={styles.entriesList}>
           {finalEntries.map((entry) => (
-            <div key={entry.versionId} className={styles.entryWrapper}>
-              {isCustomReflection(entry) && (
-                <span className={styles.customBadge}>Custom Entry</span>
-              )}
-              <RenderFinalLearningEntry entry={entry} />
-            </div>
+            <RenderFinalLearningEntry key={entry.versionId} entry={entry} />
           ))}
         </div>
       )}

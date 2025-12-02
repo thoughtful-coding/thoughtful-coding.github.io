@@ -796,6 +796,8 @@ export const useProgressStore = create<ProgressState>()(
             penaltyEndTime: state.penaltyEndTime,
             offlineActionQueue: state.offlineActionQueue,
             lastSyncError: state.lastSyncError,
+            currentCustomReflectionDraftId:
+              state.currentCustomReflectionDraftId,
           }),
           onRehydrateStorage: () => {
             return (hydratedState, error) => {
