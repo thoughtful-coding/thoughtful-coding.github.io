@@ -281,7 +281,7 @@
   padding: 0.6rem 1.2rem;
   min-width: 150px; /* Ensure good width */
   font-size: 0.9rem;
-  background-color: var(--text-muted);
+  background-color: var(--primary-color);
   color: white;
   border: none;
   border-radius: 4px;
@@ -290,7 +290,7 @@
 }
 
 .navigationButtons button:hover:not(:disabled) {
-  background-color: var(--text-secondary);
+  background-color: var(--primary-dark-color);
 }
 
 .navigationButtons button:disabled {
@@ -398,7 +398,7 @@
   display: block;
   margin: 2rem auto 0.5rem; /* More space above, less below */
   padding: 0.7rem 1.8rem;
-  background-color: var(--text-muted);
+  background-color: var(--primary-color);
   color: white;
   border: none;
   border-radius: 4px;
@@ -407,7 +407,7 @@
 }
 
 .closeButton:hover {
-  background-color: var(--text-secondary);
+  background-color: var(--primary-dark-color);
 }
 
 .iterationsContainer {
@@ -447,11 +447,31 @@
 
 .iterationsContainer .submissionDetailCard {
   /* Nested card for version details */
-  border-top: none;
+  border-top: 1px solid var(--border-secondary);
   border-top-left-radius: 0;
   border-top-right-radius: 0;
   margin-bottom: 0;
+  margin-top: 0.5rem;
   padding-top: 1rem;
+  background: var(--bg-elevated);
+}
+
+.versionTimestamp {
+  font-size: 0.8em;
+  color: var(--text-muted);
+  margin-left: 10px;
+}
+
+.entryListDescription {
+  padding: 0.5rem 1rem;
+  margin: 0;
+  font-size: 0.9em;
+  color: var(--text-muted);
+}
+
+.entryListContainer {
+  max-height: 300px;
+  margin-bottom: 1rem;
 }
 
 /* General Utility */

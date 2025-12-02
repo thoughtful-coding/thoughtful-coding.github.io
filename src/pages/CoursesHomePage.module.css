@@ -22,10 +22,13 @@
 }
 
 .philosophySection {
-  background: var(--background-secondary);
-  border-radius: 12px;
-  padding: 2rem;
-  margin-bottom: 3rem;
+  background-color: var(--card-background-color);
+  padding: var(--spacing-2xl);
+  margin: auto;
+  margin-bottom: 2.5rem;
+  width: 60%;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--card-border-color);
 }
 
 .philosophySection h2 {
@@ -190,6 +193,10 @@
 
   .subtitle {
     font-size: 1.2rem;
+  }
+
+  .philosophySection {
+    width: 100%;
   }
 
   .coursesSection h2 {

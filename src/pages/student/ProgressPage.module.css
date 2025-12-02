@@ -80,8 +80,8 @@
 }
 
 .incompleteCircle {
-  background-color: var(--text-muted);
-  border-color: var(--text-secondary);
+  background-color: var(--text-secondary);
+  border-color: var(--text-muted);
 }
 
 .lessonCircleLink:hover .lessonCircle {

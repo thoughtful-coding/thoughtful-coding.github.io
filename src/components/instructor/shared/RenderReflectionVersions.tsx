@@ -74,9 +74,7 @@ const RenderReflectionVersions: React.FC<RenderReflectionVersionsProps> = ({
             <summary>
               Version {sortedVersions.length - index} (
               {version.isFinal ? "Final Entry" : "Draft"})
-              <span
-                style={{ fontSize: "0.8em", color: "#555", marginLeft: "10px" }}
-              >
+              <span className={styles.versionTimestamp}>
                 ({new Date(version.createdAt).toLocaleString()})
               </span>
               {version.aiAssessment && (
@@ -89,14 +87,7 @@ const RenderReflectionVersions: React.FC<RenderReflectionVersionsProps> = ({
                 </span>
               )}
             </summary>
-            <div
-              className={styles.submissionDetailCard}
-              style={{
-                borderTop: "1px solid #eee",
-                marginTop: "0.5rem",
-                background: "#fff",
-              }}
-            >
+            <div className={styles.submissionDetailCard}>
               {/* <p><strong>Submitted:</strong> {new Date(version.createdAt).toLocaleString()}</p> */}
               {version.userTopic &&
                 finalOrLatestVersion.userTopic !== version.userTopic && (

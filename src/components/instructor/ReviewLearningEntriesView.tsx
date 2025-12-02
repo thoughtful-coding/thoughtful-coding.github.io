@@ -210,17 +210,9 @@ const ReviewLearningEntriesView: React.FC<ReviewLearningEntriesViewProps> = ({
         <>
           {filteredDisplayableEntries.length > 0 ? (
             <div
-              className={styles.assignmentListContainer}
-              style={{ maxHeight: "300px", marginBottom: "1rem" }}
+              className={`${styles.assignmentListContainer} ${styles.entryListContainer}`}
             >
-              <p
-                style={{
-                  padding: "0.5rem 1rem",
-                  margin: 0,
-                  fontSize: "0.9em",
-                  color: "#555",
-                }}
-              >
+              <p className={styles.entryListDescription}>
                 Select a final learning entry to view details (
                 {filteredDisplayableEntries.length}{" "}
                 {entryFilter === "all" ? "total" : entryFilter}{" "}
