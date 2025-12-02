@@ -1,5 +1,7 @@
 import { useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useOutletContext } from "react-router-dom";
+import type { Unit } from "./types/data";
+import type { InstructorStudentInfo } from "./types/apiServiceTypes";
 import CoursesHomePage from "./pages/CoursesHomePage";
 import CourseHomePage from "./pages/CourseHomePage";
 import UnitPage from "./pages/student/UnitPage";
@@ -9,6 +11,11 @@ import ProgressPage from "./pages/student/ProgressPage";
 import LearningEntriesPage from "./pages/student/LearningEntriesPage";
 import ConfigurationPage from "./pages/student/ConfigurationPage";
 import InstructorDashboardPage from "./pages/instructor/InstructorDashboardPage";
+import ReviewClassProgressView from "./components/instructor/ReviewClassProgressView";
+import ReviewByAssignmentView from "./components/instructor/ReviewByAssignmentView";
+import ReviewByStudentView from "./components/instructor/ReviewByStudentView";
+import ReviewStudentDetailView from "./components/instructor/shared/ReviewStudentDetailView";
+import ReviewLearningEntriesView from "./components/instructor/ReviewLearningEntriesView";
 import PrivacyPolicyPage from "./pages/static/PrivacyPolicyPage";
 import TermsOfServicePage from "./pages/static/TermsOfServicePage";
 import FAQPage from "./pages/static/FAQPage";
@@ -22,6 +29,53 @@ import AuthOverlay from "./components/AuthOverlay";
 import SessionExpiredModal from "./components/SessionExpiredModal";
 import { PROGRESS_CONFIG } from "./config/constants";
 import { useStoreCoordination } from "./hooks/useStoreCoordination";
+
+// Wrapper components for instructor routes that use Outlet context
+function InstructorProgressWrapper() {
+  const { allUnits, permittedStudents, isLoading, error } = useOutletContext<{
+    allUnits: Unit[];
+    permittedStudents: InstructorStudentInfo[];
+    isLoading: boolean;
+    error: string | null;
+  }>();
+  return (
+    <ReviewClassProgressView
+      units={allUnits}
+      permittedStudents={permittedStudents}
+      isLoadingUnitsGlobal={isLoading}
+      isLoadingStudentsGlobal={isLoading}
+      studentsErrorGlobal={error}
+    />
+  );
+}
+
+function InstructorAssignmentsWrapper() {
+  const { allUnits, permittedStudents } = useOutletContext<{
+    allUnits: Unit[];
+    permittedStudents: InstructorStudentInfo[];
+  }>();
+  return <ReviewByAssignmentView units={allUnits} permittedStudents={permittedStudents} />;
+}
+
+function InstructorStudentsWrapper() {
+  const { permittedStudents } = useOutletContext<{
+    permittedStudents: InstructorStudentInfo[];
+  }>();
+  return <ReviewByStudentView permittedStudents={permittedStudents} />;
+}
+
+function InstructorStudentDetailWrapper() {
+  const { allUnits } = useOutletContext<{ allUnits: Unit[] }>();
+  return <ReviewStudentDetailView units={allUnits} />;
+}
+
+function InstructorLearningEntriesWrapper() {
+  const { allUnits, permittedStudents } = useOutletContext<{
+    allUnits: Unit[];
+    permittedStudents: InstructorStudentInfo[];
+  }>();
+  return <ReviewLearningEntriesView units={allUnits} permittedStudents={permittedStudents} />;
+}
 
 function App() {
   // Coordinate auth and progress stores
@@ -78,6 +132,16 @@ function App() {
         onClose={handleModalClose}
       />
       <Routes>
+        {/* Instructor dashboard (MUST come first - define nested routes here) */}
+        <Route path="/instructor-dashboard" element={<InstructorDashboardPage />}>
+          <Route index element={<InstructorProgressWrapper />} />
+          <Route path="progress" element={<InstructorProgressWrapper />} />
+          <Route path="assignments" element={<InstructorAssignmentsWrapper />} />
+          <Route path="students" element={<InstructorStudentsWrapper />} />
+          <Route path="students/:studentId" element={<InstructorStudentDetailWrapper />} />
+          <Route path="learning-entries" element={<InstructorLearningEntriesWrapper />} />
+        </Route>
+
         {/* General/shared routes (available globally) */}
         <Route element={<Layout />}>
           <Route index element={<CoursesHomePage />} />
@@ -99,7 +163,7 @@ function App() {
           </Route>
         </Route>
 
-        {/* Course-specific routes (courseId parameter) */}
+        {/* Course-specific routes (courseId parameter) - MUST come last as it's a catch-all */}
         <Route path="/:courseId" element={<StudentLayout />}>
           <Route element={<Layout />}>
             <Route index element={<CourseHomePage />} />
@@ -124,12 +188,6 @@ function App() {
             />
           </Route>
         </Route>
-
-        {/* Instructor dashboard (will be updated for multi-course in future) */}
-        <Route
-          path="/instructor-dashboard/*"
-          element={<InstructorDashboardPage />}
-        />
 
         {/* Catch-all 404 for unknown routes */}
         <Route

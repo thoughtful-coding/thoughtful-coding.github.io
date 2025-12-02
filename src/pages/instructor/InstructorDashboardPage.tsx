@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route, NavLink, Link } from "react-router-dom";
+import { Outlet, NavLink, Link } from "react-router-dom";
 
 import * as apiService from "../../lib/apiService";
 import { useAuthStore } from "../../stores/authStore";
@@ -84,8 +84,8 @@ const InstructorDashboardPage: React.FC = () => {
           <div className={styles.headerMain}>
             <div>
               <h1>Thoughtful Dashboard</h1>
-              <Link to="/python/" className={styles.backToStudentLink}>
-                &larr; Back to Student View
+              <Link to="/" className={styles.backToStudentLink}>
+                &larr; Back to Courses
               </Link>
             </div>
             <AuthSection
@@ -157,8 +157,8 @@ const InstructorDashboardPage: React.FC = () => {
         <div className={styles.headerMain}>
           <div>
             <h1>Thoughtful Dashboard</h1>
-            <Link to="/python/" className={styles.backToStudentLink}>
-              &larr; Back to Student View
+            <Link to="/" className={styles.backToStudentLink}>
+              &larr; Back to Courses
             </Link>
           </div>
           <AuthSection
@@ -209,60 +209,7 @@ const InstructorDashboardPage: React.FC = () => {
         ) : error ? (
           <p className={styles.errorMessage}>{error}</p>
         ) : (
-          <Routes>
-            <Route
-              index
-              element={
-                <ReviewClassProgressView
-                  units={allUnits}
-                  permittedStudents={permittedStudents}
-                  isLoadingUnitsGlobal={isLoading}
-                  isLoadingStudentsGlobal={isLoading}
-                  studentsErrorGlobal={error}
-                />
-              }
-            />
-            <Route
-              path="progress"
-              element={
-                <ReviewClassProgressView
-                  units={allUnits}
-                  permittedStudents={permittedStudents}
-                  isLoadingUnitsGlobal={isLoading}
-                  isLoadingStudentsGlobal={isLoading}
-                  studentsErrorGlobal={error}
-                />
-              }
-            />
-            <Route
-              path="assignments"
-              element={
-                <ReviewByAssignmentView
-                  units={allUnits}
-                  permittedStudents={permittedStudents}
-                />
-              }
-            />
-            <Route
-              path="students"
-              element={
-                <ReviewByStudentView permittedStudents={permittedStudents} />
-              }
-            />
-            <Route
-              path="students/:studentId"
-              element={<ReviewStudentDetailView units={allUnits} />}
-            />
-            <Route
-              path="learning-entries"
-              element={
-                <ReviewLearningEntriesView
-                  units={allUnits}
-                  permittedStudents={permittedStudents}
-                />
-              }
-            />
-          </Routes>
+          <Outlet context={{ allUnits, permittedStudents, isLoading, error }} />
         )}
       </main>
       <Footer variant="instructor" />

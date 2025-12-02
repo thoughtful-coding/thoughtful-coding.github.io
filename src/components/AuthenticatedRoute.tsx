@@ -31,7 +31,7 @@ const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = ({
         <p className={styles.authRequiredMessage}>
           Please log in to access this page and its functionality.
         </p>
-        <Link to="/python/" className={styles.homeLink}>
+        <Link to="/" className={styles.homeLink}>
           Go to Home Page to Log In
         </Link>
         <p className={styles.additionalInfo}>
