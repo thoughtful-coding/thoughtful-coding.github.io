@@ -2,6 +2,14 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { viteStaticCopy } from "vite-plugin-static-copy";
+import courseSources from "./src/config/courses";
+
+const isProduction = process.env.NODE_ENV === "production";
+
+// Filter courses based on environment
+const coursesToCopy = courseSources
+  .filter((course) => !isProduction || !course.devOnly)
+  .map((course) => `courses/${course.directory}`);
 
 export default defineConfig({
   base: "/",
@@ -15,10 +23,10 @@ export default defineConfig({
     react(),
     viteStaticCopy({
       targets: [
-        {
-          src: "src/assets/data",
-          dest: ".",
-        },
+        ...coursesToCopy.map((course) => ({
+          src: course,
+          dest: "data",
+        })),
         {
           src: "src/assets/images",
           dest: ".",

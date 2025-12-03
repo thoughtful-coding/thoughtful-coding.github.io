@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "NODE_ENV=production node scripts/fetch-courses.js && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest",

@@ -13,23 +13,23 @@ import type {
   CourseId,
 } from "../types/data";
 
-// Import course directories list
-import courseDirectories from "../assets/data/courses";
+// Import course sources list
+import courseSources from "../config/courses";
 
 // Glob pattern to find course.ts manifest files
 const courseManifestModules = import.meta.glob(
-  "../assets/data/*/course.ts"
+  "../../courses/*/course.ts"
 ) as Record<string, () => Promise<{ default: CourseManifest }>>;
 
 // Use import.meta.glob to discover all unit.ts manifest files (now nested in course folders)
 const unitManifestModules = import.meta.glob(
-  "../assets/data/*/*/unit.ts"
+  "../../courses/*/*/unit.ts"
 ) as Record<string, () => Promise<{ default: UnitManifest }>>;
 
-// This glob pattern finds all .ts files under src/assets/data/ that could be lessons.
+// This glob pattern finds all .ts files under courses/ that could be lessons.
 // Vite will handle the actual dynamic importing.
 // Apply a type assertion to import.meta.glob to match the expected type.
-const lessonFileModules = import.meta.glob("../assets/data/**/*.ts") as Record<
+const lessonFileModules = import.meta.glob("../../courses/**/*.ts") as Record<
   string,
   () => Promise<{ default: Lesson }>
 >;
@@ -78,13 +78,13 @@ let unitsDataLoadingPromise: Promise<void> | null = null;
 
 /**
  * Extracts the course and unit directory from a unit manifest path.
- * Example: "../assets/data/intro-python/00_intro/unit.ts" → { courseId: "intro-python", unitDir: "00_intro" }
+ * Example: "../../courses/intro-python/00_intro/unit.ts" → { courseId: "intro-python", unitDir: "00_intro" }
  */
 function extractCourseAndUnit(
   manifestPath: string
 ): { courseId: string; unitDir: string } | null {
   const match = manifestPath.match(
-    /\.\.\/assets\/data\/([^/]+)\/([^/]+)\/unit\.ts/
+    /\.\.\/\.\.\/courses\/([^/]+)\/([^/]+)\/unit\.ts/
   );
   return match ? { courseId: match[1], unitDir: match[2] } : null;
 }
@@ -121,8 +121,9 @@ async function processUnitsData(): Promise<void> {
     // Load course manifests
     const courses: Course[] = [];
 
-    for (const courseDir of courseDirectories) {
-      const coursePath = `../assets/data/${courseDir}/course.ts`;
+    for (const courseSource of courseSources) {
+      const courseDir = courseSource.directory;
+      const coursePath = `../../courses/${courseDir}/course.ts`;
       const loader = courseManifestModules[coursePath];
 
       if (!loader) {
@@ -170,7 +171,7 @@ async function processUnitsData(): Promise<void> {
 
     for (const course of courses) {
       // Get course manifest to find unit directories
-      const coursePath = `../assets/data/${course.id}/course.ts`;
+      const coursePath = `../../courses/${course.id}/course.ts`;
       const courseLoader = courseManifestModules[coursePath];
 
       if (!courseLoader) continue;
@@ -335,7 +336,7 @@ export async function loadLesson(
     throw new Error(`Failed to load lesson at ${fullPath}`);
   }
 
-  const moduleKey = `../assets/data/${fullPath}.ts`;
+  const moduleKey = `../../courses/${fullPath}.ts`;
   const moduleLoader = lessonFileModules[moduleKey];
 
   if (!moduleLoader) {
@@ -414,7 +415,7 @@ export async function fetchLessonData(
     return lessonContentCache.get(lessonFilePath) || null;
   }
 
-  const moduleKey = `../assets/data/${lessonFilePath}.ts`;
+  const moduleKey = `../../courses/${lessonFilePath}.ts`;
   if (lessonFileModules[moduleKey]) {
     try {
       const moduleLoader = lessonFileModules[moduleKey];

@@ -3,7 +3,7 @@ import { UnitId, UnitManifest } from "../../../types/data";
 const unitManifest: UnitManifest = {
   id: "end_to_end_tests" as UnitId,
   title: "Section End-To-End Testing",
-  image: "images/unit_icon_range_loops.svg",
+  image: "images/unit_icon_e2e.svg",
   description: "A simulated to test the functionality of all of the sections.",
   lessons: [
     "lessons/00_coverage_tests",

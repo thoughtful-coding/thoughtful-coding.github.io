@@ -30,3 +30,10 @@ test-results/
 .playwright/
 src/assets/old/
 TODO*.md
+
+# Git-based courses (cloned during development, fetched fresh during build)
+# Only track built-in local courses
+courses/*
+!courses/science-of-learning/
+!courses/intro-python/
+!courses/end-to-end-tests/
