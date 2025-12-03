@@ -2,7 +2,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { viteStaticCopy } from "vite-plugin-static-copy";
-import courseSources from "./courses/courses";
+import courseSources from "./courses/courses.json";
 
 const isProduction = process.env.NODE_ENV === "production";
 

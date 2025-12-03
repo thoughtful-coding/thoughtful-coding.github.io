@@ -8,7 +8,7 @@ import { fileURLToPath } from "url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.join(__dirname, "..");
 const dataDir = path.join(rootDir, "courses");
-const coursesFile = path.join(rootDir, "courses/courses.ts");
+const coursesFile = path.join(rootDir, "courses/courses.json");
 
 // Determine if this is a production build (default to development if not set)
 const isProduction = process.env.NODE_ENV === "production";
@@ -18,76 +18,17 @@ console.log(
 );
 
 /**
- * Simple TypeScript parser to extract course sources from courses.ts
- * This avoids needing a TypeScript runtime like tsx
+ * Load course sources from JSON file
  */
-function parseCourseSources() {
+function loadCourseSources() {
   const content = fs.readFileSync(coursesFile, "utf-8");
-
-  // Extract the courseSources array using regex
-  const match = content.match(
-    /const courseSources:\s*CourseSource\[\]\s*=\s*(\[[\s\S]*?\]);/
-  );
-
-  if (!match) {
-    throw new Error("Could not find courseSources array in courses.ts");
-  }
-
-  let arrayContent = match[1];
-
-  // Remove single-line comments
-  arrayContent = arrayContent.replace(/\/\/.*$/gm, "");
-
-  // Remove multi-line comments
-  arrayContent = arrayContent.replace(/\/\*[\s\S]*?\*\//g, "");
-
-  // Parse the array - this is a simple parser that handles the specific format
-  // For production use, consider using a proper TypeScript parser
-  const sources = [];
-  const objectMatches = arrayContent.matchAll(/\{[^}]+\}/g);
-
-  for (const objMatch of objectMatches) {
-    const obj = objMatch[0];
-
-    // Extract properties
-    const typeMatch = obj.match(/type:\s*"([^"]+)"/);
-    const directoryMatch = obj.match(/directory:\s*"([^"]+)"/);
-    const devOnlyMatch = obj.match(/devOnly:\s*(true|false)/);
-    const repoMatch = obj.match(/repo:\s*"([^"]+)"/);
-    const refMatch = obj.match(/ref:\s*"([^"]+)"/);
-
-    if (!typeMatch || !directoryMatch) {
-      console.warn("Skipping malformed course entry:", obj);
-      continue;
-    }
-
-    const source = {
-      type: typeMatch[1],
-      directory: directoryMatch[1],
-    };
-
-    if (devOnlyMatch) {
-      source.devOnly = devOnlyMatch[1] === "true";
-    }
-
-    if (repoMatch) {
-      source.repo = repoMatch[1];
-    }
-
-    if (refMatch) {
-      source.ref = refMatch[1];
-    }
-
-    sources.push(source);
-  }
-
-  return sources;
+  return JSON.parse(content);
 }
 
 async function fetchCourses() {
   try {
-    // Parse course sources from TypeScript file
-    const courseSources = parseCourseSources();
+    // Load course sources from JSON file
+    const courseSources = loadCourseSources();
 
     console.log(`Found ${courseSources.length} course(s) in configuration\n`);
 

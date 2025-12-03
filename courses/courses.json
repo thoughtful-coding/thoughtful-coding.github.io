@@ -1,0 +1,17 @@
+[
+  {
+    "type": "local",
+    "directory": "science-of-learning"
+  },
+  {
+    "type": "git",
+    "directory": "thoughtful-python",
+    "repo": "https://github.com/thoughtful-coding/thoughtful-python.git",
+    "ref": "main"
+  },
+  {
+    "type": "local",
+    "directory": "end-to-end-tests",
+    "devOnly": true
+  }
+]

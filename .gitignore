@@ -36,4 +36,4 @@ TODO*.md
 courses/*
 !courses/science-of-learning/
 !courses/end-to-end-tests/
-!courses/courses.ts
+!courses/courses.json

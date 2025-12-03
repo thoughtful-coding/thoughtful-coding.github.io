@@ -14,7 +14,7 @@ import type {
 } from "../types/data";
 
 // Import course sources list
-import courseSources from "../../courses/courses";
+import courseSources from "../../courses/courses.json";
 
 // Glob pattern to find course.ts manifest files
 const courseManifestModules = import.meta.glob(
