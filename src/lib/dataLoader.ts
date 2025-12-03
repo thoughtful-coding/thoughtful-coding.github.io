@@ -71,6 +71,7 @@ const guidToPathMap: Map<CourseId, Map<LessonId, LessonPath>> = new Map(); // Co
 let lessonIdToPathMap: Map<LessonId, LessonPath> | null = null; // Global GUID → Path (for backwards compat)
 let lessonPathToIdMap: Map<LessonPath, LessonId> | null = null; // Global Path → GUID
 const lessonContentCache: Map<LessonPath, Lesson | null> = new Map(); // Path → Lesson (caching by path now)
+const courseDirMap = new Map<CourseId, string>(); // Map course.id → directory name
 
 // Flag to ensure units data is processed only once
 let unitsDataProcessed = false;
@@ -118,10 +119,20 @@ async function processUnitsData(): Promise<void> {
       }
     }
 
+    // Filter courses based on environment
+    const isProduction =
+      import.meta.env.MODE === "production" || import.meta.env.PROD;
+
     // Load course manifests
     const courses: Course[] = [];
 
     for (const courseSource of courseSources) {
+      // Skip dev-only courses in production
+      if (isProduction && courseSource.devOnly) {
+        console.log(`Skipping dev-only course: ${courseSource.directory}`);
+        continue;
+      }
+
       const courseDir = courseSource.directory;
       const coursePath = `../../courses/${courseDir}/course.ts`;
       const loader = courseManifestModules[coursePath];
@@ -140,6 +151,9 @@ async function processUnitsData(): Promise<void> {
           console.error(`Invalid course manifest in ${courseDir}/course.ts`);
           continue;
         }
+
+        // Store the directory mapping
+        courseDirMap.set(manifest.id as CourseId, courseDir);
 
         // Resolve course image path
         const resolvedImagePath = manifest.image.startsWith("/")
@@ -170,8 +184,15 @@ async function processUnitsData(): Promise<void> {
     const allUnits: Unit[] = [];
 
     for (const course of courses) {
+      // Get the actual directory name for this course
+      const courseDir = courseDirMap.get(course.id);
+      if (!courseDir) {
+        console.error(`No directory mapping found for course ${course.id}`);
+        continue;
+      }
+
       // Get course manifest to find unit directories
-      const coursePath = `../../courses/${course.id}/course.ts`;
+      const coursePath = `../../courses/${courseDir}/course.ts`;
       const courseLoader = courseManifestModules[coursePath];
 
       if (!courseLoader) continue;
@@ -182,7 +203,7 @@ async function processUnitsData(): Promise<void> {
       const courseUnits: Unit[] = [];
 
       for (const unitDir of unitDirs) {
-        const loaderKey = `${course.id}/${unitDir}`;
+        const loaderKey = `${courseDir}/${unitDir}`;
         const loader = manifestLoaderMap.get(loaderKey);
 
         if (!loader) {
@@ -326,7 +347,13 @@ export async function loadLesson(
 ): Promise<Lesson> {
   if (!unitsDataProcessed) await fetchUnitsData();
 
-  // Build full path with courseId prefix
+  // Get the actual directory name for this course
+  const courseDir = courseDirMap.get(courseId);
+  if (!courseDir) {
+    throw new Error(`No directory mapping found for course ${courseId}`);
+  }
+
+  // Build full path with courseId prefix (for caching, use courseId not directory)
   const fullPath = `${courseId}/${lessonPath}` as LessonPath;
 
   // Check cache
@@ -336,7 +363,8 @@ export async function loadLesson(
     throw new Error(`Failed to load lesson at ${fullPath}`);
   }
 
-  const moduleKey = `../../courses/${fullPath}.ts`;
+  // Build module path using actual directory name
+  const moduleKey = `../../courses/${courseDir}/${lessonPath}.ts`;
   const moduleLoader = lessonFileModules[moduleKey];
 
   if (!moduleLoader) {
@@ -415,7 +443,19 @@ export async function fetchLessonData(
     return lessonContentCache.get(lessonFilePath) || null;
   }
 
-  const moduleKey = `../../courses/${lessonFilePath}.ts`;
+  // Extract courseId from lessonFilePath (e.g., "intro-python/00_intro/lessons/..." → "intro-python")
+  const courseId = lessonFilePath.split("/")[0] as CourseId;
+  const courseDir = courseDirMap.get(courseId);
+
+  if (!courseDir) {
+    console.error(`No directory mapping found for course ${courseId}`);
+    return null;
+  }
+
+  // Build path using actual directory, replacing courseId with courseDir
+  const pathWithinCourse = lessonFilePath.substring(courseId.length + 1); // Remove "intro-python/"
+  const moduleKey = `../../courses/${courseDir}/${pathWithinCourse}.ts`;
+
   if (lessonFileModules[moduleKey]) {
     try {
       const moduleLoader = lessonFileModules[moduleKey];
