@@ -236,7 +236,7 @@ async function processUnitsData(): Promise<void> {
             })
           );
 
-          const resolvedImagePath = `/data/${course.id}/${unitDir}/${manifest.image}`;
+          const resolvedImagePath = `/data/${courseDir}/${unitDir}/${manifest.image}`;
 
           const unit: Unit = {
             id: manifest.id,
