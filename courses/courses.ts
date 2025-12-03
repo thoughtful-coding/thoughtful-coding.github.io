@@ -23,7 +23,7 @@ const courseSources: CourseSource[] = [
   {
     type: "git",
     directory: "thoughtful-python",
-    repo: "git@github.com:thoughtful-coding/thoughtful-python.git",
+    repo: "https://github.com/thoughtful-coding/thoughtful-python.git",
     ref: "main",
   },
   { type: "local", directory: "end-to-end-tests", devOnly: true },
