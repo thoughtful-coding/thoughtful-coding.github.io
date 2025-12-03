@@ -15,7 +15,7 @@ test.describe("Test can configure website", () => {
     await page.getByRole("button", { name: "Save Configuration" }).click();
 
     // Go Home
-    await page.getByRole("link", { name: "Thoughtful Code" }).click();
+    await page.getByRole("link", { name: "Thoughtful Coding" }).click();
 
     // Verify still in Dark Mode
     await page.getByRole("link", { name: "Configure Settings" }).click();

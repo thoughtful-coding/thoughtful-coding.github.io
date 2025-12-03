@@ -81,7 +81,7 @@ const Footer: React.FC<FooterProps> = ({ variant = "default" }) => {
             </div>
           </nav>
           <p className={styles.copyright}>
-            &copy; {currentYear} Thoughtful Python Lessons
+            &copy; {currentYear} Thoughtful Coding Lessons
           </p>
         </div>
       </div>

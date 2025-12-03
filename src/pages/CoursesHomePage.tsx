@@ -45,7 +45,7 @@ const CoursesHomePage: React.FC = () => {
       )}
       <div className={styles.container}>
         <section className={styles.welcome}>
-          <h1>Welcome to Thoughtful Code</h1>
+          <h1>Welcome to Thoughtful Coding</h1>
           <p className={styles.subtitle}>
             Learn programming through interactive, thoughtful lessons
           </p>

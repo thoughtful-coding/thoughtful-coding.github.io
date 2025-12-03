@@ -26,7 +26,7 @@ const WelcomeModal: React.FC<WelcomeModalProps> = ({ onClose }) => {
   return (
     <div className={styles.modalBackdrop}>
       <div className={styles.modalContent}>
-        <h2>Welcome to Thoughtful Code!</h2>
+        <h2>Welcome to Thoughtful Coding!</h2>
         <p>To help us tailor your experience, please let us know your role.</p>
         <div className={styles.buttonContainer}>
           <button

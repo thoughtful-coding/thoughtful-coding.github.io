@@ -12,14 +12,9 @@ import SettingsIcon from "../../components/icons/SettingsIcon";
 import AuthSection from "../../components/auth/AuthSection";
 
 // Import the page/view components
-import ReviewClassProgressView from "../../components/instructor/ReviewClassProgressView";
-import ReviewByAssignmentView from "../../components/instructor/ReviewByAssignmentView";
-import ReviewStudentDetailView from "../../components/instructor/shared/ReviewStudentDetailView";
 import LoadingSpinner from "../../components/LoadingSpinner";
-import ReviewByStudentView from "../../components/instructor/ReviewByStudentView";
 import Footer from "../../components/Footer";
 import styles from "./InstructorDashboardPage.module.css";
-import ReviewLearningEntriesView from "../../components/instructor/ReviewLearningEntriesView";
 
 const navLinks = [
   { path: "/instructor-dashboard/progress", label: "Class Progress" },

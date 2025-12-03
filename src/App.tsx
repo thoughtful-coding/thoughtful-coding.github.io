@@ -54,7 +54,12 @@ function InstructorAssignmentsWrapper() {
     allUnits: Unit[];
     permittedStudents: InstructorStudentInfo[];
   }>();
-  return <ReviewByAssignmentView units={allUnits} permittedStudents={permittedStudents} />;
+  return (
+    <ReviewByAssignmentView
+      units={allUnits}
+      permittedStudents={permittedStudents}
+    />
+  );
 }
 
 function InstructorStudentsWrapper() {
@@ -74,7 +79,12 @@ function InstructorLearningEntriesWrapper() {
     allUnits: Unit[];
     permittedStudents: InstructorStudentInfo[];
   }>();
-  return <ReviewLearningEntriesView units={allUnits} permittedStudents={permittedStudents} />;
+  return (
+    <ReviewLearningEntriesView
+      units={allUnits}
+      permittedStudents={permittedStudents}
+    />
+  );
 }
 
 function App() {
@@ -133,13 +143,25 @@ function App() {
       />
       <Routes>
         {/* Instructor dashboard (MUST come first - define nested routes here) */}
-        <Route path="/instructor-dashboard" element={<InstructorDashboardPage />}>
+        <Route
+          path="/instructor-dashboard"
+          element={<InstructorDashboardPage />}
+        >
           <Route index element={<InstructorProgressWrapper />} />
           <Route path="progress" element={<InstructorProgressWrapper />} />
-          <Route path="assignments" element={<InstructorAssignmentsWrapper />} />
+          <Route
+            path="assignments"
+            element={<InstructorAssignmentsWrapper />}
+          />
           <Route path="students" element={<InstructorStudentsWrapper />} />
-          <Route path="students/:studentId" element={<InstructorStudentDetailWrapper />} />
-          <Route path="learning-entries" element={<InstructorLearningEntriesWrapper />} />
+          <Route
+            path="students/:studentId"
+            element={<InstructorStudentDetailWrapper />}
+          />
+          <Route
+            path="learning-entries"
+            element={<InstructorLearningEntriesWrapper />}
+          />
         </Route>
 
         {/* General/shared routes (available globally) */}

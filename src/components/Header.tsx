@@ -20,7 +20,7 @@ const Header: React.FC = () => {
         <NavLink to="/" className={styles.titleLink}>
           {" "}
           {/* Logo links to all courses homepage */}
-          <h1 className={styles.title}>Thoughtful Code</h1>
+          <h1 className={styles.title}>Thoughtful Coding</h1>
         </NavLink>
         <nav className={styles.nav}>
           <ul className={styles.navList}>

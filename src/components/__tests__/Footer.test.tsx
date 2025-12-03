@@ -7,7 +7,7 @@ describe("Footer Component", () => {
     render(<Footer />);
 
     const currentYear = new Date().getFullYear();
-    const expectedText = `© ${currentYear} Thoughtful Python Lessons`;
+    const expectedText = `© ${currentYear} Thoughtful Coding Lessons`;
 
     // 2. Act & Assert: Check if the expected text is in the document
     const footerText = screen.getByText(expectedText);

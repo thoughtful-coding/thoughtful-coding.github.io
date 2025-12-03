@@ -10,9 +10,9 @@ test.describe("Check can navigate into and out of lessons", () => {
     await page
       .getByRole("link", { name: "Lesson 1 A Guided Tour: PRIMM" })
       .click();
-    await page.getByRole("link", { name: "Thoughtful Code" }).click();
+    await page.getByRole("link", { name: "Thoughtful Coding" }).click();
     await expect(
-      page.getByRole("heading", { name: "Welcome to Thoughtful Code" })
+      page.getByRole("heading", { name: "Welcome to Thoughtful Coding" })
     ).toBeVisible();
   });
 
