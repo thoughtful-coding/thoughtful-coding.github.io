@@ -1,0 +1,66 @@
+<svg width="350" height="200" viewBox="0 0 350 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="350" height="200" fill="#e8eaf6" rx="12"/>
+  <rect x="5" y="5" width="340" height="190" rx="10" fill="none" stroke="#5e35b1" stroke-width="3"/>
+  
+  <!-- Pencil (left side) -->
+  <g transform="translate(45, 100)">
+    <!-- Pencil body -->
+    <rect x="-12" y="-50" width="24" height="80" rx="2" fill="#ffd54f" stroke="#f57f17" stroke-width="2.5"/>
+    
+    <!-- Pencil tip -->
+    <path d="M-12,30 L0,45 L12,30 Z" fill="#8b4513" stroke="#5d2f0e" stroke-width="2"/>
+    <path d="M-8,30 L0,38 L8,30 Z" fill="#2c2c2c"/>
+    
+    <!-- Eraser -->
+    <rect x="-12" y="-55" width="24" height="10" rx="2" fill="#ff9999" stroke="#cc0000" stroke-width="2"/>
+    
+    <!-- Ferrule (metal part) -->
+    <rect x="-12" y="-50" width="24" height="5" fill="#c0c0c0" stroke="#888888" stroke-width="1.5"/>
+    
+    <!-- Pencil details -->
+    <line x1="-8" y1="-40" x2="-8" y2="20" stroke="#f57f17" stroke-width="1" opacity="0.3"/>
+    <line x1="8" y1="-40" x2="8" y2="20" stroke="#f57f17" stroke-width="1" opacity="0.3"/>
+  </g>
+  
+  <!-- Book (center) -->
+  <g transform="translate(165, 100)">
+    <!-- Book cover -->
+    <rect x="-35" y="-40" width="70" height="80" rx="4" fill="#9575cd" stroke="#5e35b1" stroke-width="3"/>
+    
+    <!-- Book pages -->
+    <rect x="-30" y="-35" width="60" height="70" rx="2" fill="#f5f5f5" stroke="#5e35b1" stroke-width="1.5"/>
+    
+    <!-- Page lines -->
+    <line x1="-20" y1="-20" x2="20" y2="-20" stroke="#b39ddb" stroke-width="1.5"/>
+    <line x1="-20" y1="-10" x2="20" y2="-10" stroke="#b39ddb" stroke-width="1.5"/>
+    <line x1="-20" y1="0" x2="20" y2="0" stroke="#b39ddb" stroke-width="1.5"/>
+    <line x1="-20" y1="10" x2="20" y2="10" stroke="#b39ddb" stroke-width="1.5"/>
+    <line x1="-20" y1="20" x2="20" y2="20" stroke="#b39ddb" stroke-width="1.5"/>
+    
+    <!-- Book spine shadow -->
+    <rect x="-35" y="-40" width="8" height="80" rx="4" fill="#7e57c2" stroke="#5e35b1" stroke-width="3"/>
+  </g>
+  
+  <!-- Light bulb (right side) -->
+  <g transform="translate(280, 90)">
+    <circle cx="0" cy="-5" r="24" fill="#ffd54f" stroke="#f57f17" stroke-width="3"/>
+    <rect x="-10" y="17" width="20" height="15" rx="3" fill="#d4d4d4" stroke="#9e9e9e" stroke-width="2.5"/>
+    
+    <!-- Light rays -->
+    <line x1="0" y1="-31" x2="0" y2="-43" stroke="#ffd54f" stroke-width="3" stroke-linecap="round"/>
+    <line x1="21" y1="-19" x2="30" y2="-28" stroke="#ffd54f" stroke-width="3" stroke-linecap="round"/>
+    <line x1="27" y1="2" x2="38" y2="2" stroke="#ffd54f" stroke-width="3" stroke-linecap="round"/>
+    <line x1="-21" y1="-19" x2="-30" y2="-28" stroke="#ffd54f" stroke-width="3" stroke-linecap="round"/>
+    <line x1="-27" y1="2" x2="-38" y2="2" stroke="#ffd54f" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Connecting arrows -->
+  <defs>
+    <marker id="learningArrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <polygon points="0,0 10,5 0,10" fill="#7e57c2"/>
+    </marker>
+  </defs>
+  <path d="M65,100 L120,100" stroke="#7e57c2" stroke-width="2.5" fill="none" marker-end="url(#learningArrow)"/>
+  <path d="M205,100 L255,100" stroke="#7e57c2" stroke-width="2.5" fill="none" marker-end="url(#learningArrow)"/>
+</svg>

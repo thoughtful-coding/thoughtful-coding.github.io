@@ -9,7 +9,7 @@ const courseManifest: CourseManifest = {
   title: "The Science of Learning",
   description:
     "Learn how to use this website and understand a bit about the science of learning",
-  image: "images/unit_icon_learning.svg",
+  image: "images/course_icon_science_of_learning.svg",
   difficulty: "beginner",
   units: ["00_learning"],
 };
