@@ -11,7 +11,7 @@ type LocalCourse = {
 
 type GitCourse = {
   type: "git";
-  directory: string; // Where to place course in src/assets/data/
+  directory: string; // Local directory name in courses/
   repo: string; // Git repository URL
   ref: string; // Branch, tag, or commit SHA
 };
@@ -20,15 +20,13 @@ type CourseSource = LocalCourse | GitCourse;
 
 const courseSources: CourseSource[] = [
   { type: "local", directory: "science-of-learning" },
-  { type: "local", directory: "intro-python" },
+  {
+    type: "git",
+    directory: "thoughtful-python",
+    repo: "git@github.com:thoughtful-coding/thoughtful-python.git",
+    ref: "main",
+  },
   { type: "local", directory: "end-to-end-tests", devOnly: true },
-  // Example git course (uncomment and modify to use):
-  // {
-  //   type: "git",
-  //   directory: "advanced-python",
-  //   repo: "https://github.com/someone/advanced-python-course",
-  //   ref: "v1.0.0"
-  // },
 ];
 
 export default courseSources;

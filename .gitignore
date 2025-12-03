@@ -35,5 +35,5 @@ TODO*.md
 # Only track built-in local courses
 courses/*
 !courses/science-of-learning/
-!courses/intro-python/
 !courses/end-to-end-tests/
+!courses/courses.ts

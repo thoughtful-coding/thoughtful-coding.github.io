@@ -8,7 +8,7 @@ import { fileURLToPath } from "url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.join(__dirname, "..");
 const dataDir = path.join(rootDir, "courses");
-const coursesFile = path.join(rootDir, "src/config/courses.ts");
+const coursesFile = path.join(rootDir, "courses/courses.ts");
 
 // Determine if this is a production build (default to development if not set)
 const isProduction = process.env.NODE_ENV === "production";
