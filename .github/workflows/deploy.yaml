@@ -78,6 +78,9 @@ jobs:
           name: dist-files
           path: ./dist
 
+      - name: Fetch courses for dev server
+        run: node scripts/fetch-courses.js
+
       - name: Run Playwright tests
         run: npm run e2e-test:ci -- --project=unauthenticated
 

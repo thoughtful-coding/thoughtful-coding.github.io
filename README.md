@@ -18,12 +18,6 @@ directly in the browser using Pyodide.
 
 ## Development
 
-This project uses:
-
-- TypeScript
-- Webpack
-- Pyodide for Python in the browser
-
 To set up locally:
 
 ```bash
