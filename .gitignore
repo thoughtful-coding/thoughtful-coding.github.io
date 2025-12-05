@@ -34,6 +34,6 @@ TODO*.md
 # Git-based courses (cloned during development, fetched fresh during build)
 # Only track built-in local courses
 courses/*
-!courses/science-of-learning/
+!courses/getting-started/
 !courses/end-to-end-tests/
 !courses/courses.json

@@ -1,9 +1,9 @@
 import { UnitId, UnitManifest } from "../../../types/data";
 
 const unitManifest: UnitManifest = {
-  id: "learning_to_learn" as UnitId,
-  title: "Learning to Learn",
-  image: "images/unit_icon_learning.svg",
+  id: "science_of_learning" as UnitId,
+  title: "The Science of Learning",
+  image: "images/unit_icon_science_of_learning.svg",
   description:
     'Understand how this website differs from other "Learn Python" websites and learn a little bit about learning.',
   lessons: [

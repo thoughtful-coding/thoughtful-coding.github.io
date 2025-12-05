@@ -5,7 +5,7 @@ import type {
   ReflectionSectionData,
   MultipleChoiceSectionData,
   MultipleSelectionSectionData,
-} from "../../../../types/data";
+} from ".././../../types/data";
 
 const lessonData: Lesson = {
   title: "Reflective Learning",
@@ -76,6 +76,8 @@ const lessonData: Lesson = {
       isCodePredefined: true,
       explanation: "Explain how your example works (3-4 sentences)",
       isExplanationPredefined: false,
+      extraContext:
+        "So far students have _only_ learned about the print statement. They have not been introduced to strings, new lines, or even functions. They have only a simple program with two print statements and its output after running it.",
     } as ReflectionSectionData,
     {
       kind: "Information",
