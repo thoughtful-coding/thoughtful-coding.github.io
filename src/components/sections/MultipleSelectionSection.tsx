@@ -102,7 +102,11 @@ const MultipleSelectionSection: React.FC<MultipleSelectionSectionProps> = ({
       <div
         className={!hasRequiredPhrase ? styles.questionError : styles.content}
       >
-        <ContentRenderer content={section.content} courseId={courseId} lessonPath={lessonPath} />
+        <ContentRenderer
+          content={section.content}
+          courseId={courseId}
+          lessonPath={lessonPath}
+        />
       </div>
 
       {isLocallyDisabled && !isCorrect && (

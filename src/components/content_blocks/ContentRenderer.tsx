@@ -26,7 +26,12 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({
             return <CodeBlock key={index} block={block} />;
           case "image":
             return (
-              <ImageBlock key={index} block={block} courseId={courseId} lessonPath={lessonPath} />
+              <ImageBlock
+                key={index}
+                block={block}
+                courseId={courseId}
+                lessonPath={lessonPath}
+              />
             );
           case "video":
             return <VideoBlock key={index} block={block} />;

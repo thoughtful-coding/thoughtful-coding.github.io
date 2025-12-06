@@ -9,7 +9,11 @@ interface ImageBlockProps {
   lessonPath: string;
 }
 
-const ImageBlock: React.FC<ImageBlockProps> = ({ block, courseId, lessonPath }) => {
+const ImageBlock: React.FC<ImageBlockProps> = ({
+  block,
+  courseId,
+  lessonPath,
+}) => {
   // Resolve image path using the same helper as TurtleTesting
   const imageUrl = resolveImagePath(block.src, courseId, lessonPath);
 

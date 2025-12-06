@@ -28,7 +28,6 @@ const lessonData: Lesson = {
           "score = 10\nprint(score)\nscore = 20\nprint(score)\nscore = score + 5\nprint(score)\n",
       },
     } as DebuggerSectionData,
-
     {
       kind: "Debugger",
       id: "error-debugging" as SectionId,
@@ -44,6 +43,24 @@ const lessonData: Lesson = {
         initialCode:
           "score = 10\nprint(score)\nscore = 20\nprint(score_x)\nscore = score + 5\nprint(score)\n",
       },
+    } as DebuggerSectionData,
+    {
+      kind: "Debugger",
+      id: "advanced-debugging" as SectionId,
+      title: "Advanced Controls for Debugging",
+      content: [
+        {
+          kind: "text",
+          value:
+            "This section should show additional controls for the debugger and basically be a clone of the VSCode debugger.",
+        },
+      ],
+      example: {
+        visualization: "console",
+        initialCode:
+          'def print_thing(x):\n  print(x)\n  print(x)\n\ny = "Eric"\nz = y + "a"\nprint_thing(z)\nprint_thing("bye")',
+      },
+      advancedControls: true,
     } as DebuggerSectionData,
   ],
 };

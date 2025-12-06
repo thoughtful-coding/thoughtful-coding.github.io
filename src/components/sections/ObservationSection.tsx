@@ -35,7 +35,11 @@ const ObservationSection: React.FC<{
       <h2 className={styles.title}>{section.title}</h2>
 
       <div className={styles.content}>
-        <ContentRenderer content={section.content} courseId={courseId} lessonPath={lessonPath} />
+        <ContentRenderer
+          content={section.content}
+          courseId={courseId}
+          lessonPath={lessonPath}
+        />
       </div>
 
       <div className={styles.exampleContainer}>

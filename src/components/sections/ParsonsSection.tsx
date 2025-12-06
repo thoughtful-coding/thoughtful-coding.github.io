@@ -217,7 +217,11 @@ const ParsonsSection: React.FC<ParsonsSectionProps> = ({
         </ReactMarkdown>
       </h2>
       <div className={sectionStyles.content}>
-        <ContentRenderer content={section.content} courseId={courseId} lessonPath={lessonPath} />
+        <ContentRenderer
+          content={section.content}
+          courseId={courseId}
+          lessonPath={lessonPath}
+        />
       </div>
 
       <div className={styles.parsonsContainer}>

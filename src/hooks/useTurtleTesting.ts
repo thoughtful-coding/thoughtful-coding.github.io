@@ -1,5 +1,11 @@
 import { useState, useCallback, useRef, useMemo } from "react";
-import type { UnitId, LessonId, SectionId, TestCase, CourseId } from "../types/data";
+import type {
+  UnitId,
+  LessonId,
+  SectionId,
+  TestCase,
+  CourseId,
+} from "../types/data";
 import type { RealTurtleInstance } from "../lib/turtleRenderer";
 import { compareTurtleImages } from "../lib/turtleComparison";
 import type { TurtleComparisonResult } from "../lib/turtleComparison";

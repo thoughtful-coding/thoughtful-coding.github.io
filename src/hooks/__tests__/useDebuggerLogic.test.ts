@@ -94,10 +94,10 @@ describe("useDebuggerLogic", () => {
           stack_depth: 0,
           variables: {},
           changed_variables: [],
-          stdout: "NameError: name 'undefined_var' is not defined\n",
+          stdout: "",
         },
       ],
-      output: "NameError: name 'undefined_var' is not defined\n",
+      output: "",
       error: "name 'undefined_var' is not defined",
       error_type: "NameError",
     };

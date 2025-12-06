@@ -1,5 +1,10 @@
 import React from "react";
-import type { PredictionSectionData, UnitId, LessonId , CourseId} from "../../types/data";
+import type {
+  PredictionSectionData,
+  UnitId,
+  LessonId,
+  CourseId,
+} from "../../types/data";
 import InteractiveTableSection from "./InteractiveTableSection";
 
 interface PredictionSectionProps {

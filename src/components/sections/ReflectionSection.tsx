@@ -2,7 +2,12 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import type { ReflectionSectionData, LessonId, UnitId , CourseId} from "../../types/data";
+import type {
+  ReflectionSectionData,
+  LessonId,
+  UnitId,
+  CourseId,
+} from "../../types/data";
 import styles from "./Section.module.css";
 import CodeEditor from "../CodeEditor";
 import { useAuthStore } from "../../stores/authStore";
@@ -84,7 +89,11 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = ({
     <section id={sectionId} className={styles.section}>
       <h2 className={styles.title}>{title}</h2>
       <div className={styles.content}>
-        <ContentRenderer content={section.content} courseId={courseId} lessonPath={lessonPath} />
+        <ContentRenderer
+          content={section.content}
+          courseId={courseId}
+          lessonPath={lessonPath}
+        />
       </div>
 
       <div className={styles.reflectionContainer}>

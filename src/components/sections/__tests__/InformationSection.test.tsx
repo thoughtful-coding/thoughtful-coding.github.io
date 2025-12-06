@@ -1,7 +1,7 @@
 import { render, screen } from "../../../test-utils";
 import { describe, it, expect } from "vitest";
 import InformationSection from "../InformationSection";
-import type { InformationSectionData , CourseId} from "../../../types/data";
+import type { InformationSectionData, CourseId } from "../../../types/data";
 
 // Mock data that matches the structure the component expects
 

@@ -1,12 +1,14 @@
 import { test, expect } from "@playwright/test";
 
-test.describe("Check can navigate into and out of lessons", () => {
+test.describe.only("Check can navigate into and out of lessons", () => {
   test("Can go from units -> lessons -> lesson -> home", async ({ page }) => {
     await page.goto("/");
 
     await page.getByRole("button", { name: "I'm a Student" }).click();
-    await page.getByRole("link", { name: "The Science of Learning" }).click();
-    await page.getByRole("link", { name: "Learning to Learn image" }).click();
+    await page.getByRole("link", { name: "Getting Started" }).click();
+    await page
+      .getByRole("link", { name: "The Science of Learning image" })
+      .click();
     await page
       .getByRole("link", { name: "Lesson 1 A Guided Tour: PRIMM" })
       .click();
@@ -20,8 +22,10 @@ test.describe("Check can navigate into and out of lessons", () => {
     await page.goto("/");
 
     await page.getByRole("button", { name: "I'm a Student" }).click();
-    await page.getByRole("link", { name: "The Science of Learning" }).click();
-    await page.getByRole("link", { name: "Learning to Learn image" }).click();
+    await page.getByRole("link", { name: "Getting Started" }).click();
+    await page
+      .getByRole("link", { name: "The Science of Learning image" })
+      .click();
     await page.getByRole("link", { name: "← Back to Learning Paths" }).click();
     await expect(
       page.getByRole("heading", { name: "A Thoughtful Approach to" })
@@ -34,8 +38,10 @@ test.describe("Check can navigate into and out of lessons", () => {
     await page.goto("/");
 
     await page.getByRole("button", { name: "I'm a Student" }).click();
-    await page.getByRole("link", { name: "The Science of Learning" }).click();
-    await page.getByRole("link", { name: "Learning to Learn image" }).click();
+    await page.getByRole("link", { name: "Getting Started" }).click();
+    await page
+      .getByRole("link", { name: "The Science of Learning image" })
+      .click();
     await page
       .getByRole("link", { name: "Lesson 1 A Guided Tour: PRIMM" })
       .click();
@@ -50,8 +56,10 @@ test.describe("Check can navigate into and out of lessons", () => {
     await page.goto("/");
 
     await page.getByRole("button", { name: "I'm a Student" }).click();
-    await page.getByRole("link", { name: "The Science of Learning" }).click();
-    await page.getByRole("link", { name: "Learning to Learn image" }).click();
+    await page.getByRole("link", { name: "Getting Started" }).click();
+    await page
+      .getByRole("link", { name: "The Science of Learning image" })
+      .click();
     await page
       .getByRole("link", { name: "Lesson 2 Reflective Learning" })
       .click();
@@ -67,8 +75,10 @@ test.describe("Check can navigate into and out of lessons", () => {
     await page.goto("/");
 
     await page.getByRole("button", { name: "I'm a Student" }).click();
-    await page.getByRole("link", { name: "The Science of Learning" }).click();
-    await page.getByRole("link", { name: "Learning to Learn image" }).click();
+    await page.getByRole("link", { name: "Getting Started" }).click();
+    await page
+      .getByRole("link", { name: "The Science of Learning image" })
+      .click();
     await page
       .getByRole("link", { name: "Lesson 1 A Guided Tour: PRIMM" })
       .click();
@@ -91,8 +101,10 @@ test.describe("Check can navigate into and out of lessons", () => {
     await page.goto("/");
 
     await page.getByRole("button", { name: "I'm a Student" }).click();
-    await page.getByRole("link", { name: "The Science of Learning" }).click();
-    await page.getByRole("link", { name: "Learning to Learn image" }).click();
+    await page.getByRole("link", { name: "Getting Started" }).click();
+    await page
+      .getByRole("link", { name: "The Science of Learning image" })
+      .click();
     await page
       .getByRole("link", { name: "Lesson 1 A Guided Tour: PRIMM" })
       .click();

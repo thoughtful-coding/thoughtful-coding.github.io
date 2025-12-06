@@ -115,20 +115,16 @@ class AdvancedTracer:
             exec(compiled_code, {})
         except Exception as e:
             final_stdout = captured_output.getvalue()
-            # Append simplified exception message to stdout
-            exception_msg = f"{type(e).__name__}: {str(e)}\\n"
-            final_stdout_with_error = final_stdout + exception_msg
-
             error_step = ExecutionStep(
                 step_number=len(self.steps) + 1,
                 line_number=getattr(e, "lineno", 0),
                 variables={},
                 changed_variables=[],
-                stdout=final_stdout_with_error,
+                stdout=final_stdout,
                 stack_depth=self.stack_depth
             )
             self.steps.append(error_step)
-            return {"success": False, "error": str(e), "error_type": type(e).__name__, "steps": self.steps, "output": final_stdout_with_error}
+            return {"success": False, "error": str(e), "error_type": type(e).__name__, "steps": self.steps, "output": final_stdout}
         finally:
             sys.settrace(None)
             sys.stdout = old_stdout

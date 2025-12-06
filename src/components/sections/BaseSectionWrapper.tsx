@@ -38,7 +38,11 @@ const BaseSectionWrapper: React.FC<BaseSectionWrapperProps> = ({
         </ReactMarkdown>
       </h2>
       <div className={styles.content}>
-        <ContentRenderer content={content} courseId={courseId} lessonPath={lessonPath} />
+        <ContentRenderer
+          content={content}
+          courseId={courseId}
+          lessonPath={lessonPath}
+        />
       </div>
       {children}
     </section>

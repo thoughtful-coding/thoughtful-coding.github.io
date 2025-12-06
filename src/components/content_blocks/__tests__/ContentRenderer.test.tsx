@@ -7,7 +7,10 @@ import TextBlock from "../TextBlock";
 import CodeBlock from "../CodeBlock";
 import ImageBlock from "../ImageBlock";
 import VideoBlock from "../VideoBlock";
-import type { ContentBlock as ContentBlockData, CourseId } from "../../../types/data";
+import type {
+  ContentBlock as ContentBlockData,
+  CourseId,
+} from "../../../types/data";
 
 // Mock all the child components to isolate the ContentRenderer's logic
 vi.mock("../TextBlock", () => ({
@@ -41,7 +44,11 @@ describe("ContentRenderer", () => {
     ];
 
     render(
-      <ContentRenderer content={mockContent} courseId={mockCourseId} lessonPath={mockLessonPath} />
+      <ContentRenderer
+        content={mockContent}
+        courseId={mockCourseId}
+        lessonPath={mockLessonPath}
+      />
     );
 
     // ASSERT: Check that each mocked child was rendered
@@ -76,7 +83,11 @@ describe("ContentRenderer", () => {
     ];
 
     render(
-      <ContentRenderer content={mockContent} courseId={mockCourseId} lessonPath={mockLessonPath} />
+      <ContentRenderer
+        content={mockContent}
+        courseId={mockCourseId}
+        lessonPath={mockLessonPath}
+      />
     );
 
     // ASSERT

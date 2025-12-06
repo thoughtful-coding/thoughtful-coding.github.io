@@ -18,7 +18,11 @@ const InformationSection: React.FC<InformationSectionProps> = ({
     <section id={section.id} className={styles.section}>
       <h2 className={styles.title}>{section.title}</h2>
       <div className={styles.content}>
-        <ContentRenderer content={section.content} courseId={courseId} lessonPath={lessonPath} />
+        <ContentRenderer
+          content={section.content}
+          courseId={courseId}
+          lessonPath={lessonPath}
+        />
       </div>
     </section>
   );

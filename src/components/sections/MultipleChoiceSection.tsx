@@ -93,7 +93,11 @@ const MultipleChoiceSection: React.FC<MultipleChoiceSectionProps> = ({
         </ReactMarkdown>
       </h2>
       <div className={styles.content}>
-        <ContentRenderer content={section.content} courseId={courseId} lessonPath={lessonPath} />
+        <ContentRenderer
+          content={section.content}
+          courseId={courseId}
+          lessonPath={lessonPath}
+        />
       </div>
 
       {isLocallyDisabled && !isCorrect && (

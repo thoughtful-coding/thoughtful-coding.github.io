@@ -1,5 +1,10 @@
 import React from "react";
-import type { CoverageSectionData, LessonId, UnitId , CourseId} from "../../types/data";
+import type {
+  CoverageSectionData,
+  LessonId,
+  UnitId,
+  CourseId,
+} from "../../types/data";
 import InteractiveTableSection from "./InteractiveTableSection";
 
 interface CoverageSectionProps {

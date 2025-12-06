@@ -2,7 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import CodeEditor from "../CodeEditor";
 import styles from "./DebuggerSection.module.css";
 import sectionStyles from "./Section.module.css";
-import type { DebuggerSectionData, UnitId, LessonId , CourseId} from "../../types/data";
+import type {
+  DebuggerSectionData,
+  UnitId,
+  LessonId,
+  CourseId,
+} from "../../types/data";
 import ContentRenderer from "../content_blocks/ContentRenderer";
 import { useDebuggerLogic } from "../../hooks/useDebuggerLogic";
 import { useProgressActions } from "../../stores/progressStore";
@@ -30,7 +35,7 @@ const DebuggerSection: React.FC<DebuggerSectionProps> = ({
   const { runAndTrace, trace, isLoading, error } = useDebuggerLogic();
   const { completeSection } = useProgressActions();
 
-  const simulationActive = trace?.success && trace.steps.length > 0;
+  const simulationActive = trace !== null && trace.steps.length > 0;
 
   useEffect(() => {
     // Reset state when the section or its initial code changes
@@ -41,7 +46,7 @@ const DebuggerSection: React.FC<DebuggerSectionProps> = ({
 
   const handleRunAndTrace = () => {
     runAndTrace(userCode, section.example.libraryCode).then((newTrace) => {
-      if (newTrace?.success && newTrace.steps.length > 0) {
+      if (newTrace && newTrace.steps.length > 0) {
         setCurrentStepIndex(0);
       }
     });
@@ -99,6 +104,8 @@ const DebuggerSection: React.FC<DebuggerSectionProps> = ({
   };
 
   const currentStep = trace?.steps?.[currentStepIndex];
+  const isErrorStep =
+    trace && !trace.success && currentStepIndex === trace.steps.length - 1;
 
   useEffect(() => {
     // This is the corrected block. We explicitly check if currentStep exists.
@@ -130,7 +137,11 @@ const DebuggerSection: React.FC<DebuggerSectionProps> = ({
     <section id={section.id} className={sectionStyles.section}>
       <h2 className={sectionStyles.title}>{section.title}</h2>
       <div className={sectionStyles.content}>
-        <ContentRenderer content={section.content} courseId={courseId} lessonPath={lessonPath} />
+        <ContentRenderer
+          content={section.content}
+          courseId={courseId}
+          lessonPath={lessonPath}
+        />
       </div>
 
       <div className={styles.editorContainer}>
@@ -290,6 +301,15 @@ const DebuggerSection: React.FC<DebuggerSectionProps> = ({
               </div>
             ))}
           </div>
+
+          {isErrorStep && trace && (
+            <div className={styles.errorOutputSection}>
+              <h4>Error Output</h4>
+              <pre>
+                {trace.error_type}: {trace.error}
+              </pre>
+            </div>
+          )}
         </div>
       )}
     </section>

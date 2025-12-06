@@ -1,5 +1,10 @@
 import React from "react";
-import type { TestingSectionData, UnitId, LessonId, CourseId } from "../../types/data";
+import type {
+  TestingSectionData,
+  UnitId,
+  LessonId,
+  CourseId,
+} from "../../types/data";
 import styles from "./Section.module.css";
 import ContentRenderer from "../content_blocks/ContentRenderer";
 import CodeEditor from "../CodeEditor";
@@ -68,7 +73,11 @@ const TestingSection: React.FC<TestingSectionProps> = ({
     <section id={section.id} className={styles.section}>
       <h2 className={styles.title}>{section.title}</h2>
       <div className={styles.content}>
-        <ContentRenderer content={section.content} courseId={courseId} lessonPath={lessonPath} />
+        <ContentRenderer
+          content={section.content}
+          courseId={courseId}
+          lessonPath={lessonPath}
+        />
       </div>
 
       <div className={styles.exampleContainer}>
