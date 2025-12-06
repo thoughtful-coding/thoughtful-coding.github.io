@@ -2,7 +2,7 @@ import type {
   Lesson,
   LessonId,
   MultipleSelectionSectionData,
-} from "../../../../types/data";
+} from "../../../../src/types/data";
 
 const lessonData: Lesson = {
   title: "MultipleSelectionSection Testing",

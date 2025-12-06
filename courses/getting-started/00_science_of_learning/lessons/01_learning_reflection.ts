@@ -5,7 +5,7 @@ import type {
   ReflectionSectionData,
   MultipleChoiceSectionData,
   MultipleSelectionSectionData,
-} from ".././../../types/data";
+} from "../../../../src/types/data";
 
 const lessonData: Lesson = {
   title: "Reflective Learning",

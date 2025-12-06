@@ -7,7 +7,7 @@ import type {
   PRIMMSectionData,
   MatchingSectionData,
   ObservationSectionData,
-} from "../../../../types/data";
+} from "../../../../src/types/data";
 
 const lessonData: Lesson = {
   title: "A Guided Tour: PRIMM",

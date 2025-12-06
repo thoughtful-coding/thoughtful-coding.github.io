@@ -3,7 +3,7 @@ import type {
   LessonId,
   PRIMMSectionData,
   SectionId,
-} from "../../../../types/data";
+} from "../../../../src/types/data";
 
 const lessonData: Lesson = {
   title: "PrimmSection Testing",

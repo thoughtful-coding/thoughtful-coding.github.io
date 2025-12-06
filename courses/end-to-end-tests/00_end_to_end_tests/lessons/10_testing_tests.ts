@@ -3,7 +3,7 @@ import type {
   LessonId,
   SectionId,
   TestingSectionData,
-} from "../../../../types/data";
+} from "../../../../src/types/data";
 
 const lessonData: Lesson = {
   title: "TestingSection Testing",
