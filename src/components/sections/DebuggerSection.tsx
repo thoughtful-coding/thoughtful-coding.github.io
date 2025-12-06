@@ -228,7 +228,7 @@ const DebuggerSection: React.FC<DebuggerSectionProps> = ({
         )}
       </div>
 
-      {error && (
+      {error && !trace && (
         <div className={styles.errorMessage}>
           <strong>Error:</strong>
           <pre>{error}</pre>

@@ -28,6 +28,23 @@ const lessonData: Lesson = {
           "score = 10\nprint(score)\nscore = 20\nprint(score)\nscore = score + 5\nprint(score)\n",
       },
     } as DebuggerSectionData,
+
+    {
+      kind: "Debugger",
+      id: "error-debugging" as SectionId,
+      title: "Watching Errors",
+      content: [
+        {
+          kind: "text",
+          value: "Intentionally have an error in the debugger",
+        },
+      ],
+      example: {
+        visualization: "console",
+        initialCode:
+          "score = 10\nprint(score)\nscore = 20\nprint(score_x)\nscore = score + 5\nprint(score)\n",
+      },
+    } as DebuggerSectionData,
   ],
 };
 
