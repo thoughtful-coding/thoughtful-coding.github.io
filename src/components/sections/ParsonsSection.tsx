@@ -225,13 +225,6 @@ const ParsonsSection: React.FC<ParsonsSectionProps> = ({
       </div>
 
       <div className={styles.parsonsContainer}>
-        {/* Indentation mode indicator */}
-        {indentationEnabled && (
-          <div className={styles.modeIndicator}>
-            2-D Mode: Use indent/outdent controls to adjust indentation
-          </div>
-        )}
-
         {/* Solution area - where blocks are placed */}
         <h4>Your Solution:</h4>
         <div
@@ -300,9 +293,6 @@ const ParsonsSection: React.FC<ParsonsSectionProps> = ({
                           isSelected ? styles.selected : ""
                         } ${isDragging ? styles.dragging : ""}`}
                         data-testid={`parsons-placed-block-${index}`}
-                        style={{
-                          marginLeft: `${placedBlock.indentLevel * 24}px`,
-                        }}
                         draggable
                         onClick={(e) => {
                           e.stopPropagation();
@@ -332,7 +322,12 @@ const ParsonsSection: React.FC<ParsonsSectionProps> = ({
                         onTouchEnd={interaction.handleTouchEnd}
                       >
                         <span className={styles.lineNumber}>{index + 1}</span>
-                        <div className={styles.placedBlock}>
+                        <div
+                          className={styles.placedBlock}
+                          style={{
+                            marginLeft: `${placedBlock.indentLevel * 40}px`,
+                          }}
+                        >
                           <SyntaxHighlightedCode
                             code={block.lines.join("\n")}
                             className={styles.blockContent}

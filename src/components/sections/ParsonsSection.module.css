@@ -14,17 +14,6 @@
   font-size: 1.15em;
 }
 
-/* Mode indicator for 2D indentation */
-.modeIndicator {
-  padding: var(--spacing-sm) var(--spacing-md);
-  background-color: var(--info-light);
-  border-left: 3px solid var(--info);
-  border-radius: var(--radius-sm);
-  font-size: 0.9rem;
-  color: var(--info-text);
-  margin-bottom: var(--spacing-md);
-}
-
 /* Solution area - matches CodeEditor background */
 .solutionArea {
   background-color: var(--bg-code-block);

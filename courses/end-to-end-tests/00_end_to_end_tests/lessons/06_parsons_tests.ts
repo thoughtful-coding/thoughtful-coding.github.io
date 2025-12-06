@@ -42,6 +42,39 @@ const lessonData: Lesson = {
         },
       ],
     } as ParsonsSectionData,
+    {
+      kind: "Parsons",
+      id: "indentation-vars" as SectionId,
+      title: "Indentation Matters",
+      content: [
+        {
+          kind: "text",
+          value: "",
+        },
+      ],
+      puzzle: {
+        codeBlocks: [
+          ["def test_me(x, y):"],
+          ["z = x + y"],
+          ["z = z + 1"],
+          ["z = z + 2"],
+          ["z = z + 3"],
+          ["return z"],
+          ["print(test_me(5, 7))"],
+          ["print(test_me(1, 1))"],
+        ],
+        visualization: "console",
+      },
+      testMode: "function",
+      functionToTest: "test_me",
+      testCases: [
+        {
+          input: [5, 8],
+          expected: "15",
+          description: "Test inputs of 5 and 8 outputs 15",
+        },
+      ],
+    } as ParsonsSectionData,
   ],
 };
 
