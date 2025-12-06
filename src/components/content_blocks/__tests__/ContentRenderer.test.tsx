@@ -7,7 +7,7 @@ import TextBlock from "../TextBlock";
 import CodeBlock from "../CodeBlock";
 import ImageBlock from "../ImageBlock";
 import VideoBlock from "../VideoBlock";
-import type { ContentBlock as ContentBlockData } from "../../../types/data";
+import type { ContentBlock as ContentBlockData, CourseId } from "../../../types/data";
 
 // Mock all the child components to isolate the ContentRenderer's logic
 vi.mock("../TextBlock", () => ({
@@ -24,7 +24,8 @@ vi.mock("../VideoBlock", () => ({
 }));
 
 describe("ContentRenderer", () => {
-  const mockLessonPath = "00_intro/lessons/intro_strings";
+  const mockCourseId = "getting-started" as CourseId;
+  const mockLessonPath = "00_science_of_learning/lessons/00_learning_primm";
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -40,7 +41,7 @@ describe("ContentRenderer", () => {
     ];
 
     render(
-      <ContentRenderer content={mockContent} lessonPath={mockLessonPath} />
+      <ContentRenderer content={mockContent} courseId={mockCourseId} lessonPath={mockLessonPath} />
     );
 
     // ASSERT: Check that each mocked child was rendered
@@ -59,6 +60,7 @@ describe("ContentRenderer", () => {
     });
     expect(vi.mocked(ImageBlock).mock.calls[0][0]).toEqual({
       block: mockContent[2],
+      courseId: mockCourseId,
       lessonPath: mockLessonPath,
     });
     expect(vi.mocked(VideoBlock).mock.calls[0][0]).toEqual({
@@ -74,7 +76,7 @@ describe("ContentRenderer", () => {
     ];
 
     render(
-      <ContentRenderer content={mockContent} lessonPath={mockLessonPath} />
+      <ContentRenderer content={mockContent} courseId={mockCourseId} lessonPath={mockLessonPath} />
     );
 
     // ASSERT

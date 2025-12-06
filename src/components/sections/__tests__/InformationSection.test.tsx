@@ -1,11 +1,12 @@
 import { render, screen } from "../../../test-utils";
 import { describe, it, expect } from "vitest";
 import InformationSection from "../InformationSection";
-import type { InformationSectionData } from "../../../types/data";
+import type { InformationSectionData , CourseId} from "../../../types/data";
 
 // Mock data that matches the structure the component expects
 
 describe("InformationSection", () => {
+  const mockCourseId = "getting-started" as CourseId;
   const mockLessonPath = "00_intro/lessons/intro_strings";
 
   it("should render the title and content from its props", () => {
@@ -25,6 +26,7 @@ describe("InformationSection", () => {
     render(
       <InformationSection
         section={mockSectionData}
+        courseId={mockCourseId}
         lessonPath={mockLessonPath}
       />
     );
@@ -54,6 +56,7 @@ describe("InformationSection", () => {
     render(
       <InformationSection
         section={mockSectionWithCode}
+        courseId={mockCourseId}
         lessonPath={mockLessonPath}
       />
     );

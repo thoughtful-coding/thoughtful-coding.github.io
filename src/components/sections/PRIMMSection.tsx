@@ -5,6 +5,7 @@ import type {
   PRIMMSectionData,
   UnitId,
   LessonId,
+  CourseId,
   AssessmentLevel,
 } from "../../types/data";
 import styles from "./Section.module.css";
@@ -19,6 +20,7 @@ interface PRIMMSectionProps {
   section: PRIMMSectionData;
   unitId: UnitId;
   lessonId: LessonId;
+  courseId: CourseId;
   lessonPath: string;
 }
 
@@ -26,6 +28,7 @@ const PRIMMSection: React.FC<PRIMMSectionProps> = ({
   section,
   unitId,
   lessonId,
+  courseId,
   lessonPath,
 }) => {
   const {
@@ -123,7 +126,7 @@ const PRIMMSection: React.FC<PRIMMSectionProps> = ({
     <section id={section.id} className={styles.section}>
       <h2 className={styles.title}>{section.title}</h2>
       <div className={styles.content}>
-        <ContentRenderer content={section.content} lessonPath={lessonPath} />
+        <ContentRenderer content={section.content} courseId={courseId} lessonPath={lessonPath} />
       </div>
 
       <div className={styles.exampleContainer}>

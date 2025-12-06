@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useMemo } from "react";
-import type { UnitId, LessonId, SectionId, TestCase } from "../types/data";
+import type { UnitId, LessonId, SectionId, TestCase, CourseId } from "../types/data";
 import type { RealTurtleInstance } from "../lib/turtleRenderer";
 import { compareTurtleImages } from "../lib/turtleComparison";
 import type { TurtleComparisonResult } from "../lib/turtleComparison";
@@ -238,6 +238,7 @@ interface UseTurtleVisualizationProps {
   testCases: TestCase[];
   visualThreshold?: number;
   functionToTest?: string;
+  courseId: CourseId;
   lessonPath?: string;
 }
 
@@ -249,6 +250,7 @@ export const useTurtleVisualization = ({
   testCases,
   visualThreshold,
   functionToTest,
+  courseId,
   lessonPath,
 }: UseTurtleVisualizationProps) => {
   const turtleCanvasRef = useRef<HTMLDivElement>(null);
@@ -262,10 +264,10 @@ export const useTurtleVisualization = ({
     return testCases.map((tc) => ({
       ...tc,
       referenceImage: tc.referenceImage
-        ? resolveImagePath(tc.referenceImage, lessonPath)
+        ? resolveImagePath(tc.referenceImage, courseId, lessonPath)
         : undefined,
     }));
-  }, [testCases, lessonPath]);
+  }, [testCases, courseId, lessonPath]);
 
   const {
     runTurtleCode,

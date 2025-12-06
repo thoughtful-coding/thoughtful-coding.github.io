@@ -556,3 +556,11 @@ export function getLessonPathFromGuid(
 ): string | undefined {
   return guidToPathMap.get(courseId)?.get(guid);
 }
+
+/**
+ * Get the directory name for a course ID.
+ * Used for resolving file paths (courseId may differ from directory name).
+ */
+export function getCourseDirectory(courseId: CourseId): string | undefined {
+  return courseDirMap.get(courseId);
+}

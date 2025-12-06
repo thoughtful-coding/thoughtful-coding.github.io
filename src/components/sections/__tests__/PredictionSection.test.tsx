@@ -11,6 +11,7 @@ import type {
   LessonId,
   SectionId,
   SavedPredictionState,
+  CourseId,
 } from "../../../types/data";
 
 // Mock the custom hook that provides all the logic
@@ -44,6 +45,8 @@ const mockSavedState: SavedPredictionState = {
 };
 
 describe("PredictionSection", () => {
+  const mockCourseId = "getting-started" as CourseId;
+  const mockLessonPath = "00_intro/lessons/intro_prediction";
   const handleUserInputChangeMock = vi.fn();
   const runRowMock = vi.fn();
 
@@ -68,6 +71,8 @@ describe("PredictionSection", () => {
         section={mockSectionData}
         unitId={"unit-1" as UnitId}
         lessonId={"lesson-1" as LessonId}
+        courseId={mockCourseId}
+        lessonPath={mockLessonPath}
       />
     );
 
@@ -95,6 +100,8 @@ describe("PredictionSection", () => {
         section={mockSectionData}
         unitId={"unit-1" as UnitId}
         lessonId={"lesson-1" as LessonId}
+        courseId={mockCourseId}
+        lessonPath={mockLessonPath}
       />
     );
 
@@ -113,6 +120,8 @@ describe("PredictionSection", () => {
         section={mockSectionData}
         unitId={"unit-1" as UnitId}
         lessonId={"lesson-1" as LessonId}
+        courseId={mockCourseId}
+        lessonPath={mockLessonPath}
       />
     );
 
@@ -147,6 +156,8 @@ describe("PredictionSection", () => {
         section={mockSectionData}
         unitId={"unit-1" as UnitId}
         lessonId={"lesson-1" as LessonId}
+        courseId={mockCourseId}
+        lessonPath={mockLessonPath}
       />
     );
 
@@ -187,6 +198,8 @@ describe("PredictionSection", () => {
         section={mockSectionData}
         unitId={"unit-1" as UnitId}
         lessonId={"lesson-1" as LessonId}
+        courseId={mockCourseId}
+        lessonPath={mockLessonPath}
       />
     );
 

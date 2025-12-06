@@ -6,6 +6,7 @@ import type {
   UnitId,
   LessonId,
   CodeBlockItem,
+  CourseId,
 } from "../../types/data";
 import { useSectionProgress } from "../../hooks/useSectionProgress";
 import {
@@ -26,6 +27,7 @@ interface ParsonsSectionProps {
   section: ParsonsSectionData;
   unitId: UnitId;
   lessonId: LessonId;
+  courseId: CourseId;
   lessonPath: string;
 }
 
@@ -33,6 +35,7 @@ const ParsonsSection: React.FC<ParsonsSectionProps> = ({
   section,
   unitId,
   lessonId,
+  courseId,
   lessonPath,
 }) => {
   const storageKey = `parsonsState_${unitId}_${lessonId}_${section.id}`;
@@ -119,6 +122,7 @@ const ParsonsSection: React.FC<ParsonsSectionProps> = ({
     testCases: section.testCases,
     visualThreshold: section.visualThreshold,
     functionToTest: section.functionToTest,
+    courseId,
     lessonPath,
   });
 
@@ -213,7 +217,7 @@ const ParsonsSection: React.FC<ParsonsSectionProps> = ({
         </ReactMarkdown>
       </h2>
       <div className={sectionStyles.content}>
-        <ContentRenderer content={section.content} lessonPath={lessonPath} />
+        <ContentRenderer content={section.content} courseId={courseId} lessonPath={lessonPath} />
       </div>
 
       <div className={styles.parsonsContainer}>

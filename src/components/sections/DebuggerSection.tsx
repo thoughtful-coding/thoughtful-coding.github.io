@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import CodeEditor from "../CodeEditor";
 import styles from "./DebuggerSection.module.css";
 import sectionStyles from "./Section.module.css";
-import type { DebuggerSectionData, UnitId, LessonId } from "../../types/data";
+import type { DebuggerSectionData, UnitId, LessonId , CourseId} from "../../types/data";
 import ContentRenderer from "../content_blocks/ContentRenderer";
 import { useDebuggerLogic } from "../../hooks/useDebuggerLogic";
 import { useProgressActions } from "../../stores/progressStore";
@@ -11,6 +11,7 @@ interface DebuggerSectionProps {
   section: DebuggerSectionData;
   unitId: UnitId;
   lessonId: LessonId;
+  courseId: CourseId;
   lessonPath: string;
 }
 
@@ -18,6 +19,7 @@ const DebuggerSection: React.FC<DebuggerSectionProps> = ({
   section,
   unitId,
   lessonId,
+  courseId,
   lessonPath,
 }) => {
   const [userCode, setUserCode] = useState<string>(section.example.initialCode);
@@ -128,7 +130,7 @@ const DebuggerSection: React.FC<DebuggerSectionProps> = ({
     <section id={section.id} className={sectionStyles.section}>
       <h2 className={sectionStyles.title}>{section.title}</h2>
       <div className={sectionStyles.content}>
-        <ContentRenderer content={section.content} lessonPath={lessonPath} />
+        <ContentRenderer content={section.content} courseId={courseId} lessonPath={lessonPath} />
       </div>
 
       <div className={styles.editorContainer}>

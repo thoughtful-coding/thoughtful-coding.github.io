@@ -11,6 +11,7 @@ import type {
   LessonId,
   SectionId,
   SavedCoverageState,
+  CourseId,
 } from "../../../types/data";
 
 // Mock the custom hook that provides all the logic
@@ -44,6 +45,8 @@ const mockSavedState: SavedCoverageState = {
 };
 
 describe("CoverageSection", () => {
+  const mockCourseId = "getting-started" as CourseId;
+  const mockLessonPath = "00_intro/lessons/intro_coverage";
   const handleUserInputChangeMock = vi.fn();
   const runRowMock = vi.fn();
 
@@ -68,6 +71,8 @@ describe("CoverageSection", () => {
         section={mockSectionData}
         unitId={"unit-1" as UnitId}
         lessonId={"lesson-1" as LessonId}
+        courseId={mockCourseId}
+        lessonPath={mockLessonPath}
       />
     );
 
@@ -99,6 +104,8 @@ describe("CoverageSection", () => {
         section={mockSectionData}
         unitId={"unit-1" as UnitId}
         lessonId={"lesson-1" as LessonId}
+        courseId={mockCourseId}
+        lessonPath={mockLessonPath}
       />
     );
 
@@ -118,6 +125,8 @@ describe("CoverageSection", () => {
         section={mockSectionData}
         unitId={"unit-1" as UnitId}
         lessonId={"lesson-1" as LessonId}
+        courseId={mockCourseId}
+        lessonPath={mockLessonPath}
       />
     );
 
@@ -152,6 +161,8 @@ describe("CoverageSection", () => {
         section={mockSectionData}
         unitId={"unit-1" as UnitId}
         lessonId={"lesson-1" as LessonId}
+        courseId={mockCourseId}
+        lessonPath={mockLessonPath}
       />
     );
 
@@ -187,6 +198,8 @@ describe("CoverageSection", () => {
         section={mockSectionData}
         unitId={"unit-1" as UnitId}
         lessonId={"lesson-1" as LessonId}
+        courseId={mockCourseId}
+        lessonPath={mockLessonPath}
       />
     );
 

@@ -1,7 +1,7 @@
 import React, { useMemo, useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import type { MatchingSectionData, UnitId, LessonId } from "../../types/data";
+import type { MatchingSectionData, UnitId, LessonId , CourseId} from "../../types/data";
 import { useSectionProgress } from "../../hooks/useSectionProgress";
 import { useMatchingInteraction } from "../../hooks/useMatchingInteraction";
 import { useProgressActions } from "../../stores/progressStore";
@@ -13,6 +13,7 @@ interface MatchingSectionProps {
   section: MatchingSectionData;
   unitId: UnitId;
   lessonId: LessonId;
+  courseId: CourseId;
   lessonPath: string;
 }
 
@@ -31,6 +32,7 @@ const MatchingSection: React.FC<MatchingSectionProps> = ({
   section,
   unitId,
   lessonId,
+  courseId,
   lessonPath,
 }) => {
   const storageKey = `matchingState_${unitId}_${lessonId}_${section.id}`;
@@ -169,7 +171,7 @@ const MatchingSection: React.FC<MatchingSectionProps> = ({
         </ReactMarkdown>
       </h2>
       <div className={styles.content}>
-        <ContentRenderer content={section.content} lessonPath={lessonPath} />
+        <ContentRenderer content={section.content} courseId={courseId} lessonPath={lessonPath} />
       </div>
 
       <div className={styles.matchingContainer}>

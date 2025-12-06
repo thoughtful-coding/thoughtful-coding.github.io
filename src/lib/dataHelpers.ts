@@ -1,4 +1,4 @@
-import type { Unit, Lesson, LessonId, UnitId } from "../types/data";
+import type { Unit, Lesson, LessonId, UnitId, CourseId } from "../types/data";
 import * as dataLoader from "./dataLoader";
 
 /**
@@ -12,13 +12,26 @@ import * as dataLoader from "./dataLoader";
  */
 export function resolveImagePath(
   imagePath: string,
-  lessonPath: string
+  courseId: CourseId,
+  lessonPath?: string
 ): string {
   if (imagePath.startsWith("/") || imagePath.startsWith("http")) {
     return imagePath;
   }
+
+  if (!lessonPath) {
+    throw new Error(
+      `lessonPath is required to resolve relative image path: ${imagePath}`
+    );
+  }
+
   const unitDir = lessonPath.split("/")[0];
-  return `/data/${unitDir}/${imagePath}`;
+  const courseDir = dataLoader.getCourseDirectory(courseId);
+
+  // Fall back to using courseId if directory mapping not available (e.g., during tests)
+  const dirToUse = courseDir || courseId;
+
+  return `/data/${dirToUse}/${unitDir}/${imagePath}`;
 }
 
 /**

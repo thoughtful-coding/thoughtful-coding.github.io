@@ -1,11 +1,12 @@
 import React from "react";
-import type { PredictionSectionData, UnitId, LessonId } from "../../types/data";
+import type { PredictionSectionData, UnitId, LessonId , CourseId} from "../../types/data";
 import InteractiveTableSection from "./InteractiveTableSection";
 
 interface PredictionSectionProps {
   section: PredictionSectionData;
   unitId: UnitId;
   lessonId: LessonId;
+  courseId: CourseId;
   lessonPath: string;
 }
 
@@ -17,6 +18,7 @@ const PredictionSection: React.FC<PredictionSectionProps> = ({
   section,
   unitId,
   lessonId,
+  courseId,
   lessonPath,
 }) => {
   return (
@@ -25,6 +27,7 @@ const PredictionSection: React.FC<PredictionSectionProps> = ({
       section={section}
       unitId={unitId}
       lessonId={lessonId}
+      courseId={courseId}
       lessonPath={lessonPath}
     />
   );

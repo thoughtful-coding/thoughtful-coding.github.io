@@ -1,11 +1,12 @@
 import React from "react";
-import type { CoverageSectionData, LessonId, UnitId } from "../../types/data";
+import type { CoverageSectionData, LessonId, UnitId , CourseId} from "../../types/data";
 import InteractiveTableSection from "./InteractiveTableSection";
 
 interface CoverageSectionProps {
   section: CoverageSectionData;
   unitId: UnitId;
   lessonId: LessonId;
+  courseId: CourseId;
   lessonPath: string;
 }
 
@@ -17,6 +18,7 @@ const CoverageSection: React.FC<CoverageSectionProps> = ({
   section,
   unitId,
   lessonId,
+  courseId,
   lessonPath,
 }) => {
   return (
@@ -25,6 +27,7 @@ const CoverageSection: React.FC<CoverageSectionProps> = ({
       section={section}
       unitId={unitId}
       lessonId={lessonId}
+      courseId={courseId}
       lessonPath={lessonPath}
     />
   );

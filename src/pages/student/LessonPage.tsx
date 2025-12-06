@@ -193,6 +193,7 @@ const LessonPage: React.FC = () => {
           <InformationSection
             key={sectionData.id}
             section={sectionData}
+            courseId={courseId}
             lessonPath={lessonPath}
           />
         );
@@ -203,6 +204,7 @@ const LessonPage: React.FC = () => {
             unitId={currentUnitGuid}
             lessonId={currentLessonGuid}
             section={sectionData}
+            courseId={courseId}
             lessonPath={lessonPath}
           />
         );
@@ -213,6 +215,7 @@ const LessonPage: React.FC = () => {
             unitId={currentUnitGuid}
             lessonId={currentLessonGuid}
             section={sectionData}
+            courseId={courseId}
             lessonPath={lessonPath}
           />
         );
@@ -223,6 +226,7 @@ const LessonPage: React.FC = () => {
             unitId={currentUnitGuid}
             lessonId={currentLessonGuid}
             section={sectionData}
+            courseId={courseId}
             lessonPath={lessonPath}
           />
         );
@@ -233,6 +237,7 @@ const LessonPage: React.FC = () => {
             unitId={currentUnitGuid}
             lessonId={currentLessonGuid}
             section={sectionData}
+            courseId={courseId}
             lessonPath={lessonPath}
           />
         );
@@ -243,6 +248,7 @@ const LessonPage: React.FC = () => {
             unitId={currentUnitGuid}
             lessonId={currentLessonGuid}
             section={sectionData}
+            courseId={courseId}
             lessonPath={lessonPath}
           />
         );
@@ -253,6 +259,7 @@ const LessonPage: React.FC = () => {
             unitId={currentUnitGuid}
             lessonId={currentLessonGuid}
             section={sectionData}
+            courseId={courseId}
             lessonPath={lessonPath}
           />
         );
@@ -263,6 +270,7 @@ const LessonPage: React.FC = () => {
             unitId={currentUnitGuid}
             lessonId={currentLessonGuid}
             section={sectionData}
+            courseId={courseId}
             lessonPath={lessonPath}
           />
         );
@@ -273,6 +281,7 @@ const LessonPage: React.FC = () => {
             unitId={currentUnitGuid}
             lessonId={currentLessonGuid}
             section={sectionData}
+            courseId={courseId}
             lessonPath={lessonPath}
           />
         );
@@ -283,6 +292,7 @@ const LessonPage: React.FC = () => {
             unitId={currentUnitGuid}
             lessonId={currentLessonGuid}
             section={sectionData}
+            courseId={courseId}
             lessonPath={lessonPath}
           />
         );
@@ -293,6 +303,7 @@ const LessonPage: React.FC = () => {
             unitId={currentUnitGuid}
             lessonId={currentLessonGuid}
             section={sectionData}
+            courseId={courseId}
             lessonPath={lessonPath}
           />
         );
@@ -303,6 +314,7 @@ const LessonPage: React.FC = () => {
             unitId={currentUnitGuid}
             lessonId={currentLessonGuid}
             section={sectionData}
+            courseId={courseId}
             lessonPath={lessonPath}
           />
         );

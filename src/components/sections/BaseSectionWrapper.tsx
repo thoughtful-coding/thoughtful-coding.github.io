@@ -1,15 +1,15 @@
 import React, { ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import type { SectionId } from "../../types/data";
+import type { SectionId, CourseId, ContentBlock } from "../../types/data";
 import styles from "./Section.module.css";
 import ContentRenderer from "../content_blocks/ContentRenderer";
-import type { ContentBlock } from "../../types/data";
 
 interface BaseSectionWrapperProps {
   sectionId: SectionId;
   title: string;
   content: ContentBlock[];
+  courseId: CourseId;
   lessonPath: string;
   children: ReactNode;
 }
@@ -22,6 +22,7 @@ const BaseSectionWrapper: React.FC<BaseSectionWrapperProps> = ({
   sectionId,
   title,
   content,
+  courseId,
   lessonPath,
   children,
 }) => {
@@ -37,7 +38,7 @@ const BaseSectionWrapper: React.FC<BaseSectionWrapperProps> = ({
         </ReactMarkdown>
       </h2>
       <div className={styles.content}>
-        <ContentRenderer content={content} lessonPath={lessonPath} />
+        <ContentRenderer content={content} courseId={courseId} lessonPath={lessonPath} />
       </div>
       {children}
     </section>

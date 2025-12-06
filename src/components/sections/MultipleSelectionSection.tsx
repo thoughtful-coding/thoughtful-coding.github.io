@@ -6,6 +6,7 @@ import type {
   LessonId,
   MultipleSelectionSectionData,
   UnitId,
+  CourseId,
 } from "../../types/data";
 import styles from "./Section.module.css";
 import { useQuizLogic } from "../../hooks/useQuizLogic";
@@ -15,6 +16,7 @@ interface MultipleSelectionSectionProps {
   section: MultipleSelectionSectionData;
   unitId: UnitId;
   lessonId: LessonId;
+  courseId: CourseId;
   lessonPath: string;
 }
 
@@ -22,6 +24,7 @@ const MultipleSelectionSection: React.FC<MultipleSelectionSectionProps> = ({
   section,
   unitId,
   lessonId,
+  courseId,
   lessonPath,
 }) => {
   const {
@@ -99,7 +102,7 @@ const MultipleSelectionSection: React.FC<MultipleSelectionSectionProps> = ({
       <div
         className={!hasRequiredPhrase ? styles.questionError : styles.content}
       >
-        <ContentRenderer content={section.content} lessonPath={lessonPath} />
+        <ContentRenderer content={section.content} courseId={courseId} lessonPath={lessonPath} />
       </div>
 
       {isLocallyDisabled && !isCorrect && (

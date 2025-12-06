@@ -1,5 +1,5 @@
 import React from "react";
-import { ContentBlock as ContentBlockData } from "../../types/data";
+import { ContentBlock as ContentBlockData, CourseId } from "../../types/data";
 import TextBlock from "./TextBlock";
 import CodeBlock from "./CodeBlock";
 import ImageBlock from "./ImageBlock";
@@ -7,11 +7,13 @@ import VideoBlock from "./VideoBlock";
 
 interface ContentRendererProps {
   content: ContentBlockData[];
+  courseId: CourseId;
   lessonPath: string;
 }
 
 const ContentRenderer: React.FC<ContentRendererProps> = ({
   content,
+  courseId,
   lessonPath,
 }) => {
   return (
@@ -24,7 +26,7 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({
             return <CodeBlock key={index} block={block} />;
           case "image":
             return (
-              <ImageBlock key={index} block={block} lessonPath={lessonPath} />
+              <ImageBlock key={index} block={block} courseId={courseId} lessonPath={lessonPath} />
             );
           case "video":
             return <VideoBlock key={index} block={block} />;

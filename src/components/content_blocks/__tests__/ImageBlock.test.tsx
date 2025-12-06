@@ -2,10 +2,11 @@ import { screen } from "@testing-library/react";
 
 import { render } from "../../../test-utils";
 import ImageBlock from "../ImageBlock";
-import type { ImageBlock as ImageBlockData } from "../../../types/data";
+import type { ImageBlock as ImageBlockData, CourseId } from "../../../types/data";
 
 describe("ImageBlock", () => {
-  const mockLessonPath = "00_intro/lessons/intro_strings";
+  const mockCourseId = "getting-started" as CourseId;
+  const mockLessonPath = "00_science_of_learning/lessons/00_learning_primm";
 
   it("constructs the correct URL for a local image source", () => {
     const mockBlock: ImageBlockData = {
@@ -14,12 +15,12 @@ describe("ImageBlock", () => {
       alt: "A local Python logo",
     };
 
-    render(<ImageBlock block={mockBlock} lessonPath={mockLessonPath} />);
+    render(<ImageBlock block={mockBlock} courseId={mockCourseId} lessonPath={mockLessonPath} />);
 
     const img = screen.getByAltText("A local Python logo");
     expect(img).toBeInTheDocument();
-    // Verify that the path is resolved relative to the unit directory
-    expect(img).toHaveAttribute("src", "/data/00_intro/images/python-logo.png");
+    // Verify that the path is resolved relative to the course and unit directory
+    expect(img).toHaveAttribute("src", "/data/getting-started/00_science_of_learning/images/python-logo.png");
   });
 
   it("uses the source URL directly for an external image", () => {
@@ -29,7 +30,7 @@ describe("ImageBlock", () => {
       alt: "An external image",
     };
 
-    render(<ImageBlock block={mockBlock} lessonPath={mockLessonPath} />);
+    render(<ImageBlock block={mockBlock} courseId={mockCourseId} lessonPath={mockLessonPath} />);
 
     const img = screen.getByAltText("An external image");
     expect(img).toBeInTheDocument();
@@ -45,7 +46,7 @@ describe("ImageBlock", () => {
       maxWidthPercentage: 50,
     };
 
-    render(<ImageBlock block={mockBlock} lessonPath={mockLessonPath} />);
+    render(<ImageBlock block={mockBlock} courseId={mockCourseId} lessonPath={mockLessonPath} />);
 
     const img = screen.getByAltText("A sized image");
     // Use .toHaveStyle to check for inline styles
@@ -59,7 +60,7 @@ describe("ImageBlock", () => {
       alt: "A full-width image",
     };
 
-    render(<ImageBlock block={mockBlock} lessonPath={mockLessonPath} />);
+    render(<ImageBlock block={mockBlock} courseId={mockCourseId} lessonPath={mockLessonPath} />);
 
     const img = screen.getByAltText("A full-width image");
     // FIX: Directly check the style property on the element. If it wasn't set,

@@ -9,6 +9,7 @@ import type {
   SectionId,
   TestCase,
   TestMode,
+  CourseId,
 } from "../types/data";
 
 export type LastAction = "run" | "test" | null;
@@ -22,6 +23,7 @@ interface UseTestableSectionProps {
   testMode: TestMode;
   functionToTest: string;
   visualThreshold?: number;
+  courseId: CourseId;
   lessonPath?: string;
   libraryCode?: string;
 }
@@ -68,6 +70,7 @@ export function useTestableSection({
   testMode,
   functionToTest,
   visualThreshold,
+  courseId,
   lessonPath,
   libraryCode,
 }: UseTestableSectionProps): UseTestableSectionResult {
@@ -91,6 +94,7 @@ export function useTestableSection({
     testCases,
     visualThreshold,
     functionToTest,
+    courseId,
     lessonPath,
   });
 

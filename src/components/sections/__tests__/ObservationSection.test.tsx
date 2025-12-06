@@ -9,6 +9,7 @@ import type {
   UnitId,
   LessonId,
   SectionId,
+  CourseId,
 } from "../../../types/data";
 
 // Mock the child CodeExecutor component to isolate the ObservationSection
@@ -29,6 +30,7 @@ const mockSectionData: ObservationSectionData = {
 };
 
 describe("ObservationSection", () => {
+  const mockCourseId = "getting-started" as CourseId;
   const mockLessonPath = "00_intro/lessons/intro_strings";
 
   beforeEach(() => {
@@ -44,6 +46,7 @@ describe("ObservationSection", () => {
         section={mockSectionData}
         unitId={unitId}
         lessonId={lessonId}
+        courseId={mockCourseId}
         lessonPath={mockLessonPath}
       />
     );

@@ -13,6 +13,7 @@ import type {
   UnitId,
   LessonId,
   SectionId,
+  CourseId,
 } from "../../../types/data";
 
 // Mock the hooks that provide the core logic
@@ -45,6 +46,7 @@ const mockSectionData: TestingSectionData = {
 
 describe("TestingSection", () => {
   const mockLessonPath = "00_intro/lessons/intro_strings";
+  const mockCourseId = "getting-started" as CourseId;
   const runCodeMock = vi.fn();
   const runTestsMock = vi.fn();
   const runTurtleCodeMock = vi.fn();
@@ -91,6 +93,7 @@ describe("TestingSection", () => {
         section={mockSectionData}
         unitId={"unit-1" as UnitId}
         lessonId={"lesson-1" as LessonId}
+        courseId={mockCourseId}
         lessonPath={mockLessonPath}
       />
     );
@@ -116,6 +119,7 @@ describe("TestingSection", () => {
         section={mockSectionData}
         unitId={"unit-1" as UnitId}
         lessonId={"lesson-1" as LessonId}
+        courseId={mockCourseId}
         lessonPath={mockLessonPath}
       />
     );
@@ -137,6 +141,7 @@ describe("TestingSection", () => {
         section={mockSectionData}
         unitId={"unit-1" as UnitId}
         lessonId={"lesson-1" as LessonId}
+        courseId={mockCourseId}
         lessonPath={mockLessonPath}
       />
     );
@@ -165,6 +170,7 @@ describe("TestingSection", () => {
         section={mockSectionData}
         unitId={"unit-1" as UnitId}
         lessonId={"lesson-1" as LessonId}
+        courseId={mockCourseId}
         lessonPath={mockLessonPath}
       />
     );
@@ -199,6 +205,7 @@ describe("TestingSection", () => {
         section={mockSectionData}
         unitId={"unit-1" as UnitId}
         lessonId={"lesson-1" as LessonId}
+        courseId={mockCourseId}
         lessonPath={mockLessonPath}
       />
     );
@@ -237,6 +244,7 @@ describe("TestingSection", () => {
         section={mockSectionData}
         unitId={"unit-1" as UnitId}
         lessonId={"lesson-1" as LessonId}
+        courseId={mockCourseId}
         lessonPath={mockLessonPath}
       />
     );

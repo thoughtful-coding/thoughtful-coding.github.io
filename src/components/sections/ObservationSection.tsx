@@ -3,6 +3,7 @@ import type {
   ObservationSectionData,
   UnitId,
   LessonId,
+  CourseId,
 } from "../../types/data";
 import type { RealTurtleInstance } from "../../lib/turtleRenderer";
 import styles from "./Section.module.css";
@@ -14,8 +15,9 @@ const ObservationSection: React.FC<{
   section: ObservationSectionData;
   unitId: UnitId;
   lessonId: LessonId;
+  courseId: CourseId;
   lessonPath: string;
-}> = ({ section, unitId, lessonId, lessonPath }) => {
+}> = ({ section, unitId, lessonId, courseId, lessonPath }) => {
   const [turtleInstance, setTurtleInstance] =
     useState<RealTurtleInstance | null>(null);
 
@@ -33,7 +35,7 @@ const ObservationSection: React.FC<{
       <h2 className={styles.title}>{section.title}</h2>
 
       <div className={styles.content}>
-        <ContentRenderer content={section.content} lessonPath={lessonPath} />
+        <ContentRenderer content={section.content} courseId={courseId} lessonPath={lessonPath} />
       </div>
 
       <div className={styles.exampleContainer}>

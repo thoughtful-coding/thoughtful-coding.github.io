@@ -7,6 +7,7 @@ import type {
   UnitId,
   SavedCoverageState,
   SavedPredictionState,
+  CourseId,
 } from "../../types/data";
 import styles from "./Section.module.css";
 import tableStyles from "./CoverageSection.module.css";
@@ -21,6 +22,7 @@ type InteractiveTableSectionProps =
       section: CoverageSectionData;
       unitId: UnitId;
       lessonId: LessonId;
+      courseId: CourseId;
       lessonPath: string;
     }
   | {
@@ -28,6 +30,7 @@ type InteractiveTableSectionProps =
       section: PredictionSectionData;
       unitId: UnitId;
       lessonId: LessonId;
+      courseId: CourseId;
       lessonPath: string;
     };
 
@@ -41,7 +44,7 @@ type InteractiveTableSectionProps =
 const InteractiveTableSection: React.FC<InteractiveTableSectionProps> = (
   props
 ) => {
-  const { mode, section, unitId, lessonId, lessonPath } = props;
+  const { mode, section, unitId, lessonId, courseId, lessonPath } = props;
   const { completeSection } = useProgressActions();
 
   // Get the table data based on mode
@@ -110,6 +113,7 @@ const InteractiveTableSection: React.FC<InteractiveTableSectionProps> = (
       sectionId={section.id}
       title={section.title}
       content={section.content}
+      courseId={courseId}
       lessonPath={lessonPath}
     >
       <div className={tableStyles.coverageCodeDisplayContainer}>

@@ -1,16 +1,17 @@
 import React from "react";
-import { ImageBlock as ImageBlockData } from "../../types/data";
+import { ImageBlock as ImageBlockData, CourseId } from "../../types/data";
 import styles from "./ContentRenderer.module.css";
 import { resolveImagePath } from "../../lib/dataHelpers";
 
 interface ImageBlockProps {
   block: ImageBlockData;
+  courseId: CourseId;
   lessonPath: string;
 }
 
-const ImageBlock: React.FC<ImageBlockProps> = ({ block, lessonPath }) => {
+const ImageBlock: React.FC<ImageBlockProps> = ({ block, courseId, lessonPath }) => {
   // Resolve image path using the same helper as TurtleTesting
-  const imageUrl = resolveImagePath(block.src, lessonPath);
+  const imageUrl = resolveImagePath(block.src, courseId, lessonPath);
 
   const imageStyles: React.CSSProperties = {};
   if (block.maxWidthPercentage) {
