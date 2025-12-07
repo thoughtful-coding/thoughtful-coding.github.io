@@ -33,13 +33,6 @@
   font-weight: 500;
 }
 
-/* Student count display */
-.total {
-  font-size: 0.85em;
-  color: var(--text-disabled);
-  font-style: italic;
-}
-
 /* Compact badge pills */
 .compactBadge span {
   padding: 3px 8px;
@@ -126,9 +119,5 @@
 
   .label {
     color: var(--text-muted);
-  }
-
-  .total {
-    color: var(--text-disabled);
   }
 }

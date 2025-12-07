@@ -11,11 +11,10 @@ describe("StatsBadge", () => {
       expect(screen.getByText(/p95: 5/)).toBeInTheDocument();
     });
 
-    it("does not include student count in tooltip", () => {
-      render(<StatsBadge p50={2} p95={5} compact totalCompletions={42} />);
+    it("shows descriptive tooltip for p50", () => {
+      render(<StatsBadge p50={2} p95={5} compact />);
 
       const p50Badge = screen.getByText(/p50: 2/);
-      // totalCompletions is no longer shown in tooltip
       expect(p50Badge).toHaveAttribute(
         "title",
         "50% of students completed in 2 or fewer attempts"
@@ -62,10 +61,10 @@ describe("StatsBadge", () => {
       expect(screen.getByText("5")).toBeInTheDocument();
     });
 
-    it("displays student count when provided", () => {
-      render(<StatsBadge p50={3} p95={7} totalCompletions={38} />);
+    it("renders without student count", () => {
+      render(<StatsBadge p50={3} p95={7} />);
 
-      expect(screen.getByText("(38 students)")).toBeInTheDocument();
+      expect(screen.queryByText(/students/)).not.toBeInTheDocument();
     });
 
     it("does not display student count when not provided", () => {
@@ -149,7 +148,7 @@ describe("StatsBadge", () => {
 
   describe("accessibility", () => {
     it("includes descriptive tooltips in compact mode", () => {
-      render(<StatsBadge p50={1} p95={3} compact totalCompletions={50} />);
+      render(<StatsBadge p50={1} p95={3} compact />);
 
       const p50Badge = screen.getByText(/p50: 1/);
       const p95Badge = screen.getByText(/p95: 3/);

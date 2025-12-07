@@ -277,14 +277,7 @@ const ReviewClassProgressView: React.FC<ReviewClassProgressViewProps> = ({
 
     if (!stats) return null;
 
-    return (
-      <StatsBadge
-        p50={stats.p50}
-        p95={stats.p95}
-        compact
-        totalCompletions={rawStudentData.length}
-      />
-    );
+    return <StatsBadge p50={stats.p50} p95={stats.p95} compact />;
   };
 
   // This new helper function contains the logic to decide what to render.
@@ -348,7 +341,7 @@ const ReviewClassProgressView: React.FC<ReviewClassProgressViewProps> = ({
               <th>Student</th>
               {selectedUnitLessons.map((lesson) => {
                 const hasAssignments = hasReviewableAssignments(lesson);
-                const lessonLink = `/instructor-dashboard/assignments?unit=${selectedUnitId}&lesson=${lesson.guid}`;
+                const lessonLink = `/instructor-dashboard/assignments?course=${selectedCourseId}&unit=${selectedUnitId}&lesson=${lesson.guid}`;
                 return (
                   <th key={lesson.guid} title={lesson.guid}>
                     <div>

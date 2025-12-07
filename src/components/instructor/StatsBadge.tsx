@@ -15,8 +15,6 @@ interface StatsBadgeProps {
   p95: number;
   /** Show compact inline version (for table headers) */
   compact?: boolean;
-  /** Number of students who completed the section (for tooltip) */
-  totalCompletions?: number;
 }
 
 /**
@@ -36,18 +34,13 @@ const getColorClass = (attempts: number): "green" | "yellow" | "red" => {
  *
  * @example
  * // Compact mode for table headers
- * <StatsBadge p50={2} p95={4} compact totalCompletions={42} />
+ * <StatsBadge p50={2} p95={4} compact />
  *
  * @example
  * // Full mode for detailed views
- * <StatsBadge p50={3} p95={8} totalCompletions={38} />
+ * <StatsBadge p50={3} p95={8} />
  */
-const StatsBadge: React.FC<StatsBadgeProps> = ({
-  p50,
-  p95,
-  compact = false,
-  totalCompletions,
-}) => {
+const StatsBadge: React.FC<StatsBadgeProps> = ({ p50, p95, compact = false }) => {
   const p50Color = getColorClass(p50);
   const p95Color = getColorClass(p95);
 
@@ -77,9 +70,6 @@ const StatsBadge: React.FC<StatsBadgeProps> = ({
         <span className={styles.label}>p95:</span>
         <span className={styles[`value-${p95Color}`]}>{p95}</span>
       </div>
-      {totalCompletions && (
-        <div className={styles.total}>({totalCompletions} students)</div>
-      )}
     </div>
   );
 };
