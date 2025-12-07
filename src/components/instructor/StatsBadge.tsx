@@ -51,7 +51,7 @@ const StatsBadge: React.FC<StatsBadgeProps> = ({
   const p50Color = getColorClass(p50);
   const p95Color = getColorClass(p95);
 
-  const p50Tooltip = `50% of students completed in ${p50} or fewer attempt${p50 === 1 ? "" : "s"}${totalCompletions ? ` (n=${totalCompletions})` : ""}`;
+  const p50Tooltip = `50% of students completed in ${p50} or fewer attempt${p50 === 1 ? "" : "s"}`;
   const p95Tooltip = `95% of students completed in ${p95} or fewer attempt${p95 === 1 ? "" : "s"}`;
 
   if (compact) {

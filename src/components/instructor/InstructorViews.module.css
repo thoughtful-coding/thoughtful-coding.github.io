@@ -74,6 +74,12 @@
   opacity: 0.65;
 }
 
+.studentCount {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-left: auto;
+}
+
 /* Assignment List (for Review by Assignment) */
 .assignmentListContainer {
   margin-top: 1rem;

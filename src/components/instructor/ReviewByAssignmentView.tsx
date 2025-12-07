@@ -1,6 +1,12 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
-import type { Unit, DisplayableAssignment, UnitId } from "../../types/data";
+import type {
+  Course,
+  CourseId,
+  Unit,
+  DisplayableAssignment,
+  UnitId,
+} from "../../types/data";
 import type {
   AssignmentSubmission,
   InstructorStudentInfo,
@@ -18,16 +24,19 @@ import RenderPrimmActivity from "./shared/RenderPrimmActivity";
 import RenderTestingSolution from "./shared/RenderTestingSolution";
 
 interface ReviewByAssignmentViewProps {
+  courses: Course[];
   units: Unit[];
   permittedStudents: InstructorStudentInfo[];
 }
 
 const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
+  courses,
   units,
   permittedStudents,
 }) => {
   const { isAuthenticated } = useAuthStore();
 
+  const [selectedCourseId, setSelectedCourseId] = useState<CourseId | "">("");
   const [selectedUnitId, setSelectedUnitId] = useState<UnitId | "">("");
   const [selectedAssignmentKey, setSelectedAssignmentKey] = useState<
     string | null
@@ -50,12 +59,34 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
     error: lessonsError,
   } = useUnitLessons(units, selectedUnitId);
 
+  // Get units for the selected course
+  const unitsForSelectedCourse = useMemo(
+    () =>
+      selectedCourseId
+        ? units.filter((u) => u.courseId === selectedCourseId)
+        : [],
+    [selectedCourseId, units]
+  );
+
   // Reset selections when unit changes
   useEffect(() => {
     setSelectedAssignmentKey(null);
     setSubmissions([]);
     setSubmissionsError(null);
   }, [selectedUnitId]);
+
+  // Clear unit selection when course changes and unit doesn't belong to course
+  useEffect(() => {
+    if (selectedCourseId && selectedUnitId) {
+      const unitBelongsToCourse = unitsForSelectedCourse.some(
+        (u) => u.id === selectedUnitId
+      );
+      if (!unitBelongsToCourse) {
+        setSelectedUnitId("");
+        setSearchParams({ course: selectedCourseId });
+      }
+    }
+  }, [selectedCourseId, selectedUnitId, unitsForSelectedCourse, setSearchParams]);
 
   const assignmentsInUnit: DisplayableAssignment[] = useMemo(() => {
     if (!selectedUnitId || !lessonsInSelectedUnit.length) return [];
@@ -105,10 +136,14 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
   }, [selectedUnitId, lessonsInSelectedUnit, units]);
 
   useEffect(() => {
+    const courseIdFromUrl = searchParams.get("course") as CourseId;
     const unitIdFromUrl = searchParams.get("unit") as UnitId;
     const lessonIdFromUrl = searchParams.get("lesson");
     const sectionIdFromUrl = searchParams.get("section");
 
+    if (courseIdFromUrl && courseIdFromUrl !== selectedCourseId) {
+      setSelectedCourseId(courseIdFromUrl);
+    }
     if (unitIdFromUrl && unitIdFromUrl !== selectedUnitId) {
       setSelectedUnitId(unitIdFromUrl);
     }
@@ -125,7 +160,7 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
     } else if (!lessonIdFromUrl) {
       setSelectedAssignmentKey(null);
     }
-  }, [searchParams, selectedUnitId, assignmentsInUnit, selectedAssignmentKey]);
+  }, [searchParams, selectedCourseId, selectedUnitId, assignmentsInUnit, selectedAssignmentKey]);
 
   const fetchSubmissionsForSelectedAssignment = useCallback(
     async (assignment: DisplayableAssignment) => {
@@ -174,14 +209,28 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
     fetchSubmissionsForSelectedAssignment,
   ]);
 
+  const handleCourseSelectionChange = (newCourseId: CourseId | "") => {
+    setSelectedCourseId(newCourseId);
+    setSelectedUnitId("");
+    setSearchParams(newCourseId ? { course: newCourseId } : {});
+  };
+
   const handleUnitSelectionChange = (newUnitId: UnitId | "") => {
-    setSearchParams(newUnitId ? { unit: newUnitId } : {});
+    setSelectedUnitId(newUnitId);
+    if (newUnitId && selectedCourseId) {
+      setSearchParams({ course: selectedCourseId, unit: newUnitId });
+    } else if (selectedCourseId) {
+      setSearchParams({ course: selectedCourseId });
+    } else {
+      setSearchParams({});
+    }
   };
 
   const handleAssignmentSelection = (assignmentKey: string) => {
     const assignment = assignmentsInUnit.find((a) => a.key === assignmentKey);
-    if (assignment) {
+    if (assignment && selectedCourseId) {
       setSearchParams({
+        course: selectedCourseId,
         unit: assignment.unitId,
         lesson: assignment.lessonId,
         section: assignment.sectionId,
@@ -326,15 +375,30 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
       <h3>Review by Assignment</h3>
       <div className={styles.filters}>
         <select
+          value={selectedCourseId}
+          onChange={(e) =>
+            handleCourseSelectionChange(e.target.value as CourseId | "")
+          }
+          className={styles.filterSelect}
+          disabled={courses.length === 0}
+        >
+          <option value="">-- Select Course --</option>
+          {courses.map((course) => (
+            <option key={course.id} value={course.id}>
+              {course.title}
+            </option>
+          ))}
+        </select>
+        <select
           value={selectedUnitId}
           onChange={(e) =>
             handleUnitSelectionChange(e.target.value as UnitId | "")
           }
           className={styles.filterSelect}
-          disabled={units.length === 0}
+          disabled={!selectedCourseId || unitsForSelectedCourse.length === 0}
         >
           <option value="">-- Select Unit --</option>
-          {units.map((unit) => (
+          {unitsForSelectedCourse.map((unit) => (
             <option key={unit.id} value={unit.id}>
               {unit.title}
             </option>

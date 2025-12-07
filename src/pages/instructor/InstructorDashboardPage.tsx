@@ -4,8 +4,8 @@ import { Outlet, NavLink, Link } from "react-router-dom";
 import * as apiService from "../../lib/apiService";
 import { useAuthStore } from "../../stores/authStore";
 import type { InstructorStudentInfo } from "../../types/apiServiceTypes";
-import type { Unit } from "../../types/data";
-import { fetchUnitsData } from "../../lib/dataLoader";
+import type { Unit, Course } from "../../types/data";
+import { fetchUnitsData, getCoursesAsync } from "../../lib/dataLoader";
 import { BASE_PATH } from "../../config";
 import { useAuthHandlers } from "../../hooks/useAuthHandlers";
 import SettingsIcon from "../../components/icons/SettingsIcon";
@@ -36,6 +36,7 @@ const InstructorDashboardPage: React.FC = () => {
     InstructorStudentInfo[]
   >([]);
   const [allUnits, setAllUnits] = useState<Unit[]>([]);
+  const [allCourses, setAllCourses] = useState<Course[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -50,12 +51,14 @@ const InstructorDashboardPage: React.FC = () => {
       setIsLoading(true);
       setError(null);
       try {
-        const [studentsResponse, unitsData] = await Promise.all([
+        const [studentsResponse, unitsData, coursesData] = await Promise.all([
           apiService.getInstructorPermittedStudents(),
           fetchUnitsData(),
+          getCoursesAsync(),
         ]);
         setPermittedStudents(studentsResponse.students);
         setAllUnits(unitsData.units);
+        setAllCourses(coursesData);
       } catch (err) {
         setError("Failed to load initial instructor data.");
         console.error(err);
@@ -204,7 +207,7 @@ const InstructorDashboardPage: React.FC = () => {
         ) : error ? (
           <p className={styles.errorMessage}>{error}</p>
         ) : (
-          <Outlet context={{ allUnits, permittedStudents, isLoading, error }} />
+          <Outlet context={{ allUnits, allCourses, permittedStudents, isLoading, error }} />
         )}
       </main>
       <Footer variant="instructor" />

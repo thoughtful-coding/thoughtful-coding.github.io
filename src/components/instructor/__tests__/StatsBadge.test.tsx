@@ -11,13 +11,14 @@ describe("StatsBadge", () => {
       expect(screen.getByText(/p95: 5/)).toBeInTheDocument();
     });
 
-    it("shows total completions in tooltip when provided", () => {
+    it("does not include student count in tooltip", () => {
       render(<StatsBadge p50={2} p95={5} compact totalCompletions={42} />);
 
       const p50Badge = screen.getByText(/p50: 2/);
+      // totalCompletions is no longer shown in tooltip
       expect(p50Badge).toHaveAttribute(
         "title",
-        expect.stringContaining("n=42")
+        "50% of students completed in 2 or fewer attempts"
       );
     });
 
@@ -155,7 +156,7 @@ describe("StatsBadge", () => {
 
       expect(p50Badge).toHaveAttribute(
         "title",
-        "50% of students completed in 1 or fewer attempt (n=50)"
+        "50% of students completed in 1 or fewer attempt"
       );
       expect(p95Badge).toHaveAttribute(
         "title",

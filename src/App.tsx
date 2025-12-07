@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Routes, Route, useOutletContext } from "react-router-dom";
-import type { Unit } from "./types/data";
+import type { Course, Unit } from "./types/data";
 import type { InstructorStudentInfo } from "./types/apiServiceTypes";
 import CoursesHomePage from "./pages/CoursesHomePage";
 import CourseHomePage from "./pages/CourseHomePage";
@@ -32,14 +32,17 @@ import { useStoreCoordination } from "./hooks/useStoreCoordination";
 
 // Wrapper components for instructor routes that use Outlet context
 function InstructorProgressWrapper() {
-  const { allUnits, permittedStudents, isLoading, error } = useOutletContext<{
-    allUnits: Unit[];
-    permittedStudents: InstructorStudentInfo[];
-    isLoading: boolean;
-    error: string | null;
-  }>();
+  const { allCourses, allUnits, permittedStudents, isLoading, error } =
+    useOutletContext<{
+      allCourses: Course[];
+      allUnits: Unit[];
+      permittedStudents: InstructorStudentInfo[];
+      isLoading: boolean;
+      error: string | null;
+    }>();
   return (
     <ReviewClassProgressView
+      courses={allCourses}
       units={allUnits}
       permittedStudents={permittedStudents}
       isLoadingUnitsGlobal={isLoading}
@@ -50,12 +53,14 @@ function InstructorProgressWrapper() {
 }
 
 function InstructorAssignmentsWrapper() {
-  const { allUnits, permittedStudents } = useOutletContext<{
+  const { allCourses, allUnits, permittedStudents } = useOutletContext<{
+    allCourses: Course[];
     allUnits: Unit[];
     permittedStudents: InstructorStudentInfo[];
   }>();
   return (
     <ReviewByAssignmentView
+      courses={allCourses}
       units={allUnits}
       permittedStudents={permittedStudents}
     />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import * as apiService from "../../lib/apiService";
 import { useAuthStore } from "../../stores/authStore";
@@ -8,10 +8,12 @@ import type {
   StudentUnitCompletionData,
 } from "../../types/apiServiceTypes";
 import type {
+  Course,
   Unit,
   Lesson,
   LessonId,
   UserId,
+  CourseId,
   UnitId,
   LessonReference,
 } from "../../types/data";
@@ -36,6 +38,7 @@ interface DisplayableStudentUnitProgress {
 }
 
 interface ReviewClassProgressViewProps {
+  courses: Course[];
   units: Unit[];
   permittedStudents: InstructorStudentInfo[];
   isLoadingUnitsGlobal: boolean;
@@ -44,6 +47,7 @@ interface ReviewClassProgressViewProps {
 }
 
 const ReviewClassProgressView: React.FC<ReviewClassProgressViewProps> = ({
+  courses,
   units,
   permittedStudents,
   isLoadingUnitsGlobal,
@@ -52,6 +56,7 @@ const ReviewClassProgressView: React.FC<ReviewClassProgressViewProps> = ({
 }) => {
   const { isAuthenticated } = useAuthStore();
 
+  const [selectedCourseId, setSelectedCourseId] = useState<CourseId | "">("");
   const [selectedUnitId, setSelectedUnitId] = useState<UnitId | "">("");
   const [selectedUnitLessons, setSelectedUnitLessons] = useState<
     (Lesson & { guid: LessonId })[]
@@ -70,13 +75,38 @@ const ReviewClassProgressView: React.FC<ReviewClassProgressViewProps> = ({
 
   const [searchParams, setSearchParams] = useSearchParams();
 
+  // Get units for the selected course
+  const unitsForSelectedCourse = useMemo(
+    () =>
+      selectedCourseId
+        ? units.filter((u) => u.courseId === selectedCourseId)
+        : [],
+    [selectedCourseId, units]
+  );
+
   useEffect(() => {
+    const courseFromUrl = searchParams.get("course") as CourseId;
     const unitFromUrl = searchParams.get("unit") as UnitId;
-    // Set initial state from URL only if it's not already set
+    if (courseFromUrl && courseFromUrl !== selectedCourseId) {
+      setSelectedCourseId(courseFromUrl);
+    }
     if (unitFromUrl && unitFromUrl !== selectedUnitId) {
       setSelectedUnitId(unitFromUrl);
     }
-  }, [searchParams, selectedUnitId]);
+  }, [searchParams, selectedCourseId, selectedUnitId]);
+
+  // Clear unit selection when course changes and unit doesn't belong to course
+  useEffect(() => {
+    if (selectedCourseId && selectedUnitId) {
+      const unitBelongsToCourse = unitsForSelectedCourse.some(
+        (u) => u.id === selectedUnitId
+      );
+      if (!unitBelongsToCourse) {
+        setSelectedUnitId("");
+        setSearchParams({ course: selectedCourseId });
+      }
+    }
+  }, [selectedCourseId, selectedUnitId, unitsForSelectedCourse, setSearchParams]);
 
   useEffect(() => {
     if (!selectedUnitId || !isAuthenticated) {
@@ -202,8 +232,21 @@ const ReviewClassProgressView: React.FC<ReviewClassProgressViewProps> = ({
     }
   }, [selectedUnitId, permittedStudents, isAuthenticated, units]);
 
+  const handleCourseSelectionChange = (newCourseId: CourseId | "") => {
+    setSelectedCourseId(newCourseId);
+    setSelectedUnitId("");
+    setSearchParams(newCourseId ? { course: newCourseId } : {});
+  };
+
   const handleUnitSelectionChange = (newUnitId: UnitId | "") => {
-    setSearchParams(newUnitId ? { unit: newUnitId } : {});
+    setSelectedUnitId(newUnitId);
+    if (newUnitId && selectedCourseId) {
+      setSearchParams({ course: selectedCourseId, unit: newUnitId });
+    } else if (selectedCourseId) {
+      setSearchParams({ course: selectedCourseId });
+    } else {
+      setSearchParams({});
+    }
   };
 
   const getCellBackgroundColor = (
@@ -372,23 +415,51 @@ const ReviewClassProgressView: React.FC<ReviewClassProgressViewProps> = ({
     );
   };
 
+  // Show student count when data is loaded
+  const showStudentCount =
+    selectedUnitId &&
+    !isLoadingClassProgressLocal &&
+    !classProgressErrorLocal &&
+    displayableClassProgress.length > 0;
+
   return (
     <section className={styles.viewContainer}>
       <h3>Class Progress Overview</h3>
       <div className={styles.filters}>
         <select
+          value={selectedCourseId}
+          onChange={(e) =>
+            handleCourseSelectionChange(e.target.value as CourseId)
+          }
+          className={styles.filterSelect}
+          disabled={courses.length === 0 || isLoadingUnitsGlobal}
+        >
+          <option value="">-- Select Course --</option>
+          {courses.map((course) => (
+            <option key={course.id} value={course.id}>
+              {course.title}
+            </option>
+          ))}
+        </select>
+        <select
           value={selectedUnitId}
           onChange={(e) => handleUnitSelectionChange(e.target.value as UnitId)}
           className={styles.filterSelect}
-          disabled={units.length === 0 || isLoadingUnitsGlobal}
+          disabled={!selectedCourseId || unitsForSelectedCourse.length === 0}
         >
           <option value="">-- Select Unit --</option>
-          {units.map((unit) => (
+          {unitsForSelectedCourse.map((unit) => (
             <option key={unit.id} value={unit.id}>
               {unit.title}
             </option>
           ))}
         </select>
+        {showStudentCount && (
+          <span className={styles.studentCount}>
+            Showing progress of {displayableClassProgress.length} student
+            {displayableClassProgress.length !== 1 ? "s" : ""}
+          </span>
+        )}
       </div>
 
       {/* Call the new render helper function here */}

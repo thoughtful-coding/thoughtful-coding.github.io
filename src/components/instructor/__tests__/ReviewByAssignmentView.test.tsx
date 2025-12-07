@@ -8,7 +8,14 @@ import ReviewByAssignmentView from "../ReviewByAssignmentView";
 import * as apiService from "../../../lib/apiService";
 import * as dataLoader from "../../../lib/dataLoader";
 import { useAuthStore } from "../../../stores/authStore";
-import type { Unit, Lesson, LessonId, UnitId } from "../../../types/data";
+import type {
+  Course,
+  CourseId,
+  Unit,
+  Lesson,
+  LessonId,
+  UnitId,
+} from "../../../types/data";
 import type { AssignmentSubmission } from "../../../types/apiServiceTypes";
 
 // Mock all external dependencies
@@ -26,11 +33,22 @@ vi.mock("react-router-dom", async () => {
 const mockedUseSearchParams = vi.mocked(useSearchParams);
 
 // --- Mock Data ---
+const mockCourses: Course[] = [
+  {
+    id: "course-1" as CourseId,
+    title: "Intro to Python",
+    description: "Learn Python",
+    image: "python.png",
+    units: [],
+  },
+];
+
 const mockUnits: Unit[] = [
   {
     id: "unit-1" as UnitId,
     title: "Unit 1: The Basics",
     lessons: [{ path: "01_intro/lesson_1.ts" }],
+    courseId: "course-1" as CourseId,
   },
 ];
 
@@ -78,10 +96,14 @@ describe("ReviewByAssignmentView", () => {
     ]);
   });
 
-  it("renders the initial state and allows unit selection", async () => {
+  it("renders the initial state and allows course and unit selection", async () => {
     const user = userEvent.setup();
     const { rerender } = render(
-      <ReviewByAssignmentView units={mockUnits} permittedStudents={[]} />
+      <ReviewByAssignmentView
+        courses={mockCourses}
+        units={mockUnits}
+        permittedStudents={[]}
+      />
     );
 
     // Initial state
@@ -92,20 +114,42 @@ describe("ReviewByAssignmentView", () => {
       screen.getByText(/please select a unit to view available assignments/i)
     ).toBeInTheDocument();
 
-    // Select a unit
-    const unitSelect = screen.getByRole("combobox");
-    await user.selectOptions(unitSelect, "unit-1");
+    // Select a course first
+    const [courseSelect, unitSelect] = screen.getAllByRole("combobox");
+    await user.selectOptions(courseSelect, "course-1");
+    expect(setSearchParamsMock).toHaveBeenCalledWith({ course: "course-1" });
 
-    // Assert that setSearchParams was called
-    expect(setSearchParamsMock).toHaveBeenCalledWith({ unit: "unit-1" });
-
-    // FIX: Simulate the URL change by updating the mock and re-rendering
+    // Simulate URL change after course selection
     mockedUseSearchParams.mockReturnValue([
-      new URLSearchParams("unit=unit-1"),
+      new URLSearchParams("course=course-1"),
       setSearchParamsMock,
     ]);
     rerender(
-      <ReviewByAssignmentView units={mockUnits} permittedStudents={[]} />
+      <ReviewByAssignmentView
+        courses={mockCourses}
+        units={mockUnits}
+        permittedStudents={[]}
+      />
+    );
+
+    // Now select a unit
+    await user.selectOptions(unitSelect, "unit-1");
+    expect(setSearchParamsMock).toHaveBeenCalledWith({
+      course: "course-1",
+      unit: "unit-1",
+    });
+
+    // Simulate the URL change by updating the mock and re-rendering
+    mockedUseSearchParams.mockReturnValue([
+      new URLSearchParams("course=course-1&unit=unit-1"),
+      setSearchParamsMock,
+    ]);
+    rerender(
+      <ReviewByAssignmentView
+        courses={mockCourses}
+        units={mockUnits}
+        permittedStudents={[]}
+      />
     );
 
     // After selecting, it should load and display the assignment
@@ -118,16 +162,24 @@ describe("ReviewByAssignmentView", () => {
   it("fetches and displays submissions when an assignment is clicked", async () => {
     const user = userEvent.setup();
     const { rerender } = render(
-      <ReviewByAssignmentView units={mockUnits} permittedStudents={[]} />
+      <ReviewByAssignmentView
+        courses={mockCourses}
+        units={mockUnits}
+        permittedStudents={[]}
+      />
     );
 
-    // 1. Select a unit to load assignments
+    // 1. Simulate course and unit already selected via URL
     mockedUseSearchParams.mockReturnValue([
-      new URLSearchParams("unit=unit-1"),
+      new URLSearchParams("course=course-1&unit=unit-1"),
       setSearchParamsMock,
     ]);
     rerender(
-      <ReviewByAssignmentView units={mockUnits} permittedStudents={[]} />
+      <ReviewByAssignmentView
+        courses={mockCourses}
+        units={mockUnits}
+        permittedStudents={[]}
+      />
     );
     const assignmentItem = await screen.findByText(
       /reflection: "first reflection"/i
@@ -136,6 +188,7 @@ describe("ReviewByAssignmentView", () => {
     // 2. Click the assignment
     await user.click(assignmentItem);
     expect(setSearchParamsMock).toHaveBeenCalledWith({
+      course: "course-1",
       unit: "unit-1",
       lesson: "lesson-1",
       section: "reflect-1",
@@ -143,11 +196,17 @@ describe("ReviewByAssignmentView", () => {
 
     // 3. Simulate the URL change for the selected assignment
     mockedUseSearchParams.mockReturnValue([
-      new URLSearchParams("unit=unit-1&lesson=lesson-1&section=reflect-1"),
+      new URLSearchParams(
+        "course=course-1&unit=unit-1&lesson=lesson-1&section=reflect-1"
+      ),
       setSearchParamsMock,
     ]);
     rerender(
-      <ReviewByAssignmentView units={mockUnits} permittedStudents={[]} />
+      <ReviewByAssignmentView
+        courses={mockCourses}
+        units={mockUnits}
+        permittedStudents={[]}
+      />
     );
 
     // 4. Assert that submissions are fetched and displayed
@@ -169,16 +228,24 @@ describe("ReviewByAssignmentView", () => {
     );
 
     const { rerender } = render(
-      <ReviewByAssignmentView units={mockUnits} permittedStudents={[]} />
+      <ReviewByAssignmentView
+        courses={mockCourses}
+        units={mockUnits}
+        permittedStudents={[]}
+      />
     );
 
-    // Simulate selecting the unit
+    // Simulate selecting the course and unit via URL
     mockedUseSearchParams.mockReturnValue([
-      new URLSearchParams("unit=unit-1"),
+      new URLSearchParams("course=course-1&unit=unit-1"),
       setSearchParamsMock,
     ]);
     rerender(
-      <ReviewByAssignmentView units={mockUnits} permittedStudents={[]} />
+      <ReviewByAssignmentView
+        courses={mockCourses}
+        units={mockUnits}
+        permittedStudents={[]}
+      />
     );
 
     // Assert that the correct placeholder message is shown after loading
