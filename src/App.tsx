@@ -14,7 +14,6 @@ import InstructorDashboardPage from "./pages/instructor/InstructorDashboardPage"
 import ReviewClassProgressView from "./components/instructor/ReviewClassProgressView";
 import ReviewByAssignmentView from "./components/instructor/ReviewByAssignmentView";
 import ReviewByStudentView from "./components/instructor/ReviewByStudentView";
-import ReviewStudentDetailView from "./components/instructor/shared/ReviewStudentDetailView";
 import ReviewLearningEntriesView from "./components/instructor/ReviewLearningEntriesView";
 import PrivacyPolicyPage from "./pages/static/PrivacyPolicyPage";
 import TermsOfServicePage from "./pages/static/TermsOfServicePage";
@@ -68,15 +67,18 @@ function InstructorAssignmentsWrapper() {
 }
 
 function InstructorStudentsWrapper() {
-  const { permittedStudents } = useOutletContext<{
+  const { allCourses, allUnits, permittedStudents } = useOutletContext<{
+    allCourses: Course[];
+    allUnits: Unit[];
     permittedStudents: InstructorStudentInfo[];
   }>();
-  return <ReviewByStudentView permittedStudents={permittedStudents} />;
-}
-
-function InstructorStudentDetailWrapper() {
-  const { allUnits } = useOutletContext<{ allUnits: Unit[] }>();
-  return <ReviewStudentDetailView units={allUnits} />;
+  return (
+    <ReviewByStudentView
+      courses={allCourses}
+      units={allUnits}
+      permittedStudents={permittedStudents}
+    />
+  );
 }
 
 function InstructorLearningEntriesWrapper() {
@@ -159,10 +161,6 @@ function App() {
             element={<InstructorAssignmentsWrapper />}
           />
           <Route path="students" element={<InstructorStudentsWrapper />} />
-          <Route
-            path="students/:studentId"
-            element={<InstructorStudentDetailWrapper />}
-          />
           <Route
             path="learning-entries"
             element={<InstructorLearningEntriesWrapper />}

@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import * as apiService from "../../lib/apiService";
 import { useAuthStore } from "../../stores/authStore";
 import type {
@@ -23,6 +23,8 @@ import {
   hasReviewableAssignments,
 } from "../../lib/dataLoader";
 import { calculateLessonAggregateStats } from "../../lib/difficultyCalculator";
+import { sortByStudentName } from "../../lib/instructorHelpers";
+import { useCourseUnitSelection } from "../../hooks/useCourseUnitSelection";
 import StatsBadge from "./StatsBadge";
 
 import LoadingSpinner from "../LoadingSpinner";
@@ -56,8 +58,15 @@ const ReviewClassProgressView: React.FC<ReviewClassProgressViewProps> = ({
 }) => {
   const { isAuthenticated } = useAuthStore();
 
-  const [selectedCourseId, setSelectedCourseId] = useState<CourseId | "">("");
-  const [selectedUnitId, setSelectedUnitId] = useState<UnitId | "">("");
+  const {
+    selectedCourseId,
+    selectedUnitId,
+    unitsForSelectedCourse,
+    handleCourseChange,
+    handleUnitChange,
+    buildUrlParams,
+  } = useCourseUnitSelection({ courses, units });
+
   const [selectedUnitLessons, setSelectedUnitLessons] = useState<
     (Lesson & { guid: LessonId })[]
   >([]);
@@ -72,41 +81,6 @@ const ReviewClassProgressView: React.FC<ReviewClassProgressViewProps> = ({
   const [classProgressErrorLocal, setClassProgressErrorLocal] = useState<
     string | null
   >(null);
-
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  // Get units for the selected course
-  const unitsForSelectedCourse = useMemo(
-    () =>
-      selectedCourseId
-        ? units.filter((u) => u.courseId === selectedCourseId)
-        : [],
-    [selectedCourseId, units]
-  );
-
-  useEffect(() => {
-    const courseFromUrl = searchParams.get("course") as CourseId;
-    const unitFromUrl = searchParams.get("unit") as UnitId;
-    if (courseFromUrl && courseFromUrl !== selectedCourseId) {
-      setSelectedCourseId(courseFromUrl);
-    }
-    if (unitFromUrl && unitFromUrl !== selectedUnitId) {
-      setSelectedUnitId(unitFromUrl);
-    }
-  }, [searchParams, selectedCourseId, selectedUnitId]);
-
-  // Clear unit selection when course changes and unit doesn't belong to course
-  useEffect(() => {
-    if (selectedCourseId && selectedUnitId) {
-      const unitBelongsToCourse = unitsForSelectedCourse.some(
-        (u) => u.id === selectedUnitId
-      );
-      if (!unitBelongsToCourse) {
-        setSelectedUnitId("");
-        setSearchParams({ course: selectedCourseId });
-      }
-    }
-  }, [selectedCourseId, selectedUnitId, unitsForSelectedCourse, setSearchParams]);
 
   useEffect(() => {
     if (!selectedUnitId || !isAuthenticated) {
@@ -205,7 +179,7 @@ const ReviewClassProgressView: React.FC<ReviewClassProgressViewProps> = ({
               ),
             };
           });
-        setDisplayableClassProgress(computedProgress);
+        setDisplayableClassProgress(sortByStudentName(computedProgress));
       } catch (err) {
         console.error(
           `Failed to fetch class progress for unit ${selectedUnitId}:`,
@@ -231,23 +205,6 @@ const ReviewClassProgressView: React.FC<ReviewClassProgressViewProps> = ({
       fetchUnitAndProgressDetails();
     }
   }, [selectedUnitId, permittedStudents, isAuthenticated, units]);
-
-  const handleCourseSelectionChange = (newCourseId: CourseId | "") => {
-    setSelectedCourseId(newCourseId);
-    setSelectedUnitId("");
-    setSearchParams(newCourseId ? { course: newCourseId } : {});
-  };
-
-  const handleUnitSelectionChange = (newUnitId: UnitId | "") => {
-    setSelectedUnitId(newUnitId);
-    if (newUnitId && selectedCourseId) {
-      setSearchParams({ course: selectedCourseId, unit: newUnitId });
-    } else if (selectedCourseId) {
-      setSearchParams({ course: selectedCourseId });
-    } else {
-      setSearchParams({});
-    }
-  };
 
   const getCellBackgroundColor = (
     percent: number | null | undefined
@@ -341,13 +298,16 @@ const ReviewClassProgressView: React.FC<ReviewClassProgressViewProps> = ({
               <th>Student</th>
               {selectedUnitLessons.map((lesson) => {
                 const hasAssignments = hasReviewableAssignments(lesson);
-                const lessonLink = `/instructor-dashboard/assignments?course=${selectedCourseId}&unit=${selectedUnitId}&lesson=${lesson.guid}`;
+                const params = buildUrlParams({ lesson: lesson.guid });
+                const lessonLink = `/instructor-dashboard/assignments?${new URLSearchParams(params)}`;
                 return (
                   <th key={lesson.guid} title={lesson.guid}>
                     <div>
                       {hasAssignments ? (
                         <Link
                           to={lessonLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
                           title={`Review assignments for ${lesson.title}`}
                         >
                           {lesson.title} ↗
@@ -368,7 +328,9 @@ const ReviewClassProgressView: React.FC<ReviewClassProgressViewProps> = ({
               <tr key={studentProgress.studentId}>
                 <td className={styles.studentNameCell}>
                   <Link
-                    to={`/instructor-dashboard/students/${studentProgress.studentId}`}
+                    to={`/instructor-dashboard/students?course=${selectedCourseId}&student=${studentProgress.studentId}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
                     {studentProgress.studentName || studentProgress.studentId}
                   </Link>
@@ -421,9 +383,7 @@ const ReviewClassProgressView: React.FC<ReviewClassProgressViewProps> = ({
       <div className={styles.filters}>
         <select
           value={selectedCourseId}
-          onChange={(e) =>
-            handleCourseSelectionChange(e.target.value as CourseId)
-          }
+          onChange={(e) => handleCourseChange(e.target.value as CourseId | "")}
           className={styles.filterSelect}
           disabled={courses.length === 0 || isLoadingUnitsGlobal}
         >
@@ -436,7 +396,7 @@ const ReviewClassProgressView: React.FC<ReviewClassProgressViewProps> = ({
         </select>
         <select
           value={selectedUnitId}
-          onChange={(e) => handleUnitSelectionChange(e.target.value as UnitId)}
+          onChange={(e) => handleUnitChange(e.target.value as UnitId | "")}
           className={styles.filterSelect}
           disabled={!selectedCourseId || unitsForSelectedCourse.length === 0}
         >

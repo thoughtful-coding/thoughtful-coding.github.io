@@ -205,7 +205,9 @@ describe("ReviewClassProgressView", () => {
     expect(screen.getByRole("cell", { name: "33%" })).toBeInTheDocument();
 
     // Check student count is displayed
-    expect(screen.getByText("Showing progress of 1 student")).toBeInTheDocument();
+    expect(
+      screen.getByText("Showing progress of 1 student")
+    ).toBeInTheDocument();
   });
 
   it("shows a loading spinner while fetching data", async () => {

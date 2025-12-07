@@ -62,6 +62,8 @@ const mockEntries: ReflectionVersionItem[] = [
 describe("ReviewLearningEntriesView", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // Reset URL to avoid state leakage between tests
+    window.history.pushState({}, "", "/");
     vi.mocked(useAuthStore).mockReturnValue({ isAuthenticated: true });
     vi.mocked(
       apiService.getInstructorStudentFinalLearningEntries
@@ -128,9 +130,13 @@ describe("ReviewLearningEntriesView", () => {
     ) as HTMLSelectElement;
     await user.selectOptions(studentSelect, "student-1");
 
-    // Wait for the initial view to render
+    // Wait for entries to load (same pattern as first test)
+    const listItems = await screen.findAllByRole("listitem");
+    expect(listItems.length).toBeGreaterThan(0);
+
+    // Now the detail view should be rendered
     expect(
-      await screen.findByText("Mocked Final Entry: Second Entry")
+      screen.getByText("Mocked Final Entry: Second Entry")
     ).toBeInTheDocument();
 
     const nextButton = screen.getByRole("button", { name: /next entry/i });

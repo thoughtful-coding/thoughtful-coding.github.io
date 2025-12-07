@@ -6,6 +6,7 @@ import { useAuthStore } from "../../stores/authStore";
 import type { InstructorStudentInfo } from "../../types/apiServiceTypes";
 import type { Unit, Course } from "../../types/data";
 import { fetchUnitsData, getCoursesAsync } from "../../lib/dataLoader";
+import { sortByStudentName } from "../../lib/instructorHelpers";
 import { BASE_PATH } from "../../config";
 import { useAuthHandlers } from "../../hooks/useAuthHandlers";
 import SettingsIcon from "../../components/icons/SettingsIcon";
@@ -56,7 +57,7 @@ const InstructorDashboardPage: React.FC = () => {
           fetchUnitsData(),
           getCoursesAsync(),
         ]);
-        setPermittedStudents(studentsResponse.students);
+        setPermittedStudents(sortByStudentName(studentsResponse.students));
         setAllUnits(unitsData.units);
         setAllCourses(coursesData);
       } catch (err) {
@@ -207,7 +208,15 @@ const InstructorDashboardPage: React.FC = () => {
         ) : error ? (
           <p className={styles.errorMessage}>{error}</p>
         ) : (
-          <Outlet context={{ allUnits, allCourses, permittedStudents, isLoading, error }} />
+          <Outlet
+            context={{
+              allUnits,
+              allCourses,
+              permittedStudents,
+              isLoading,
+              error,
+            }}
+          />
         )}
       </main>
       <Footer variant="instructor" />

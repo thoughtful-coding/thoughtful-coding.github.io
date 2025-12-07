@@ -97,3 +97,16 @@ export async function buildLessonTitleMap(
 
   return titleMap;
 }
+
+/**
+ * Sorts items with studentName/studentId fields alphabetically by name (fallback to ID)
+ */
+export function sortByStudentName<
+  T extends { studentName?: string | null; studentId: string },
+>(items: T[]): T[] {
+  return [...items].sort((a, b) => {
+    const nameA = (a.studentName || a.studentId).toLowerCase();
+    const nameB = (b.studentName || b.studentId).toLowerCase();
+    return nameA.localeCompare(nameB);
+  });
+}

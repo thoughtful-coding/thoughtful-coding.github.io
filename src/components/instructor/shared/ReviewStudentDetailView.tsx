@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom"; // Import router hooks
+import React, { useState, useEffect, useMemo } from "react";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import * as apiService from "../../../lib/apiService";
 import { useAuthStore } from "../../../stores/authStore";
 import type {
@@ -7,7 +7,7 @@ import type {
   SectionStatusItem,
   UnitProgressProfile,
 } from "../../../types/apiServiceTypes";
-import type { UserId, Unit } from "../../../types/data";
+import type { UserId, Unit, CourseId } from "../../../types/data";
 import * as instructorHelpers from "../../../lib/instructorHelpers";
 import { useLessonDataMap } from "../../../hooks/useCurriculumData";
 import LoadingSpinner from "../../LoadingSpinner";
@@ -24,8 +24,17 @@ interface ReviewStudentDetailViewProps {
 const ReviewStudentDetailView: React.FC<ReviewStudentDetailViewProps> = ({
   units,
 }) => {
-  const { studentId } = useParams<{ studentId: string }>(); // Get studentId from URL
-  const navigate = useNavigate(); // Get the navigate function for the back button
+  const { studentId } = useParams<{ studentId: string }>();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const courseFilter = searchParams.get("course") as CourseId | null;
+
+  // Filter units by course if course param is present
+  const filteredUnits = useMemo(
+    () =>
+      courseFilter ? units.filter((u) => u.courseId === courseFilter) : units,
+    [units, courseFilter]
+  );
 
   const [studentProfile, setStudentProfile] =
     useState<StudentDetailedProgressResponse | null>(null);
@@ -41,7 +50,7 @@ const ReviewStudentDetailView: React.FC<ReviewStudentDetailViewProps> = ({
   } | null>(null);
 
   const { isAuthenticated } = useAuthStore();
-  const { lessonDataMap } = useLessonDataMap(units);
+  const { lessonDataMap } = useLessonDataMap(filteredUnits);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -85,24 +94,33 @@ const ReviewStudentDetailView: React.FC<ReviewStudentDetailViewProps> = ({
       return;
     }
 
-    // Enrich with titles from lesson data
+    // Filter profile to only include units in the filtered list
+    const filteredUnitIds = new Set(filteredUnits.map((u) => u.id));
+    const filteredProfile = studentProfile.profile.filter((unitProgress) =>
+      filteredUnitIds.has(unitProgress.unitId as any)
+    );
+
+    // Enrich with titles from lesson data (using filtered units)
     const enriched = instructorHelpers.enrichStudentProfile(
-      studentProfile.profile,
-      units,
+      filteredProfile,
+      filteredUnits,
       lessonDataMap
     );
 
     // Sort units by curriculum order
     const sorted = instructorHelpers.sortUnitsByCurriculumOrder(
       enriched,
-      units
+      filteredUnits
     );
 
     setEnrichedProfile(sorted);
-  }, [studentProfile, lessonDataMap, units]);
+  }, [studentProfile, lessonDataMap, filteredUnits]);
 
   const handleBack = () => {
-    navigate("/instructor-dashboard/students"); // Always navigate back to the main student list page
+    const backUrl = courseFilter
+      ? `/instructor-dashboard/students?course=${courseFilter}`
+      : "/instructor-dashboard/students";
+    navigate(backUrl);
   };
 
   // ... (renderStatusBadge and renderSubmissionModal functions remain the same)

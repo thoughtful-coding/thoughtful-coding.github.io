@@ -40,7 +40,11 @@ const getColorClass = (attempts: number): "green" | "yellow" | "red" => {
  * // Full mode for detailed views
  * <StatsBadge p50={3} p95={8} />
  */
-const StatsBadge: React.FC<StatsBadgeProps> = ({ p50, p95, compact = false }) => {
+const StatsBadge: React.FC<StatsBadgeProps> = ({
+  p50,
+  p95,
+  compact = false,
+}) => {
   const p50Color = getColorClass(p50);
   const p95Color = getColorClass(p95);
 

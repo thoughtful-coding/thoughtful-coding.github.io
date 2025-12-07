@@ -17,6 +17,8 @@ import type {
 import * as apiService from "../../lib/apiService";
 import { useAuthStore } from "../../stores/authStore";
 import { useUnitLessons } from "../../hooks/useCurriculumData";
+import { useCourseUnitSelection } from "../../hooks/useCourseUnitSelection";
+import { sortByStudentName } from "../../lib/instructorHelpers";
 import LoadingSpinner from "../LoadingSpinner";
 import styles from "./InstructorViews.module.css";
 import RenderReflectionVersions from "./shared/RenderReflectionVersions";
@@ -36,8 +38,16 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
 }) => {
   const { isAuthenticated } = useAuthStore();
 
-  const [selectedCourseId, setSelectedCourseId] = useState<CourseId | "">("");
-  const [selectedUnitId, setSelectedUnitId] = useState<UnitId | "">("");
+  const {
+    selectedCourseId,
+    selectedUnitId,
+    unitsForSelectedCourse,
+    handleCourseChange,
+    handleUnitChange,
+  } = useCourseUnitSelection({ courses, units });
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const [selectedAssignmentKey, setSelectedAssignmentKey] = useState<
     string | null
   >(null);
@@ -50,8 +60,6 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
   });
   const [submissionsError, setSubmissionsError] = useState<string | null>(null);
 
-  const [searchParams, setSearchParams] = useSearchParams();
-
   // Load lessons for the selected unit
   const {
     lessons: lessonsInSelectedUnit,
@@ -59,34 +67,12 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
     error: lessonsError,
   } = useUnitLessons(units, selectedUnitId);
 
-  // Get units for the selected course
-  const unitsForSelectedCourse = useMemo(
-    () =>
-      selectedCourseId
-        ? units.filter((u) => u.courseId === selectedCourseId)
-        : [],
-    [selectedCourseId, units]
-  );
-
   // Reset selections when unit changes
   useEffect(() => {
     setSelectedAssignmentKey(null);
     setSubmissions([]);
     setSubmissionsError(null);
   }, [selectedUnitId]);
-
-  // Clear unit selection when course changes and unit doesn't belong to course
-  useEffect(() => {
-    if (selectedCourseId && selectedUnitId) {
-      const unitBelongsToCourse = unitsForSelectedCourse.some(
-        (u) => u.id === selectedUnitId
-      );
-      if (!unitBelongsToCourse) {
-        setSelectedUnitId("");
-        setSearchParams({ course: selectedCourseId });
-      }
-    }
-  }, [selectedCourseId, selectedUnitId, unitsForSelectedCourse, setSearchParams]);
 
   const assignmentsInUnit: DisplayableAssignment[] = useMemo(() => {
     if (!selectedUnitId || !lessonsInSelectedUnit.length) return [];
@@ -135,18 +121,10 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
     return displayableAssignments;
   }, [selectedUnitId, lessonsInSelectedUnit, units]);
 
+  // Sync assignment selection from URL (course/unit handled by hook)
   useEffect(() => {
-    const courseIdFromUrl = searchParams.get("course") as CourseId;
-    const unitIdFromUrl = searchParams.get("unit") as UnitId;
     const lessonIdFromUrl = searchParams.get("lesson");
     const sectionIdFromUrl = searchParams.get("section");
-
-    if (courseIdFromUrl && courseIdFromUrl !== selectedCourseId) {
-      setSelectedCourseId(courseIdFromUrl);
-    }
-    if (unitIdFromUrl && unitIdFromUrl !== selectedUnitId) {
-      setSelectedUnitId(unitIdFromUrl);
-    }
 
     if (lessonIdFromUrl && assignmentsInUnit.length > 0) {
       const targetAssignment = assignmentsInUnit.find(
@@ -160,7 +138,7 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
     } else if (!lessonIdFromUrl) {
       setSelectedAssignmentKey(null);
     }
-  }, [searchParams, selectedCourseId, selectedUnitId, assignmentsInUnit, selectedAssignmentKey]);
+  }, [searchParams, assignmentsInUnit, selectedAssignmentKey]);
 
   const fetchSubmissionsForSelectedAssignment = useCallback(
     async (assignment: DisplayableAssignment) => {
@@ -177,7 +155,7 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
           assignment.assignmentType,
           assignment.primmExampleId
         );
-        setSubmissions(response.submissions);
+        setSubmissions(sortByStudentName(response.submissions));
         if (response.submissions.length === 0) {
           setSubmissionsError(
             "No submissions found for this assignment from any student."
@@ -208,23 +186,6 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
     assignmentsInUnit,
     fetchSubmissionsForSelectedAssignment,
   ]);
-
-  const handleCourseSelectionChange = (newCourseId: CourseId | "") => {
-    setSelectedCourseId(newCourseId);
-    setSelectedUnitId("");
-    setSearchParams(newCourseId ? { course: newCourseId } : {});
-  };
-
-  const handleUnitSelectionChange = (newUnitId: UnitId | "") => {
-    setSelectedUnitId(newUnitId);
-    if (newUnitId && selectedCourseId) {
-      setSearchParams({ course: selectedCourseId, unit: newUnitId });
-    } else if (selectedCourseId) {
-      setSearchParams({ course: selectedCourseId });
-    } else {
-      setSearchParams({});
-    }
-  };
 
   const handleAssignmentSelection = (assignmentKey: string) => {
     const assignment = assignmentsInUnit.find((a) => a.key === assignmentKey);
@@ -376,9 +337,7 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
       <div className={styles.filters}>
         <select
           value={selectedCourseId}
-          onChange={(e) =>
-            handleCourseSelectionChange(e.target.value as CourseId | "")
-          }
+          onChange={(e) => handleCourseChange(e.target.value as CourseId | "")}
           className={styles.filterSelect}
           disabled={courses.length === 0}
         >
@@ -391,9 +350,7 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
         </select>
         <select
           value={selectedUnitId}
-          onChange={(e) =>
-            handleUnitSelectionChange(e.target.value as UnitId | "")
-          }
+          onChange={(e) => handleUnitChange(e.target.value as UnitId | "")}
           className={styles.filterSelect}
           disabled={!selectedCourseId || unitsForSelectedCourse.length === 0}
         >

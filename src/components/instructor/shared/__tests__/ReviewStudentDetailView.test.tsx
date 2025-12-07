@@ -33,21 +33,23 @@ vi.mock("../RenderPrimmActivity", () => ({
 }));
 // Mock the curriculum data hook to avoid loading actual lessons
 // Needs at least one entry so enrichedProfile gets populated
+// IMPORTANT: Create Map outside mock function to maintain stable reference (avoids infinite re-renders)
+const mockLessonDataMap = new Map([
+  [
+    "lesson-1",
+    {
+      guid: "lesson-1",
+      title: "Intro Lesson",
+      sections: [
+        { id: "sec-1", kind: "Information", title: "First Section" },
+        { id: "sec-2", kind: "Reflection", title: "Reflection Section" },
+      ],
+    },
+  ],
+]);
 vi.mock("../../../../hooks/useCurriculumData", () => ({
   useLessonDataMap: () => ({
-    lessonDataMap: new Map([
-      [
-        "lesson-1",
-        {
-          guid: "lesson-1",
-          title: "Intro Lesson",
-          sections: [
-            { id: "sec-1", kind: "Information", title: "First Section" },
-            { id: "sec-2", kind: "Reflection", title: "Reflection Section" },
-          ],
-        },
-      ],
-    ]),
+    lessonDataMap: mockLessonDataMap,
     isLoading: false,
   }),
 }));

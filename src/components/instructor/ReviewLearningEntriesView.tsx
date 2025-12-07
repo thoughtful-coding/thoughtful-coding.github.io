@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { useSearchParams } from "react-router-dom";
 import type {
   UserId,
   LessonId,
@@ -43,6 +44,7 @@ const ReviewLearningEntriesView: React.FC<ReviewLearningEntriesViewProps> = ({
   units,
 }) => {
   const { isAuthenticated } = useAuthStore();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [selectedStudentId, setSelectedStudentId] = useState<UserId | "">("");
   const [entryFilter, setEntryFilter] = useState<EntryFilter>("all");
@@ -59,8 +61,40 @@ const ReviewLearningEntriesView: React.FC<ReviewLearningEntriesViewProps> = ({
   const [currentEntryIndex, setCurrentEntryIndex] = useState<number | null>(
     null
   );
+  const [pendingEntryId, setPendingEntryId] = useState<string | null>(null);
 
   const { lessonTitlesMap } = useLessonTitleMap(units);
+
+  // Update URL when selections change
+  const updateUrlParams = useCallback(
+    (student: string, filter: EntryFilter, entryId: string | null) => {
+      const params: Record<string, string> = {};
+      if (student) params.student = student;
+      if (filter !== "all") params.filter = filter;
+      if (entryId) params.entry = entryId;
+      setSearchParams(params);
+    },
+    [setSearchParams]
+  );
+
+  // Initialize from URL on mount
+  useEffect(() => {
+    const studentFromUrl = searchParams.get("student") as UserId | null;
+    const filterFromUrl = searchParams.get("filter") as EntryFilter | null;
+    const entryFromUrl = searchParams.get("entry");
+
+    if (studentFromUrl && studentFromUrl !== selectedStudentId) {
+      setSelectedStudentId(studentFromUrl);
+    }
+    if (filterFromUrl && ["all", "lesson", "custom"].includes(filterFromUrl)) {
+      setEntryFilter(filterFromUrl);
+    }
+    if (entryFromUrl) {
+      setPendingEntryId(entryFromUrl);
+    }
+    // Only run on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (selectedStudentId && isAuthenticated) {
@@ -119,12 +153,23 @@ const ReviewLearningEntriesView: React.FC<ReviewLearningEntriesViewProps> = ({
 
     workItems.sort((a, b) => b.sortDate.getTime() - a.sortDate.getTime()); // Newest first
     setDisplayableFinalEntries(workItems);
-    if (workItems.length > 0 && currentEntryIndex === null) {
-      setCurrentEntryIndex(0);
-    } else if (workItems.length === 0) {
+
+    // Handle pending entry from URL or default to first
+    if (workItems.length > 0) {
+      if (pendingEntryId) {
+        const idx = workItems.findIndex(
+          (item) => item.data.versionId === pendingEntryId
+        );
+        setCurrentEntryIndex(idx >= 0 ? idx : 0);
+        setPendingEntryId(null);
+      } else {
+        // Use functional update to avoid stale closure
+        setCurrentEntryIndex((prev) => (prev === null ? 0 : prev));
+      }
+    } else {
       setCurrentEntryIndex(null);
     }
-  }, [finalLearningEntries, lessonTitlesMap]); // Removed currentEntryIndex from deps
+  }, [finalLearningEntries, lessonTitlesMap, pendingEntryId]);
 
   // Filter entries based on selected filter
   const filteredDisplayableEntries = useMemo(() => {
@@ -144,17 +189,47 @@ const ReviewLearningEntriesView: React.FC<ReviewLearningEntriesViewProps> = ({
       ? filteredDisplayableEntries[currentEntryIndex]
       : null;
 
+  const handleEntrySelect = useCallback(
+    (index: number) => {
+      setCurrentEntryIndex(index);
+      const entry = filteredDisplayableEntries[index];
+      if (entry) {
+        updateUrlParams(selectedStudentId, entryFilter, entry.data.versionId);
+      }
+    },
+    [
+      filteredDisplayableEntries,
+      selectedStudentId,
+      entryFilter,
+      updateUrlParams,
+    ]
+  );
+
   const handleNextEntry = () => {
-    setCurrentEntryIndex((prev) =>
-      prev !== null && prev < filteredDisplayableEntries.length - 1
-        ? prev + 1
-        : prev
-    );
+    if (
+      currentEntryIndex !== null &&
+      currentEntryIndex < filteredDisplayableEntries.length - 1
+    ) {
+      handleEntrySelect(currentEntryIndex + 1);
+    }
   };
   const handlePrevEntry = () => {
-    setCurrentEntryIndex((prev) =>
-      prev !== null && prev > 0 ? prev - 1 : prev
-    );
+    if (currentEntryIndex !== null && currentEntryIndex > 0) {
+      handleEntrySelect(currentEntryIndex - 1);
+    }
+  };
+
+  const handleStudentChange = (newStudentId: UserId | "") => {
+    setSelectedStudentId(newStudentId);
+    setCurrentEntryIndex(null);
+    setDisplayableFinalEntries([]);
+    updateUrlParams(newStudentId, entryFilter, null);
+  };
+
+  const handleFilterChange = (newFilter: EntryFilter) => {
+    setEntryFilter(newFilter);
+    setCurrentEntryIndex(null);
+    updateUrlParams(selectedStudentId, newFilter, null);
   };
 
   return (
@@ -164,11 +239,7 @@ const ReviewLearningEntriesView: React.FC<ReviewLearningEntriesViewProps> = ({
         <select
           id="student-select-learning-entries"
           value={selectedStudentId}
-          onChange={(e) => {
-            setSelectedStudentId(e.target.value as UserId);
-            setCurrentEntryIndex(null);
-            setDisplayableFinalEntries([]);
-          }}
+          onChange={(e) => handleStudentChange(e.target.value as UserId | "")}
           className={styles.filterSelect}
           disabled={permittedStudents.length === 0}
         >
@@ -184,10 +255,7 @@ const ReviewLearningEntriesView: React.FC<ReviewLearningEntriesViewProps> = ({
         <select
           id="entry-type-filter"
           value={entryFilter}
-          onChange={(e) => {
-            setEntryFilter(e.target.value as EntryFilter);
-            setCurrentEntryIndex(null);
-          }}
+          onChange={(e) => handleFilterChange(e.target.value as EntryFilter)}
           className={styles.filterSelect}
           disabled={!selectedStudentId}
         >
@@ -226,7 +294,7 @@ const ReviewLearningEntriesView: React.FC<ReviewLearningEntriesViewProps> = ({
                     className={`${styles.assignmentListItem} ${
                       currentEntryIndex === index ? styles.selected : ""
                     }`}
-                    onClick={() => setCurrentEntryIndex(index)}
+                    onClick={() => handleEntrySelect(index)}
                   >
                     <span className={styles.assignmentTitle}>
                       {isCustomReflection(item.data) && (
