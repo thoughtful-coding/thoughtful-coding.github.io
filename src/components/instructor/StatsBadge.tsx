@@ -51,19 +51,16 @@ const StatsBadge: React.FC<StatsBadgeProps> = ({
   const p50Color = getColorClass(p50);
   const p95Color = getColorClass(p95);
 
+  const p50Tooltip = `50% of students completed in ${p50} or fewer attempt${p50 === 1 ? "" : "s"}${totalCompletions ? ` (n=${totalCompletions})` : ""}`;
+  const p95Tooltip = `95% of students completed in ${p95} or fewer attempt${p95 === 1 ? "" : "s"}`;
+
   if (compact) {
     return (
       <div className={styles.compactBadge}>
-        <span
-          className={styles[`badge-${p50Color}`]}
-          title={`Median: ${p50} attempt${p50 === 1 ? "" : "s"}${totalCompletions ? ` (${totalCompletions} students)` : ""}`}
-        >
+        <span className={styles[`badge-${p50Color}`]} title={p50Tooltip}>
           p50: {p50}
         </span>
-        <span
-          className={styles[`badge-${p95Color}`]}
-          title={`95th percentile: ${p95} attempt${p95 === 1 ? "" : "s"}`}
-        >
+        <span className={styles[`badge-${p95Color}`]} title={p95Tooltip}>
           p95: {p95}
         </span>
       </div>
@@ -72,11 +69,11 @@ const StatsBadge: React.FC<StatsBadgeProps> = ({
 
   return (
     <div className={styles.badge}>
-      <div className={styles.stat}>
+      <div className={styles.stat} title={p50Tooltip}>
         <span className={styles.label}>Median:</span>
         <span className={styles[`value-${p50Color}`]}>{p50}</span>
       </div>
-      <div className={styles.stat}>
+      <div className={styles.stat} title={p95Tooltip}>
         <span className={styles.label}>p95:</span>
         <span className={styles[`value-${p95Color}`]}>{p95}</span>
       </div>

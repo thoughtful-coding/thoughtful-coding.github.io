@@ -17,7 +17,7 @@ describe("StatsBadge", () => {
       const p50Badge = screen.getByText(/p50: 2/);
       expect(p50Badge).toHaveAttribute(
         "title",
-        expect.stringContaining("42 students")
+        expect.stringContaining("n=42")
       );
     });
 
@@ -155,9 +155,12 @@ describe("StatsBadge", () => {
 
       expect(p50Badge).toHaveAttribute(
         "title",
-        "Median: 1 attempt (50 students)"
+        "50% of students completed in 1 or fewer attempt (n=50)"
       );
-      expect(p95Badge).toHaveAttribute("title", "95th percentile: 3 attempts");
+      expect(p95Badge).toHaveAttribute(
+        "title",
+        "95% of students completed in 3 or fewer attempts"
+      );
     });
 
     it("uses correct singular/plural in tooltips", () => {
@@ -166,14 +169,14 @@ describe("StatsBadge", () => {
       const p50Single = screen.getByText(/p50: 1/);
       expect(p50Single).toHaveAttribute(
         "title",
-        expect.stringContaining("1 attempt")
+        expect.stringContaining("1 or fewer attempt")
       );
 
       rerender(<StatsBadge p50={2} p95={3} compact />);
       const p50Plural = screen.getByText(/p50: 2/);
       expect(p50Plural).toHaveAttribute(
         "title",
-        expect.stringContaining("2 attempts")
+        expect.stringContaining("2 or fewer attempts")
       );
     });
   });
