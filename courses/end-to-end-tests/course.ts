@@ -9,7 +9,7 @@ const courseManifest: CourseManifest = {
   title: "End-to-End Tests",
   description:
     "A test-bed to allow end-to-end testing of all the sections via playwright.",
-  image: "images/python-logo.svg",
+  image: "images/course_icon_end_to_end_tests.svg",
   difficulty: "beginner",
   units: ["00_end_to_end_tests"],
 };

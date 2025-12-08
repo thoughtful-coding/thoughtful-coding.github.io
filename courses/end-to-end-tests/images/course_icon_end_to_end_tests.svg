@@ -1,0 +1,77 @@
+<svg width="350" height="200" viewBox="0 0 350 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="350" height="200" fill="#e8f5e9" rx="12"/>
+  <rect x="5" y="5" width="340" height="190" rx="10" fill="none" stroke="#2e7d32" stroke-width="3"/>
+  
+  <!-- Start flag (left side) -->
+  <g transform="translate(60, 100)">
+    <!-- Flag pole -->
+    <rect x="-2" y="-40" width="4" height="80" fill="#424242"/>
+    
+    <!-- Checkered flag -->
+    <g transform="translate(0, -40)">
+      <rect x="2" y="0" width="35" height="25" fill="#fff" stroke="#2e7d32" stroke-width="2"/>
+      <!-- Checkered pattern -->
+      <rect x="2" y="0" width="7" height="5" fill="#424242"/>
+      <rect x="16" y="0" width="7" height="5" fill="#424242"/>
+      <rect x="30" y="0" width="7" height="5" fill="#424242"/>
+      <rect x="9" y="5" width="7" height="5" fill="#424242"/>
+      <rect x="23" y="5" width="7" height="5" fill="#424242"/>
+      <rect x="2" y="10" width="7" height="5" fill="#424242"/>
+      <rect x="16" y="10" width="7" height="5" fill="#424242"/>
+      <rect x="30" y="10" width="7" height="5" fill="#424242"/>
+      <rect x="9" y="15" width="7" height="5" fill="#424242"/>
+      <rect x="23" y="15" width="7" height="5" fill="#424242"/>
+      <rect x="2" y="20" width="7" height="5" fill="#424242"/>
+      <rect x="16" y="20" width="7" height="5" fill="#424242"/>
+      <rect x="30" y="20" width="7" height="5" fill="#424242"/>
+    </g>
+  </g>
+  
+  <!-- Winding path (center) -->
+  <g>
+    <defs>
+      <marker id="pathArrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+        <polygon points="0,0 10,5 0,10" fill="#66bb6a"/>
+      </marker>
+    </defs>
+    <path d="M100,115 Q130,85 160,105 T235,115" 
+          stroke="#66bb6a" stroke-width="4" fill="none" 
+          stroke-dasharray="8,4" marker-end="url(#pathArrow)"/>
+  </g>
+  
+  <!-- Finish line/trophy (right side) -->
+  <g transform="translate(280, 100)">
+    <!-- Trophy cup -->
+    <path d="M-20,-35 L-20,-12 Q-20,-6 -13,-6 L13,-6 Q20,-6 20,-12 L20,-35 Z" 
+          fill="#ffd700" stroke="#f57f00" stroke-width="2.5"/>
+    
+    <!-- Trophy handles -->
+    <path d="M-20,-28 Q-32,-28 -32,-15 Q-32,-8 -25,-8" 
+          stroke="#ffd700" stroke-width="2.5" fill="none"/>
+    <path d="M20,-28 Q32,-28 32,-15 Q32,-8 25,-8" 
+          stroke="#ffd700" stroke-width="2.5" fill="none"/>
+    
+    <!-- Trophy base -->
+    <rect x="-16" y="-6" width="32" height="5" fill="#f57f00"/>
+    <rect x="-11" y="-1" width="22" height="10" fill="#757575" stroke="#424242" stroke-width="2"/>
+    <rect x="-20" y="9" width="40" height="6" rx="2" fill="#757575" stroke="#424242" stroke-width="2"/>
+    
+    <!-- Trophy decoration -->
+    <circle cx="0" cy="-24" r="4" fill="#f57f00"/>
+    
+    <!-- Checkmark on trophy -->
+    <path d="M-7,-25 L-3,-18 L7,-30" stroke="#43a047" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  
+  <!-- Test checkmarks floating -->
+  <g transform="translate(175, 50)">
+    <circle cx="0" cy="0" r="12" fill="#66bb6a" stroke="#43a047" stroke-width="2"/>
+    <path d="M-4,0 L-1,4 L5,-4" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  
+  <g transform="translate(140, 140)">
+    <circle cx="0" cy="0" r="10" fill="#81c784" stroke="#43a047" stroke-width="2"/>
+    <path d="M-3,0 L-1,3 L4,-3" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>
