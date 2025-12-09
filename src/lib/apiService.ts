@@ -233,6 +233,25 @@ export async function loginWithGoogle(
   return handleApiResponse(response);
 }
 
+/**
+ * Test login for E2E tests (beta environment only).
+ * Uses the /auth/test-login endpoint that bypasses Google OAuth.
+ */
+export async function loginWithTestAuth(
+  testUserId: string,
+  testAuthSecret: string
+): Promise<{ accessToken: AccessTokenId; refreshToken: RefreshTokenId }> {
+  const response = await fetchWithRetry(
+    `${API_GATEWAY_BASE_URL}/auth/test-login`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ testUserId, testAuthSecret }),
+    }
+  );
+  return handleApiResponse(response);
+}
+
 export async function refreshAccessToken(
   refreshToken: string
 ): Promise<{ accessToken: AccessTokenId; refreshToken: RefreshTokenId }> {

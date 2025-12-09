@@ -18,6 +18,7 @@ import ReviewLearningEntriesView from "./components/instructor/ReviewLearningEnt
 import PrivacyPolicyPage from "./pages/static/PrivacyPolicyPage";
 import TermsOfServicePage from "./pages/static/TermsOfServicePage";
 import FAQPage from "./pages/static/FAQPage";
+import TestLoginPage from "./pages/TestLoginPage";
 import Layout from "./components/Layout";
 import AuthenticatedRoute from "./components/AuthenticatedRoute";
 import { useThemeStore } from "./stores/themeStore";
@@ -171,6 +172,7 @@ function App() {
         <Route element={<Layout />}>
           <Route index element={<CoursesHomePage />} />
           <Route path="/configure" element={<ConfigurationPage />} />
+          <Route path="/test-login" element={<TestLoginPage />} />
           <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
           <Route path="/terms-of-service" element={<TermsOfServicePage />} />
           <Route path="/faq" element={<FAQPage />} />
