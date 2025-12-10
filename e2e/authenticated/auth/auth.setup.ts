@@ -10,48 +10,23 @@ setup("authenticate", async ({ page }) => {
     // Automated test auth flow (beta environment)
     console.log(`Using test auth for user: ${testUserId}`);
 
-    await page.goto("/");
+    // Navigate to test login page
+    await page.goto("/test-login");
 
-    // Call the test login API directly and store tokens
-    const response = await page.evaluate(
-      async ({ userId, secret, apiUrl }) => {
-        const res = await fetch(`${apiUrl}/auth/test-login`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            testUserId: userId,
-            testAuthSecret: secret,
-          }),
-        });
+    // Click the login button
+    await page.getByRole("button", { name: "Login as Test User" }).click();
 
-        if (!res.ok) {
-          const error = await res.text();
-          throw new Error(`Test login failed: ${error}`);
-        }
+    // Wait for redirect to instructor dashboard to complete
+    await page.waitForURL(/instructor-dashboard/);
 
-        const data = await res.json();
-        localStorage.setItem("accessToken", data.accessToken);
-        localStorage.setItem("refreshToken", data.refreshToken);
-        return data;
-      },
-      {
-        userId: testUserId,
-        secret: testAuthSecret,
-        apiUrl:
-          process.env.VITE_API_GATEWAY_BASE_URL ||
-          "https://txg564rkl8.execute-api.us-west-1.amazonaws.com",
-      }
-    );
-
-    console.log("Test auth login successful");
-
-    // Reload to pick up auth state
-    await page.reload();
+    // Verify we're authenticated
     await expect(page.getByRole("button", { name: "Logout" })).toBeVisible({
       timeout: 10000,
     });
+
+    console.log("Test auth login successful");
   } else {
-    // Manual Google OAuth flow (local development)
+    // Manual Google OAuth flow (local development without test credentials)
     console.log("No test auth credentials found. Using manual login flow...");
     await page.goto("/intro-python/");
 
@@ -66,6 +41,7 @@ setup("authenticate", async ({ page }) => {
     console.log("Login successful. Saving authentication state...");
   }
 
+  // Save authentication state to file
   await page.context().storageState({ path: authFile });
   console.log(`Authentication state saved to ${authFile}`);
 });

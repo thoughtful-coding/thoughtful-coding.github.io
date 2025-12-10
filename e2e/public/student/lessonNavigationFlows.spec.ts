@@ -1,4 +1,9 @@
 import { test, expect } from "@playwright/test";
+import {
+  backToUnitOverview,
+  backToLearningPaths,
+  runCode,
+} from "../../utils/testHelpers";
 
 test.describe("Check can navigate into and out of lessons", () => {
   test("Can go from units -> lessons -> lesson -> home", async ({ page }) => {
@@ -26,7 +31,7 @@ test.describe("Check can navigate into and out of lessons", () => {
     await page
       .getByRole("link", { name: "The Science of Learning image" })
       .click();
-    await page.getByRole("link", { name: "← Back to Learning Paths" }).click();
+    await backToLearningPaths(page);
     await expect(
       page.getByRole("heading", { name: "A Thoughtful Approach to" })
     ).toBeVisible();
@@ -45,8 +50,8 @@ test.describe("Check can navigate into and out of lessons", () => {
     await page
       .getByRole("link", { name: "Lesson 1 A Guided Tour: PRIMM" })
       .click();
-    await page.getByRole("link", { name: "← Back to Unit Overview" }).click();
-    await page.getByRole("link", { name: "← Back to Learning Paths" }).click();
+    await backToUnitOverview(page);
+    await backToLearningPaths(page);
     await expect(
       page.getByRole("heading", { name: "A Thoughtful Approach to" })
     ).toBeVisible();
@@ -108,17 +113,8 @@ test.describe("Check can navigate into and out of lessons", () => {
     await page
       .getByRole("link", { name: "Lesson 1 A Guided Tour: PRIMM" })
       .click();
-    // await expect(
-    //   page.getByRole("listitem").filter({ hasText: "Running Code" })
-    // ).toHaveClass("/sectionItemToBeDone/");
-    await page
-      .locator("#running-code")
-      .getByRole("button", { name: "Run Code" })
-      .click();
+    await runCode(page, "running-code");
     await expect(page.getByText("Hello, World! Can I call")).toBeVisible();
-    // await expect(
-    //   page.getByRole("listitem").filter({ hasText: "Running Code" })
-    // ).toHaveClass("/sectionItemCompleted/");
   });
 
   test("Can go to a lesson by the URL", async ({ page }) => {
@@ -143,11 +139,11 @@ test.describe("Check can navigate into and out of lessons", () => {
       .getByLabel("Previous Lesson")
       .click();
     await expect(page.getByText("Based on the definition above")).toBeVisible();
-    await page.getByRole("link", { name: "← Back to Unit Overview" }).click();
+    await backToUnitOverview(page);
     await expect(
       page.getByRole("heading", { name: "Section End-To-End Testing" })
     ).toBeVisible();
-    await page.getByRole("link", { name: "← Back to Learning Paths" }).click();
+    await backToLearningPaths(page);
     await expect(
       page.getByRole("heading", { name: "A Thoughtful Approach to" })
     ).toBeVisible();
@@ -176,8 +172,8 @@ test.describe("Check can navigate into and out of lessons", () => {
     await expect(
       page.getByRole("heading", { name: "Watching Variables Change" })
     ).toBeVisible();
-    await page.getByRole("link", { name: "← Back to Unit Overview" }).click();
-    await page.getByRole("link", { name: "← Back to Learning Paths" }).click();
+    await backToUnitOverview(page);
+    await backToLearningPaths(page);
     await expect(
       page.getByRole("heading", { name: "A Thoughtful Approach to" })
     ).toBeVisible();
@@ -200,7 +196,7 @@ test.describe("Check can navigate into and out of lessons", () => {
       })
       .getByLabel("Previous Lesson")
       .click();
-    await page.getByRole("link", { name: "← Back to Unit Overview" }).click();
+    await backToUnitOverview(page);
     await expect(
       page.getByRole("link", { name: "Lesson 3 MatchingSection" })
     ).toBeVisible();
