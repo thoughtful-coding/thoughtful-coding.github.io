@@ -90,7 +90,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "The goal of this lesson isn't to make you a philosopher of learning. It's to prove to you that the techniques utilized in this website have been proven to be effective. In fact, these techniques will help you learn more effectively no matter what you're focused on.\n\nThe important thing to keep in mind is that learning isn't easy. It's an active process that requires effort. This website utilizes best practice learning techniques that are proven to work. If you're willing to put forth the effort, you have the opportunity to learn more effectively and deeply. Good luck as you move onto learning Python!",
+            "The goal of this lesson isn't to make you a philosopher of learning. It's to prove to you that the techniques utilized in this website have been proven to be effective. In fact, these techniques will help you learn more effectively no matter what you're focused on.\n\nThe important thing to keep in mind is that learning isn't easy. It's an active process that requires effort. This website utilizes best practice learning techniques that are proven to work. If you're willing to put forth the effort, you have the opportunity to learn more effectively and deeply. Good luck as you move on to learning Python!",
         },
       ],
     } as InformationSectionData,
