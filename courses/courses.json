@@ -5,8 +5,14 @@
   },
   {
     "type": "git",
-    "directory": "thoughtful-python",
-    "repo": "https://github.com/thoughtful-coding/thoughtful-python.git",
+    "directory": "thoughtful-python-intro",
+    "repo": "https://github.com/thoughtful-coding/thoughtful-python-intro.git",
+    "ref": "main"
+  },
+  {
+    "type": "git",
+    "directory": "thoughtful-python-intermediate",
+    "repo": "https://github.com/thoughtful-coding/thoughtful-python-intermediate.git",
     "ref": "main"
   },
   {

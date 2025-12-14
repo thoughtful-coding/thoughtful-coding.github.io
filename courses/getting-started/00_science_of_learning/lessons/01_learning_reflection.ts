@@ -33,7 +33,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Why do you think reflection such a powerful tool in learning?",
+            "Why do you think reflection is such a powerful tool in learning?",
         },
       ],
       options: [

@@ -1,4 +1,4 @@
-import type { CourseManifest, CourseId } from "../../../types/data";
+import type { CourseManifest, CourseId } from "../../src/types/data";
 
 /**
  * Test "course" to allow end-to-end testing of sections via playwright.
