@@ -35,7 +35,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "This website is designed to allow you to quickly write, run, and debug programs. Below is your first program. Run it by clicking the `Run Code` button. Once it is done executing, compare the program with the resulting output to try and understand what is happened.",
+            "This website is designed to allow you to quickly write, run, and debug programs. Below is your first program. Run it by clicking the `Run Code` button. Once it is done executing, compare the program with the resulting output to try and understand what happened.",
         },
       ],
       example: {

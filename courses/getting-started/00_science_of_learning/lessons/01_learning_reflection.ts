@@ -74,7 +74,8 @@ const lessonData: Lesson = {
       isTopicPredefined: true,
       code: 'print("Hello, World!")\nprint("Can I call myself a programmer now?")',
       isCodePredefined: true,
-      explanation: "Explain how your example works (3-4 sentences)",
+      explanation:
+        "Explain how the example works and why the output looks the way it does (3-4 sentences)",
       isExplanationPredefined: false,
       extraContext:
         "So far students have _only_ learned about the print statement. They have not been introduced to strings, new lines, or even functions. They have only a simple program with two print statements and its output after running it.",
@@ -87,7 +88,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            'The AI is intended to act as a guide and a "speed bump". What is basically happening is the website sends your entire journal entry to a ChatBot and asks it to assess it using a rubric designed for people learning to program.\n\nThe best way to approach reflection sections is to pretend you are writing for some future version of yourself who doesn\'t quite remember a topic. Keep the entries short and to the point. Using the magic phrase **"as seen in the example above"** will really help because it will keep your analysis aligned with the code.',
+            'The AI is intended to act as a guide and a "speed bump". What is basically happening is the website sends your entire journal entry to a ChatBot and asks it to assess it using a rubric designed for people learning to program.\n\nTo pass a reflection section, your entry must include:\n* **Correct Terminology**: Using the right words for the concepts.\n* **Specific Evidence**: Pointing to specific lines of code.\n* **Accurate Reasoning**: Correctly explaining *why* the code runs that way.\n\nThe best way to approach this is to pretend you are writing for a future version of yourself who doesn\'t quite remember the topic. Keep the entries short, focus on what you found tricky, and use the phrase **"as seen in the example above"** to keep your analysis aligned with the code.',
         },
       ],
     } as InformationSectionData,

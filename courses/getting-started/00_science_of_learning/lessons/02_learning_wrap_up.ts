@@ -71,7 +71,7 @@ const lessonData: Lesson = {
         },
       ],
       options: [
-        "Do as much as possible as you can in a single day",
+        "Do one large block of coding every Sunday to maintain deep focus",
         "Wait until the last minute to do anything so it's fresh",
         "Do a few things a day so you practice recalling information",
         "Change strategies over time to keep yourself on your toes",
