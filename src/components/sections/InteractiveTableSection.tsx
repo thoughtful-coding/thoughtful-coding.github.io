@@ -140,7 +140,7 @@ const InteractiveTableSection: React.FC<InteractiveTableSectionProps> = (
                     <>
                       {tableData.columns.map((param) => (
                         <th key={param.variableName}>
-                          Input: {param.variableName}
+                          Argument: {param.variableName}
                         </th>
                       ))}
                       <th>Expected Output</th>
@@ -151,9 +151,9 @@ const InteractiveTableSection: React.FC<InteractiveTableSectionProps> = (
                     // Prediction mode: Input columns are read-only display
                     <>
                       {tableData.columns.map((col, index) => (
-                        <th key={index}>{col.variableName}</th>
+                        <th key={index}>Argument: {col.variableName}</th>
                       ))}
-                      <th>Your Prediction</th>
+                      <th>Prediction Output</th>
                       <th>Actual Output</th>
                       <th>Action</th>
                     </>

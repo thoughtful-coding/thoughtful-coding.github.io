@@ -80,10 +80,14 @@ describe("PredictionSection", () => {
     expect(
       screen.getByRole("heading", { name: /predict the output/i })
     ).toBeInTheDocument();
-    expect(screen.getByRole("columnheader", { name: "a" })).toBeInTheDocument();
-    expect(screen.getByRole("columnheader", { name: "b" })).toBeInTheDocument();
     expect(
-      screen.getByRole("columnheader", { name: "Your Prediction" })
+      screen.getByRole("columnheader", { name: "Argument: a" })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("columnheader", { name: "Argument: b" })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("columnheader", { name: "Prediction Output" })
     ).toBeInTheDocument();
     // Assert that the inputs are rendered
     expect(screen.getByRole("cell", { name: "2" })).toBeInTheDocument();

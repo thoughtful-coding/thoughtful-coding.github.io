@@ -88,7 +88,7 @@ describe("CoverageSection", () => {
     expect(codeEditor).toHaveTextContent(/return 'Hot'/);
 
     expect(
-      screen.getByRole("columnheader", { name: "Input: t" })
+      screen.getByRole("columnheader", { name: "Argument: t" })
     ).toBeInTheDocument();
     expect(
       screen.getByRole("columnheader", { name: "Expected Output" })
