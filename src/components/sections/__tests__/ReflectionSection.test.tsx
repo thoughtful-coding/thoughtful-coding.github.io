@@ -218,4 +218,92 @@ describe("ReflectionSection", () => {
       );
     });
   });
+
+  it("shows phrase indicator in inactive state initially", async () => {
+    render(
+      <ReflectionSection
+        section={mockSectionData}
+        unitId={"unit-1" as UnitId}
+        lessonId={"lesson-1" as LessonId}
+      />
+    );
+
+    const indicator = screen.getByText(/includes "as seen in the example"/i);
+    expect(indicator).toBeInTheDocument();
+    expect(indicator.parentElement).not.toHaveClass("phraseIndicatorActive");
+  });
+
+  it("activates phrase indicator when magic phrase is typed", async () => {
+    const user = userEvent.setup();
+    render(
+      <ReflectionSection
+        section={mockSectionData}
+        unitId={"unit-1" as UnitId}
+        lessonId={"lesson-1" as LessonId}
+      />
+    );
+
+    const explanationTextarea = screen.getByLabelText(/explanation/i);
+    const indicator = screen.getByText(/includes "as seen in the example"/i);
+
+    // Initially inactive
+    expect(indicator.parentElement).not.toHaveClass("phraseIndicatorActive");
+
+    // Type the magic phrase
+    await user.type(
+      explanationTextarea,
+      "This is my explanation as seen in the example"
+    );
+
+    // Should now be active
+    expect(indicator.parentElement).toHaveClass("phraseIndicatorActive");
+  });
+
+  it("phrase indicator is case-insensitive", async () => {
+    const user = userEvent.setup();
+    render(
+      <ReflectionSection
+        section={mockSectionData}
+        unitId={"unit-1" as UnitId}
+        lessonId={"lesson-1" as LessonId}
+      />
+    );
+
+    const explanationTextarea = screen.getByLabelText(/explanation/i);
+    const indicator = screen.getByText(/includes "as seen in the example"/i);
+
+    // Type with different casing
+    await user.type(
+      explanationTextarea,
+      "This is AS SEEN IN THE EXAMPLE in my code"
+    );
+
+    // Should be active despite different case
+    expect(indicator.parentElement).toHaveClass("phraseIndicatorActive");
+  });
+
+  it("deactivates phrase indicator when phrase is removed", async () => {
+    const user = userEvent.setup();
+    render(
+      <ReflectionSection
+        section={mockSectionData}
+        unitId={"unit-1" as UnitId}
+        lessonId={"lesson-1" as LessonId}
+      />
+    );
+
+    const explanationTextarea = screen.getByLabelText(/explanation/i);
+    const indicator = screen.getByText(/includes "as seen in the example"/i);
+
+    // Type the magic phrase
+    await user.type(explanationTextarea, "This is as seen in the example");
+    expect(indicator.parentElement).toHaveClass("phraseIndicatorActive");
+
+    // Clear the textarea
+    await user.clear(explanationTextarea);
+    await user.type(explanationTextarea, "Different text without the phrase");
+
+    // Should be inactive again
+    expect(indicator.parentElement).not.toHaveClass("phraseIndicatorActive");
+  });
 });

@@ -88,7 +88,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            'The AI is intended to act as a guide and a "speed bump". What is basically happening is the website sends your entire journal entry to a ChatBot and asks it to assess it using a rubric designed for people learning to program.\n\nTo pass a reflection section, your entry must include:\n* **Correct Terminology**: Using the right words for the concepts.\n* **Specific Evidence**: Pointing to specific lines of code.\n* **Accurate Reasoning**: Correctly explaining *why* the code runs that way.\n\nThe best way to approach this is to pretend you are writing for a future version of yourself who doesn\'t quite remember the topic. Keep the entries short, focus on what you found tricky, and use the phrase **"as seen in the example above"** to keep your analysis aligned with the code.',
+            'The AI is intended to act as a guide and a "speed bump". What is basically happening is the website sends your entire journal entry to a ChatBot and asks it to assess it using a rubric designed for people learning to program.\n\nTo pass a reflection section, your entry must include:\n* **Correct Terminology**: Using the right words for the concepts.\n* **Specific Evidence**: Pointing to specific lines of code.\n* **Accurate Reasoning**: Correctly explaining *why* the code runs that way.\n\nThe best way to approach this is to pretend you are writing for a future version of yourself who doesn\'t quite remember the topic. Keep the entries short, focus on what you found tricky, and use the phrase **"as seen in the example"** to keep your analysis aligned with the code.',
         },
       ],
     } as InformationSectionData,

@@ -705,7 +705,6 @@
   border: 2px solid var(--border-tertiary);
   border-radius: 4px;
   overflow: hidden;
-  margin-bottom: 1.5rem;
   background-color: var(--bg-elevated);
 }
 /* Ensure CodeMirror inside takes up space and min-height */
@@ -717,7 +716,6 @@
   composes: textArea from "../../styles/common.module.css";
   min-height: 150px;
   padding: 1rem;
-  margin-bottom: 1.5rem;
 }
 
 .reflectionButtons {
@@ -919,7 +917,25 @@
 
 .topicInput {
   composes: textInput from "../../styles/common.module.css";
-  margin-bottom: 1rem;
+}
+
+.phraseIndicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.phraseIndicatorActive {
+  composes: phraseIndicator;
+  color: var(--color-success);
+}
+
+.phraseIndicator span:first-child {
+  font-size: 1.2rem;
 }
 
 .feedbackOnlyBadge {

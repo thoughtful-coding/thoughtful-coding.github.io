@@ -156,6 +156,18 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = ({
             }
             rows={4}
           />
+          <div
+            className={
+              currentExplanation
+                .toLowerCase()
+                .includes("as seen in the example")
+                ? styles.phraseIndicatorActive
+                : styles.phraseIndicator
+            }
+          >
+            <span>✓</span>
+            <span>Includes "as seen in the example"</span>
+          </div>
         </div>
 
         <div className={styles.reflectionButtons}>
