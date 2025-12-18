@@ -31,6 +31,8 @@ npm run build        # Build for production
 npm run preview      # Preview production build
 ```
 
+**IMPORTANT**: Never start the dev server (`npm run dev`) automatically. Always ask the user to start it manually.
+
 ### Testing
 ```bash
 npm test             # Run Vitest unit tests in watch mode

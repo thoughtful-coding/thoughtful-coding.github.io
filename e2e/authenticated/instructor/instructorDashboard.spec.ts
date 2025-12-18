@@ -5,7 +5,6 @@ test.describe("Instructor Dashboard - Authenticated Tests", () => {
   test("Can see data on self navigating to `Class Progress` view", async ({
     page,
   }) => {
-    // Verify we're authenticated and on the dashboard
     await expectAuthenticated(page);
 
     await page.goto("/instructor-dashboard");

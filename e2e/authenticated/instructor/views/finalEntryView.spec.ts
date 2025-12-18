@@ -17,8 +17,12 @@ test.describe("Final Entry View Dashboard - Authenticated Tests", () => {
       .selectOption("instructor-test@thoughtful.local");
     await page.locator("#entry-type-filter").selectOption("lesson");
 
-    // Assert parts of the view
-    await expect(page.getByText("No lesson learning entries")).toBeVisible();
+    await expect(page.getByText("Select a final learning entry")).toBeVisible();
+    await expect(
+      page.getByRole("listitem").getByText("How Print Works")
+    ).toBeVisible();
+    await expect(page.getByText("/18/2025, 6:47:57 AM")).toBeVisible();
+    await expect(page.getByText("Print works by outputting")).toBeVisible();
   });
 
   test("Can use URL to jump to given unit/data", async ({ page }) => {
@@ -29,7 +33,11 @@ test.describe("Final Entry View Dashboard - Authenticated Tests", () => {
       "/instructor-dashboard/learning-entries?student=instructor-test%40thoughtful.local&filter=lesson"
     );
 
-    // Assert parts of the view
-    await expect(page.getByText("No lesson learning entries")).toBeVisible();
+    await expect(page.getByText("Select a final learning entry")).toBeVisible();
+    await expect(
+      page.getByRole("listitem").getByText("How Print Works")
+    ).toBeVisible();
+    await expect(page.getByText("/18/2025, 6:47:57 AM")).toBeVisible();
+    await expect(page.getByText("Print works by outputting")).toBeVisible();
   });
 });
