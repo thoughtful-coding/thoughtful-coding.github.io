@@ -168,11 +168,12 @@ export const useTurtleExecution = ({
 
       await new Promise((resolve) => requestAnimationFrame(resolve));
 
-      const pythonModuleLines = pythonCaptureModuleCode.split("\n").length;
-      const scriptPrefixLines = pythonModuleLines + 2;
+      // Set up turtle module FIRST, before library code executes
+      await runPythonCode(pythonCaptureModuleCode);
+
+      const scriptPrefixLines = 2; // _js_turtle_commands_.clear() + try:
 
       const fullPythonScript = `
-${pythonCaptureModuleCode}
 _js_turtle_commands_.clear()
 try:
 ${codeToRun

@@ -33,7 +33,10 @@ function getInitialAuthState(): AuthStateForStores {
       }
     }
   } catch (error) {
-    console.error("[StoreCoordinator] Failed to read initial auth state:", error);
+    console.error(
+      "[StoreCoordinator] Failed to read initial auth state:",
+      error
+    );
   }
   return { isAuthenticated: false, userId: null };
 }
