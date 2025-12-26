@@ -110,6 +110,28 @@
   white-space: pre-wrap;
 }
 
+/* Code blocks rendered by MarkdownWithCodeBlocks */
+.draggableOption pre,
+.matchedOption pre,
+.promptItem pre {
+  margin: 0;
+  padding: 0;
+  background: none;
+  width: 100%;
+  align-self: flex-start; /* Override parent's align-items: center */
+  text-align: left; /* Ensure left alignment */
+}
+
+.draggableOption pre code,
+.matchedOption pre code,
+.promptItem pre code {
+  padding: 0;
+  background: none;
+  display: block;
+  white-space: pre;
+}
+
+/* Inline code styling */
 .draggableOption code,
 .matchedOption code {
   padding: 0.2em 0.4em;

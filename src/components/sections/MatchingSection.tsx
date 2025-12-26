@@ -13,6 +13,7 @@ import { useProgressActions } from "../../stores/progressStore";
 import styles from "./MatchingSection.module.css";
 import sectionStyles from "./Section.module.css";
 import ContentRenderer from "../content_blocks/ContentRenderer";
+import MarkdownWithCodeBlocks from "./MarkdownWithCodeBlocks";
 
 interface MatchingSectionProps {
   section: MatchingSectionData;
@@ -194,13 +195,7 @@ const MatchingSection: React.FC<MatchingSectionProps> = ({
             return (
               <div key={promptText} className={styles.matchRow}>
                 <div className={styles.promptItem}>
-                  <ReactMarkdown
-                    remarkPlugins={[remarkGfm]}
-                    disallowedElements={["p"]}
-                    unwrapDisallowed={true}
-                  >
-                    {promptText}
-                  </ReactMarkdown>
+                  <MarkdownWithCodeBlocks text={promptText} />
                 </div>
                 <div
                   className={`${styles.dropZone} ${
@@ -252,13 +247,7 @@ const MatchingSection: React.FC<MatchingSectionProps> = ({
                       onTouchMove={handleTouchMove}
                       onTouchEnd={handleTouchEnd}
                     >
-                      <ReactMarkdown
-                        remarkPlugins={[remarkGfm]}
-                        disallowedElements={["p"]}
-                        unwrapDisallowed={true}
-                      >
-                        {matchedOption.text}
-                      </ReactMarkdown>
+                      <MarkdownWithCodeBlocks text={matchedOption.text} />
                     </div>
                   ) : (
                     <span className={styles.dropZonePlaceholder}>
@@ -287,13 +276,7 @@ const MatchingSection: React.FC<MatchingSectionProps> = ({
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
             >
-              <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
-                disallowedElements={["p"]}
-                unwrapDisallowed={true}
-              >
-                {option.text}
-              </ReactMarkdown>
+              <MarkdownWithCodeBlocks text={option.text} />
             </div>
           ))}
         </div>
