@@ -197,13 +197,13 @@ const lessonData: Lesson = {
       example: {
         visualization: "turtle",
         initialCode:
-          "import turtle\nimport thoughtful_code\n\n# `thoughtful_code.draw_square(size, color)` and `thoughtful_code.draw_triangle(size, color)` are provided\n\ndef draw_house():\n    # 1. Place the Body\n\n    # 2. Move to top-left (Use `turtle.left(angle)`, `turtle.forward(size)`, and `turtle.right(angle)`!)\n\n    # 3. Place the Roof\n\n# Test the Blueprint\ndraw_house()",
+          "import turtle\nimport thoughtful_code\n\n# `thoughtful_code.draw_square_right(size, color)` and `thoughtful_code.draw_triangle_left(size, color)` are provided\n\ndef draw_house():\n    # 1. Place the Body\n\n    # 2. Move to top-left (Use `turtle.left(angle)`, `turtle.forward(size)`, and `turtle.right(angle)`!)\n\n    # 3. Place the Roof\n\n# Test the Blueprint\ndraw_house()",
         libraryCode:
-          "import turtle\ndef draw_square(size, color):\n    turtle.fillcolor(color)\n    turtle.begin_fill()\n    for i in range(4):\n        turtle.forward(size)\n        turtle.right(90)\n    turtle.end_fill()\n\ndef draw_triangle(size, color):\n    turtle.fillcolor(color)\n    turtle.begin_fill()\n    for i in range(3):\n        turtle.forward(size)\n        turtle.right(120)\n    turtle.end_fill()\n",
+          "import turtle\ndef draw_square_right(size, color):\n    turtle.fillcolor(color)\n    turtle.begin_fill()\n    for i in range(4):\n        turtle.forward(size)\n        turtle.right(90)\n    turtle.end_fill()\n\ndef draw_triangle_left(size, color):\n    turtle.fillcolor(color)\n    turtle.begin_fill()\n    for i in range(3):\n        turtle.forward(size)\n        turtle.left(120)\n    turtle.end_fill()\n",
       },
       testMode: "procedure",
       functionToTest: "draw_house",
-      visualThreshold: 0.95,
+      visualThreshold: 0.999,
       testCases: [
         {
           description: "The house",

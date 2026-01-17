@@ -308,7 +308,7 @@ test.describe("TestingSection for turtles non-`__main__`", () => {
     await expectSectionCompleted(page, "Challenge: Octagon with Input");
   });
 
-  test("Test can click `Run Tests` button and get pass for turtle section using library", async ({
+  test.only("Test can click `Run Tests` button and get fail for turtle section using library", async ({
     page,
   }) => {
     await page.goto(
@@ -320,7 +320,26 @@ test.describe("TestingSection for turtles non-`__main__`", () => {
     await fillCodeEditor(
       page,
       "code-editor-testing-turtle-library-works",
-      "import turtle\nimport thoughtful_code\n\n# `thoughtful_code.draw_square(size, color)` and `thoughtful_code.draw_triangle(size, color)` are provided\n\ndef draw_house():\n    thoughtful_code.draw_square(50, 'yellow')\n    turtle.forward(50)\n    turtle.right(30)\n    thoughtful_code.draw_triangle(50, 'black')\n\n# Test the Blueprint\ndraw_house()"
+      "import turtle\nimport thoughtful_code\n\n# `thoughtful_code.draw_square_right(size, color)` and `thoughtful_code.draw_triangle(size, color)` are provided\n\ndef draw_house():\n    thoughtful_code.draw_square_right(50, 'yellow')\n    turtle.forward(40)\n    turtle.right(90)\n    thoughtful_code.draw_triangle_left(50, 'black')\n\n# Test the Blueprint\ndraw_house()"
+    );
+    await runTests(page, "testing-turtle-library-works");
+    await expectTurtleTestFail(page, 1);
+    await expectSectionNotCompleted(page, "Turtle Library Works");
+  });
+
+  test.only("Test can click `Run Tests` button and get pass for turtle section using library", async ({
+    page,
+  }) => {
+    await page.goto(
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/10_testing_tests"
+    );
+
+    await expectSectionNotCompleted(page, "Turtle Library Works");
+
+    await fillCodeEditor(
+      page,
+      "code-editor-testing-turtle-library-works",
+      "import turtle\nimport thoughtful_code\n\n# `thoughtful_code.draw_square_right(size, color)` and `thoughtful_code.draw_triangle_left(size, color)` are provided\n\ndef draw_house():\n    thoughtful_code.draw_square_right(50, 'yellow')\n    turtle.forward(50)\n    turtle.right(90)\n    thoughtful_code.draw_triangle_left(50, 'black')\n\n# Test the Blueprint\ndraw_house()"
     );
     await runCode(page, "testing-turtle-library-works");
     await runTests(page, "testing-turtle-library-works");
