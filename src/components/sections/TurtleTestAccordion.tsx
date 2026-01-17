@@ -42,9 +42,6 @@ const TestCaseItem: React.FC<TestCaseItemProps> = ({
           </span>
         </div>
         <div className={styles.testCaseHeaderRight}>
-          <span style={STYLES.similarityText(result.passed)}>
-            {(result.similarity * 100).toFixed(1)}% match
-          </span>
           <span className={styles.expandIcon}>{isExpanded ? "▼" : "▶"}</span>
         </div>
       </div>
