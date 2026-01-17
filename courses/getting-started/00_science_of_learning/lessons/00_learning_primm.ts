@@ -23,7 +23,7 @@ const lessonData: Lesson = {
         {
           kind: "text",
           value:
-            "Welcome to _Thoughtful Python_! We hope that this will serve as a first step in your journey towards the ability to read and write programs that empower you to do great things.\n\nFirst things first: programming is difficult! It's a lot like learning a new language. It requires a whole new way of thinking in order to express your ideas. Also, it requires a lot of practice!",
+            "Welcome to _Thoughtful Coding_! We hope that this will serve as a first step in your journey towards the ability to read and write programs that empower you to do great things.\n\nFirst things first: programming is difficult! It's a lot like learning a new language. It requires a whole new way of thinking in order to express your ideas. Also, it requires a lot of practice!",
         },
       ],
     } as InformationSectionData,
