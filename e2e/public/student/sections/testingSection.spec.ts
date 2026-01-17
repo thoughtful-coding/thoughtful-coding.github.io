@@ -342,6 +342,7 @@ test.describe("TestingSection for turtles non-`__main__`", () => {
       "import turtle\nimport thoughtful_code\n\n# `thoughtful_code.draw_square_right(size, color)` and `thoughtful_code.draw_triangle_left(size, color)` are provided\n\ndef draw_house():\n    thoughtful_code.draw_square_right(50, 'yellow')\n    turtle.forward(50)\n    turtle.right(90)\n    thoughtful_code.draw_triangle_left(50, 'black')\n\n# Test the Blueprint\ndraw_house()"
     );
     await runCode(page, "testing-turtle-library-works");
+    await expectSectionNotCompleted(page, "Turtle Library Works");
     await runTests(page, "testing-turtle-library-works");
     await expectTurtleTestsPass(page, 1);
     await expectSectionCompleted(page, "Turtle Library Works");

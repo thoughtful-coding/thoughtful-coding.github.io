@@ -136,10 +136,8 @@ export const useTurtleTesting = ({
             // Run the turtle code
             await runTurtleCode(codeToRun, libraryCode);
 
-            // Wait for p5.js to render the final frame (fills render on next draw cycle)
-            // Need two frames: one for p5 to process, one to ensure canvas is updated
-            await new Promise((r) => requestAnimationFrame(r));
-            await new Promise((r) => requestAnimationFrame(r));
+            // Wait for p5.js to render fills
+            await new Promise((r) => setTimeout(r, 250));
 
             // Get the student's canvas as data URL
             const studentImageDataURL = turtleInstance.getCanvasDataURL();
