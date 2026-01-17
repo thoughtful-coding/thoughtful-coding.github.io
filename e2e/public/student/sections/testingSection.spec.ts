@@ -307,4 +307,24 @@ test.describe("TestingSection for turtles non-`__main__`", () => {
     await expectTurtleTestsPass(page, 2);
     await expectSectionCompleted(page, "Challenge: Octagon with Input");
   });
+
+  test("Test can click `Run Tests` button and get pass for turtle section using library", async ({
+    page,
+  }) => {
+    await page.goto(
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/10_testing_tests"
+    );
+
+    await expectSectionNotCompleted(page, "Turtle Library Works");
+
+    await fillCodeEditor(
+      page,
+      "code-editor-testing-turtle-library-works",
+      "import turtle\n\nturtle.speed(0)\ndef make_octagon(size):\n  # Your code here converting the code above to a loop\n  for i in range(8):\n    turtle.forward(size)\n    turtle.right(45)\n\n\nmake_octagon(55)"
+    );
+    await runCode(page, "testing-turtle-library-works");
+    await runTests(page, "testing-turtle-library-works");
+    await expectTurtleTestsPass(page, 2);
+    await expectSectionCompleted(page, "Challenge: Octagon with Input");
+  });
 });

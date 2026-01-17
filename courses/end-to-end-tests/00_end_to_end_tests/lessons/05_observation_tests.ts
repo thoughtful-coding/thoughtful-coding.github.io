@@ -46,6 +46,42 @@ const lessonData: Lesson = {
         allowImageDownload: true,
       },
     } as ObservationSectionData,
+    {
+      kind: "Observation",
+      id: "observe-turtle-library-works" as SectionId,
+      title: "Testing Working Turtle Library",
+      content: [
+        {
+          kind: "text",
+          value: "Make sure can use library code with turtles",
+        },
+      ],
+      example: {
+        visualization: "turtle",
+        initialCode:
+          'import turtle\nimport thoughtful_code\n\nturtle.speed(0)\nthoughtful_code.draw_square(100, "green")\nthoughtful_code.draw_square(70, "blue")\nthoughtful_code.draw_triangle(50, "red")\n',
+        libraryCode:
+          "import turtle\ndef draw_square(size, color):\n    turtle.fillcolor(color)\n    turtle.begin_fill()\n    for i in range(4):\n        turtle.forward(size)\n        turtle.right(90)\n    turtle.end_fill()\n\ndef draw_triangle(size, color):\n    turtle.fillcolor(color)\n    turtle.begin_fill()\n    for i in range(3):\n        turtle.forward(size)\n        turtle.right(120)\n    turtle.end_fill()\n",
+      },
+    } as ObservationSectionData,
+    {
+      kind: "Observation",
+      id: "observe-turtle-library-broken" as SectionId,
+      title: "Testing Broken Turtle Library",
+      content: [
+        {
+          kind: "text",
+          value: "Make sure broken library code doesn't result in pass",
+        },
+      ],
+      example: {
+        visualization: "turtle",
+        initialCode:
+          'import turtle\nimport thoughtful_code\n\nturtle.speed(0)\nthoughtful_code.draw_square(100, "green")\nthoughtful_code.draw_square(70, "blue")\nthoughtful_code.draw_triangle(50, "red")\n',
+        libraryCode:
+          "import turtle\ndef drawsquare(size, color):\n    turtle.fillcolor(color)\n    turtle.begin_fill()\n    for i in range(4):\n        turtle.forward(size)\n        turtle.right(90)\n    turtle.end_fill()\n\ndef draw_triangle(size, color):\n    turtle.fillcolor(color)\n    turtle.begin_fill()\n    for i in range(3):\n        turtle.forward(size)\n        turtle.right(120)\n    turtle.end_fill()\n",
+      },
+    } as ObservationSectionData,
   ],
 };
 

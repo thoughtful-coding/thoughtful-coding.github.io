@@ -1,4 +1,8 @@
 import { test, expect } from "@playwright/test";
+import {
+  expectSectionCompleted,
+  expectSectionNotCompleted,
+} from "../../../utils/testHelpers";
 
 test.describe("PrimmSection tests with regular code", () => {
   test("Test can run the PRIMM section up to requiring AI", async ({
@@ -46,10 +50,7 @@ test.describe("PrimmSection tests with turtles", () => {
       "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/08_primm_tests"
     );
 
-    const sectionItem = page
-      .getByRole("listitem")
-      .filter({ hasText: "Drawing A Shape" });
-    await expect(sectionItem).not.toHaveClass(/sectionItemCompleted/);
+    await expectSectionNotCompleted(page, "Drawing A Shape");
 
     await expect(
       page.locator("#square-primm #defaultCanvas0").first()
@@ -84,6 +85,83 @@ test.describe("PrimmSection tests with turtles", () => {
       .click();
     await expect(page.getByText("Authentication required")).toBeVisible();
 
-    await expect(sectionItem).not.toHaveClass(/sectionItemCompleted/);
+    await expectSectionNotCompleted(page, "Drawing A Shape");
+  });
+
+  test("Test can run the PRIMM turtle section with libraries", async ({
+    page,
+  }) => {
+    await page.goto(
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/08_primm_tests"
+    );
+
+    await expectSectionNotCompleted(page, "PRIMM Turtle Library Works");
+
+    await expect(
+      page.locator("#primm-turtle-library-works #defaultCanvas0").first()
+    ).toBeVisible();
+    await page
+      .getByRole("textbox", {
+        name: "The code draws a square, then immediately draws a triangle. What shape will this produce?",
+      })
+      .click();
+    await page
+      .getByRole("textbox", {
+        name: "The code draws a square, then immediately draws a triangle. What shape will this produce?",
+      })
+      .fill("Stuff");
+    await page
+      .locator("#primm-turtle-library-works")
+      .getByRole("button", { name: "Run Code" })
+      .click();
+    // Turtles take a while
+    await page.waitForTimeout(2000);
+    await expect(
+      page.locator("#primm-turtle-library-works #defaultCanvas0").first()
+    ).toBeVisible();
+    await page
+      .getByRole("textbox", { name: "Your Reflection/Explanation:" })
+      .click();
+    await page
+      .getByRole("textbox", { name: "Your Reflection/Explanation:" })
+      .fill("I was right");
+    await page
+      .getByRole("button", { name: "Get AI Feedback", exact: true })
+      .click();
+    await expect(page.getByText("Authentication required")).toBeVisible();
+
+    await expectSectionNotCompleted(page, "PRIMM Turtle Library Works");
+  });
+
+  test("Test can run the PRIMM turtle section with libraries that are broken", async ({
+    page,
+  }) => {
+    await page.goto(
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/08_primm_tests"
+    );
+
+    await expectSectionNotCompleted(page, "PRIMM Turtle Library Broken");
+
+    await expect(
+      page.locator("#primm-turtle-library-broken #defaultCanvas0").first()
+    ).toBeVisible();
+    await page
+      .getByRole("textbox", {
+        name: "The code is broken intentionally.",
+      })
+      .click();
+    await page
+      .getByRole("textbox", {
+        name: "The code is broken intentionally.",
+      })
+      .fill("Stuff");
+    await page
+      .locator("#primm-turtle-library-broken")
+      .getByRole("button", { name: "Run Code" })
+      .click();
+
+    await page.waitForTimeout(2000);
+
+    // TODO: need to output something here
   });
 });

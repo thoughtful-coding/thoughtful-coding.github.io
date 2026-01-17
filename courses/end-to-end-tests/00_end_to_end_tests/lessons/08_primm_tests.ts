@@ -52,6 +52,49 @@ const lessonData: Lesson = {
       conclusion:
         "It draws a square! Each `right(90)` function call makes a 90-degree turn, and four 90-degree turns bring you back to where you started.",
     } as PRIMMSectionData,
+    {
+      kind: "PRIMM",
+      id: "primm-turtle-library-works",
+      title: "PRIMM Turtle Library Works",
+      content: [
+        {
+          kind: "text",
+          value: "Test that PRIMM properly uses libraries",
+        },
+      ],
+      example: {
+        visualization: "turtle",
+        initialCode:
+          'import turtle\nimport thoughtful_code\n\nturtle.speed(0)\nthoughtful_code.draw_square(100, "yellow")\nthoughtful_code.draw_triangle(100, "black")',
+        libraryCode:
+          "import turtle\ndef draw_square(size, color):\n    turtle.fillcolor(color)\n    turtle.begin_fill()\n    for i in range(4):\n        turtle.forward(size)\n        turtle.right(90)\n    turtle.end_fill()\n\ndef draw_triangle(size, color):\n    turtle.fillcolor(color)\n    turtle.begin_fill()\n    for i in range(3):\n        turtle.forward(size)\n        turtle.right(120)\n    turtle.end_fill()\n",
+      },
+      predictPrompt:
+        "The code draws a square, then immediately draws a triangle. What shape will this produce?",
+      conclusion:
+        "The triangle draws right on top of the square's bottom line! This is because the turtle ended at the bottom-left corner after the square.",
+    } as PRIMMSectionData,
+    {
+      kind: "PRIMM",
+      id: "primm-turtle-library-broken",
+      title: "PRIMM Turtle Library Broken",
+      content: [
+        {
+          kind: "text",
+          value: "Test that PRIMM properly handles libraries that are broken",
+        },
+      ],
+      example: {
+        visualization: "turtle",
+        initialCode:
+          'import turtle\nimport thoughtful_code\n\nturtle.speed(0)\nthoughtful_code.draw_square(100, "yellow")\nthoughtful_code.draw_triangle(100, "black")',
+        libraryCode:
+          "import turtle\ndef drawsquare(size, color):\n    turtle.fillcolor(color)\n    turtle.begin_fill()\n    for i in range(4):\n        turtle.forward(size)\n        turtle.right(90)\n    turtle.end_fill()\n\ndef draw_triangle(size, color):\n    turtle.fillcolor(color)\n    turtle.begin_fill()\n    for i in range(3):\n        turtle.forward(size)\n        turtle.right(120)\n    turtle.end_fill()\n",
+      },
+      predictPrompt: "The code is broken intentionally.",
+      conclusion:
+        "The triangle draws right on top of the square's bottom line! This is because the turtle ended at the bottom-left corner after the square.",
+    } as PRIMMSectionData,
   ],
 };
 

@@ -183,6 +183,35 @@ const lessonData: Lesson = {
         },
       ],
     } as TestingSectionData,
+    {
+      kind: "Testing",
+      id: "testing-turtle-library-works" as SectionId,
+      title: "Turtle Library Works",
+      content: [
+        {
+          kind: "text",
+          value:
+            "This tests whether the turtle library tests work. Create the `draw_house()` function using the components from the `thoughtful_code` library.\n\n1. Draw a yellow square (size 100)\n2. Move the turtle to the top-left corner and face right\n3. Draw a black triangle (size 100) for the roof.",
+        },
+      ],
+      example: {
+        visualization: "turtle",
+        initialCode:
+          "import turtle\nimport thoughtful_code\n\n# `thoughtful_code.draw_square(size, color)` and `thoughtful_code.draw_triangle(size, color)` are provided\n\ndef draw_house():\n    # 1. Place the Body\n\n    # 2. Move to top-left (Use `turtle.left(angle)`, `turtle.forward(size)`, and `turtle.right(angle)`!)\n\n    # 3. Place the Roof\n\n# Test the Blueprint\ndraw_house()",
+        libraryCode:
+          "import turtle\ndef draw_square(size, color):\n    turtle.fillcolor(color)\n    turtle.begin_fill()\n    for i in range(4):\n        turtle.forward(size)\n        turtle.right(90)\n    turtle.end_fill()\n\ndef draw_triangle(size, color):\n    turtle.fillcolor(color)\n    turtle.begin_fill()\n    for i in range(3):\n        turtle.forward(size)\n        turtle.right(120)\n    turtle.end_fill()\n",
+      },
+      testMode: "procedure",
+      functionToTest: "draw_house",
+      visualThreshold: 0.95,
+      testCases: [
+        {
+          input: [null],
+          expected: "SHAPE:house_basic",
+          description: "Draw the house",
+        },
+      ],
+    } as TestingSectionData,
   ],
 };
 

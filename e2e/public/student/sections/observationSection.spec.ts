@@ -105,4 +105,29 @@ test.describe("ObservationSection tests for turtles code", () => {
     await expectError(page, "SyntaxError: Traceback (");
     await expectSectionNotCompleted(page, "Your First Turtle Program");
   });
+
+  test("Test can click the `Run Code` button for Turtle with working library", async ({
+    page,
+  }) => {
+    await page.goto(
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/05_observation_tests"
+    );
+
+    await expectSectionNotCompleted(page, "Testing Working Turtle Library");
+    await runCode(page, "observe-turtle-library-works");
+    await expectSectionCompleted(page, "Testing Working Turtle Library");
+  });
+
+  test("Test can click the `Run Code` button for Turtle with broken library", async ({
+    page,
+  }) => {
+    await page.goto(
+      "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/05_observation_tests"
+    );
+
+    await expectSectionNotCompleted(page, "Testing Broken Turtle Library");
+    await runCode(page, "observe-turtle-library-broken");
+    await expectError(page, "Error on line 6");
+    await expectSectionNotCompleted(page, "Testing Broken Turtle Library");
+  });
 });

@@ -102,7 +102,7 @@ export async function expectTestFail(page: Page, testNumber: number) {
 export async function expectTurtleTestsPass(page: Page, testCount: number) {
   await expect(
     page.getByText(
-      `Your drawing matched the target! All ${testCount} test${testCount > 1 ? "s" : ""} passed.`
+      `Your drawing matched the target! All ${testCount} tests passed.`
     )
   ).toBeVisible();
 }
