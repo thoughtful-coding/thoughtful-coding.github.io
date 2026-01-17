@@ -206,9 +206,10 @@ const lessonData: Lesson = {
       visualThreshold: 0.95,
       testCases: [
         {
-          input: [null],
-          expected: "SHAPE:house_basic",
-          description: "Draw the house",
+          description: "The house",
+          input: [],
+          expected: null,
+          referenceImage: "images/turtle_color_house_50.png",
         },
       ],
     } as TestingSectionData,

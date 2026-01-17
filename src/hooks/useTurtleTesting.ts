@@ -29,7 +29,7 @@ interface UseTurtleTestingProps {
   testCases: TestCase[];
   visualThreshold?: number;
   turtleInstance: RealTurtleInstance | null;
-  runTurtleCode: (code: string) => Promise<unknown>;
+  runTurtleCode: (code: string, libraryCode?: string) => Promise<unknown>;
   functionToTest?: string;
 }
 
@@ -89,7 +89,7 @@ export const useTurtleTesting = ({
   const [isRunningTests, setIsRunningTests] = useState(false);
 
   const runTests = useCallback(
-    async (userCode: string) => {
+    async (userCode: string, libraryCode?: string) => {
       setIsRunningTests(true);
       setTestResults(null);
       setError(null);
@@ -134,7 +134,7 @@ export const useTurtleTesting = ({
             }
 
             // Run the turtle code
-            await runTurtleCode(codeToRun);
+            await runTurtleCode(codeToRun, libraryCode);
 
             // Get the student's canvas as data URL
             const studentImageDataURL = turtleInstance.getCanvasDataURL();

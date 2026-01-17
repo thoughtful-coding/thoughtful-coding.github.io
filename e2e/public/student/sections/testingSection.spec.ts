@@ -320,11 +320,11 @@ test.describe("TestingSection for turtles non-`__main__`", () => {
     await fillCodeEditor(
       page,
       "code-editor-testing-turtle-library-works",
-      "import turtle\n\nturtle.speed(0)\ndef make_octagon(size):\n  # Your code here converting the code above to a loop\n  for i in range(8):\n    turtle.forward(size)\n    turtle.right(45)\n\n\nmake_octagon(55)"
+      "import turtle\nimport thoughtful_code\n\n# `thoughtful_code.draw_square(size, color)` and `thoughtful_code.draw_triangle(size, color)` are provided\n\ndef draw_house():\n    thoughtful_code.draw_square(50, 'yellow')\n    turtle.forward(50)\n    turtle.right(30)\n    thoughtful_code.draw_triangle(50, 'black')\n\n# Test the Blueprint\ndraw_house()"
     );
     await runCode(page, "testing-turtle-library-works");
     await runTests(page, "testing-turtle-library-works");
-    await expectTurtleTestsPass(page, 2);
-    await expectSectionCompleted(page, "Challenge: Octagon with Input");
+    await expectTurtleTestsPass(page, 1);
+    await expectSectionCompleted(page, "Turtle Library Works");
   });
 });
