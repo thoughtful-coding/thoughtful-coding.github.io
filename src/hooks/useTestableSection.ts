@@ -129,12 +129,13 @@ export function useTestableSection({
     error: testError,
   } = isVisualTurtleTest ? turtleTestingHook : consoleTestingHook;
 
-  // Track completion state
+  // Track completion state (only after tests finish running)
   const isSectionComplete = useTestingCompletion(
     unitId,
     lessonId,
     sectionId,
-    testResults
+    testResults,
+    isRunningTests
   );
 
   // Handlers

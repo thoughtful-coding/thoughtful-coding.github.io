@@ -20,7 +20,8 @@ export function useTestingCompletion(
   unitId: UnitId,
   lessonId: LessonId,
   sectionId: SectionId,
-  testResults: TestResultLike[] | null
+  testResults: TestResultLike[] | null,
+  isRunningTests: boolean
 ): boolean {
   const storageKey = `testingState_${unitId}_${lessonId}_${sectionId}`;
 
@@ -34,12 +35,17 @@ export function useTestingCompletion(
       (state) => state.testsPassedOnce
     );
 
-  // Update testsPassedOnce when all tests pass
+  // Update testsPassedOnce only after tests finish running and all passed
   useEffect(() => {
-    if (testResults && testResults.every((r) => r.passed)) {
+    if (
+      !isRunningTests &&
+      testResults &&
+      testResults.length > 0 &&
+      testResults.every((r) => r.passed)
+    ) {
       setSavedState((prev) => ({ ...prev, testsPassedOnce: true }));
     }
-  }, [testResults, setSavedState]);
+  }, [testResults, isRunningTests, setSavedState]);
 
   return isSectionComplete;
 }
