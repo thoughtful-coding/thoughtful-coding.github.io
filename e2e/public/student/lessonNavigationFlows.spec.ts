@@ -29,7 +29,7 @@ test.describe("Check can navigate into and out of lessons", () => {
       .click();
     await backToLearningPaths(page);
     await expect(
-      page.getByRole("heading", { name: "A Thoughtful Approach to" })
+      page.getByRole("heading", { name: "Getting Started" })
     ).toBeVisible();
   });
 
@@ -47,7 +47,7 @@ test.describe("Check can navigate into and out of lessons", () => {
     await backToUnitOverview(page);
     await backToLearningPaths(page);
     await expect(
-      page.getByRole("heading", { name: "A Thoughtful Approach to" })
+      page.getByRole("heading", { name: "Getting Started" })
     ).toBeVisible();
   });
 
@@ -133,7 +133,7 @@ test.describe("Check can navigate into and out of lessons", () => {
     ).toBeVisible();
     await backToLearningPaths(page);
     await expect(
-      page.getByRole("heading", { name: "A Thoughtful Approach to" })
+      page.getByRole("heading", { name: "End-to-End Tests" })
     ).toBeVisible();
     await expect(
       page.getByRole("link", { name: "Section End-To-End Testing" })
@@ -163,7 +163,7 @@ test.describe("Check can navigate into and out of lessons", () => {
     await backToUnitOverview(page);
     await backToLearningPaths(page);
     await expect(
-      page.getByRole("heading", { name: "A Thoughtful Approach to" })
+      page.getByRole("heading", { name: "End-to-End Tests" })
     ).toBeVisible();
   });
 

@@ -3,15 +3,16 @@ import { Link, useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { getCoursesAsync } from "../lib/dataLoader";
-import type { Unit } from "../types/data";
+import type { Course } from "../types/data";
 import styles from "./CourseHomePage.module.css";
 import loadingStyles from "../components/LoadingSpinner.module.css";
+import PhilosophySection from "../components/PhilosophySection";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { BASE_PATH } from "../config";
 
 const CourseHomePage: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
-  const [units, setUnits] = useState<Unit[]>([]);
+  const [course, setCourse] = useState<Course | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -27,14 +28,14 @@ const CourseHomePage: React.FC = () => {
         }
 
         const courses = await getCoursesAsync();
-        const course = courses.find((c) => c.id === courseId);
+        const foundCourse = courses.find((c) => c.id === courseId);
 
-        if (!course) {
+        if (!foundCourse) {
           setError(`Course not found: ${courseId}`);
           return;
         }
 
-        setUnits(course.units);
+        setCourse(foundCourse);
       } catch (err) {
         console.error("CourseHomePage Error:", err);
         setError(
@@ -59,28 +60,28 @@ const CourseHomePage: React.FC = () => {
 
   const renderContent = () => {
     if (isLoading) {
-      return <LoadingSpinner message="Loading learning paths..." />;
+      return <LoadingSpinner message="Loading units..." />;
     }
 
     if (error) {
       return (
         <div className={styles.error}>
-          Error loading learning paths: {error}
+          Error loading units: {error}
         </div>
       );
     }
 
-    if (units.length === 0) {
+    if (!course || course.units.length === 0) {
       return (
         <div className={loadingStyles.spinnerContainer}>
-          <p>No learning paths available yet. Check back soon!</p>
+          <p>No units available yet. Check back soon!</p>
         </div>
       );
     }
 
     return (
       <div className={styles.unitsGrid}>
-        {units.map((unit, index) => (
+        {course.units.map((unit, index) => (
           <Link
             to={`/${courseId}/unit/${unit.id}`}
             key={unit.id}
@@ -120,48 +121,15 @@ const CourseHomePage: React.FC = () => {
   return (
     <div className={styles.homePageContainer}>
       <section className={styles.welcome}>
-        <h2>A Thoughtful Approach to Learning Python</h2>
+        <h2>{course?.title || "Loading..."}</h2>
       </section>
-      <section className={styles.philosophySection}>
-        <p>
-          This website can be viewed as the first step on your programming
-          journey. It will help you establish a strong foundation in Python
-          fundamentals and effective learning processes. Once you feel more
-          confident, you will be well-prepared to explore other, more powerful
-          tools.
-        </p>
-        <h3>Philosophy:</h3>
-        <ul>
-          <li>Anyone can learn Python.</li>
-          <li>
-            Python is a wonderful way to order your thoughts and accomplish
-            complex tasks.
-          </li>
-          <li>
-            Like any language, learning Python takes concentration and practice.
-          </li>
-          <li>
-            The best way to learn a programming language is PRIMM: Predict, Run,
-            Investigate, Modify, Make.
-          </li>
-          <li>
-            The best way to solidify your knowledge is through reflection.
-          </li>
-          <li>
-            There are many powerful coding tools, but they are overwhelming for
-            first time learners.
-          </li>
-          <li>
-            Once you have a base understanding, it's easy to jump to more
-            powerful tools.
-          </li>
-        </ul>
-      </section>
+      {course?.longDescription && (
+        <PhilosophySection markdown={course.longDescription} />
+      )}
       <section className={styles.learningPaths}>
-        <h2>Learning Paths</h2>
+        <h2>Available Units</h2>
         <p className={styles.learningPathsIntro}>
-          {" "}
-          Choose a learning path to begin your Python journey.
+          Work through the units in order for the best learning experience.
         </p>
         {renderContent()}
       </section>

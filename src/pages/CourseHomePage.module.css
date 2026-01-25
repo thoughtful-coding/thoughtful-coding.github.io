@@ -24,48 +24,6 @@
   line-height: 1.6;
 }
 
-/* Styles for the new philosophy section */
-.philosophySection {
-  background-color: var(--card-background-color);
-  padding: var(--spacing-2xl);
-  margin: auto;
-  margin-bottom: 2.5rem;
-  width: 60%;
-  border-radius: var(--radius-xl);
-  border: 1px solid var(--card-border-color);
-}
-
-.philosophySection h3 {
-  color: var(--primary-dark-color);
-  margin-top: 0;
-  margin-bottom: var(--spacing-xl);
-  text-align: left;
-  font-size: 1.5rem;
-}
-
-.philosophySection ul {
-  list-style-type: disc; /* Standard bullets */
-  margin-left: 1.5rem; /* Indent bullet points */
-  padding-left: 0.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.philosophySection li {
-  margin-bottom: 0.75rem; /* Space between bullet points */
-  line-height: 1.6;
-  color: var(--text-secondary);
-}
-
-.philosophySection p {
-  line-height: 1.6;
-  color: var(--text-secondary);
-  text-align: left; /* Align paragraph text to the left */
-}
-
-.philosophySection p:last-child {
-  margin-bottom: 0;
-}
-
 .learningPathsIntro {
   text-align: center;
   color: var(--text-muted);
@@ -232,3 +190,4 @@
   border-radius: var(--radius-xl);
   font-size: 1.1rem;
 }
+

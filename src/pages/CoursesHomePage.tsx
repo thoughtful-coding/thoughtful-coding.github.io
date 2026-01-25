@@ -4,6 +4,7 @@ import { getCoursesAsync } from "../lib/dataLoader";
 import type { Course } from "../types/data";
 import styles from "./CoursesHomePage.module.css";
 import LoadingSpinner from "../components/LoadingSpinner";
+import PhilosophySection from "../components/PhilosophySection";
 
 const CoursesHomePage: React.FC = () => {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -36,7 +37,7 @@ const CoursesHomePage: React.FC = () => {
         </p>
       </section>
 
-      <section className={styles.philosophySection}>
+      <PhilosophySection>
         <h2>Philosophy</h2>
         <ul>
           <li>Anyone can learn to code.</li>
@@ -62,12 +63,12 @@ const CoursesHomePage: React.FC = () => {
             powerful tools.
           </li>
         </ul>
-      </section>
+      </PhilosophySection>
 
       <section className={styles.coursesSection}>
         <h2>Available Courses</h2>
         <p className={styles.coursesIntro}>
-          Choose a course to begin your learning journey
+          Choose a course to begin your thoughtful coding journey
         </p>
 
         {isLoading ? (
@@ -115,7 +116,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
         </div>
         <div className={styles.courseContent}>
           <h3 className={styles.courseTitle}>{course.title}</h3>
-          <p className={styles.courseDescription}>{course.description}</p>
+          <p className={styles.courseDescription}>{course.blurb}</p>
           {course.difficulty && (
             <span
               className={`${styles.difficultyBadge} ${styles[course.difficulty]}`}

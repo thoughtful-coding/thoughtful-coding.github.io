@@ -1,0 +1,46 @@
+/* Shared styling for philosophy/description sections */
+.philosophySection {
+  background-color: var(--card-background-color);
+  padding: var(--spacing-2xl);
+  margin: auto;
+  margin-bottom: 2.5rem;
+  width: 60%;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--card-border-color);
+}
+
+.philosophySection p {
+  line-height: 1.6;
+  color: var(--text-color);
+}
+
+.philosophySection p:last-child {
+  margin-bottom: 0;
+}
+
+.philosophySection ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.philosophySection li {
+  padding: 0.5rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  color: var(--text-color);
+}
+
+.philosophySection li::before {
+  content: "\2713";
+  position: absolute;
+  left: 0;
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+@media (width <= 768px) {
+  .philosophySection {
+    width: 100%;
+  }
+}

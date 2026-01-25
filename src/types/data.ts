@@ -341,7 +341,8 @@ export interface Unit {
 export interface Course {
   id: CourseId;
   title: string;
-  description: string;
+  blurb: string;
+  longDescription: string;
   image: string;
   difficulty?: "beginner" | "intermediate" | "advanced";
   units: Unit[];
@@ -359,7 +360,8 @@ export interface Course {
  * const courseData: CourseManifest = {
  *   id: "intro-python" as CourseId,
  *   title: "Introduction to Python",
- *   description: "Learn Python programming...",
+ *   blurb: "Learn Python programming fundamentals.",
+ *   longDescription: "A comprehensive introduction to Python...",
  *   image: "images/python-logo.png",
  *   difficulty: "beginner",
  *   units: [
@@ -374,7 +376,8 @@ export interface Course {
 export interface CourseManifest {
   id: CourseId;
   title: string;
-  description: string;
+  blurb: string; // Short description for cards/previews
+  longDescription: string; // Markdown content for course detail page
   image: string; // Relative to course directory (e.g., "images/python-logo.png")
   difficulty?: "beginner" | "intermediate" | "advanced";
   units: string[]; // Relative paths to unit directories (e.g., "00_intro")

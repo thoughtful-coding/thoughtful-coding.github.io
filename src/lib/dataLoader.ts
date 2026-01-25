@@ -164,7 +164,8 @@ async function processUnitsData(): Promise<void> {
         const course: Course = {
           id: manifest.id,
           title: manifest.title,
-          description: manifest.description,
+          blurb: manifest.blurb,
+          longDescription: manifest.longDescription,
           image: resolvedImagePath,
           difficulty: manifest.difficulty,
           units: [], // Will be populated below
