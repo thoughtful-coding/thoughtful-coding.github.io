@@ -153,7 +153,7 @@ const UnitPage: React.FC = () => {
       <div className={styles.error}>
         <p>Error loading unit: {error}</p>
         <Link to={`/${courseId}`} className={styles.backLink}>
-          &larr; Back to Learning Paths
+          &larr; Back to Course Overview
         </Link>
       </div>
     );
@@ -164,7 +164,7 @@ const UnitPage: React.FC = () => {
       <div className={styles.error}>
         <p>Unit data could not be loaded.</p>
         <Link to={`/${courseId}`} className={styles.backLink}>
-          &larr; Back to Learning Paths
+          &larr; Back to Course Overview
         </Link>
       </div>
     );
@@ -173,10 +173,10 @@ const UnitPage: React.FC = () => {
   return (
     <div className={styles.unitContainer}>
       <Link to={`/${courseId}`} className={styles.backLink}>
-        &larr; Back to Learning Paths
+        &larr; Back to Course Overview
       </Link>
       <div className={styles.unitHeader}>
-        <h2 className={styles.unitTitle}>{unit.title}</h2>
+        <h2 className={styles.unitTitle}>Unit: {unit.title}</h2>
         <div className={styles.unitDescription}>
           <ReactMarkdown remarkPlugins={[remarkGfm]}>
             {unit.description}

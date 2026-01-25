@@ -40,7 +40,7 @@
 
 .lessonsList {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 4rem 2rem;
   grid-auto-rows: auto;
   margin-bottom: 4rem;
@@ -67,6 +67,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  max-width: 500px;
 }
 
 .lessonCard:hover {

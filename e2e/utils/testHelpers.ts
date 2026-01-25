@@ -141,10 +141,10 @@ export async function backToUnitOverview(page: Page) {
 }
 
 /**
- * Clicks the "Back to Learning Paths" link.
+ * Clicks the "Back to Course Overview" link.
  */
 export async function backToLearningPaths(page: Page) {
-  await page.getByRole("link", { name: "← Back to Learning Paths" }).click();
+  await page.getByRole("link", { name: "← Back to Course Overview" }).click();
 }
 
 /**
