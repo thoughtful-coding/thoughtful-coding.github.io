@@ -308,7 +308,7 @@ test.describe("TestingSection for turtles non-`__main__`", () => {
     await expectSectionCompleted(page, "Challenge: Octagon with Input");
   });
 
-  test.only("Test can click `Run Tests` button and get fail for turtle section using library", async ({
+  test("Test can click `Run Tests` button and get fail for turtle section using library", async ({
     page,
   }) => {
     await page.goto(
@@ -327,7 +327,7 @@ test.describe("TestingSection for turtles non-`__main__`", () => {
     await expectSectionNotCompleted(page, "Turtle Library Works");
   });
 
-  test.only("Test can click `Run Tests` button and get pass for turtle section using library", async ({
+  test("Test can click `Run Tests` button and get pass for turtle section using library", async ({
     page,
   }) => {
     await page.goto(
