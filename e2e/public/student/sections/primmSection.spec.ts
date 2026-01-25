@@ -1,8 +1,5 @@
 import { test, expect } from "@playwright/test";
-import {
-  expectSectionCompleted,
-  expectSectionNotCompleted,
-} from "../../../utils/testHelpers";
+import { expectSectionNotCompleted } from "../../../utils/testHelpers";
 
 test.describe("PrimmSection tests with regular code", () => {
   test("Test can run the PRIMM section up to requiring AI", async ({
