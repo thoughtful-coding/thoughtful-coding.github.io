@@ -171,6 +171,13 @@
   flex-direction: column;
 }
 
+.unitNumber {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
 .unitTitle {
   font-size: 1.4rem;
   color: var(--primary-dark-color);

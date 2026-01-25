@@ -80,7 +80,7 @@ const CourseHomePage: React.FC = () => {
 
     return (
       <div className={styles.unitsGrid}>
-        {units.map((unit) => (
+        {units.map((unit, index) => (
           <Link
             to={`/${courseId}/unit/${unit.id}`}
             key={unit.id}
@@ -96,6 +96,7 @@ const CourseHomePage: React.FC = () => {
                 />
               </div>
               <div className={styles.unitContent}>
+                <div className={styles.unitNumber}>Unit {index + 1}</div>
                 <h3 className={styles.unitTitle}>{unit.title}</h3>
                 <div className={styles.unitDescription}>
                   <ReactMarkdown remarkPlugins={[remarkGfm]}>
