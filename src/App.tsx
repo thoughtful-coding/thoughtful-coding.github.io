@@ -27,6 +27,7 @@ import { useAuthStore } from "./stores/authStore";
 import StudentLayout from "./components/StudentLayout";
 import AuthOverlay from "./components/AuthOverlay";
 import SessionExpiredModal from "./components/SessionExpiredModal";
+import ScrollToTop from "./components/ScrollToTop";
 import { PROGRESS_CONFIG } from "./config/constants";
 import { useStoreCoordination } from "./hooks/useStoreCoordination";
 
@@ -149,6 +150,7 @@ function App() {
         isOpen={sessionHasExpired}
         onClose={handleModalClose}
       />
+      <ScrollToTop />
       <Routes>
         {/* Instructor dashboard (MUST come first - define nested routes here) */}
         <Route

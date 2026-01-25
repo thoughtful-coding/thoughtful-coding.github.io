@@ -20,11 +20,6 @@ const LessonNavigation: React.FC<LessonNavigationProps> = ({
   currentPosition,
   totalInUnit,
 }) => {
-  // Helper to scroll to top when navigating
-  const handleNavigation = () => {
-    window.scrollTo(0, 0);
-  };
-
   // Strip courseId prefix from lesson paths since it's already in the URL
   const stripCourseIdPrefix = (path: LessonPath | null): string | null => {
     if (!path) return null;
@@ -57,7 +52,6 @@ const LessonNavigation: React.FC<LessonNavigationProps> = ({
           to={`/${courseId}/lesson/${prevPath}`}
           className={getNavLinkClass(true)}
           aria-label="Previous Lesson"
-          onClick={handleNavigation}
         >
           &larr; Previous
         </NavLink>
@@ -75,7 +69,6 @@ const LessonNavigation: React.FC<LessonNavigationProps> = ({
           to={`/${courseId}/lesson/${nextPath}`}
           className={getNavLinkClass(true)}
           aria-label="Next Lesson"
-          onClick={handleNavigation}
         >
           Next &rarr;
         </NavLink>
