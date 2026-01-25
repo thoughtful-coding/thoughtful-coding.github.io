@@ -6,9 +6,10 @@ import remarkGfm from "remark-gfm";
 import {
   fetchUnitById,
   getRequiredSectionsForLesson,
+  getCourse,
 } from "../../lib/dataLoader";
 import * as dataHelpers from "../../lib/dataHelpers";
-import type { Unit, Lesson, UnitId, LessonId } from "../../types/data";
+import type { Unit, Lesson, UnitId, LessonId, CourseId } from "../../types/data";
 import styles from "./UnitPage.module.css";
 import { useAllCompletions } from "../../stores/progressStore";
 import LoadingSpinner from "../../components/LoadingSpinner";
@@ -20,10 +21,11 @@ type CompletionStatus = {
 
 const UnitPage: React.FC = () => {
   const { courseId, unitId } = useParams<{
-    courseId: string;
+    courseId: CourseId;
     unitId: UnitId;
   }>();
   const [unit, setUnit] = useState<Unit | null>(null);
+  const [unitNumber, setUnitNumber] = useState<number | null>(null);
   const [lessonsData, setLessonsData] = useState<Map<LessonId, Lesson | null>>(
     new Map()
   );
@@ -47,6 +49,7 @@ const UnitPage: React.FC = () => {
       setError(null);
       setLessonsData(new Map());
       setPathToGuidMap(new Map());
+      setUnitNumber(null);
 
       try {
         const fetchedUnit = await fetchUnitById(unitId);
@@ -54,6 +57,17 @@ const UnitPage: React.FC = () => {
           throw new Error(`Unit with ID "${unitId}" not found.`);
         }
         setUnit(fetchedUnit);
+
+        // Get unit number from course
+        if (courseId) {
+          const course = getCourse(courseId as CourseId);
+          if (course) {
+            const index = course.units.findIndex((u) => u.id === unitId);
+            if (index !== -1) {
+              setUnitNumber(index + 1);
+            }
+          }
+        }
         document.title = `${fetchedUnit.title} - Python Lessons`;
 
         // Load all lessons for this unit
@@ -176,7 +190,10 @@ const UnitPage: React.FC = () => {
         &larr; Back to Course Overview
       </Link>
       <div className={styles.unitHeader}>
-        <h2 className={styles.unitTitle}>Unit: {unit.title}</h2>
+        <h2 className={styles.unitTitle}>
+          {unitNumber ? `Unit ${unitNumber}: ` : "Unit: "}
+          {unit.title}
+        </h2>
         <div className={styles.unitDescription}>
           <ReactMarkdown remarkPlugins={[remarkGfm]}>
             {unit.description}
