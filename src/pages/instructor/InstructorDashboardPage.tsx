@@ -84,7 +84,7 @@ const InstructorDashboardPage: React.FC = () => {
             <div>
               <h1>Thoughtful Dashboard</h1>
               <Link to="/" className={styles.backToStudentLink}>
-                &larr; Back to Courses
+                &larr; Back to Student View
               </Link>
             </div>
             <AuthSection
@@ -157,7 +157,7 @@ const InstructorDashboardPage: React.FC = () => {
           <div>
             <h1>Thoughtful Dashboard</h1>
             <Link to="/" className={styles.backToStudentLink}>
-              &larr; Back to Courses
+              &larr; Back to Student View
             </Link>
           </div>
           <AuthSection
