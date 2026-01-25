@@ -6,8 +6,6 @@ test.describe("Various learning entries tests", () => {
     await expectAuthenticated(page);
 
     await page.goto("/");
-
-    await page.getByRole("button", { name: "I'm a Student" }).click();
     await page.getByRole("link", { name: "Learning Entries" }).click();
 
     await expect(

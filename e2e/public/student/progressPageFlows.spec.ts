@@ -3,8 +3,6 @@ import { test, expect } from "@playwright/test";
 test.describe("Various progress page tests", () => {
   test("Progress page doesn't show anything via header", async ({ page }) => {
     await page.goto("/");
-
-    await page.getByRole("button", { name: "I'm a Student" }).click();
     await page
       .getByRole("link", { name: "End-to-End Tests course End-" })
       .click();

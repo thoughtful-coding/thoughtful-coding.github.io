@@ -128,7 +128,6 @@ export async function navigateToLesson(
   lessonName: string
 ) {
   await page.goto("/");
-  await page.getByRole("button", { name: "I'm a Student" }).click();
   await page.getByRole("link", { name: unitName }).click();
   await page.getByRole("link", { name: unitImageText }).click();
   await page.getByRole("link", { name: lessonName }).click();

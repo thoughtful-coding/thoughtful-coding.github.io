@@ -3,7 +3,6 @@ import { test, expect } from "@playwright/test";
 test.describe("Test that images exist/are rendered properly", () => {
   test('Should show an actual image from a "local" path', async ({ page }) => {
     await page.goto("/");
-    await page.getByRole("button", { name: "I'm a Student" }).click();
     await page
       .getByRole("link", { name: "End-to-End Tests course End-" })
       .click();

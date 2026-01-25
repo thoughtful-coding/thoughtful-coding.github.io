@@ -3,8 +3,6 @@ import { test, expect } from "@playwright/test";
 test.describe("Check can add tests to Code Editor ad top bar", () => {
   test("Add passing test to test suite", async ({ page }) => {
     await page.goto("/");
-
-    await page.getByRole("button", { name: "I'm a Student" }).click();
     await page.getByRole("link", { name: "Code Editor" }).click();
     await page.getByRole("button", { name: "Add Test to Suite" }).click();
     await page.getByRole("textbox").filter({ hasText: /^$/ }).click();
@@ -20,8 +18,6 @@ test.describe("Check can add tests to Code Editor ad top bar", () => {
 
   test("Add failing test to test suite", async ({ page }) => {
     await page.goto("/");
-
-    await page.getByRole("button", { name: "I'm a Student" }).click();
     await page.getByRole("link", { name: "Code Editor" }).click();
     await page.getByRole("button", { name: "Add Test to Suite" }).click();
     await page.getByRole("textbox").filter({ hasText: /^$/ }).click();

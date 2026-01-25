@@ -3,7 +3,6 @@ import { test, expect } from "@playwright/test";
 test.describe("Test can configure website", () => {
   test("Test that can switch to Dark Mode", async ({ page }) => {
     await page.goto("/");
-    await page.getByRole("button", { name: "I'm a Student" }).click();
 
     // Configure Dark Mode and save it
     await page.getByRole("link", { name: "Configure Settings" }).click();

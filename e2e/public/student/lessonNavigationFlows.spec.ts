@@ -8,8 +8,6 @@ import {
 test.describe("Check can navigate into and out of lessons", () => {
   test("Can go from units -> lessons -> lesson -> home", async ({ page }) => {
     await page.goto("/");
-
-    await page.getByRole("button", { name: "I'm a Student" }).click();
     await page.getByRole("link", { name: "Getting Started" }).click();
     await page
       .getByRole("link", { name: "The Science of Learning image" })
@@ -25,8 +23,6 @@ test.describe("Check can navigate into and out of lessons", () => {
 
   test("Can go from units -> lessons -> units", async ({ page }) => {
     await page.goto("/");
-
-    await page.getByRole("button", { name: "I'm a Student" }).click();
     await page.getByRole("link", { name: "Getting Started" }).click();
     await page
       .getByRole("link", { name: "The Science of Learning image" })
@@ -41,8 +37,6 @@ test.describe("Check can navigate into and out of lessons", () => {
     page,
   }) => {
     await page.goto("/");
-
-    await page.getByRole("button", { name: "I'm a Student" }).click();
     await page.getByRole("link", { name: "Getting Started" }).click();
     await page
       .getByRole("link", { name: "The Science of Learning image" })
@@ -59,8 +53,6 @@ test.describe("Check can navigate into and out of lessons", () => {
 
   test("Can hit `Previous Lesson`", async ({ page }) => {
     await page.goto("/");
-
-    await page.getByRole("button", { name: "I'm a Student" }).click();
     await page.getByRole("link", { name: "Getting Started" }).click();
     await page
       .getByRole("link", { name: "The Science of Learning image" })
@@ -78,8 +70,6 @@ test.describe("Check can navigate into and out of lessons", () => {
 
   test("Can hit `Next Lesson`", async ({ page }) => {
     await page.goto("/");
-
-    await page.getByRole("button", { name: "I'm a Student" }).click();
     await page.getByRole("link", { name: "Getting Started" }).click();
     await page
       .getByRole("link", { name: "The Science of Learning image" })
@@ -104,8 +94,6 @@ test.describe("Check can navigate into and out of lessons", () => {
 
   test("Can `Run Code`", async ({ page }) => {
     await page.goto("/");
-
-    await page.getByRole("button", { name: "I'm a Student" }).click();
     await page.getByRole("link", { name: "Getting Started" }).click();
     await page
       .getByRole("link", { name: "The Science of Learning image" })
