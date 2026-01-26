@@ -2,6 +2,7 @@
 import React, { useCallback, useMemo } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import { python } from "@codemirror/lang-python";
+import { indentUnit } from "@codemirror/language";
 import { oneDark } from "@codemirror/theme-one-dark";
 import { EditorView } from "@codemirror/view"; // Import EditorView for DOM event handlers
 
@@ -33,7 +34,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
 
   // Memoize extensions to avoid re-creating them on every render
   const extensions = useMemo(() => {
-    const baseExtensions = [python()];
+    const baseExtensions = [python(), indentUnit.of("    ")]; // 4-space indentation
 
     if (preventPaste) {
       baseExtensions.push(
