@@ -6,6 +6,18 @@
   padding: 0 1rem;
 }
 
+.backLink {
+  display: inline-block;
+  margin-bottom: var(--spacing-sm);
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.backLink:hover {
+  text-decoration: underline;
+}
+
 .welcome {
   text-align: center;
   padding: 1rem 0;
@@ -15,7 +27,7 @@
 .welcome h2 {
   color: var(--primary-dark-color);
   margin-bottom: var(--spacing-lg);
-  font-size: 2rem;
+  font-size: 2.2rem;
 }
 
 .welcome p {
@@ -189,4 +201,11 @@
   border: 1px solid var(--error-border);
   border-radius: var(--radius-xl);
   font-size: 1.1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .welcome h2 {
+    font-size: 1.8rem;
+  }
 }

@@ -116,6 +116,9 @@ const CourseHomePage: React.FC = () => {
 
   return (
     <div className={styles.homePageContainer}>
+      <Link to="/" className={styles.backLink}>
+        &larr; Back to Courses
+      </Link>
       <section className={styles.welcome}>
         <h2>{course?.title || "Loading..."}</h2>
       </section>

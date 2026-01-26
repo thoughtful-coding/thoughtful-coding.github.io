@@ -17,20 +17,14 @@
 
 /* Style for the link back to unit */
 .backToUnitLink {
-  display: block;
-  margin: 0 0 var(--spacing-lg) 0;
-  padding: var(--spacing-sm) var(--spacing-lg);
+  display: inline-block;
+  margin-bottom: var(--spacing-sm);
   color: var(--primary-color);
   text-decoration: none;
   font-weight: 500;
-  font-size: 0.9rem;
-  background-color: var(--bg-code);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-secondary);
 }
 
 .backToUnitLink:hover {
-  background-color: var(--primary-bg);
   text-decoration: underline;
 }
 
