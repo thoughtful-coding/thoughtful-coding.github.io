@@ -24,8 +24,7 @@ const lessonData: Lesson = {
       ],
       example: {
         visualization: "console",
-        initialCode:
-          'print("Hello, World!")\nprint("Can I call myself a programmer?")',
+        initialCode: 'print("Hello, World!")\nprint("Am I a programmer now?")',
       },
     } as ObservationSectionData,
     {

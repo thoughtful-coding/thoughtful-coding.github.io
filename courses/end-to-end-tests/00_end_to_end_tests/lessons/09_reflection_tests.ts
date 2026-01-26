@@ -22,7 +22,7 @@ const lessonData: Lesson = {
       ],
       topic: "How Print Works",
       isTopicPredefined: true,
-      code: 'print("Hello, World!")\nprint("Can I call myself a programmer now?")',
+      code: 'print("Hello, World!")\nprint("Am I a programmer now?")',
       isCodePredefined: true,
       explanation: "Explain how your example works (3-4 sentences)",
       isExplanationPredefined: false,

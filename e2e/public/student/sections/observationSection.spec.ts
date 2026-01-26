@@ -16,7 +16,7 @@ test.describe("ObservationSection tests for regular code", () => {
 
     await expectSectionNotCompleted(page, "Running Code");
     await runCode(page, "running-code");
-    await expect(page.getByText("Hello, World! Can I call")).toBeVisible();
+    await expect(page.getByText("Hello, World! Am I a")).toBeVisible();
     await expectSectionCompleted(page, "Running Code");
   });
 
@@ -34,12 +34,8 @@ test.describe("ObservationSection tests for regular code", () => {
       .getByText('print("Hello, World!")')
       .click();
     await page
-      .getByText(
-        'print("Hello, World!")print("Can I call myself a programmer?")'
-      )
-      .fill(
-        'print("Hello, World!")aaa\nprint("Can I call myself a programmer?")'
-      );
+      .getByText('print("Hello, World!")print("Am I a programmer now?")')
+      .fill('print("Hello, World!")aaa\nprint("Am I a programmer now?")');
 
     await runCode(page, "running-code");
     await expectError(page, "SyntaxError: Traceback");
