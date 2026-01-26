@@ -9,7 +9,13 @@ import {
   getCourse,
 } from "../../lib/dataLoader";
 import * as dataHelpers from "../../lib/dataHelpers";
-import type { Unit, Lesson, UnitId, LessonId, CourseId } from "../../types/data";
+import type {
+  Unit,
+  Lesson,
+  UnitId,
+  LessonId,
+  CourseId,
+} from "../../types/data";
 import styles from "./UnitPage.module.css";
 import { useAllCompletions } from "../../stores/progressStore";
 import LoadingSpinner from "../../components/LoadingSpinner";

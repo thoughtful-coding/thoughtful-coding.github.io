@@ -64,11 +64,7 @@ const CourseHomePage: React.FC = () => {
     }
 
     if (error) {
-      return (
-        <div className={styles.error}>
-          Error loading units: {error}
-        </div>
-      );
+      return <div className={styles.error}>Error loading units: {error}</div>;
     }
 
     if (!course || course.units.length === 0) {

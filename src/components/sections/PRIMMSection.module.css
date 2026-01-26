@@ -184,35 +184,13 @@
   border-top: none;
 }
 
-/* Buttons */
+/* Buttons - matches ReflectionSection primaryButton style */
 .primmButton {
-  background-color: var(--color-info);
-  color: white;
-  border: none;
-  padding: 0.7em 1.3em;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.25s;
-  font-size: 0.95em;
+  composes: primaryButton from "../../styles/common.module.css";
   margin-top: var(--spacing-sm);
 }
 
-.primmButton:hover:not(:disabled) {
-  background-color: var(--color-info-dark);
-}
-
-.primmButton:disabled {
-  background-color: var(--text-muted);
-  opacity: 0.65;
-  cursor: not-allowed;
-}
-
 .getFeedbackButton {
-  composes: primmButton;
-  background-color: var(--color-success);
-}
-
-.getFeedbackButton:hover:not(:disabled) {
-  background-color: var(--color-success-dark);
+  composes: primaryButton from "../../styles/common.module.css";
+  margin-top: var(--spacing-sm);
 }

@@ -30,10 +30,12 @@ test.describe("PrimmSection tests with regular code", () => {
     await page
       .getByRole("textbox", { name: "Your Reflection/Explanation:" })
       .fill("I was right");
-    await page
-      .getByRole("button", { name: "Get AI Feedback", exact: true })
-      .click();
-    await expect(page.getByText("Authentication required")).toBeVisible();
+    // When unauthenticated, button shows login prompt and is disabled
+    const feedbackButton = page.getByRole("button", {
+      name: "Please Log In to Get AI Feedback",
+    });
+    await expect(feedbackButton).toBeVisible();
+    await expect(feedbackButton).toBeDisabled();
 
     await expect(sectionItem).not.toHaveClass(/sectionItemCompleted/);
   });
@@ -77,10 +79,12 @@ test.describe("PrimmSection tests with turtles", () => {
     await page
       .getByRole("textbox", { name: "Your Reflection/Explanation:" })
       .fill("I was right");
-    await page
-      .getByRole("button", { name: "Get AI Feedback", exact: true })
-      .click();
-    await expect(page.getByText("Authentication required")).toBeVisible();
+    // When unauthenticated, button shows login prompt and is disabled
+    const feedbackButton = page.getByRole("button", {
+      name: "Please Log In to Get AI Feedback",
+    });
+    await expect(feedbackButton).toBeVisible();
+    await expect(feedbackButton).toBeDisabled();
 
     await expectSectionNotCompleted(page, "Drawing A Shape");
   });
@@ -122,10 +126,12 @@ test.describe("PrimmSection tests with turtles", () => {
     await page
       .getByRole("textbox", { name: "Your Reflection/Explanation:" })
       .fill("I was right");
-    await page
-      .getByRole("button", { name: "Get AI Feedback", exact: true })
-      .click();
-    await expect(page.getByText("Authentication required")).toBeVisible();
+    // When unauthenticated, button shows login prompt and is disabled
+    const feedbackButton = page.getByRole("button", {
+      name: "Please Log In to Get AI Feedback",
+    });
+    await expect(feedbackButton).toBeVisible();
+    await expect(feedbackButton).toBeDisabled();
 
     await expectSectionNotCompleted(page, "PRIMM Turtle Library Works");
   });

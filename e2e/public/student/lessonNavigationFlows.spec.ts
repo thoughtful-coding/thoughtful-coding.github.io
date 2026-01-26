@@ -129,7 +129,9 @@ test.describe("Check can navigate into and out of lessons", () => {
     await expect(page.getByText("Based on the definition above")).toBeVisible();
     await backToUnitOverview(page);
     await expect(
-      page.getByRole("heading", { name: /Unit \d+: Section End-To-End Testing/ })
+      page.getByRole("heading", {
+        name: /Unit \d+: Section End-To-End Testing/,
+      })
     ).toBeVisible();
     await backToLearningPaths(page);
     await expect(

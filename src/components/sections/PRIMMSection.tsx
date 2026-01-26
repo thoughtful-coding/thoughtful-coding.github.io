@@ -15,6 +15,7 @@ import CodeEditor from "../CodeEditor";
 import { useEnhancedPRIMM } from "../../hooks/useEnhancedPRIMM";
 import { usePyodide } from "../../contexts/PyodideContext";
 import { useTurtleExecution } from "../../hooks/useTurtleExecution";
+import { useAuthStore } from "../../stores/authStore";
 
 interface PRIMMSectionProps {
   section: PRIMMSectionData;
@@ -46,6 +47,7 @@ const PRIMMSection: React.FC<PRIMMSectionProps> = ({
   });
 
   const { runPythonCode, isLoading: isPyodideLoading } = usePyodide();
+  const { isAuthenticated } = useAuthStore();
   const canvasRef = useRef<HTMLDivElement>(null);
 
   const { runTurtleCode, isLoading: isTurtleLoading } = useTurtleExecution({
@@ -214,13 +216,17 @@ const PRIMMSection: React.FC<PRIMMSectionProps> = ({
                       actions.submitForFeedback(section.example.initialCode)
                     }
                     disabled={
-                      !state.userExplanationText.trim() || isLoadingAiFeedback
+                      !state.userExplanationText.trim() ||
+                      isLoadingAiFeedback ||
+                      !isAuthenticated
                     }
                     className={primmStyles.getFeedbackButton}
                   >
                     {isLoadingAiFeedback
                       ? "Getting Feedback..."
-                      : "Get AI Feedback"}
+                      : !isAuthenticated
+                        ? "Please Log In to Get AI Feedback"
+                        : "Get AI Feedback"}
                   </button>
                 </div>
               )}

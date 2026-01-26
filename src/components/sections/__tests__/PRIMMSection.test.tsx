@@ -7,6 +7,7 @@ import PRIMMSection from "../PRIMMSection";
 import { useEnhancedPRIMM } from "../../../hooks/useEnhancedPRIMM";
 import { usePyodide } from "../../../contexts/PyodideContext";
 import { useTurtleExecution } from "../../../hooks/useTurtleExecution";
+import { useAuthStore } from "../../../stores/authStore";
 import type {
   PRIMMSectionData,
   UnitId,
@@ -18,6 +19,7 @@ import type {
 vi.mock("../../../hooks/useEnhancedPRIMM");
 vi.mock("../../../contexts/PyodideContext");
 vi.mock("../../../hooks/useTurtleExecution");
+vi.mock("../../../stores/authStore");
 
 const mockSectionData: PRIMMSectionData = {
   kind: "PRIMM",
@@ -71,6 +73,9 @@ describe("PRIMMSection", () => {
     vi.mocked(useTurtleExecution).mockReturnValue({
       runTurtleCode: mockRunTurtleCode,
       isLoading: false,
+    });
+    vi.mocked(useAuthStore).mockReturnValue({
+      isAuthenticated: true,
     });
   });
 
@@ -256,5 +261,37 @@ describe("PRIMMSection", () => {
     expect(
       screen.getByText(/this concludes the primm challenge./i)
     ).toBeInTheDocument();
+  });
+
+  it("shows login prompt and disables feedback button when not authenticated", () => {
+    vi.mocked(useAuthStore).mockReturnValue({
+      isAuthenticated: false,
+    });
+    vi.mocked(useEnhancedPRIMM).mockReturnValue({
+      state: {
+        ...mockPrimmState,
+        isPredictionLocked: true,
+        actualPyodideOutput: "Hello, PRIMM!",
+        userExplanationText: "My explanation.",
+      },
+      actions: mockActions,
+      isSectionComplete: false,
+      isLoadingAiFeedback: false,
+      aiFeedbackError: null,
+    });
+
+    render(
+      <PRIMMSection
+        section={mockSectionData}
+        unitId={"unit-1" as UnitId}
+        lessonId={"lesson-1" as LessonId}
+      />
+    );
+
+    const feedbackButton = screen.getByRole("button", {
+      name: /please log in to get ai feedback/i,
+    });
+    expect(feedbackButton).toBeInTheDocument();
+    expect(feedbackButton).toBeDisabled();
   });
 });
