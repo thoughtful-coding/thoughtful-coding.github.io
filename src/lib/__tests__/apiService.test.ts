@@ -667,6 +667,29 @@ describe("apiService", () => {
       expect(mockFetch).toHaveBeenCalledTimes(2);
     });
 
+    it("should retry on 500 (internal server error)", async () => {
+      // ARRANGE
+      getAccessTokenMock.mockReturnValue("access-token");
+      const mockProgress = { completions: {} };
+
+      mockFetch
+        .mockResolvedValueOnce({ ok: false, status: 500 })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: () => Promise.resolve(mockProgress),
+        });
+
+      // ACT
+      const progressPromise = apiService.getUserProgress();
+      await vi.advanceTimersByTimeAsync(1000);
+
+      const result = await progressPromise;
+
+      // ASSERT
+      expect(result).toEqual(mockProgress);
+      expect(mockFetch).toHaveBeenCalledTimes(2);
+    });
+
     it("should use exponential backoff correctly (1s, 2s, 4s)", async () => {
       // ARRANGE
       getAccessTokenMock.mockReturnValue("access-token");
