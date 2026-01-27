@@ -204,7 +204,7 @@
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .welcome h2 {
     font-size: 1.8rem;
   }
