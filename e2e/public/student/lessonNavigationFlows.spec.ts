@@ -102,7 +102,9 @@ test.describe("Check can navigate into and out of lessons", () => {
       .getByRole("link", { name: "Lesson 1 A Guided Tour: PRIMM" })
       .click();
     await runCode(page, "running-code");
-    await expect(page.getByText("Hello, World! Can I call")).toBeVisible();
+    await expect(
+      page.getByText("Hello, World! Am I a programmer?")
+    ).toBeVisible();
   });
 
   test("Can go to a lesson by the URL", async ({ page }) => {

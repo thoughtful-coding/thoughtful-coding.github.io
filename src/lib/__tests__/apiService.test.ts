@@ -74,22 +74,21 @@ describe("apiService", () => {
     it("should throw an ApiError on a failed request", async () => {
       // ARRANGE
       getAccessTokenMock.mockReturnValue("fake-access-token");
+      // Use 400 (non-retryable) to avoid retry delays timing out the test
       mockFetch.mockResolvedValue({
         ok: false,
-        status: 500,
-        statusText: "Server Error",
+        status: 400,
+        statusText: "Bad Request",
         json: () =>
           Promise.resolve({
-            message: "Internal Server Error",
-            errorCode: "INTERNAL_ERROR",
+            message: "Bad Request",
+            errorCode: "INVALID_INPUT",
           }),
       });
 
       // ACT & ASSERT
       await expect(apiService.getUserProgress()).rejects.toThrow(ApiError);
-      await expect(apiService.getUserProgress()).rejects.toThrow(
-        "Internal Server Error"
-      );
+      await expect(apiService.getUserProgress()).rejects.toThrow("Bad Request");
     });
   });
 
@@ -198,9 +197,10 @@ describe("apiService", () => {
       const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation();
 
       // Mock an error response without errorCode (legacy format)
+      // Use 400 (non-retryable) to avoid retry delays timing out the test
       mockFetch.mockResolvedValue({
         ok: false,
-        status: 500,
+        status: 400,
         json: () =>
           Promise.resolve({
             message: "Legacy error without errorCode",
@@ -368,9 +368,10 @@ describe("apiService", () => {
     });
 
     it("should not throw even if logout fails", async () => {
+      // Use 400 (non-retryable) to avoid retry delays timing out the test
       mockFetch.mockResolvedValue({
         ok: false,
-        status: 500,
+        status: 400,
       });
 
       // Should not throw - logout is best-effort
