@@ -31,7 +31,7 @@ test.describe("ReflectionSection tests", () => {
     await expect(page.getByText("Your explanation is accurate")).toBeVisible();
   });
 
-  test.only('Test "as seen in example" checker', async ({ page }) => {
+  test('Test "as seen in example" checker', async ({ page }) => {
     await page.goto(
       "/end-to-end-tests/lesson/00_end_to_end_tests/lessons/09_reflection_tests"
     );
