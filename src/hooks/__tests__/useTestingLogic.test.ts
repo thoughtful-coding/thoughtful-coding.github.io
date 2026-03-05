@@ -1,6 +1,6 @@
 import { renderHook, act, waitFor } from "@testing-library/react";
 import { vi } from "vitest";
-import { useTestingLogic } from "../useTestingLogic";
+import { useTestingLogic, executeTests } from "../useTestingLogic";
 import { usePyodide } from "../../contexts/PyodideContext";
 import { useProgressActions } from "../../stores/progressStore";
 import type { TestCase, UnitId, LessonId, SectionId } from "../../types/data";
@@ -802,6 +802,317 @@ greet("Example2")`;
       expect(generatedScript).toContain("_user_globals = {}");
       expect(generatedScript).toContain("exec('''");
       expect(generatedScript).toContain("_user_globals)");
+    });
+  });
+});
+
+describe("executeTests", () => {
+  const mockRunPython = vi.fn();
+
+  const makePythonResult = (result: Record<string, any>) => ({
+    success: true,
+    stdout: JSON.stringify(result),
+    stderr: "",
+    error: null,
+    result: null,
+  });
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  describe("function mode", () => {
+    const testCases: TestCase[] = [
+      { input: [2, 3], expected: 5, description: "adds 2 and 3" },
+      { input: [0, 0], expected: 0, description: "adds zeros" },
+    ];
+
+    it("should return passing results for all test cases", async () => {
+      mockRunPython
+        .mockResolvedValueOnce(
+          makePythonResult({
+            success: true,
+            actual: 5,
+            expected: 5,
+            input: [2, 3],
+            passed: true,
+          })
+        )
+        .mockResolvedValueOnce(
+          makePythonResult({
+            success: true,
+            actual: 0,
+            expected: 0,
+            input: [0, 0],
+            passed: true,
+          })
+        );
+
+      const results = await executeTests(
+        mockRunPython,
+        "def add(a, b): return a + b",
+        testCases,
+        "function",
+        "add"
+      );
+
+      expect(results).toHaveLength(2);
+      expect(results[0].passed).toBe(true);
+      expect(results[1].passed).toBe(true);
+      expect(mockRunPython).toHaveBeenCalledTimes(2);
+    });
+
+    it("should stop on first failure", async () => {
+      mockRunPython.mockResolvedValueOnce(
+        makePythonResult({
+          success: true,
+          actual: 6,
+          expected: 5,
+          input: [2, 3],
+          passed: false,
+        })
+      );
+
+      const results = await executeTests(
+        mockRunPython,
+        "def add(a, b): return a * b",
+        testCases,
+        "function",
+        "add"
+      );
+
+      expect(results).toHaveLength(1);
+      expect(results[0].passed).toBe(false);
+      expect(mockRunPython).toHaveBeenCalledTimes(1);
+    });
+
+    it("should include input in results for function mode", async () => {
+      mockRunPython.mockResolvedValueOnce(
+        makePythonResult({
+          success: true,
+          actual: 5,
+          expected: 5,
+          input: [2, 3],
+          passed: true,
+        })
+      );
+
+      const results = await executeTests(
+        mockRunPython,
+        "def add(a, b): return a + b",
+        [testCases[0]],
+        "function",
+        "add"
+      );
+
+      expect(results[0].input).toEqual([2, 3]);
+    });
+
+    it("should handle function-not-defined errors", async () => {
+      mockRunPython.mockResolvedValueOnce(
+        makePythonResult({
+          success: false,
+          error: "NameError: name 'add' is not defined",
+          input: [2, 3],
+          expected: 5,
+        })
+      );
+
+      const results = await executeTests(
+        mockRunPython,
+        "# empty",
+        [testCases[0]],
+        "function",
+        "add"
+      );
+
+      expect(results[0].passed).toBe(false);
+      expect(results[0].actual).toContain("NameError");
+    });
+  });
+
+  describe("procedure mode", () => {
+    const testCases: TestCase[] = [
+      {
+        input: ["Alice"],
+        expected: "Hello, Alice!",
+        description: "greets Alice",
+      },
+    ];
+
+    it("should return passing results", async () => {
+      mockRunPython.mockResolvedValueOnce(
+        makePythonResult({
+          success: true,
+          actual: "Hello, Alice!",
+          expected: "Hello, Alice!",
+          input: ["Alice"],
+          passed: true,
+        })
+      );
+
+      const results = await executeTests(
+        mockRunPython,
+        'def greet(name): print(f"Hello, {name}!")',
+        testCases,
+        "procedure",
+        "greet"
+      );
+
+      expect(results).toHaveLength(1);
+      expect(results[0].passed).toBe(true);
+    });
+
+    it("should generate script with stdout capture and buffer clearing", async () => {
+      mockRunPython.mockResolvedValueOnce(
+        makePythonResult({
+          success: true,
+          actual: "Hello, Alice!",
+          expected: "Hello, Alice!",
+          input: ["Alice"],
+          passed: true,
+        })
+      );
+
+      await executeTests(
+        mockRunPython,
+        'def greet(name): print(f"Hello, {name}!")',
+        testCases,
+        "procedure",
+        "greet"
+      );
+
+      const script = mockRunPython.mock.calls[0][0];
+      expect(script).toContain("captured_output.truncate(0)");
+      expect(script).toContain("captured_output.seek(0)");
+    });
+  });
+
+  describe("__main__ mode", () => {
+    const testCases: TestCase[] = [
+      {
+        input: null,
+        expected: "Hello, World!",
+        description: "prints greeting",
+      },
+    ];
+
+    it("should return passing results", async () => {
+      mockRunPython.mockResolvedValueOnce(
+        makePythonResult({
+          success: true,
+          actual: "Hello, World!",
+          expected: "Hello, World!",
+          passed: true,
+        })
+      );
+
+      const results = await executeTests(
+        mockRunPython,
+        'print("Hello, World!")',
+        testCases,
+        "procedure",
+        "__main__"
+      );
+
+      expect(results).toHaveLength(1);
+      expect(results[0].passed).toBe(true);
+    });
+
+    it("should not include input in results", async () => {
+      mockRunPython.mockResolvedValueOnce(
+        makePythonResult({
+          success: true,
+          actual: "Hello, World!",
+          expected: "Hello, World!",
+          passed: true,
+        })
+      );
+
+      const results = await executeTests(
+        mockRunPython,
+        'print("Hello, World!")',
+        testCases,
+        "procedure",
+        "__main__"
+      );
+
+      expect(results[0].input).toBeUndefined();
+    });
+  });
+
+  describe("error handling", () => {
+    const testCases: TestCase[] = [
+      { input: [1], expected: 1, description: "identity" },
+    ];
+
+    it("should handle Pyodide execution failures", async () => {
+      mockRunPython.mockResolvedValueOnce({
+        success: false,
+        stdout: "",
+        stderr: "",
+        error: { type: "PythonError", message: "Pyodide crashed" },
+        result: null,
+      });
+
+      const results = await executeTests(
+        mockRunPython,
+        "def f(x): return x",
+        testCases,
+        "function",
+        "f"
+      );
+
+      expect(results[0].passed).toBe(false);
+      expect(results[0].actual).toContain("Execution error");
+      expect(results[0].actual).toContain("Pyodide crashed");
+    });
+
+    it("should handle unparseable stdout", async () => {
+      mockRunPython.mockResolvedValueOnce({
+        success: true,
+        stdout: "not json at all {{{",
+        stderr: "",
+        error: null,
+        result: null,
+      });
+
+      const results = await executeTests(
+        mockRunPython,
+        "def f(x): return x",
+        testCases,
+        "function",
+        "f"
+      );
+
+      expect(results[0].passed).toBe(false);
+      expect(results[0].actual).toContain("Parse error");
+    });
+
+    it("should pass libraryCode through to runPythonCode", async () => {
+      mockRunPython.mockResolvedValueOnce(
+        makePythonResult({
+          success: true,
+          actual: 1,
+          expected: 1,
+          input: [1],
+          passed: true,
+        })
+      );
+
+      await executeTests(
+        mockRunPython,
+        "def f(x): return x",
+        testCases,
+        "function",
+        "f",
+        "import math"
+      );
+
+      expect(mockRunPython).toHaveBeenCalledWith(
+        expect.any(String),
+        "import math"
+      );
     });
   });
 });

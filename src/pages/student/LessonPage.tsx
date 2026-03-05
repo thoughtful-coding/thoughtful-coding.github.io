@@ -18,6 +18,7 @@ import type {
 import InformationSection from "../../components/sections/InformationSection";
 import ObservationSection from "../../components/sections/ObservationSection";
 import TestingSection from "../../components/sections/TestingSection";
+import RefactorSection from "../../components/sections/RefactorSection";
 import PredictionSection from "../../components/sections/PredictionSection";
 import MultipleChoiceSection from "../../components/sections/MultipleChoiceSection";
 import MultipleSelectionSection from "../../components/sections/MultipleSelectionSection";
@@ -310,6 +311,17 @@ const LessonPage: React.FC = () => {
       case "Debugger":
         return (
           <DebuggerSection
+            key={sectionData.id}
+            unitId={currentUnitGuid}
+            lessonId={currentLessonGuid}
+            section={sectionData}
+            courseId={courseId}
+            lessonPath={lessonPath}
+          />
+        );
+      case "Refactor":
+        return (
+          <RefactorSection
             key={sectionData.id}
             unitId={currentUnitGuid}
             lessonId={currentLessonGuid}

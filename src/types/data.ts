@@ -67,7 +67,8 @@ export type SectionKind =
   | "Prediction"
   | "PRIMM"
   | "Testing"
-  | "Debugger";
+  | "Debugger"
+  | "Refactor";
 
 export interface InformationSectionData extends LessonSection {
   kind: "Information";
@@ -208,6 +209,35 @@ export interface TestingSectionData extends LessonSection, TestableFields {
   example: ExecutableCode;
 }
 
+export type RefactorStyle =
+  | "function"
+  | "oop"
+  | "recursive"
+  | "pep8"
+  | "annotated"
+  | "simple"
+  | "minimalist";
+
+export interface RefactorStyleResult {
+  passed: boolean;
+  feedback: string[];
+}
+
+export interface RefactorTabConfig {
+  style: RefactorStyle;
+  instructions: ContentBlock[];
+  testMode: TestMode;
+  functionToTest: string; // ignored when style === "oop" (correctness skipped)
+  maxLines?: number; // max non-empty, non-comment lines allowed
+}
+
+export interface RefactorSectionData extends LessonSection {
+  kind: "Refactor";
+  originalCode: string;
+  testCases: TestCase[];
+  tabs: RefactorTabConfig[];
+}
+
 export interface DebuggerSectionData extends LessonSection {
   kind: "Debugger";
   example: ExecutableCode;
@@ -316,7 +346,8 @@ export type AnyLessonSectionData =
   | ParsonsSectionData
   | ReflectionSectionData
   | CoverageSectionData
-  | PRIMMSectionData;
+  | PRIMMSectionData
+  | RefactorSectionData;
 
 export interface Lesson {
   guid: LessonId;

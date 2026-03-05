@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import { usePyodide } from "../contexts/PyodideContext";
+import type { PythonExecutionResult } from "../contexts/PyodideContext";
 import type {
   UnitId,
   LessonId,
@@ -17,47 +18,78 @@ export interface TestResult {
   input?: any[]; // Optional for output-based tests
 }
 
-interface UseTestingLogicProps {
-  unitId: UnitId;
-  lessonId: LessonId;
-  sectionId: SectionId;
-  testMode: TestMode;
-  functionToTest: string; // "__main__" for testing entire program, function name for testing specific functions
-  testCases: TestCase[];
+type RunPythonCodeFn = (
+  code: string,
+  libraryCode?: string
+) => Promise<PythonExecutionResult>;
+
+// Parse a single test case result from Python execution output
+function parseTestCaseResult(
+  testResult: PythonExecutionResult,
+  testCase: TestCase,
+  includeInput: boolean
+): TestResult {
+  if (!testResult.success) {
+    const errorMsg = testResult.error
+      ? `${testResult.error.type}: ${testResult.error.message}`
+      : "Unknown error";
+    return {
+      description: testCase.description,
+      passed: false,
+      actual: `Execution error: ${errorMsg}`,
+      expected: testCase.expected,
+      ...(includeInput && { input: testCase.input }),
+    };
+  }
+
+  try {
+    const parsedResult = JSON.parse(testResult.stdout);
+
+    if (parsedResult.success) {
+      return {
+        description: testCase.description,
+        passed: parsedResult.passed,
+        actual: parsedResult.actual,
+        expected: parsedResult.expected,
+        ...(includeInput && { input: parsedResult.input }),
+      };
+    } else {
+      return {
+        description: testCase.description,
+        passed: false,
+        actual: parsedResult.error,
+        expected: parsedResult.expected,
+        ...(includeInput && { input: parsedResult.input }),
+      };
+    }
+  } catch {
+    return {
+      description: testCase.description,
+      passed: false,
+      actual: `Parse error: ${testResult.stdout}`,
+      expected: testCase.expected,
+      ...(includeInput && { input: testCase.input }),
+    };
+  }
 }
 
-export const useTestingLogic = ({
-  unitId,
-  lessonId,
-  sectionId,
-  testMode,
-  functionToTest,
-  testCases,
-}: UseTestingLogicProps) => {
-  const {
-    runPythonCode,
-    isLoading: isPyodideLoading,
-    error: pyodideError,
-  } = usePyodide();
-  const { completeSection, incrementAttemptCounter } = useProgressActions();
+/**
+ * Execute test cases against user code via Pyodide. Stops on first failure.
+ * Pure function — no React state or side effects.
+ */
+export async function executeTests(
+  runPythonCode: RunPythonCodeFn,
+  userCode: string,
+  testCases: TestCase[],
+  testMode: TestMode,
+  functionToTest: string,
+  libraryCode?: string
+): Promise<TestResult[]> {
+  const results: TestResult[] = [];
 
-  const [isRunningTests, setIsRunningTests] = useState(false);
-  const [testResults, setTestResults] = useState<TestResult[] | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  const runTests = useCallback(
-    async (userCode: string, libraryCode?: string) => {
-      setIsRunningTests(true);
-      setTestResults(null);
-      setError(null);
-
-      try {
-        const results: TestResult[] = [];
-
-        if (functionToTest === "__main__") {
-          // Test entire program output
-          for (const testCase of testCases) {
-            const testScript = `
+  if (functionToTest === "__main__") {
+    for (const testCase of testCases) {
+      const testScript = `
 import sys
 from io import StringIO
 import json
@@ -70,28 +102,28 @@ sys.stdout = captured_output
 try:
     # Execute user code
     exec('''${userCode.replace(/\\/g, "\\\\").replace(/'/g, "\\'")}''')
-    
+
     # Get the output
     output = captured_output.getvalue().strip()
-    
+
     # Restore stdout
     sys.stdout = old_stdout
-    
+
     expected = '''${testCase.expected
       .replace(/\\/g, "\\\\")
       .replace(/'/g, "\\'")}'''
-    
+
     result = {
         "success": True,
         "actual": output,
         "expected": expected,
         "passed": output == expected
     }
-    
+
 except Exception as e:
     # Restore stdout
     sys.stdout = old_stdout
-    
+
     result = {
         "success": False,
         "error": f"{type(e).__name__}: {e}",
@@ -104,69 +136,21 @@ except Exception as e:
 print(json.dumps(result))
 `;
 
-            const testResult = await runPythonCode(testScript, libraryCode);
+      const testResult = await runPythonCode(testScript, libraryCode);
+      const parsed = parseTestCaseResult(testResult, testCase, false);
+      results.push(parsed);
+      if (!parsed.passed) break;
+    }
+  } else {
+    const escapedUserCode = userCode
+      .replace(/\\/g, "\\\\")
+      .replace(/'/g, "\\'");
 
-            let testPassed = false;
+    for (const testCase of testCases) {
+      let testScript: string;
 
-            if (!testResult.success) {
-              const errorMsg = testResult.error
-                ? `${testResult.error.type}: ${testResult.error.message}`
-                : "Unknown error";
-              results.push({
-                description: testCase.description,
-                passed: false,
-                actual: `Execution error: ${errorMsg}`,
-                expected: testCase.expected,
-              });
-              testPassed = false;
-            } else {
-              try {
-                const parsedResult = JSON.parse(testResult.stdout);
-
-                if (parsedResult.success) {
-                  results.push({
-                    description: testCase.description,
-                    passed: parsedResult.passed,
-                    actual: parsedResult.actual,
-                    expected: parsedResult.expected,
-                  });
-                  testPassed = parsedResult.passed;
-                } else {
-                  results.push({
-                    description: testCase.description,
-                    passed: false,
-                    actual: parsedResult.error,
-                    expected: parsedResult.expected,
-                  });
-                  testPassed = false;
-                }
-              } catch {
-                results.push({
-                  description: testCase.description,
-                  passed: false,
-                  actual: `Parse error: ${testResult.stdout}`,
-                  expected: testCase.expected,
-                });
-                testPassed = false;
-              }
-            }
-
-            // Stop on first failure
-            if (!testPassed) {
-              break;
-            }
-          }
-        } else {
-          // Test individual function (either capture stdout for "procedure" or return value for "function")
-          // Each test is self-contained: executes user code, then tests the function
-          const escapedUserCode = userCode
-            .replace(/\\/g, "\\\\")
-            .replace(/'/g, "\\'");
-
-          for (const testCase of testCases) {
-            if (testMode === "procedure") {
-              // Capture stdout from function call
-              const testScript = `
+      if (testMode === "procedure") {
+        testScript = `
 import json
 import sys
 from io import StringIO
@@ -223,65 +207,9 @@ except Exception as e:
 
 print(json.dumps(result))
 `;
-
-              const testResult = await runPythonCode(testScript, libraryCode);
-
-              let testPassed = false;
-
-              if (!testResult.success) {
-                const errorMsg = testResult.error
-                  ? `${testResult.error.type}: ${testResult.error.message}`
-                  : "Unknown error";
-                results.push({
-                  description: testCase.description,
-                  passed: false,
-                  actual: `Execution error: ${errorMsg}`,
-                  expected: testCase.expected,
-                  input: testCase.input,
-                });
-                testPassed = false;
-              } else {
-                try {
-                  const parsedResult = JSON.parse(testResult.stdout);
-
-                  if (parsedResult.success) {
-                    results.push({
-                      description: testCase.description,
-                      passed: parsedResult.passed,
-                      actual: parsedResult.actual,
-                      expected: parsedResult.expected,
-                      input: parsedResult.input,
-                    });
-                    testPassed = parsedResult.passed;
-                  } else {
-                    results.push({
-                      description: testCase.description,
-                      passed: false,
-                      actual: parsedResult.error,
-                      expected: parsedResult.expected,
-                      input: parsedResult.input,
-                    });
-                    testPassed = false;
-                  }
-                } catch {
-                  results.push({
-                    description: testCase.description,
-                    passed: false,
-                    actual: `Parse error: ${testResult.stdout}`,
-                    expected: testCase.expected,
-                    input: testCase.input,
-                  });
-                  testPassed = false;
-                }
-              }
-
-              // Stop on first failure
-              if (!testPassed) {
-                break;
-              }
-            } else {
-              // testMode === "function": Capture return value
-              const testScript = `
+      } else {
+        // testMode === "function": Capture return value
+        testScript = `
 import json
 import sys
 from io import StringIO
@@ -333,65 +261,61 @@ except Exception as e:
 
 print(json.dumps(result))
 `;
+      }
 
-              const testResult = await runPythonCode(testScript, libraryCode);
+      const testResult = await runPythonCode(testScript, libraryCode);
+      const parsed = parseTestCaseResult(testResult, testCase, true);
+      results.push(parsed);
+      if (!parsed.passed) break;
+    }
+  }
 
-              let testPassed = false;
+  return results;
+}
 
-              if (!testResult.success) {
-                const errorMsg = testResult.error
-                  ? `${testResult.error.type}: ${testResult.error.message}`
-                  : "Unknown error";
-                results.push({
-                  description: testCase.description,
-                  passed: false,
-                  actual: `Execution error: ${errorMsg}`,
-                  expected: testCase.expected,
-                  input: testCase.input,
-                });
-                testPassed = false;
-              } else {
-                try {
-                  const parsedResult = JSON.parse(testResult.stdout);
+interface UseTestingLogicProps {
+  unitId: UnitId;
+  lessonId: LessonId;
+  sectionId: SectionId;
+  testMode: TestMode;
+  functionToTest: string; // "__main__" for testing entire program, function name for testing specific functions
+  testCases: TestCase[];
+}
 
-                  if (parsedResult.success) {
-                    results.push({
-                      description: testCase.description,
-                      passed: parsedResult.passed,
-                      actual: parsedResult.actual,
-                      expected: parsedResult.expected,
-                      input: parsedResult.input,
-                    });
-                    testPassed = parsedResult.passed;
-                  } else {
-                    results.push({
-                      description: testCase.description,
-                      passed: false,
-                      actual: parsedResult.error,
-                      expected: parsedResult.expected,
-                      input: parsedResult.input,
-                    });
-                    testPassed = false;
-                  }
-                } catch {
-                  results.push({
-                    description: testCase.description,
-                    passed: false,
-                    actual: `Parse error: ${testResult.stdout}`,
-                    expected: testCase.expected,
-                    input: testCase.input,
-                  });
-                  testPassed = false;
-                }
-              }
+export const useTestingLogic = ({
+  unitId,
+  lessonId,
+  sectionId,
+  testMode,
+  functionToTest,
+  testCases,
+}: UseTestingLogicProps) => {
+  const {
+    runPythonCode,
+    isLoading: isPyodideLoading,
+    error: pyodideError,
+  } = usePyodide();
+  const { completeSection, incrementAttemptCounter } = useProgressActions();
 
-              // Stop on first failure
-              if (!testPassed) {
-                break;
-              }
-            }
-          }
-        }
+  const [isRunningTests, setIsRunningTests] = useState(false);
+  const [testResults, setTestResults] = useState<TestResult[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const runTests = useCallback(
+    async (userCode: string, libraryCode?: string) => {
+      setIsRunningTests(true);
+      setTestResults(null);
+      setError(null);
+
+      try {
+        const results = await executeTests(
+          runPythonCode,
+          userCode,
+          testCases,
+          testMode,
+          functionToTest,
+          libraryCode
+        );
 
         setTestResults(results);
 

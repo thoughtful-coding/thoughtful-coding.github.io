@@ -37,7 +37,8 @@ interface PyodideContextType {
     code: string,
     libraryCode?: string
   ) => Promise<PythonExecutionResult>;
-  loadPackages: (packages: string[]) => Promise<void>; // Function to load packages
+  loadPackages: (packages: string[]) => Promise<void>;
+  loadPylint: () => Promise<void>;
 }
 
 // Create the actual React Context
@@ -64,6 +65,9 @@ export const PyodideProvider: React.FC<PyodideProviderProps> = ({
   const initPromise = useRef<Promise<PyodideInterface> | null>(null);
   // Ref to hold the interrupt buffer for timeout handling
   const interruptBuffer = useRef<Uint8Array | null>(null);
+  // Refs to manage lazy pylint installation
+  const pylintLoadedRef = useRef(false);
+  const pylintLoadingPromiseRef = useRef<Promise<void> | null>(null);
 
   // Function to dynamically load the Pyodide script from CDN if not already present
   const loadPyodideScript = useCallback((): Promise<void> => {
@@ -338,6 +342,25 @@ if 'thoughtful_code' in sys.modules:
     [pyodide, isInitializing]
   );
 
+  const loadPylint = useCallback(async (): Promise<void> => {
+    if (pylintLoadedRef.current) return;
+    if (pylintLoadingPromiseRef.current) return pylintLoadingPromiseRef.current;
+    if (!pyodide || isInitializing) {
+      throw new Error("Pyodide is not ready. Cannot install pylint.");
+    }
+    pylintLoadingPromiseRef.current = (async () => {
+      console.log("Installing pylint via micropip...");
+      await pyodide.loadPackage("micropip");
+      await pyodide.runPythonAsync(`
+import micropip
+await micropip.install('pylint')
+`);
+      pylintLoadedRef.current = true;
+      console.log("pylint installed successfully.");
+    })();
+    return pylintLoadingPromiseRef.current;
+  }, [pyodide, isInitializing]);
+
   // Function provided by context to load packages
   const loadPackages = useCallback(
     async (packages: string[]) => {
@@ -375,6 +398,7 @@ if 'thoughtful_code' in sys.modules:
     error,
     runPythonCode,
     loadPackages,
+    loadPylint,
   };
 
   return (

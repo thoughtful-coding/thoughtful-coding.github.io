@@ -1,0 +1,84 @@
+.tabBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+  margin-bottom: 0;
+  border-bottom: 2px solid var(--border-secondary);
+  padding-bottom: 0;
+}
+
+.tab {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border-secondary);
+  border-bottom: none;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition:
+    background-color 0.15s,
+    color 0.15s;
+}
+
+.tab:hover {
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
+.tabActive {
+  background-color: var(--bg-elevated);
+  color: var(--primary-dark-color);
+  border-color: var(--border-secondary);
+  border-bottom: 2px solid var(--bg-elevated);
+  margin-bottom: -2px;
+  font-weight: 600;
+}
+
+.tabPassed {
+  border-color: var(--success);
+  color: var(--color-success-text);
+}
+
+.tabPassed.tabActive {
+  border-color: var(--success);
+  border-bottom: 2px solid var(--bg-elevated);
+}
+
+.tabAttempted {
+  border-color: var(--error);
+}
+
+.tabBadge {
+  font-size: 0.85rem;
+  color: var(--color-success-text);
+}
+
+.tabPanel {
+  border: 1px solid var(--border-secondary);
+  border-top: none;
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  padding: 1rem;
+  background-color: var(--bg-elevated);
+  margin-bottom: 1rem;
+}
+
+.feedbackList {
+  margin: 0.5rem 0 0;
+  padding-left: 1.5rem;
+}
+
+.feedbackList li {
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
+}
+
+.feedbackList code {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
