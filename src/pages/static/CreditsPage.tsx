@@ -10,22 +10,6 @@ const CreditsPage: React.FC = () => {
         <h2>Inspiration</h2>
 
         <div className={styles.faqItem}>
-          <h3>RefactorSection</h3>
-          <p>
-            The Refactor section type — where students rewrite a program in
-            multiple styles — was inspired by the SixHack project by{" "}
-            <a
-              href="https://httcs.online"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Alan Harrison
-            </a>
-            .
-          </p>
-        </div>
-
-        <div className={styles.faqItem}>
           <h3>Science of Learning</h3>
           <p>
             The pedagogical framing of this site — spaced practice, retrieval
@@ -57,6 +41,7 @@ const CreditsPage: React.FC = () => {
             .
           </p>
         </div>
+
         <div className={styles.faqItem}>
           <h3>Learning Entries</h3>
           <p>
@@ -86,6 +71,22 @@ const CreditsPage: React.FC = () => {
               Python Tutor
             </a>{" "}
             (CodeLens) by Philip Guo.
+          </p>
+        </div>
+
+        <div className={styles.faqItem}>
+          <h3>RefactorSection</h3>
+          <p>
+            The Refactor section type — where students rewrite a program in
+            multiple styles — was inspired by the SixHack project by{" "}
+            <a
+              href="https://httcs.online"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Alan Harrison
+            </a>
+            .
           </p>
         </div>
 
