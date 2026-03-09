@@ -109,6 +109,25 @@ const CreditsPage: React.FC = () => {
       </section>
 
       <section className={styles.section}>
+        <h2>Acknowledgments</h2>
+
+        <div className={styles.faqItem}>
+          <p>
+            Thank you to{" "}
+            <a
+              href="https://ieeexplore.ieee.org/author/37086254423"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Mitchell Gerrard
+            </a>{" "}
+            for his consistent feedback, close reading, and various ideas
+            throughout.
+          </p>
+        </div>
+      </section>
+
+      <section className={styles.section}>
         <h2>Technology</h2>
 
         <div className={styles.faqItem}>
