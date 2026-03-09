@@ -18,6 +18,7 @@ import ReviewLearningEntriesView from "./components/instructor/ReviewLearningEnt
 import PrivacyPolicyPage from "./pages/static/PrivacyPolicyPage";
 import TermsOfServicePage from "./pages/static/TermsOfServicePage";
 import FAQPage from "./pages/static/FAQPage";
+import CreditsPage from "./pages/static/CreditsPage";
 import TestLoginPage from "./pages/TestLoginPage";
 import Layout from "./components/Layout";
 import AuthenticatedRoute from "./components/AuthenticatedRoute";
@@ -178,6 +179,7 @@ function App() {
           <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
           <Route path="/terms-of-service" element={<TermsOfServicePage />} />
           <Route path="/faq" element={<FAQPage />} />
+          <Route path="/credits" element={<CreditsPage />} />
         </Route>
 
         {/* Code Editor and Learning Entries need Pyodide, so wrap with StudentLayout */}

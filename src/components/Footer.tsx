@@ -61,23 +61,18 @@ const Footer: React.FC<FooterProps> = ({ variant = "default" }) => {
             </div>
 
             <div className={styles.linkColumn}>
-              <h3 className={styles.columnTitle}>Open Source</h3>
+              <h3 className={styles.columnTitle}>Source</h3>
               <a
-                href="https://github.com/thoughtful-coding/thoughtful-coding.github.io"
+                href="https://github.com/thoughtful-coding"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={styles.link}
               >
-                Front-End Source
+                Source Code
               </a>
-              <a
-                href="https://github.com/thoughtful-coding/thoughtful-backend"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.link}
-              >
-                Back-End Source
-              </a>
+              <Link to="/credits" className={styles.link}>
+                Credits
+              </Link>
             </div>
           </nav>
           <p className={styles.copyright}>
