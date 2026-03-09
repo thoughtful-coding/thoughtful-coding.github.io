@@ -12,15 +12,13 @@ const CreditsPage: React.FC = () => {
         <div className={styles.faqItem}>
           <h3>Science of Learning</h3>
           <p>
-            The pedagogical framing of this site — spaced practice, retrieval
-            practice, interleaving, elaboration, concrete examples, and dual
-            coding — draws from{" "}
+            The pedagogical framing of this site draws from{" "}
             <a
               href="https://doi.org/10.1177/0098628318762997"
               target="_blank"
               rel="noopener noreferrer"
             >
-              "Teaching the Science of Learning"
+              <em>Teaching the Science of Learning</em>
             </a>{" "}
             by Yana Weinstein, Christopher R. Madan, and Megan A. Sumeracki.
           </p>
@@ -36,7 +34,7 @@ const CreditsPage: React.FC = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Sue Sentance and others
+              Sue Sentance, Jane Waite, and others
             </a>
             .
           </p>
@@ -45,14 +43,14 @@ const CreditsPage: React.FC = () => {
         <div className={styles.faqItem}>
           <h3>Learning Entries</h3>
           <p>
-            The learning journal feature — where students record what they
-            learned — was inspired by{" "}
+            The learning journal feature that has students record what they
+            learned was inspired by Josh Branchaud's{" "}
             <a
               href="https://github.com/jbranchaud/til"
               target="_blank"
               rel="noopener noreferrer"
             >
-              Josh Branchaud's "Today I Learned"
+              "Today I Learned"
             </a>{" "}
             project.
           </p>
@@ -61,8 +59,8 @@ const CreditsPage: React.FC = () => {
         <div className={styles.faqItem}>
           <h3>Debugger</h3>
           <p>
-            The Debugger section — where students step through code execution —
-            was inspired by{" "}
+            The Debugger section where students step through code execution was
+            inspired by{" "}
             <a
               href="https://pythontutor.com/"
               target="_blank"
@@ -77,8 +75,8 @@ const CreditsPage: React.FC = () => {
         <div className={styles.faqItem}>
           <h3>RefactorSection</h3>
           <p>
-            The Refactor section type — where students rewrite a program in
-            multiple styles — was inspired by the SixHack project by{" "}
+            The Refactor section type that has students rewrite a program in
+            multiple styles was inspired by the SixHack project by{" "}
             <a
               href="https://httcs.online"
               target="_blank"
