@@ -35,6 +35,7 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 import styles from "./LessonPage.module.css";
 import { useCompletedSectionsForLesson } from "../../stores/progressStore";
 import MatchingSection from "../../components/sections/MatchingSection";
+import ClozeSection from "../../components/sections/ClozeSection";
 
 const LessonPage: React.FC = () => {
   const params = useParams();
@@ -256,6 +257,17 @@ const LessonPage: React.FC = () => {
       case "Matching":
         return (
           <MatchingSection
+            key={sectionData.id}
+            unitId={currentUnitGuid}
+            lessonId={currentLessonGuid}
+            section={sectionData}
+            courseId={courseId}
+            lessonPath={lessonPath}
+          />
+        );
+      case "Cloze":
+        return (
+          <ClozeSection
             key={sectionData.id}
             unitId={currentUnitGuid}
             lessonId={currentLessonGuid}

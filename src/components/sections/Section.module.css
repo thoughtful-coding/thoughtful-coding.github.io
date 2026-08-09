@@ -589,6 +589,22 @@
   background-color: var(--error-light);
 }
 
+/* Cloze blank feedback fill. Reuses the theme's success/error tokens (which are
+   redefined in the dark-mode block in index.css). The `input.` element+class
+   selector outranks the base `.textInput` background so the green/red reliably
+   wins regardless of CSS module ordering. */
+input.clozeInputCorrect {
+  border-color: var(--success);
+  background-color: var(--success-light);
+  color: var(--success-text);
+}
+
+input.clozeInputIncorrect {
+  border-color: var(--error);
+  background-color: var(--error-light);
+  color: var(--error-text);
+}
+
 /* Status cell with icon */
 .statusCell {
   width: 50px; /* Fixed width for status icon */

@@ -59,6 +59,7 @@ export type SectionKind =
   | "MultipleSelection"
   | "Matching"
   | "Parsons"
+  | "Cloze"
   // AI Sections
   | "Reflection"
   // Executable Code Sections
@@ -100,6 +101,28 @@ export interface MatchingSectionData extends LessonSection {
   prompts: Array<{ [key: string]: string }>;
   // An optional array of indices to determine the initial shuffled order of answers.
   initialOrder?: number[];
+  feedback?: FeedbackText;
+}
+
+/**
+ * How a wrong guess is scaffolded. "coloring" gives Wordle-style per-letter
+ * feedback on the learner's own guess. Extend this union (e.g. "reveal" for a
+ * front-to-back letter reveal) to offer author-selectable hint styles.
+ */
+export type ClozeHintMode = "coloring";
+
+export interface ClozeSectionData extends LessonSection {
+  kind: "Cloze";
+  /**
+   * The fill-in-the-blank text. Mark each blank with double brackets around the
+   * answer: `[[6]]`. Offer several acceptable answers with a pipe: `[[6|six]]`.
+   * Example: "Target [[6|six]] mL/kg of [[predicted|ideal]] body weight."
+   */
+  body: string;
+  /** Grading is case-insensitive by default; set true to require exact case. */
+  caseSensitive?: boolean;
+  /** Hint scaffolding for wrong guesses. Defaults to "coloring". */
+  hintMode?: ClozeHintMode;
   feedback?: FeedbackText;
 }
 
@@ -342,6 +365,7 @@ export type AnyLessonSectionData =
   | PredictionSectionData
   | MultipleChoiceSectionData
   | MultipleSelectionSectionData
+  | ClozeSectionData
   | MatchingSectionData
   | ParsonsSectionData
   | ReflectionSectionData
