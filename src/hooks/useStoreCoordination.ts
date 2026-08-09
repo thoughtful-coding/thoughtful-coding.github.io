@@ -57,10 +57,7 @@ export interface ProgressSyncOperations {
   setServerProgress: (serverData: any) => void;
   resetAllProgress: () => void;
   extractAnonymousCompletions: () => any[];
-  syncProgressAfterLogin: (
-    apiGatewayUrl: string,
-    anonymousCompletions: any[]
-  ) => Promise<any>;
+  syncProgressAfterLogin: (anonymousCompletions: any[]) => Promise<any>;
   extractAnonymousDrafts: () => any;
   mergeDraftsAfterLogin: (anonymousDrafts: any) => void;
   extractAnonymousAttemptCounters: () => any;
