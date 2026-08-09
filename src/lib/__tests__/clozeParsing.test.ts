@@ -22,6 +22,24 @@ describe("parseCloze", () => {
     expect(segs.map((s) => s.kind)).toEqual(["blank", "text", "blank"]);
   });
 
+  it("keeps trailing brackets that belong to the answer", () => {
+    const segs = parseCloze("print([[nums[0]]])");
+    expect(segs).toEqual([
+      { kind: "text", value: "print(" },
+      { kind: "blank", index: 0, answers: ["nums[0]"] },
+      { kind: "text", value: ")" },
+    ]);
+  });
+
+  it("still ends a blank at the first ]] when no extra bracket follows", () => {
+    const segs = parseCloze("[[a]] then [[b]]");
+    expect(segs).toEqual([
+      { kind: "blank", index: 0, answers: ["a"] },
+      { kind: "text", value: " then " },
+      { kind: "blank", index: 1, answers: ["b"] },
+    ]);
+  });
+
   it("returns a single text segment when there are no blanks", () => {
     expect(parseCloze("no blanks here")).toEqual([
       { kind: "text", value: "no blanks here" },

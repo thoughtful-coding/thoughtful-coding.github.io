@@ -162,6 +162,29 @@ describe("ClozeSection", () => {
     expect(input).not.toHaveClass("clozeInputIncorrect");
   });
 
+  it("does not penalize a check with every blank still empty", async () => {
+    const user = userEvent.setup();
+    renderSection();
+    const check = screen.getByTestId(CHECK_ID);
+
+    // Nothing typed: the button is unavailable and a forced click is inert.
+    expect(check).toBeDisabled();
+    await user.click(check);
+    expect(startPenaltyMock).not.toHaveBeenCalled();
+    expect(incrementAttemptCounterMock).not.toHaveBeenCalled();
+    expect(screen.queryByText(/correct/i)).toBeNull();
+
+    // Whitespace alone doesn't count as an answer either.
+    await user.type(screen.getByTestId(INPUT_ID), "   ");
+    expect(check).toBeDisabled();
+
+    // A real attempt re-enables it, and a wrong one still penalizes.
+    await user.type(screen.getByTestId(INPUT_ID), "xyz");
+    expect(check).toBeEnabled();
+    await user.click(check);
+    expect(startPenaltyMock).toHaveBeenCalledTimes(1);
+  });
+
   it("warns when a Cloze body has no blanks (uncompletable authoring guard)", () => {
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
     render(

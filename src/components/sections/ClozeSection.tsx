@@ -257,8 +257,15 @@ const ClozeSection: React.FC<ClozeSectionProps> = ({
     }));
   };
 
+  // Nothing to grade until at least one blank has been filled in. Mirrors the
+  // quiz sections, which keep Submit disabled until an option is selected —
+  // without this, a stray click on an untouched section costs a lock-out.
+  const hasAnyAnswer = blanks.some(
+    (b) => (state.answers[b.index] ?? "").trim().length > 0
+  );
+
   const handleCheck = () => {
-    if (isLockedOut) return;
+    if (isLockedOut || !hasAnyAnswer) return;
     setShowFeedback(true);
     setState((prev) => ({ ...prev, checkedAnswers: { ...prev.answers } }));
     // A wrong check triggers the same time-penalty lock-out as the quiz sections.
@@ -316,7 +323,7 @@ const ClozeSection: React.FC<ClozeSectionProps> = ({
         <button
           className={styles.quizSubmitButton}
           onClick={handleCheck}
-          disabled={isLockedOut}
+          disabled={isLockedOut || !hasAnyAnswer}
           data-testid={`cloze-check-${section.id}`}
         >
           Check Answers

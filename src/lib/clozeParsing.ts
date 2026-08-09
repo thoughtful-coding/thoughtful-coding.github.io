@@ -11,10 +11,14 @@ export type ClozeSegment =
 /**
  * Splits a cloze body into text runs and blanks. Blanks are marked `[[answer]]`,
  * with pipe-separated alternatives (`[[6|six]]`).
+ *
+ * The lazy match is guarded by `(?!\])` so answers that themselves end in a
+ * bracket close correctly: in `[[nums[0]]]` the closing `]]` is taken to be the
+ * last two brackets, giving the answer `nums[0]` rather than `nums[0`.
  */
 export function parseCloze(body: string): ClozeSegment[] {
   const segments: ClozeSegment[] = [];
-  const regex = /\[\[(.+?)\]\]/g;
+  const regex = /\[\[(.+?)\]\](?!\])/g;
   let lastIndex = 0;
   let blankIndex = 0;
   let match: RegExpExecArray | null;
