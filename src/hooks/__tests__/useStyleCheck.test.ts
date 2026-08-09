@@ -45,31 +45,46 @@ describe("useStyleCheck", () => {
   });
 
   it("sets _student_code as a pyodide global before running check", async () => {
-    mockRunPythonCode.mockResolvedValue(SUCCESS({ passed: true, feedback: [] }));
+    mockRunPythonCode.mockResolvedValue(
+      SUCCESS({ passed: true, feedback: [] })
+    );
     const { result } = renderHook(() => useStyleCheck());
     await result.current.checkStyle("function", "def foo(): pass");
-    expect(mockGlobalsSet).toHaveBeenCalledWith("_student_code", "def foo(): pass");
+    expect(mockGlobalsSet).toHaveBeenCalledWith(
+      "_student_code",
+      "def foo(): pass"
+    );
   });
 
   it.each(["function", "oop", "recursive"] as const)(
     "does not set pylint flags for AST-based style '%s'",
     async (style) => {
-      mockRunPythonCode.mockResolvedValue(SUCCESS({ passed: true, feedback: [] }));
+      mockRunPythonCode.mockResolvedValue(
+        SUCCESS({ passed: true, feedback: [] })
+      );
       const { result } = renderHook(() => useStyleCheck());
       await result.current.checkStyle(style, "code");
       expect(mockToPy).not.toHaveBeenCalled();
-      expect(mockGlobalsSet).not.toHaveBeenCalledWith("_pylint_flags", expect.anything());
+      expect(mockGlobalsSet).not.toHaveBeenCalledWith(
+        "_pylint_flags",
+        expect.anything()
+      );
     }
   );
 
   it.each(["pep8", "annotated", "simple", "minimalist"] as const)(
     "sets pylint flags for pylint-based style '%s'",
     async (style) => {
-      mockRunPythonCode.mockResolvedValue(SUCCESS({ passed: true, feedback: [] }));
+      mockRunPythonCode.mockResolvedValue(
+        SUCCESS({ passed: true, feedback: [] })
+      );
       const { result } = renderHook(() => useStyleCheck());
       await result.current.checkStyle(style, "code");
       expect(mockToPy).toHaveBeenCalledOnce();
-      expect(mockGlobalsSet).toHaveBeenCalledWith("_pylint_flags", expect.anything());
+      expect(mockGlobalsSet).toHaveBeenCalledWith(
+        "_pylint_flags",
+        expect.anything()
+      );
     }
   );
 

@@ -156,10 +156,7 @@ export interface ReflectionSubmission {
 }
 
 export type AssessmentLevel =
-  | "achieves"
-  | "mostly"
-  | "developing"
-  | "insufficient";
+  "achieves" | "mostly" | "developing" | "insufficient";
 
 export interface ReflectionSectionData extends LessonSection {
   kind: "Reflection";

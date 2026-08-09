@@ -68,8 +68,7 @@ const ProgressPage: React.FC = () => {
               };
             }
 
-            const lessonProgressObject =
-              allCompletions[unit.id]?.[lesson.guid];
+            const lessonProgressObject = allCompletions[unit.id]?.[lesson.guid];
             const completedSectionsForLesson = new Set<string>(
               lessonProgressObject ? Object.keys(lessonProgressObject) : []
             );

@@ -147,7 +147,13 @@ const ClozeBlank: React.FC<ClozeBlankProps> = ({
     checkedGuess.trim().length > 0;
 
   return (
-    <span style={{ display: "inline-flex", flexDirection: "column", verticalAlign: "top" }}>
+    <span
+      style={{
+        display: "inline-flex",
+        flexDirection: "column",
+        verticalAlign: "top",
+      }}
+    >
       <input
         type="text"
         className={inputClass}
@@ -278,7 +284,11 @@ const ClozeSection: React.FC<ClozeSectionProps> = ({
   };
 
   const correctCount = blanks.filter((b) =>
-    isBlankCorrect(state.checkedAnswers[b.index] ?? "", b.answers, caseSensitive)
+    isBlankCorrect(
+      state.checkedAnswers[b.index] ?? "",
+      b.answers,
+      caseSensitive
+    )
   ).length;
 
   return (

@@ -181,12 +181,16 @@ describe("progressStore", () => {
       act(() => {
         useProgressStore.getState().actions.setServerProgress({
           completion: {
-            [unitId]: { [lessonId]: { [sectionId]: "2024-01-01T00:00:00.000Z" } },
+            [unitId]: {
+              [lessonId]: { [sectionId]: "2024-01-01T00:00:00.000Z" },
+            },
           },
         });
       });
       expect(
-        useProgressStore.getState().actions.isSectionComplete(unitId, lessonId, sectionId)
+        useProgressStore
+          .getState()
+          .actions.isSectionComplete(unitId, lessonId, sectionId)
       ).toBe(true);
     });
 
@@ -195,18 +199,26 @@ describe("progressStore", () => {
       act(() => {
         useProgressStore.setState({
           completion: {
-            [unitId]: { [lessonId]: { [localSectionId]: "2024-01-01T00:00:00.000Z" } },
+            [unitId]: {
+              [lessonId]: { [localSectionId]: "2024-01-01T00:00:00.000Z" },
+            },
           },
         });
         useProgressStore.getState().actions.setServerProgress({
           completion: {
-            [unitId]: { [lessonId]: { [sectionId]: "2024-06-01T00:00:00.000Z" } },
+            [unitId]: {
+              [lessonId]: { [sectionId]: "2024-06-01T00:00:00.000Z" },
+            },
           },
         });
       });
       const state = useProgressStore.getState();
-      expect(state.actions.isSectionComplete(unitId, lessonId, localSectionId)).toBe(true);
-      expect(state.actions.isSectionComplete(unitId, lessonId, sectionId)).toBe(true);
+      expect(
+        state.actions.isSectionComplete(unitId, lessonId, localSectionId)
+      ).toBe(true);
+      expect(state.actions.isSectionComplete(unitId, lessonId, sectionId)).toBe(
+        true
+      );
     });
 
     it("removes offline queue items now confirmed by server", () => {
@@ -216,7 +228,9 @@ describe("progressStore", () => {
         });
         useProgressStore.getState().actions.setServerProgress({
           completion: {
-            [unitId]: { [lessonId]: { [sectionId]: "2024-01-01T00:00:00.000Z" } },
+            [unitId]: {
+              [lessonId]: { [sectionId]: "2024-01-01T00:00:00.000Z" },
+            },
           },
         });
       });
@@ -231,7 +245,9 @@ describe("progressStore", () => {
         });
         useProgressStore.getState().actions.setServerProgress({
           completion: {
-            [unitId]: { [lessonId]: { [sectionId]: "2024-01-01T00:00:00.000Z" } },
+            [unitId]: {
+              [lessonId]: { [sectionId]: "2024-01-01T00:00:00.000Z" },
+            },
           },
         });
       });
@@ -244,13 +260,19 @@ describe("progressStore", () => {
       act(() => {
         useProgressStore.setState({
           completion: {
-            [unitId]: { [lessonId]: { [sectionId]: "2024-01-01T00:00:00.000Z" } },
+            [unitId]: {
+              [lessonId]: { [sectionId]: "2024-01-01T00:00:00.000Z" },
+            },
           },
         });
-        useProgressStore.getState().actions.resetLessonProgress(unitId, lessonId);
+        useProgressStore
+          .getState()
+          .actions.resetLessonProgress(unitId, lessonId);
       });
       expect(
-        useProgressStore.getState().actions.isSectionComplete(unitId, lessonId, sectionId)
+        useProgressStore
+          .getState()
+          .actions.isSectionComplete(unitId, lessonId, sectionId)
       ).toBe(false);
     });
 
@@ -259,7 +281,9 @@ describe("progressStore", () => {
         useProgressStore.setState({
           offlineActionQueue: [{ unitId, lessonId, sectionId }],
         });
-        useProgressStore.getState().actions.resetLessonProgress(unitId, lessonId);
+        useProgressStore
+          .getState()
+          .actions.resetLessonProgress(unitId, lessonId);
       });
       expect(useProgressStore.getState().offlineActionQueue).toHaveLength(0);
     });
@@ -268,10 +292,14 @@ describe("progressStore", () => {
       act(() => {
         useProgressStore.setState({
           completion: {
-            [unitId]: { [lessonId]: { [sectionId]: "2024-01-01T00:00:00.000Z" } },
+            [unitId]: {
+              [lessonId]: { [sectionId]: "2024-01-01T00:00:00.000Z" },
+            },
           },
         });
-        useProgressStore.getState().actions.resetLessonProgress(unitId, lessonId);
+        useProgressStore
+          .getState()
+          .actions.resetLessonProgress(unitId, lessonId);
       });
       expect(useProgressStore.getState().completion[unitId]).toBeUndefined();
     });
@@ -282,9 +310,13 @@ describe("progressStore", () => {
       act(() => {
         useProgressStore.setState({
           completion: {
-            [unitId]: { [lessonId]: { [sectionId]: "2024-01-01T00:00:00.000Z" } },
+            [unitId]: {
+              [lessonId]: { [sectionId]: "2024-01-01T00:00:00.000Z" },
+            },
           },
-          drafts: { [unitId]: { [lessonId]: { [sectionId]: { code: "x = 1" } } } },
+          drafts: {
+            [unitId]: { [lessonId]: { [sectionId]: { code: "x = 1" } } },
+          },
           attemptCounters: { [unitId]: { [lessonId]: { [sectionId]: 3 } } },
         });
         useProgressStore.getState().actions.resetAllProgress();
@@ -343,13 +375,17 @@ describe("progressStore", () => {
         useProgressStore.setState({
           drafts: {
             [unitId]: {
-              [lessonId]: { [sectionId]: { code: "auth-code", isModified: false } },
+              [lessonId]: {
+                [sectionId]: { code: "auth-code", isModified: false },
+              },
             },
           },
         });
         useProgressStore.getState().actions.mergeDraftsAfterLogin({
           [unitId]: {
-            [lessonId]: { [sectionId]: { code: "anon-code", isModified: true } },
+            [lessonId]: {
+              [sectionId]: { code: "anon-code", isModified: true },
+            },
           },
         });
       });
@@ -363,7 +399,9 @@ describe("progressStore", () => {
       act(() => {
         useProgressStore.getState().actions.mergeDraftsAfterLogin({
           [unitId]: {
-            [lessonId]: { [sectionId]: { code: "anon-code", isModified: false } },
+            [lessonId]: {
+              [sectionId]: { code: "anon-code", isModified: false },
+            },
           },
         });
       });
@@ -378,13 +416,17 @@ describe("progressStore", () => {
         useProgressStore.setState({
           drafts: {
             [unitId]: {
-              [lessonId]: { [sectionId]: { code: "auth-code", isModified: false } },
+              [lessonId]: {
+                [sectionId]: { code: "auth-code", isModified: false },
+              },
             },
           },
         });
         useProgressStore.getState().actions.mergeDraftsAfterLogin({
           [unitId]: {
-            [lessonId]: { [sectionId]: { code: "anon-code", isModified: false } },
+            [lessonId]: {
+              [sectionId]: { code: "anon-code", isModified: false },
+            },
           },
         });
       });
@@ -416,7 +458,11 @@ describe("progressStore", () => {
       expect(
         useProgressStore
           .getState()
-          .actions.getAttemptCounter(unitId, lessonId, "no-section" as SectionId)
+          .actions.getAttemptCounter(
+            unitId,
+            lessonId,
+            "no-section" as SectionId
+          )
       ).toBe(0);
     });
 
@@ -434,7 +480,9 @@ describe("progressStore", () => {
           .getState()
           .actions.getAttemptCounter(unitId, lessonId, sectionId)
       ).toBe(0);
-      expect(useProgressStore.getState().attemptCounters[unitId]).toBeUndefined();
+      expect(
+        useProgressStore.getState().attemptCounters[unitId]
+      ).toBeUndefined();
     });
   });
 
@@ -487,7 +535,9 @@ describe("progressStore", () => {
       const data = {
         state: {
           completion: {
-            [unitId]: { [lessonId]: { [sectionId]: "2024-01-01T00:00:00.000Z" } },
+            [unitId]: {
+              [lessonId]: { [sectionId]: "2024-01-01T00:00:00.000Z" },
+            },
           },
           attemptCounters: { [unitId]: { [lessonId]: { [sectionId]: 2 } } },
         },

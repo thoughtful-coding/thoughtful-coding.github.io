@@ -70,20 +70,18 @@ describe("ClozeSection", () => {
     vi.clearAllMocks();
 
     // Functional useSectionProgress: derives completion from checkCompletion(state).
-    vi.mocked(useSectionProgress).mockImplementation(
-      ((
-        _unitId: unknown,
-        _lessonId: unknown,
-        _sectionId: unknown,
-        _key: unknown,
-        initialState: object,
-        checkCompletion: (s: object) => boolean
-      ) => {
-        const [state, setState] = React.useState(initialState);
-        return [state, setState, checkCompletion(state)];
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      }) as any
-    );
+    vi.mocked(useSectionProgress).mockImplementation(((
+      _unitId: unknown,
+      _lessonId: unknown,
+      _sectionId: unknown,
+      _key: unknown,
+      initialState: object,
+      checkCompletion: (s: object) => boolean
+    ) => {
+      const [state, setState] = React.useState(initialState);
+      return [state, setState, checkCompletion(state)];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    }) as any);
 
     vi.mocked(useProgressActions).mockReturnValue({
       startPenalty: startPenaltyMock,
@@ -196,9 +194,7 @@ describe("ClozeSection", () => {
         lessonPath={"00_intro/lessons/cloze"}
       />
     );
-    expect(warn).toHaveBeenCalledWith(
-      expect.stringContaining("no [[blanks]]")
-    );
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining("no [[blanks]]"));
     warn.mockRestore();
   });
 });

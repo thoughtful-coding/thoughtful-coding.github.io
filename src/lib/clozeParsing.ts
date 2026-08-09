@@ -24,7 +24,10 @@ export function parseCloze(body: string): ClozeSegment[] {
   let match: RegExpExecArray | null;
   while ((match = regex.exec(body)) !== null) {
     if (match.index > lastIndex) {
-      segments.push({ kind: "text", value: body.slice(lastIndex, match.index) });
+      segments.push({
+        kind: "text",
+        value: body.slice(lastIndex, match.index),
+      });
     }
     const answers = match[1]
       .split("|")

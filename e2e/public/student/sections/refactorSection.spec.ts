@@ -16,11 +16,17 @@ async function waitForReady(page: Page, sectionId: string) {
 }
 
 async function clickTab(page: Page, sectionId: string, label: string) {
-  await page.locator(`#${sectionId}`).getByRole("button", { name: label }).click();
+  await page
+    .locator(`#${sectionId}`)
+    .getByRole("button", { name: label })
+    .click();
 }
 
 async function runRefactorTests(page: Page, sectionId: string) {
-  await page.locator(`#${sectionId}`).getByRole("button", { name: "Run Tests" }).click();
+  await page
+    .locator(`#${sectionId}`)
+    .getByRole("button", { name: "Run Tests" })
+    .click();
 }
 
 async function fillRefactorEditor(
@@ -66,7 +72,9 @@ test.describe("RefactorSection — shipping calculator (function + annotated tab
     );
     await runRefactorTests(page, SECTION);
     await expect(
-      page.locator(`#${SECTION}`).getByText("Test 1 failed. Fix the issue and try again!")
+      page
+        .locator(`#${SECTION}`)
+        .getByText("Test 1 failed. Fix the issue and try again!")
     ).toBeVisible({ timeout: 15000 });
   });
 

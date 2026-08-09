@@ -27,7 +27,9 @@ describe("useAuthHandlers", () => {
   describe("handleLoginSuccess", () => {
     it("calls login with the credential token", async () => {
       const { result } = renderHook(() => useAuthHandlers());
-      await result.current.handleLoginSuccess({ credential: "token-xyz" } as CredentialResponse);
+      await result.current.handleLoginSuccess({
+        credential: "token-xyz",
+      } as CredentialResponse);
       expect(mockLogin).toHaveBeenCalledWith("token-xyz");
     });
 
@@ -41,7 +43,9 @@ describe("useAuthHandlers", () => {
       mockLogin.mockRejectedValue(new Error("server error"));
       const { result } = renderHook(() => useAuthHandlers());
       await expect(
-        result.current.handleLoginSuccess({ credential: "token" } as CredentialResponse)
+        result.current.handleLoginSuccess({
+          credential: "token",
+        } as CredentialResponse)
       ).resolves.toBeUndefined();
     });
   });
