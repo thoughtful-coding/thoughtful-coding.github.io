@@ -562,7 +562,10 @@ export const setupJsTurtle = (container: HTMLElement): RealTurtleInstance => {
   sketch = new p5(createSketch, container);
 
   const getCanvasDataURL = (): string | null => {
-    if (!sketch || !sketch.canvas) {
+    // p5's underlying canvas element is not exposed in @types/p5.
+    const canvas = (sketch as (p5 & { canvas?: HTMLCanvasElement }) | null)
+      ?.canvas;
+    if (!canvas) {
       return null;
     }
 
@@ -573,12 +576,12 @@ export const setupJsTurtle = (container: HTMLElement): RealTurtleInstance => {
 
     const targetWidth = 400;
     const targetHeight = 300;
-    const actualWidth = sketch.canvas.width;
-    const actualHeight = sketch.canvas.height;
+    const actualWidth = canvas.width;
+    const actualHeight = canvas.height;
 
     // If canvas is already the target size, return directly
     if (actualWidth === targetWidth && actualHeight === targetHeight) {
-      return sketch.canvas.toDataURL("image/png");
+      return canvas.toDataURL("image/png");
     }
 
     // Otherwise, scale down to target size using a temporary canvas
@@ -589,11 +592,11 @@ export const setupJsTurtle = (container: HTMLElement): RealTurtleInstance => {
 
     if (!tempCtx) {
       console.error("Failed to get 2d context for scaling");
-      return sketch.canvas.toDataURL("image/png");
+      return canvas.toDataURL("image/png");
     }
 
     // Draw the p5 canvas onto the temp canvas, scaling it down
-    tempCtx.drawImage(sketch.canvas, 0, 0, targetWidth, targetHeight);
+    tempCtx.drawImage(canvas, 0, 0, targetWidth, targetHeight);
 
     return tempCanvas.toDataURL("image/png");
   };

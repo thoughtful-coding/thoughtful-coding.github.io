@@ -243,7 +243,7 @@ interface UseTurtleVisualizationProps {
   unitId: UnitId;
   lessonId: LessonId;
   sectionId: SectionId;
-  visualization: "console" | "turtle";
+  visualization?: "console" | "turtle";
   testCases: TestCase[];
   visualThreshold?: number;
   functionToTest?: string;

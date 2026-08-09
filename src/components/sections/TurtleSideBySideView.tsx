@@ -8,7 +8,7 @@ interface TurtleSideBySideViewProps {
   description: string;
   currentTestNumber: number;
   totalTests: number;
-  turtleCanvasRef: React.RefObject<HTMLDivElement>;
+  turtleCanvasRef: React.RefObject<HTMLDivElement | null>;
   showProgressLabel: boolean;
 }
 

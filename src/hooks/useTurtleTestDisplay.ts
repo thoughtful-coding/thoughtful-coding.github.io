@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import type { TurtleTestResult } from "./useTurtleTesting";
-import type { TestCase } from "../types/data";
+import type { CourseId, TestCase } from "../types/data";
 import { resolveImagePath } from "../lib/dataHelpers";
 
 interface DisplayedTestInfo {
@@ -14,6 +14,7 @@ interface UseTurtleTestDisplayProps {
   results: TurtleTestResult[] | null;
   testCases: TestCase[];
   isRunningTests: boolean;
+  courseId: CourseId;
   lessonPath?: string;
 }
 
@@ -35,6 +36,7 @@ export const useTurtleTestDisplay = ({
   results,
   testCases,
   isRunningTests,
+  courseId,
   lessonPath,
 }: UseTurtleTestDisplayProps): UseTurtleTestDisplayReturn => {
   // Filter to only visual test cases (those with reference images)
@@ -60,6 +62,7 @@ export const useTurtleTestDisplay = ({
         return {
           referenceImage: resolveImagePath(
             firstTest.referenceImage,
+            courseId,
             lessonPath
           ),
           description: firstTest.description,
@@ -87,7 +90,11 @@ export const useTurtleTestDisplay = ({
       const nextTest = visualTestCases[results.length];
       if (nextTest && nextTest.referenceImage) {
         return {
-          referenceImage: resolveImagePath(nextTest.referenceImage, lessonPath),
+          referenceImage: resolveImagePath(
+            nextTest.referenceImage,
+            courseId,
+            lessonPath
+          ),
           description: nextTest.description,
           isResult: false,
           resultIndex: null,

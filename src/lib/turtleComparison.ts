@@ -127,7 +127,7 @@ export async function compareTurtleImages(
   const numDiffPixels = pixelmatch(
     studentImageData.data,
     referenceImageData.data,
-    diffData,
+    diffData ?? undefined,
     width,
     height,
     {

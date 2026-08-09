@@ -35,21 +35,21 @@ interface UseTestableSectionResult {
   // Run code functionality
   handleRunCode: (code: string) => void;
   isRunningCode: boolean;
-  runOutput: string;
+  runOutput: string | null;
   runError: Error | null;
 
   // Test functionality
   handleRunTests: (code: string) => Promise<void>;
   isRunningTests: boolean;
   testResults: TestResult[] | TurtleTestResult[] | null;
-  testError: string | null;
+  testError: string | null | undefined;
 
   // Turtle-specific
-  turtleCanvasRef: React.RefObject<HTMLDivElement>;
+  turtleCanvasRef: React.RefObject<HTMLDivElement | null>;
   isVisualTurtleTest: boolean;
   resolvedTestCases: TestCase[];
   isRunningTurtle: boolean;
-  turtleRunError: string | null;
+  turtleRunError: string | Error | null;
   stopExecution: () => void;
 
   // Combined state

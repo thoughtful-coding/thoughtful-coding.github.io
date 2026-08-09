@@ -7,8 +7,8 @@ import { LessonPath, CourseId } from "../types/data";
 
 interface LessonNavigationProps {
   courseId: CourseId;
-  prevLessonPath: LessonPath | null;
-  nextLessonPath: LessonPath | null;
+  prevLessonPath: LessonPath | null | undefined;
+  nextLessonPath: LessonPath | null | undefined;
   currentPosition: number;
   totalInUnit: number;
 }
@@ -28,8 +28,8 @@ const LessonNavigation: React.FC<LessonNavigationProps> = ({
       : path;
   };
 
-  const prevPath = stripCourseIdPrefix(prevLessonPath);
-  const nextPath = stripCourseIdPrefix(nextLessonPath);
+  const prevPath = stripCourseIdPrefix(prevLessonPath ?? null);
+  const nextPath = stripCourseIdPrefix(nextLessonPath ?? null);
 
   // Helper to get link classes (including disabled state)
   const getNavLinkClass = (isTargetAvailable: boolean): string => {

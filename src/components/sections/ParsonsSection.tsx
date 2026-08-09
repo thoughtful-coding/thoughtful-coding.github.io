@@ -488,6 +488,7 @@ const ParsonsSection: React.FC<ParsonsSectionProps> = ({
           resolvedTestCases={resolvedTestCases}
           isRunningTests={isRunningTests}
           visualThreshold={section.visualThreshold || 0.95}
+          courseId={courseId}
           lessonPath={lessonPath}
         />
       </div>

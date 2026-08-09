@@ -168,7 +168,9 @@ export function useReflectionWorkflow({
 
   const handleApiError = useCallback((err: unknown, defaultMessage: string) => {
     if (err instanceof ApiError) {
-      switch (err.data.errorCode) {
+      const errorCode =
+        "errorCode" in err.data ? err.data.errorCode : undefined;
+      switch (errorCode) {
         case ErrorCode.RATE_LIMIT_EXCEEDED:
           setSubmitError(
             "You've submitted feedback too frequently. Please wait a moment before trying again."
@@ -354,10 +356,10 @@ export function useReflectionWorkflow({
     (isExplanationPredefined || !!currentExplanation.trim());
 
   const latestAssessment =
-    draftHistory.length > 0 ? draftHistory[0].aiAssessment : null;
+    draftHistory.length > 0 ? (draftHistory[0].aiAssessment ?? null) : null;
   const canSubmitToJournal =
     draftHistory.length > 0 &&
-    latestAssessment &&
+    !!latestAssessment &&
     QUALIFYING_ASSESSMENTS_FOR_FINAL.includes(latestAssessment);
 
   return {

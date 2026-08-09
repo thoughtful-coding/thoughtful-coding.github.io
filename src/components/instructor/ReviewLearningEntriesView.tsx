@@ -322,7 +322,6 @@ const ReviewLearningEntriesView: React.FC<ReviewLearningEntriesViewProps> = ({
               {/* No general H4 here, RenderFinalLearningEntry provides its own title */}
               <RenderFinalLearningEntry
                 entry={currentEntryToDisplay.data}
-                studentName={selectedStudentInfo?.studentName}
                 lessonTitle={currentEntryToDisplay.lessonTitle}
               />
 

@@ -47,11 +47,16 @@ const ProgressPage: React.FC = () => {
               lesson = await fetchLessonData(lessonReference.path);
             } catch (lessonError) {
               console.error(
-                `Failed to load lesson data for ${lessonReference.guid}:`,
+                `Failed to load lesson data for ${lessonReference.path}:`,
                 lessonError
               );
+            }
+
+            // Completion is keyed by the lesson GUID, which is only known once
+            // the lesson manifest loads. Fall back to the path when unavailable.
+            if (!lesson) {
               return {
-                lessonId: lessonReference.guid,
+                lessonId: lessonReference.path as unknown as LessonId,
                 lessonPath: lessonReference.path,
                 title: `Lesson ${
                   lessonReference.path
@@ -64,14 +69,12 @@ const ProgressPage: React.FC = () => {
             }
 
             const lessonProgressObject =
-              allCompletions[unit.id]?.[lessonReference.guid];
+              allCompletions[unit.id]?.[lesson.guid];
             const completedSectionsForLesson = new Set<string>(
               lessonProgressObject ? Object.keys(lessonProgressObject) : []
             );
 
-            const requiredSections = lesson
-              ? getRequiredSectionsForLesson(lesson)
-              : [];
+            const requiredSections = getRequiredSectionsForLesson(lesson);
 
             const isLessonComplete =
               requiredSections.length > 0 &&
@@ -80,10 +83,10 @@ const ProgressPage: React.FC = () => {
               );
 
             return {
-              lessonId: lessonReference.guid,
+              lessonId: lesson.guid,
               lessonPath: lessonReference.path,
               title:
-                lesson?.title ||
+                lesson.title ||
                 `Lesson ${
                   lessonReference.path
                     .split("/")

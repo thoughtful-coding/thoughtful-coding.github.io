@@ -165,7 +165,9 @@ const InteractiveTableSection: React.FC<InteractiveTableSectionProps> = (
                   ? // Coverage mode: render editable input cells
                     (section as CoverageSectionData).coverageTable.rows.map(
                       (challenge, rowIndex) => {
-                        const state = stateData[rowIndex];
+                        const state = (
+                          stateData as SavedCoverageState["challengeStates"]
+                        )[rowIndex];
                         const isRunning = runningStates[rowIndex] || false;
                         const rowClass =
                           state?.isCorrect === true
@@ -267,7 +269,9 @@ const InteractiveTableSection: React.FC<InteractiveTableSectionProps> = (
                   : // Prediction mode: render fixed input display + prediction input
                     (section as PredictionSectionData).predictionTable.rows.map(
                       (row, rowIndex) => {
-                        const rowState = stateData[rowIndex];
+                        const rowState = (
+                          stateData as SavedPredictionState["predictions"]
+                        )[rowIndex];
                         const isRunning = runningStates[rowIndex];
                         const rowClass =
                           rowState?.isCorrect === true

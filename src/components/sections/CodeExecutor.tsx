@@ -74,7 +74,7 @@ const TurtleDisplay: React.FC<CodeExecutorProps> = ({
       </div>
       {error && (
         <div className={styles.errorFeedback}>
-          <pre>{error}</pre>
+          <pre>{error instanceof Error ? error.message : error}</pre>
         </div>
       )}
       <div>

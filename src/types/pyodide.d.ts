@@ -19,6 +19,8 @@ export interface PyodideInterface {
   // Add other methods you might use, e.g., loadPackage, pyimport
   loadPackage: (packages: string | string[]) => Promise<void>;
   pyimport: (module: string) => any;
+  setInterruptBuffer: (interruptBuffer: Uint8Array | null) => void;
+  toPy: (obj: any) => any;
 
   globals: any;
 }

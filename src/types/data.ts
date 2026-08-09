@@ -353,7 +353,7 @@ export interface Lesson {
   guid: LessonId;
   title: string;
   description: string;
-  sections: LessonSection[];
+  sections: AnyLessonSectionData[];
 }
 
 export interface LessonReference {

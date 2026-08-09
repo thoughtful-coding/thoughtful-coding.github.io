@@ -655,14 +655,19 @@ export const useProgressStore = create<ProgressState>()(
               // Strategy: If anonymous draft is "worked on" (isModified), use it
               set((state) => {
                 // With immer, we can mutate the draft state directly
-                for (const unitId in anonymousDrafts) {
+                for (const unitIdStr in anonymousDrafts) {
+                  const unitId = unitIdStr as UnitId;
                   if (!state.drafts[unitId]) state.drafts[unitId] = {};
 
-                  for (const lessonId in anonymousDrafts[unitId]) {
+                  for (const lessonIdStr in anonymousDrafts[unitId]) {
+                    const lessonId = lessonIdStr as LessonId;
                     if (!state.drafts[unitId][lessonId])
                       state.drafts[unitId][lessonId] = {};
 
-                    for (const sectionId in anonymousDrafts[unitId][lessonId]) {
+                    for (const sectionIdStr in anonymousDrafts[unitId][
+                      lessonId
+                    ]) {
+                      const sectionId = sectionIdStr as SectionId;
                       const anonymousDraft =
                         anonymousDrafts[unitId][lessonId][sectionId];
                       const authenticatedDraft =
@@ -719,17 +724,20 @@ export const useProgressStore = create<ProgressState>()(
               // Strategy: Keep anonymous counters (they are in-progress attempts)
               set((state) => {
                 // With immer, we can mutate the state directly
-                for (const unitId in anonymousCounters) {
+                for (const unitIdStr in anonymousCounters) {
+                  const unitId = unitIdStr as UnitId;
                   if (!state.attemptCounters[unitId])
                     state.attemptCounters[unitId] = {};
 
-                  for (const lessonId in anonymousCounters[unitId]) {
+                  for (const lessonIdStr in anonymousCounters[unitId]) {
+                    const lessonId = lessonIdStr as LessonId;
                     if (!state.attemptCounters[unitId][lessonId])
                       state.attemptCounters[unitId][lessonId] = {};
 
-                    for (const sectionId in anonymousCounters[unitId][
+                    for (const sectionIdStr in anonymousCounters[unitId][
                       lessonId
                     ]) {
+                      const sectionId = sectionIdStr as SectionId;
                       const anonymousCounter =
                         anonymousCounters[unitId][lessonId][sectionId];
                       const authenticatedCounter =

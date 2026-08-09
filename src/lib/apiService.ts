@@ -33,9 +33,12 @@ import {
  * This allows for dependency injection and easier testing.
  */
 export interface AuthProvider {
-  getAccessToken: () => string | null;
-  getRefreshToken: () => string | null;
-  setTokens: (tokens: { accessToken: string; refreshToken: string }) => void;
+  getAccessToken: () => AccessTokenId | null;
+  getRefreshToken: () => RefreshTokenId | null;
+  setTokens: (tokens: {
+    accessToken: AccessTokenId;
+    refreshToken: RefreshTokenId;
+  }) => void;
   logout: () => void;
   setSessionExpired: (expired: boolean) => void;
 }
@@ -182,7 +185,7 @@ async function fetchWithAuth(
       return new Promise((resolve, reject) => {
         failedQueue.push({ resolve, reject });
       }).then(() => {
-        options.headers!["Authorization"] =
+        (options.headers as Record<string, string>)["Authorization"] =
           `Bearer ${authProvider.getAccessToken()}`;
         return fetchWithRetry(url, options);
       });
@@ -203,7 +206,8 @@ async function fetchWithAuth(
       authProvider.setTokens(newTokens);
       processQueue(null, newTokens.accessToken);
 
-      options.headers!["Authorization"] = `Bearer ${newTokens.accessToken}`;
+      (options.headers as Record<string, string>)["Authorization"] =
+        `Bearer ${newTokens.accessToken}`;
       response = await fetchWithRetry(url, options);
     } catch (refreshError) {
       processQueue(refreshError, null);

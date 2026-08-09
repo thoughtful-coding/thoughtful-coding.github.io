@@ -131,7 +131,9 @@ export const useEnhancedPRIMM = ({
           });
         } catch (err) {
           if (err instanceof ApiError) {
-            switch (err.data.errorCode) {
+            const errorCode =
+              "errorCode" in err.data ? err.data.errorCode : undefined;
+            switch (errorCode) {
               case ErrorCode.RATE_LIMIT_EXCEEDED:
                 setAiFeedbackError(
                   "You've submitted feedback too frequently. Please wait a moment before trying again."

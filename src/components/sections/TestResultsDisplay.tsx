@@ -1,7 +1,7 @@
 import React from "react";
 import type { TestResult } from "../../hooks/useTestingLogic";
 import type { TurtleTestResult } from "../../hooks/useTurtleTesting";
-import type { TestCase } from "../../types/data";
+import type { CourseId, TestCase } from "../../types/data";
 import type { LastAction } from "../../hooks/useTestableSection";
 import { useTurtleTestDisplay } from "../../hooks/useTurtleTestDisplay";
 import TurtleTestAccordion from "./TurtleTestAccordion";
@@ -118,7 +118,8 @@ interface TurtleTestResultsProps {
   results: TurtleTestResult[] | null;
   threshold: number;
   testCases: TestCase[];
-  turtleCanvasRef: React.RefObject<HTMLDivElement>;
+  turtleCanvasRef: React.RefObject<HTMLDivElement | null>;
+  courseId: CourseId;
   lessonPath?: string;
   isRunningTests: boolean;
 }
@@ -132,6 +133,7 @@ export const TurtleTestResults: React.FC<TurtleTestResultsProps> = ({
   threshold: _threshold,
   testCases,
   turtleCanvasRef,
+  courseId,
   lessonPath,
   isRunningTests,
 }) => {
@@ -146,6 +148,7 @@ export const TurtleTestResults: React.FC<TurtleTestResultsProps> = ({
     results,
     testCases,
     isRunningTests,
+    courseId,
     lessonPath,
   });
 
@@ -201,18 +204,19 @@ export const TurtleTestResults: React.FC<TurtleTestResultsProps> = ({
 interface TestResultsAreaProps {
   lastAction: LastAction;
   // Run output
-  runOutput: string;
+  runOutput: string | null;
   runError: Error | null;
   // Test results
   testResults: TestResult[] | TurtleTestResult[] | null;
-  testError: string | null;
+  testError: string | null | undefined;
   // Turtle-specific
   isVisualTurtleTest: boolean;
-  turtleRunError: string | null;
-  turtleCanvasRef: React.RefObject<HTMLDivElement>;
+  turtleRunError: string | Error | null;
+  turtleCanvasRef: React.RefObject<HTMLDivElement | null>;
   resolvedTestCases: TestCase[];
   isRunningTests: boolean;
   visualThreshold: number;
+  courseId: CourseId;
   lessonPath?: string;
 }
 
@@ -233,6 +237,7 @@ export const TestResultsArea: React.FC<TestResultsAreaProps> = ({
   resolvedTestCases,
   isRunningTests,
   visualThreshold,
+  courseId,
   lessonPath,
 }) => {
   return (
@@ -242,7 +247,11 @@ export const TestResultsArea: React.FC<TestResultsAreaProps> = ({
       {/* Error display for visual turtle tests */}
       {isVisualTurtleTest && (turtleRunError || testError) && (
         <div className={styles.errorFeedback}>
-          <pre>{turtleRunError || testError}</pre>
+          <pre>
+            {turtleRunError instanceof Error
+              ? turtleRunError.message
+              : turtleRunError || testError}
+          </pre>
         </div>
       )}
 
@@ -257,6 +266,7 @@ export const TestResultsArea: React.FC<TestResultsAreaProps> = ({
           threshold={visualThreshold}
           testCases={resolvedTestCases}
           turtleCanvasRef={turtleCanvasRef}
+          courseId={courseId}
           lessonPath={lessonPath}
           isRunningTests={isRunningTests}
         />
