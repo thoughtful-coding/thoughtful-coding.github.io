@@ -286,8 +286,10 @@ export interface TestingSectionStatusItem extends SectionStatusItemBase {
   submissionDetails?: StoredFirstSolutionItem | null;
 }
 
+// The detailed-progress endpoint emits sectionKind="" for sections that are
+// completed but carry no submission payload; also tolerate other real kinds.
 export interface OtherSectionStatusItem extends SectionStatusItemBase {
-  sectionKind: Exclude<SectionKind, "Reflection" | "PRIMM" | "Testing">;
+  sectionKind: Exclude<SectionKind, "Reflection" | "PRIMM" | "Testing"> | "";
   submissionDetails?: null;
 }
 
