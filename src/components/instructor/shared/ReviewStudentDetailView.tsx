@@ -6,8 +6,6 @@ import type {
   StudentDetailedProgressResponse,
   SectionStatusItem,
   UnitProgressProfile,
-  StoredPrimmSubmissionItem,
-  StoredFirstSolutionItem,
 } from "../../../types/apiServiceTypes";
 import type { UserId, Unit, CourseId } from "../../../types/data";
 import * as instructorHelpers from "../../../lib/instructorHelpers";
@@ -169,10 +167,7 @@ const ReviewStudentDetailView: React.FC<ReviewStudentDetailViewProps> = ({
             Array.isArray(submissionDetails) &&
             submissionDetails[0] && (
               <RenderPrimmActivity
-                // Narrowed by the sectionKind === "PRIMM" guard above.
-                submission={
-                  submissionDetails[0] as unknown as StoredPrimmSubmissionItem
-                }
+                submission={submissionDetails[0]}
                 lessonTitle={lessonTitle}
                 sectionId={sectionId}
               />
@@ -181,8 +176,7 @@ const ReviewStudentDetailView: React.FC<ReviewStudentDetailViewProps> = ({
             !Array.isArray(submissionDetails) &&
             submissionDetails && (
               <RenderTestingSolution
-                // Narrowed by the sectionKind === "Testing" guard above.
-                submission={submissionDetails as StoredFirstSolutionItem}
+                submission={submissionDetails}
                 lessonTitle={lessonTitle}
                 sectionId={sectionId}
               />

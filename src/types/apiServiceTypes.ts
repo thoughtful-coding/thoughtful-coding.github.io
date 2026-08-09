@@ -259,19 +259,43 @@ export interface ListOfAssignmentSubmissionsResponse<
 
 /**
  * Represents the status and details of a single section for a student.
+ *
+ * Discriminated on `sectionKind` so that `submissionDetails` narrows to the
+ * correct shape once the kind is checked. The submission shapes match how the
+ * "by student" views consume them (Reflection/PRIMM as arrays, Testing single).
  */
-export interface SectionStatusItem {
+interface SectionStatusItemBase {
   sectionId: SectionId;
   sectionTitle: string;
-  sectionKind: SectionKind;
   status: "completed" | "submitted" | "not_started";
   submissionTimestamp?: IsoTimestamp | null;
-  submissionDetails?:
-    | ReflectionVersionItem[]
-    | StoredPrimmSubmissionItem
-    | StoredFirstSolutionItem
-    | null;
 }
+
+export interface ReflectionSectionStatusItem extends SectionStatusItemBase {
+  sectionKind: "Reflection";
+  submissionDetails?: ReflectionVersionItem[] | null;
+}
+
+export interface PrimmSectionStatusItem extends SectionStatusItemBase {
+  sectionKind: "PRIMM";
+  submissionDetails?: StoredPrimmSubmissionItem[] | null;
+}
+
+export interface TestingSectionStatusItem extends SectionStatusItemBase {
+  sectionKind: "Testing";
+  submissionDetails?: StoredFirstSolutionItem | null;
+}
+
+export interface OtherSectionStatusItem extends SectionStatusItemBase {
+  sectionKind: Exclude<SectionKind, "Reflection" | "PRIMM" | "Testing">;
+  submissionDetails?: null;
+}
+
+export type SectionStatusItem =
+  | ReflectionSectionStatusItem
+  | PrimmSectionStatusItem
+  | TestingSectionStatusItem
+  | OtherSectionStatusItem;
 
 /**
  * Represents a student's progress and submissions for all sections within a single lesson.
