@@ -38,3 +38,19 @@ courses/*
 !courses/getting-started/
 !courses/end-to-end-tests/
 !courses/courses.json
+
+# Python toolchain (coursegen). The venv self-ignores via coursegen/.venv/.gitignore.
+__pycache__/
+*.pyc
+.pytest_cache/
+
+*.pdf
+drop/
+work/
+review/
+sources/
+coursegen/drop/
+coursegen/work/
+coursegen/review/
+coursegen/sources/
+
