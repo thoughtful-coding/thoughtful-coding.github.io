@@ -5,18 +5,14 @@ import styles from "./LessonSidebar.module.css";
 
 interface LessonSidebarProps {
   sections: LessonSection[];
-  completedSections: Set<SectionId>; // FIXME: THIS SEEMS WRONG ... dict[LessonId: SectionId]?
+  completedSections: Set<SectionId>;
   informationSections: Set<SectionId>;
-
-  // Optional: Add onClick handler for smooth scrolling later
-  // onLinkClick?: (sectionId: string) => void;
 }
 
 const LessonSidebar: React.FC<LessonSidebarProps> = ({
   sections,
   completedSections,
   informationSections,
-  // onLinkClick
 }) => {
   const handleLinkClick = (
     event: React.MouseEvent<HTMLAnchorElement>,
@@ -32,8 +28,6 @@ const LessonSidebar: React.FC<LessonSidebarProps> = ({
       // Update URL hash to make the link shareable
       window.history.pushState(null, "", `#${sectionId}`);
     }
-    // Call prop handler if provided
-    // onLinkClick?.(sectionId);
   };
 
   if (!sections || sections.length === 0) {

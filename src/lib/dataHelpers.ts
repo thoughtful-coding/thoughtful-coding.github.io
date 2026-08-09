@@ -1,4 +1,4 @@
-import type { Unit, Lesson, LessonId, UnitId, CourseId } from "../types/data";
+import type { Unit, Lesson, LessonId, CourseId } from "../types/data";
 import * as dataLoader from "./dataLoader";
 
 /**
@@ -51,20 +51,6 @@ export async function loadLessonsForUnit(
   return loadedLessons.filter(
     (lesson): lesson is Lesson & { guid: LessonId } => lesson !== null
   );
-}
-
-/**
- * Loads all lessons for a unit by unitId
- * Convenience wrapper around loadLessonsForUnit
- */
-export async function loadLessonsByUnitId(
-  unitId: UnitId
-): Promise<(Lesson & { guid: LessonId })[]> {
-  const unit = await dataLoader.fetchUnitById(unitId);
-  if (!unit) {
-    throw new Error(`Unit ${unitId} not found`);
-  }
-  return loadLessonsForUnit(unit);
 }
 
 /**
