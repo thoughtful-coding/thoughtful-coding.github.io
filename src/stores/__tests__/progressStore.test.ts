@@ -2,10 +2,12 @@ import { vi } from "vitest";
 import { act } from "@testing-library/react";
 
 import { useProgressStore } from "../progressStore";
+import { BASE_PROGRESS_STORE_KEY } from "../progressStore";
 import * as apiService from "../../lib/apiService";
 import type { LessonId, SectionId, UnitId } from "../../types/data";
 import { UserProgressData } from "../../types/apiServiceTypes";
 import { storeCoordinator } from "../storeCoordination";
+import { ANONYMOUS_USER_ID_PLACEHOLDER } from "../../lib/localStorageUtils";
 
 // Mock all external dependencies
 vi.mock("../../lib/apiService");
@@ -25,6 +27,8 @@ describe("progressStore", () => {
     act(() => {
       useProgressStore.setState({
         completion: {},
+        drafts: {},
+        attemptCounters: {},
         penaltyEndTime: null,
         offlineActionQueue: [],
         isSyncing: false,
@@ -169,6 +173,345 @@ describe("progressStore", () => {
       expect(state.penaltyEndTime).toBeNull();
 
       vi.useRealTimers();
+    });
+  });
+
+  describe("setServerProgress", () => {
+    it("merges server completion data into local state", () => {
+      act(() => {
+        useProgressStore.getState().actions.setServerProgress({
+          completion: {
+            [unitId]: { [lessonId]: { [sectionId]: "2024-01-01T00:00:00.000Z" } },
+          },
+        });
+      });
+      expect(
+        useProgressStore.getState().actions.isSectionComplete(unitId, lessonId, sectionId)
+      ).toBe(true);
+    });
+
+    it("preserves existing local completions not present in server data", () => {
+      const localSectionId = "local-sec" as SectionId;
+      act(() => {
+        useProgressStore.setState({
+          completion: {
+            [unitId]: { [lessonId]: { [localSectionId]: "2024-01-01T00:00:00.000Z" } },
+          },
+        });
+        useProgressStore.getState().actions.setServerProgress({
+          completion: {
+            [unitId]: { [lessonId]: { [sectionId]: "2024-06-01T00:00:00.000Z" } },
+          },
+        });
+      });
+      const state = useProgressStore.getState();
+      expect(state.actions.isSectionComplete(unitId, lessonId, localSectionId)).toBe(true);
+      expect(state.actions.isSectionComplete(unitId, lessonId, sectionId)).toBe(true);
+    });
+
+    it("removes offline queue items now confirmed by server", () => {
+      act(() => {
+        useProgressStore.setState({
+          offlineActionQueue: [{ unitId, lessonId, sectionId }],
+        });
+        useProgressStore.getState().actions.setServerProgress({
+          completion: {
+            [unitId]: { [lessonId]: { [sectionId]: "2024-01-01T00:00:00.000Z" } },
+          },
+        });
+      });
+      expect(useProgressStore.getState().offlineActionQueue).toHaveLength(0);
+    });
+
+    it("keeps offline queue items not yet confirmed by server", () => {
+      const otherSection = "other-sec" as SectionId;
+      act(() => {
+        useProgressStore.setState({
+          offlineActionQueue: [{ unitId, lessonId, sectionId: otherSection }],
+        });
+        useProgressStore.getState().actions.setServerProgress({
+          completion: {
+            [unitId]: { [lessonId]: { [sectionId]: "2024-01-01T00:00:00.000Z" } },
+          },
+        });
+      });
+      expect(useProgressStore.getState().offlineActionQueue).toHaveLength(1);
+    });
+  });
+
+  describe("resetLessonProgress", () => {
+    it("removes a lesson's completions from state", () => {
+      act(() => {
+        useProgressStore.setState({
+          completion: {
+            [unitId]: { [lessonId]: { [sectionId]: "2024-01-01T00:00:00.000Z" } },
+          },
+        });
+        useProgressStore.getState().actions.resetLessonProgress(unitId, lessonId);
+      });
+      expect(
+        useProgressStore.getState().actions.isSectionComplete(unitId, lessonId, sectionId)
+      ).toBe(false);
+    });
+
+    it("removes matching items from the offline queue", () => {
+      act(() => {
+        useProgressStore.setState({
+          offlineActionQueue: [{ unitId, lessonId, sectionId }],
+        });
+        useProgressStore.getState().actions.resetLessonProgress(unitId, lessonId);
+      });
+      expect(useProgressStore.getState().offlineActionQueue).toHaveLength(0);
+    });
+
+    it("cleans up empty unit object after removing last lesson", () => {
+      act(() => {
+        useProgressStore.setState({
+          completion: {
+            [unitId]: { [lessonId]: { [sectionId]: "2024-01-01T00:00:00.000Z" } },
+          },
+        });
+        useProgressStore.getState().actions.resetLessonProgress(unitId, lessonId);
+      });
+      expect(useProgressStore.getState().completion[unitId]).toBeUndefined();
+    });
+  });
+
+  describe("resetAllProgress", () => {
+    it("clears all completion, draft, and attempt counter state", () => {
+      act(() => {
+        useProgressStore.setState({
+          completion: {
+            [unitId]: { [lessonId]: { [sectionId]: "2024-01-01T00:00:00.000Z" } },
+          },
+          drafts: { [unitId]: { [lessonId]: { [sectionId]: { code: "x = 1" } } } },
+          attemptCounters: { [unitId]: { [lessonId]: { [sectionId]: 3 } } },
+        });
+        useProgressStore.getState().actions.resetAllProgress();
+      });
+      const state = useProgressStore.getState();
+      expect(state.completion).toEqual({});
+      expect(state.drafts).toEqual({});
+      expect(state.attemptCounters).toEqual({});
+    });
+  });
+
+  describe("draft management", () => {
+    it("saveDraft stores and getDraft retrieves draft content", () => {
+      act(() => {
+        useProgressStore
+          .getState()
+          .actions.saveDraft(unitId, lessonId, sectionId, {
+            code: "x = 1",
+            isModified: true,
+          });
+      });
+      const draft = useProgressStore
+        .getState()
+        .actions.getDraft(unitId, lessonId, sectionId);
+      expect(draft?.code).toBe("x = 1");
+      expect(draft?.isModified).toBe(true);
+    });
+
+    it("getDraft returns null for an unsaved section", () => {
+      const draft = useProgressStore
+        .getState()
+        .actions.getDraft(unitId, lessonId, "nonexistent-sec" as SectionId);
+      expect(draft).toBeNull();
+    });
+
+    it("saveDraft merges with existing draft content", () => {
+      act(() => {
+        useProgressStore
+          .getState()
+          .actions.saveDraft(unitId, lessonId, sectionId, { code: "x = 1" });
+        useProgressStore
+          .getState()
+          .actions.saveDraft(unitId, lessonId, sectionId, { isModified: true });
+      });
+      const draft = useProgressStore
+        .getState()
+        .actions.getDraft(unitId, lessonId, sectionId);
+      expect(draft?.code).toBe("x = 1");
+      expect(draft?.isModified).toBe(true);
+    });
+  });
+
+  describe("mergeDraftsAfterLogin", () => {
+    it("uses modified anonymous draft over existing authenticated draft", () => {
+      act(() => {
+        useProgressStore.setState({
+          drafts: {
+            [unitId]: {
+              [lessonId]: { [sectionId]: { code: "auth-code", isModified: false } },
+            },
+          },
+        });
+        useProgressStore.getState().actions.mergeDraftsAfterLogin({
+          [unitId]: {
+            [lessonId]: { [sectionId]: { code: "anon-code", isModified: true } },
+          },
+        });
+      });
+      const draft = useProgressStore
+        .getState()
+        .actions.getDraft(unitId, lessonId, sectionId);
+      expect(draft?.code).toBe("anon-code");
+    });
+
+    it("merges unmodified anonymous draft when no authenticated draft exists", () => {
+      act(() => {
+        useProgressStore.getState().actions.mergeDraftsAfterLogin({
+          [unitId]: {
+            [lessonId]: { [sectionId]: { code: "anon-code", isModified: false } },
+          },
+        });
+      });
+      const draft = useProgressStore
+        .getState()
+        .actions.getDraft(unitId, lessonId, sectionId);
+      expect(draft?.code).toBe("anon-code");
+    });
+
+    it("keeps authenticated draft when anonymous draft is not modified", () => {
+      act(() => {
+        useProgressStore.setState({
+          drafts: {
+            [unitId]: {
+              [lessonId]: { [sectionId]: { code: "auth-code", isModified: false } },
+            },
+          },
+        });
+        useProgressStore.getState().actions.mergeDraftsAfterLogin({
+          [unitId]: {
+            [lessonId]: { [sectionId]: { code: "anon-code", isModified: false } },
+          },
+        });
+      });
+      const draft = useProgressStore
+        .getState()
+        .actions.getDraft(unitId, lessonId, sectionId);
+      expect(draft?.code).toBe("auth-code");
+    });
+  });
+
+  describe("attempt counters", () => {
+    it("incrementAttemptCounter initializes and increments the counter", () => {
+      act(() => {
+        useProgressStore
+          .getState()
+          .actions.incrementAttemptCounter(unitId, lessonId, sectionId);
+        useProgressStore
+          .getState()
+          .actions.incrementAttemptCounter(unitId, lessonId, sectionId);
+      });
+      expect(
+        useProgressStore
+          .getState()
+          .actions.getAttemptCounter(unitId, lessonId, sectionId)
+      ).toBe(2);
+    });
+
+    it("getAttemptCounter returns 0 for an unset section", () => {
+      expect(
+        useProgressStore
+          .getState()
+          .actions.getAttemptCounter(unitId, lessonId, "no-section" as SectionId)
+      ).toBe(0);
+    });
+
+    it("resetAttemptCounter removes the counter and cleans up empty objects", () => {
+      act(() => {
+        useProgressStore
+          .getState()
+          .actions.incrementAttemptCounter(unitId, lessonId, sectionId);
+        useProgressStore
+          .getState()
+          .actions.resetAttemptCounter(unitId, lessonId, sectionId);
+      });
+      expect(
+        useProgressStore
+          .getState()
+          .actions.getAttemptCounter(unitId, lessonId, sectionId)
+      ).toBe(0);
+      expect(useProgressStore.getState().attemptCounters[unitId]).toBeUndefined();
+    });
+  });
+
+  describe("mergeAttemptCountersAfterLogin", () => {
+    it("uses the maximum of anonymous and authenticated counter values", () => {
+      act(() => {
+        useProgressStore.setState({
+          attemptCounters: { [unitId]: { [lessonId]: { [sectionId]: 2 } } },
+        });
+        useProgressStore.getState().actions.mergeAttemptCountersAfterLogin({
+          [unitId]: { [lessonId]: { [sectionId]: 5 } },
+        });
+      });
+      expect(
+        useProgressStore
+          .getState()
+          .actions.getAttemptCounter(unitId, lessonId, sectionId)
+      ).toBe(5);
+    });
+
+    it("adopts anonymous counter when no authenticated counter exists", () => {
+      act(() => {
+        useProgressStore.getState().actions.mergeAttemptCountersAfterLogin({
+          [unitId]: { [lessonId]: { [sectionId]: 3 } },
+        });
+      });
+      expect(
+        useProgressStore
+          .getState()
+          .actions.getAttemptCounter(unitId, lessonId, sectionId)
+      ).toBe(3);
+    });
+  });
+
+  describe("extractAnonymousCompletions", () => {
+    const anonymousKey = `${ANONYMOUS_USER_ID_PLACEHOLDER}_${BASE_PROGRESS_STORE_KEY}`;
+
+    afterEach(() => {
+      localStorage.removeItem(anonymousKey);
+    });
+
+    it("returns empty array when no anonymous data is in localStorage", () => {
+      const completions = useProgressStore
+        .getState()
+        .actions.extractAnonymousCompletions();
+      expect(completions).toEqual([]);
+    });
+
+    it("parses and returns completions from localStorage", () => {
+      const data = {
+        state: {
+          completion: {
+            [unitId]: { [lessonId]: { [sectionId]: "2024-01-01T00:00:00.000Z" } },
+          },
+          attemptCounters: { [unitId]: { [lessonId]: { [sectionId]: 2 } } },
+        },
+      };
+      localStorage.setItem(anonymousKey, JSON.stringify(data));
+
+      const completions = useProgressStore
+        .getState()
+        .actions.extractAnonymousCompletions();
+      expect(completions).toHaveLength(1);
+      expect(completions[0]).toMatchObject({
+        unitId,
+        lessonId,
+        sectionId,
+        attemptsBeforeSuccess: 2,
+      });
+    });
+
+    it("returns empty array when localStorage data is invalid JSON", () => {
+      localStorage.setItem(anonymousKey, "not-valid-json");
+      const completions = useProgressStore
+        .getState()
+        .actions.extractAnonymousCompletions();
+      expect(completions).toEqual([]);
     });
   });
 });
