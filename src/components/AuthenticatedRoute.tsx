@@ -2,26 +2,17 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuthStore } from "../stores/authStore";
-import LoadingSpinner from "./LoadingSpinner";
 import styles from "./AuthenticatedRoute.module.css";
 
 interface AuthenticatedRouteProps {
-  children: JSX.Element;
+  children: React.ReactElement;
 }
 
 const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = ({
   children,
 }) => {
-  const { isAuthenticated, isLoading: isAuthLoading } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
   const location = useLocation();
-
-  if (isAuthLoading) {
-    return (
-      <div className={styles.loadingContainer}>
-        <LoadingSpinner message="Verifying authentication..." />
-      </div>
-    );
-  }
 
   if (!isAuthenticated) {
     console.log("User not authenticated. Path attempted:", location.pathname);
