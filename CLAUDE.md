@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Be concise and to the point in every document you write
 - Be concise and to the point in any comments you make
 - Be concise and to the point in your analysis
-- Where ever possible, be extremely concise and sacrifice grammer for the sake of concision
+- Where ever possible, be extremely concise and sacrifice grammar for the sake of concision
 
 ## Code Quality Principles
 
