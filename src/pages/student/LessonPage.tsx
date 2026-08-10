@@ -36,6 +36,7 @@ import styles from "./LessonPage.module.css";
 import { useCompletedSectionsForLesson } from "../../stores/progressStore";
 import MatchingSection from "../../components/sections/MatchingSection";
 import FillInSection from "../../components/sections/FillInSection";
+import NonCodingReflectionSection from "../../components/sections/NonCodingReflectionSection";
 
 const LessonPage: React.FC = () => {
   const params = useParams();
@@ -257,6 +258,17 @@ const LessonPage: React.FC = () => {
       case "Matching":
         return (
           <MatchingSection
+            key={sectionData.id}
+            unitId={currentUnitGuid}
+            lessonId={currentLessonGuid}
+            section={sectionData}
+            courseId={courseId}
+            lessonPath={lessonPath}
+          />
+        );
+      case "NonCodingReflection":
+        return (
+          <NonCodingReflectionSection
             key={sectionData.id}
             unitId={currentUnitGuid}
             lessonId={currentLessonGuid}

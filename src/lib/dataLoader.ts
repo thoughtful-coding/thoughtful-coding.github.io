@@ -512,6 +512,7 @@ export function getRequiredSectionsForLesson(lesson: Lesson): SectionId[] {
     "Matching",
     "FillIn",
     "Reflection",
+    "NonCodingReflection",
     "Coverage",
     "PRIMM",
     "Debugger",
@@ -534,7 +535,10 @@ export function hasReviewableAssignments(lesson: Lesson): boolean {
     return false;
   }
   return lesson.sections.some(
-    (s) => s.kind === "Reflection" || s.kind === "PRIMM"
+    (s) =>
+      s.kind === "Reflection" ||
+      s.kind === "NonCodingReflection" ||
+      s.kind === "PRIMM"
   );
 }
 

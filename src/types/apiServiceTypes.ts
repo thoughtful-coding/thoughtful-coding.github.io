@@ -1,5 +1,7 @@
 import {
   AssessmentLevel,
+  AssignmentType,
+  ReflectionKind,
   SectionId,
   LessonId,
   UnitId,
@@ -71,6 +73,7 @@ export interface ReflectionInteractionInput {
   userCode: string;
   isUserCodePredefined: boolean;
   userExplanation: string; // As per your Swagger's ReflectionInteractionInput
+  reflectionKind: ReflectionKind; // Which rubric the server grades against
   isFinal?: boolean; // Defaults to false on the server if not provided
   sourceVersionId?: string | null; // Optional from client if isFinal=true; server might look up latest draft
   extraContext?: string; // Optional context provided to the AI chatbot for feedback
@@ -233,9 +236,7 @@ export interface StoredFirstSolutionItem {
   submittedAt: IsoTimestamp;
 }
 
-export interface AssignmentSubmission<
-  T extends "Reflection" | "PRIMM" | "Testing",
-> {
+export interface AssignmentSubmission<T extends AssignmentType> {
   studentId: UserId;
   studentName?: string | null;
   submissionTimestamp: IsoTimestamp;
@@ -246,9 +247,7 @@ export interface AssignmentSubmission<
       : StoredFirstSolutionItem;
 }
 
-export interface ListOfAssignmentSubmissionsResponse<
-  T extends "Reflection" | "PRIMM" | "Testing",
-> {
+export interface ListOfAssignmentSubmissionsResponse<T extends AssignmentType> {
   assignmentType: T;
   unitId: UnitId;
   lessonId: LessonId;
@@ -289,7 +288,7 @@ export interface TestingSectionStatusItem extends SectionStatusItemBase {
 // The detailed-progress endpoint emits sectionKind="" for sections that are
 // completed but carry no submission payload; also tolerate other real kinds.
 export interface OtherSectionStatusItem extends SectionStatusItemBase {
-  sectionKind: Exclude<SectionKind, "Reflection" | "PRIMM" | "Testing"> | "";
+  sectionKind: Exclude<SectionKind, AssignmentType> | "";
   submissionDetails?: null;
 }
 

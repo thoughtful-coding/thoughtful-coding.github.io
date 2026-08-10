@@ -48,6 +48,7 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = ({
   const reflection = useReflectionWorkflow({
     lessonId,
     sectionId,
+    reflectionKind: "code",
     isTopicPredefined,
     isCodePredefined,
     isExplanationPredefined,

@@ -6,6 +6,7 @@ import type {
   Unit,
   DisplayableAssignment,
   UnitId,
+  AssignmentType,
 } from "../../types/data";
 import type {
   AssignmentSubmission,
@@ -52,7 +53,7 @@ const ReviewByAssignmentView: React.FC<ReviewByAssignmentViewProps> = ({
     string | null
   >(null);
   const [submissions, setSubmissions] = useState<
-    AssignmentSubmission<"Reflection" | "PRIMM" | "Testing">[]
+    AssignmentSubmission<AssignmentType>[]
   >([]);
   const [currentSubmissionIndex, setCurrentSubmissionIndex] = useState(0);
   const [isLoading, setIsLoadingState] = useState({

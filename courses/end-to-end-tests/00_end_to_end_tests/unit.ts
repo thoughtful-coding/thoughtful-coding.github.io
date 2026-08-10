@@ -19,6 +19,7 @@ const unitManifest: UnitManifest = {
     "lessons/10_testing_tests",
     "lessons/11_refactor_tests",
     "lessons/12_fill_in_tests",
+    "lessons/13_non_coding_reflection_tests",
   ],
 };
 

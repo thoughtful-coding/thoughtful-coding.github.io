@@ -24,6 +24,7 @@ import {
   UnitId,
   AccessTokenId,
   RefreshTokenId,
+  AssignmentType,
 } from "../types/data";
 
 // --- AUTH PROVIDER INTERFACE ---
@@ -414,9 +415,7 @@ export async function getInstructorClassUnitProgress(
   return handleApiResponse(response);
 }
 
-export async function getSubmissionsForAssignment<
-  T extends "Reflection" | "PRIMM" | "Testing",
->(
+export async function getSubmissionsForAssignment<T extends AssignmentType>(
   unitId: UnitId,
   lessonId: LessonId,
   sectionId: SectionId,

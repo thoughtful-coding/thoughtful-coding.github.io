@@ -15,6 +15,7 @@ const mockedGetHistory = vi.mocked(apiService.getReflectionDraftVersions);
 const PROPS = {
   lessonId: "lesson-1" as LessonId,
   sectionId: "section-1" as SectionId,
+  reflectionKind: "code" as const,
 };
 
 function makeVersion(overrides: Partial<Record<string, unknown>> = {}) {
@@ -103,6 +104,93 @@ describe("useReflectionWorkflow", () => {
       );
       await waitFor(() => expect(result.current.isLoadingHistory).toBe(false));
       expect(result.current.canAttemptInteraction).toBe(true);
+    });
+  });
+
+  describe("reflectionKind", () => {
+    const PROSE_PROPS = {
+      ...PROPS,
+      reflectionKind: "prose" as const,
+      isTopicPredefined: true,
+      defaultTopic: "Why randomisation matters",
+      isCodePredefined: true,
+      defaultCode: "",
+    };
+
+    beforeEach(() => {
+      mockedUseAuthStore.mockReturnValue({ isAuthenticated: true } as any);
+      vi.mocked(apiService.submitReflectionInteraction).mockResolvedValue(
+        makeVersion({ aiAssessment: "mostly" }) as never
+      );
+    });
+
+    it("sends the kind to the server so it grades on the right rubric", async () => {
+      const { result } = renderHook(() => useReflectionWorkflow(PROSE_PROPS));
+      await waitFor(() => expect(result.current.isLoadingHistory).toBe(false));
+
+      act(() =>
+        result.current.setCurrentExplanation("It balances confounders.")
+      );
+      await act(async () => {
+        await result.current.handleGetFeedback();
+      });
+
+      const [, , payload] = vi.mocked(apiService.submitReflectionInteraction)
+        .mock.calls[0];
+      expect(payload.reflectionKind).toBe("prose");
+      expect(payload.userCode).toBe("");
+    });
+
+    it("submits a prose reflection despite having no code", async () => {
+      const { result } = renderHook(() => useReflectionWorkflow(PROSE_PROPS));
+      await waitFor(() => expect(result.current.isLoadingHistory).toBe(false));
+
+      act(() =>
+        result.current.setCurrentExplanation("It balances confounders.")
+      );
+      expect(result.current.canAttemptInteraction).toBe(true);
+      await act(async () => {
+        await result.current.handleGetFeedback();
+      });
+
+      expect(apiService.submitReflectionInteraction).toHaveBeenCalledTimes(1);
+    });
+
+    it("still refuses a code reflection with no code", async () => {
+      vi.spyOn(window, "alert").mockImplementation(() => {});
+      const { result } = renderHook(() =>
+        useReflectionWorkflow({
+          ...PROPS,
+          isTopicPredefined: true,
+          defaultTopic: "Recursion",
+        })
+      );
+      await waitFor(() => expect(result.current.isLoadingHistory).toBe(false));
+
+      act(() => result.current.setCurrentExplanation("It calls itself."));
+      await act(async () => {
+        await result.current.handleGetFeedback();
+      });
+
+      expect(apiService.submitReflectionInteraction).not.toHaveBeenCalled();
+    });
+
+    it("tags a code reflection as code", async () => {
+      const { result } = renderHook(() => useReflectionWorkflow(PROPS));
+      await waitFor(() => expect(result.current.isLoadingHistory).toBe(false));
+
+      act(() => {
+        result.current.setCurrentTopic("Recursion");
+        result.current.setCurrentCode("def f(): return f()");
+        result.current.setCurrentExplanation("It calls itself.");
+      });
+      await act(async () => {
+        await result.current.handleGetFeedback();
+      });
+
+      const [, , payload] = vi.mocked(apiService.submitReflectionInteraction)
+        .mock.calls[0];
+      expect(payload.reflectionKind).toBe("code");
     });
   });
 

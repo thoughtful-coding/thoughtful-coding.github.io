@@ -62,6 +62,7 @@ export type SectionKind =
   | "FillIn"
   // AI Sections
   | "Reflection"
+  | "NonCodingReflection"
   // Executable Code Sections
   | "Observation"
   | "Coverage"
@@ -212,6 +213,13 @@ export interface ReflectionSubmission {
 export type AssessmentLevel =
   "achieves" | "mostly" | "developing" | "insufficient";
 
+/** Section kinds whose submissions an instructor reviews. */
+export type AssignmentType =
+  "Reflection" | "NonCodingReflection" | "PRIMM" | "Testing";
+
+/** Which server rubric grades a reflection: one with code, or prose alone. */
+export type ReflectionKind = "code" | "prose";
+
 export interface ReflectionSectionData extends LessonSection {
   kind: "Reflection";
   topic: string;
@@ -224,6 +232,17 @@ export interface ReflectionSectionData extends LessonSection {
   isExplanationPredefined: boolean;
 
   extraContext?: string; // Optional context provided to the AI chatbot for feedback
+}
+
+export interface NonCodingReflectionSectionData extends LessonSection {
+  kind: "NonCodingReflection";
+  /** The thing to reflect on, shown as the prompt. */
+  topic: string;
+  /** Characters required before Submit enables. */
+  minLength: number;
+  placeholder?: string;
+  /** Extra rubric context handed to the AI. */
+  extraContext?: string;
 }
 
 export interface ReflectionResponse {
@@ -420,6 +439,7 @@ export type AnyLessonSectionData =
   | MatchingSectionData
   | ParsonsSectionData
   | ReflectionSectionData
+  | NonCodingReflectionSectionData
   | CoverageSectionData
   | PRIMMSectionData
   | RefactorSectionData;
@@ -537,7 +557,7 @@ export interface DisplayableAssignment {
   lessonTitle: string;
   sectionId: SectionId;
   sectionTitle: string;
-  assignmentType: "Reflection" | "PRIMM" | "Testing";
+  assignmentType: AssignmentType;
   primmExampleId?: string; // Only for PRIMM
   assignmentDisplayTitle: string; // e.g., "Reflection: Variables" or "PRIMM: Example 1 - Loops" or "Testing: First Solutions"
 }

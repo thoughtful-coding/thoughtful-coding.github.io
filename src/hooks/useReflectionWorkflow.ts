@@ -2,7 +2,12 @@
 // Used by both lesson ReflectionSection and standalone CustomReflectionEntry
 
 import { useState, useCallback, useEffect } from "react";
-import type { LessonId, SectionId, AssessmentLevel } from "../types/data";
+import type {
+  LessonId,
+  SectionId,
+  AssessmentLevel,
+  ReflectionKind,
+} from "../types/data";
 import { useAuthStore } from "../stores/authStore";
 import * as apiService from "../lib/apiService";
 import { ApiError } from "../lib/apiService";
@@ -20,6 +25,8 @@ const QUALIFYING_ASSESSMENTS_FOR_FINAL: AssessmentLevel[] = [
 export interface UseReflectionWorkflowParams {
   lessonId: LessonId;
   sectionId: SectionId;
+  /** "prose" grades against the code-free rubric and stops requiring code. */
+  reflectionKind: ReflectionKind;
   isTopicPredefined?: boolean;
   isCodePredefined?: boolean;
   isExplanationPredefined?: boolean;
@@ -58,6 +65,7 @@ export interface UseReflectionWorkflowReturn {
 export function useReflectionWorkflow({
   lessonId,
   sectionId,
+  reflectionKind,
   isTopicPredefined = false,
   isCodePredefined = false,
   isExplanationPredefined = false,
@@ -209,7 +217,8 @@ export function useReflectionWorkflow({
       isExplanationPredefined ? defaultExplanation : currentExplanation
     ).trim();
 
-    if (!finalTopic || !finalCode.trim() || !finalExplanation) {
+    const codeMissing = reflectionKind === "code" && !finalCode.trim();
+    if (!finalTopic || codeMissing || !finalExplanation) {
       alert("Please ensure topic, code, and explanation have content.");
       return;
     }
@@ -222,6 +231,7 @@ export function useReflectionWorkflow({
       userCode: finalCode,
       isUserCodePredefined: isCodePredefined,
       userExplanation: finalExplanation,
+      reflectionKind,
       isFinal: false,
       ...(extraContext && { extraContext }),
     };
@@ -258,6 +268,7 @@ export function useReflectionWorkflow({
     defaultCode,
     isExplanationPredefined,
     defaultExplanation,
+    reflectionKind,
     extraContext,
     handleApiError,
   ]);
@@ -286,7 +297,8 @@ export function useReflectionWorkflow({
       isExplanationPredefined ? defaultExplanation : currentExplanation
     ).trim();
 
-    if (!finalTopic || !finalCode.trim() || !finalExplanation) {
+    const codeMissing = reflectionKind === "code" && !finalCode.trim();
+    if (!finalTopic || codeMissing || !finalExplanation) {
       alert(
         "Please ensure topic, code, and explanation have content for final submission."
       );
@@ -302,6 +314,7 @@ export function useReflectionWorkflow({
       userCode: finalCode,
       isUserCodePredefined: isCodePredefined,
       userExplanation: finalExplanation,
+      reflectionKind,
       isFinal: true,
       sourceVersionId: latestDraft.versionId,
       ...(extraContext && { extraContext }),
@@ -344,6 +357,7 @@ export function useReflectionWorkflow({
     defaultCode,
     isExplanationPredefined,
     defaultExplanation,
+    reflectionKind,
     extraContext,
     onFinalSubmit,
     fetchAndUpdateHistory,
@@ -352,7 +366,7 @@ export function useReflectionWorkflow({
 
   const canAttemptInteraction =
     (isTopicPredefined || !!currentTopic.trim()) &&
-    (isCodePredefined || !!currentCode.trim()) &&
+    (reflectionKind === "prose" || isCodePredefined || !!currentCode.trim()) &&
     (isExplanationPredefined || !!currentExplanation.trim());
 
   const latestAssessment =

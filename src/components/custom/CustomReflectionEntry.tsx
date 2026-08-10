@@ -31,6 +31,7 @@ const CustomReflectionEntry: React.FC<CustomReflectionEntryProps> = ({
   const reflection = useReflectionWorkflow({
     lessonId: CUSTOM_REFLECTION_LESSON_ID,
     sectionId: currentSectionId,
+    reflectionKind: "code",
     isTopicPredefined: false,
     isCodePredefined: false,
     isExplanationPredefined: false,

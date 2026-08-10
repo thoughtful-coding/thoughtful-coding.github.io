@@ -753,6 +753,12 @@ input.fillInInputIncorrect {
   padding: 1rem;
 }
 
+.reflectionCharCount {
+  margin: 0.25rem 0 0;
+  color: var(--text-secondary);
+  font-size: 0.85em;
+}
+
 .reflectionButtons {
   display: flex;
   gap: 1rem;
