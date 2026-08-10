@@ -589,20 +589,39 @@
   background-color: var(--error-light);
 }
 
-/* Cloze blank feedback fill. Reuses the theme's success/error tokens (which are
+/* FillIn blank feedback fill. Reuses the theme's success/error tokens (which are
    redefined in the dark-mode block in index.css). The `input.` element+class
    selector outranks the base `.textInput` background so the green/red reliably
    wins regardless of CSS module ordering. */
-input.clozeInputCorrect {
+input.fillInInputCorrect {
   border-color: var(--success);
   background-color: var(--success-light);
   color: var(--success-text);
 }
 
-input.clozeInputIncorrect {
+input.fillInInputIncorrect {
   border-color: var(--error);
   background-color: var(--error-light);
   color: var(--error-text);
+}
+
+/* Unit label sitting next to a numeric blank; static text, never typed. */
+.fillInUnit {
+  color: var(--text-secondary);
+  font-size: 0.9em;
+}
+
+/* Short per-blank note under an input: "too high", "enter a number". */
+.fillInBlankNote {
+  margin-top: 4px;
+  color: var(--text-secondary);
+  font-size: 0.8em;
+  line-height: 1.2;
+}
+
+.fillInHelpText {
+  color: var(--text-secondary);
+  font-size: 0.85em;
 }
 
 /* Status cell with icon */

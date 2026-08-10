@@ -510,7 +510,7 @@ export function getRequiredSectionsForLesson(lesson: Lesson): SectionId[] {
     "MultipleChoice",
     "MultipleSelection",
     "Matching",
-    "Cloze",
+    "FillIn",
     "Reflection",
     "Coverage",
     "PRIMM",

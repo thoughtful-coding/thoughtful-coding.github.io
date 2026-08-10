@@ -35,7 +35,7 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 import styles from "./LessonPage.module.css";
 import { useCompletedSectionsForLesson } from "../../stores/progressStore";
 import MatchingSection from "../../components/sections/MatchingSection";
-import ClozeSection from "../../components/sections/ClozeSection";
+import FillInSection from "../../components/sections/FillInSection";
 
 const LessonPage: React.FC = () => {
   const params = useParams();
@@ -265,9 +265,9 @@ const LessonPage: React.FC = () => {
             lessonPath={lessonPath}
           />
         );
-      case "Cloze":
+      case "FillIn":
         return (
-          <ClozeSection
+          <FillInSection
             key={sectionData.id}
             unitId={currentUnitGuid}
             lessonId={currentLessonGuid}

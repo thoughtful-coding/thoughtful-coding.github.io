@@ -59,7 +59,7 @@ export type SectionKind =
   | "MultipleSelection"
   | "Matching"
   | "Parsons"
-  | "Cloze"
+  | "FillIn"
   // AI Sections
   | "Reflection"
   // Executable Code Sections
@@ -105,24 +105,78 @@ export interface MatchingSectionData extends LessonSection {
 }
 
 /**
- * How a wrong guess is scaffolded. "coloring" gives Wordle-style per-letter
- * feedback on the learner's own guess. Extend this union (e.g. "reveal" for a
- * front-to-back letter reveal) to offer author-selectable hint styles.
+ * A blank the learner fills with a word. Graded by exact match against
+ * `answers`, trimmed, case-insensitive unless `caseSensitive` is set.
  */
-export type ClozeHintMode = "coloring";
-
-export interface ClozeSectionData extends LessonSection {
-  kind: "Cloze";
+export interface TextBlankConfig {
+  match: "text";
+  /** Any one of these is accepted. Always a list, even for a single answer. */
+  answers: string[];
   /**
-   * The fill-in-the-blank text. Mark each blank with double brackets around the
-   * answer: `[[6]]`. Offer several acceptable answers with a pipe: `[[6|six]]`.
-   * Example: "Target [[6|six]] mL/kg of [[predicted|ideal]] body weight."
+   * Whether casing must match. Required, with no default: Python is
+   * case-sensitive (`Def` is not `def`), so a silent `false` would quietly
+   * accept wrong answers across most of the curriculum.
+   */
+  caseSensitive: boolean;
+  /**
+   * Scaffolding shown after a wrong check. "coloring" gives Wordle-style
+   * per-letter feedback on the learner's own guess; "none" shows nothing.
+   * Required: per-letter hints can turn a recall item into a letter puzzle, so
+   * the choice belongs to the author rather than to a default.
+   */
+  hintMode: "coloring" | "none";
+}
+
+/**
+ * A blank the learner *computes*. Graded by tolerance, never equality —
+ * `|typed − answer| <= tolerance` — because arithmetic yields values like
+ * 9.0909… that exact comparison misgrades.
+ */
+export interface NumericBlankConfig {
+  match: "numeric";
+  answer: number;
+  /** Absolute tolerance, in the same units as `answer`. Required. */
+  tolerance: number;
+  /**
+   * Shown next to the input as static text; the learner never types it. Omit it
+   * when the surrounding prose already names the unit, or it reads twice:
+   * "runs {{n}} times" plus `unit: "times"` renders "runs [ ] times times".
+   */
+  unit?: string;
+  /**
+   * Scaffolding shown after a wrong check. "highLow" says whether the guess was
+   * too large or too small, which does not leak the value. Required, like the
+   * text hint mode.
+   */
+  hintMode: "highLow" | "none";
+}
+
+/**
+ * One blank, always written out in full. There is deliberately no shorthand:
+ * inferring `match` from the shape of the value would make `nnt: "9.09"` a
+ * *string* comparison, so `9.090` and `9.1` would be graded wrong with nothing
+ * to warn the author. Every blank names its matcher.
+ *
+ * Optional here means "this thing is absent" (`unit`), never "a default was
+ * chosen for you" — anything that picks a behavior is required, and enforced at
+ * runtime by `validateFillIn`, since lesson files are not typechecked.
+ */
+export type BlankConfig = TextBlankConfig | NumericBlankConfig;
+
+export interface FillInSectionData extends LessonSection {
+  kind: "FillIn";
+  /**
+   * The prose, with each blank written as a `{{name}}` reference into `blanks`.
+   * Example: "ARR is {{arr}}% so the NNT is {{nnt}}."
+   *
+   * References are resolved by name, not position, so editing the sentence
+   * never silently reassigns answers. A reference with no matching key (or a
+   * key nothing references) is reported as an authoring error rather than
+   * grading wrongly.
    */
   body: string;
-  /** Grading is case-insensitive by default; set true to require exact case. */
-  caseSensitive?: boolean;
-  /** Hint scaffolding for wrong guesses. Defaults to "coloring". */
-  hintMode?: ClozeHintMode;
+  /** One entry per `{{name}}` in `body`. */
+  blanks: Record<string, BlankConfig>;
   feedback?: FeedbackText;
 }
 
@@ -362,7 +416,7 @@ export type AnyLessonSectionData =
   | PredictionSectionData
   | MultipleChoiceSectionData
   | MultipleSelectionSectionData
-  | ClozeSectionData
+  | FillInSectionData
   | MatchingSectionData
   | ParsonsSectionData
   | ReflectionSectionData
