@@ -24,7 +24,7 @@ const mockSectionData: MultipleChoiceSectionData = {
       value: "What is 2 + 2?",
     },
   ],
-  options: ["3", "4", "5"],
+  options: [{ text: "3" }, { text: "4" }, { text: "5" }],
   correctAnswer: 1,
   feedback: { correct: "You got it!", incorrect: "Incorrect!" },
 };
@@ -227,5 +227,103 @@ describe("MultipleChoiceSection", () => {
     expect(screen.getByLabelText("3")).not.toBeDisabled();
     expect(screen.getByLabelText("4")).not.toBeDisabled();
     expect(screen.getByLabelText("5")).not.toBeDisabled();
+  });
+
+  describe("per-option feedback", () => {
+    const withFeedback = {
+      ...mockSectionData,
+      options: [
+        { text: "3", feedback: "That is 2 + 1." },
+        { text: "4" },
+        { text: "5", feedback: "That is 2 + 3." },
+      ],
+    };
+
+    const submitted = (selected: number[], correct: boolean) => {
+      vi.mocked(useQuizLogic).mockReturnValue({
+        selectedIndices: selected,
+        isSubmitted: true,
+        isCorrect: correct,
+        isLocallyDisabled: false,
+        remainingPenaltyTime: 0,
+        isSectionComplete: correct,
+        handleOptionChange: vi.fn(),
+        handleSubmit: vi.fn(),
+        handleTryAgain: vi.fn(),
+        canTryAgain: false,
+        selectedOptionsSet: new Set(selected),
+      });
+      return render(
+        <MultipleChoiceSection
+          section={withFeedback}
+          unitId={"unit-1" as UnitId}
+          lessonId={"lesson-1" as LessonId}
+        />
+      );
+    };
+
+    it("explains the distractor the learner actually chose", () => {
+      submitted([2], false);
+      const list = screen.getByTestId("quiz-option-feedback-test-mcq");
+      expect(list).toHaveTextContent("You chose:");
+      expect(list).toHaveTextContent("That is 2 + 3.");
+      // Not the other distractor's explanation.
+      expect(list).not.toHaveTextContent("That is 2 + 1.");
+    });
+
+    it("shows only feedback.correct on a right answer", () => {
+      submitted([1], true);
+      expect(screen.queryByTestId("quiz-option-feedback-test-mcq")).toBeNull();
+      expect(screen.getByText("You got it!")).toBeInTheDocument();
+    });
+
+    it("falls back to feedback.incorrect when the option has none", () => {
+      submitted([0], false);
+      const list = screen.getByTestId("quiz-option-feedback-test-mcq");
+      expect(list).toHaveTextContent("That is 2 + 1.");
+      expect(screen.getByText("Incorrect!")).toBeInTheDocument();
+    });
+
+    it("never says 'You missed:' — there is only one answer to choose", () => {
+      submitted([2], false);
+      expect(
+        screen.getByTestId("quiz-option-feedback-test-mcq")
+      ).not.toHaveTextContent("You missed:");
+    });
+
+    it("warns about feedback on the correct option, which never renders", () => {
+      const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+      vi.mocked(useQuizLogic).mockReturnValue({
+        selectedIndices: [],
+        isSubmitted: false,
+        isCorrect: null,
+        isLocallyDisabled: false,
+        remainingPenaltyTime: 0,
+        isSectionComplete: false,
+        handleOptionChange: vi.fn(),
+        handleSubmit: vi.fn(),
+        handleTryAgain: vi.fn(),
+        canTryAgain: false,
+        selectedOptionsSet: new Set(),
+      });
+      render(
+        <MultipleChoiceSection
+          section={{
+            ...withFeedback,
+            options: [
+              { text: "3" },
+              { text: "4", feedback: "never seen" },
+              { text: "5" },
+            ],
+          }}
+          unitId={"unit-1" as UnitId}
+          lessonId={"lesson-1" as LessonId}
+        />
+      );
+      expect(warn).toHaveBeenCalledWith(
+        expect.stringContaining("never be shown")
+      );
+      warn.mockRestore();
+    });
   });
 });

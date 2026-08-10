@@ -26,7 +26,7 @@ const mockSectionData: MultipleSelectionSectionData = {
       value: "Select all prime numbers.",
     },
   ],
-  options: ["2", "4", "5", "6"],
+  options: [{ text: "2" }, { text: "4" }, { text: "5" }, { text: "6" }],
   correctAnswers: [0, 2], // Correct answers are 2 and 5
   feedback: { correct: "Correct!", incorrect: "Not quite." },
 };
@@ -188,5 +188,70 @@ describe("MultipleSelectionSection", () => {
 
     // ASSERT 2
     expect(handleTryAgainMock).toHaveBeenCalledTimes(1);
+  });
+
+  describe("per-option feedback", () => {
+    const withFeedback = {
+      ...mockSectionData,
+      options: [
+        {
+          text: "2",
+          feedback: "Two is prime — its only divisors are 1 and 2.",
+        },
+        { text: "4", feedback: "Four divides by 2." },
+        { text: "5", feedback: "Five is prime." },
+        { text: "6", feedback: "Six divides by 2 and 3." },
+      ],
+    };
+
+    const submitted = (selected: number[], correct: boolean) => {
+      vi.mocked(useQuizLogic).mockReturnValue({
+        selectedIndices: selected,
+        isSubmitted: true,
+        isCorrect: correct,
+        isLocallyDisabled: false,
+        remainingPenaltyTime: 0,
+        isSectionComplete: correct,
+        handleOptionChange: vi.fn(),
+        handleSubmit: vi.fn(),
+        handleTryAgain: vi.fn(),
+        canTryAgain: false,
+        selectedOptionsSet: new Set(selected),
+      });
+      return render(
+        <MultipleSelectionSection
+          section={withFeedback}
+          unitId={"unit-1" as UnitId}
+          lessonId={"lesson-1" as LessonId}
+        />
+      );
+    };
+
+    it("covers both a wrong pick and a missed right answer", () => {
+      // Correct answers are 0 and 2; the learner picked 0 and 1.
+      submitted([0, 1], false);
+      const list = screen.getByTestId("quiz-option-feedback-test-msq");
+
+      const chose = list.querySelectorAll('[data-reason="chose"]');
+      const missed = list.querySelectorAll('[data-reason="missed"]');
+      expect(chose).toHaveLength(1);
+      expect(missed).toHaveLength(1);
+      expect(chose[0]).toHaveTextContent("Four divides by 2.");
+      expect(missed[0]).toHaveTextContent("Five is prime.");
+    });
+
+    it("stays silent about options the learner handled correctly", () => {
+      submitted([0, 1], false);
+      const list = screen.getByTestId("quiz-option-feedback-test-msq");
+      // 0 was correctly picked and 3 correctly left alone.
+      expect(list).not.toHaveTextContent("only divisors are 1 and 2");
+      expect(list).not.toHaveTextContent("Six divides by 2 and 3.");
+    });
+
+    it("shows only feedback.correct on a right answer", () => {
+      submitted([0, 2], true);
+      expect(screen.queryByTestId("quiz-option-feedback-test-msq")).toBeNull();
+      expect(screen.getByText("Correct!")).toBeInTheDocument();
+    });
   });
 });

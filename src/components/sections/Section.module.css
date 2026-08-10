@@ -605,6 +605,26 @@ input.fillInInputIncorrect {
   color: var(--error-text);
 }
 
+/* Per-option feedback shown beneath a wrong quiz answer. */
+.optionFeedbackList {
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.optionFeedbackItem {
+  margin-top: 0.5rem;
+  font-size: 0.95em;
+}
+
+.optionFeedbackLabel {
+  font-weight: 700;
+}
+
+.optionFeedbackOption {
+  font-style: italic;
+}
+
 /* Per-letter hint tiles. Border style and text decoration carry the status as
    well as hue, so the three states stay distinguishable without colour. */
 .hintTileRow {

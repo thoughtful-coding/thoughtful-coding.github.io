@@ -22,10 +22,26 @@ const lessonData: Lesson = {
         },
       ],
       options: [
-        { text: "Be specific in your prediction" },
-        { text: "Be verbose to let the AI know you're smart" },
-        { text: "Be critical in your interpretation" },
-        { text: "Be careful when reading the AI's feedback" },
+        {
+          text: "Be specific in your prediction",
+          feedback:
+            "A specific prediction is falsifiable, so running the code actually tells you something.",
+        },
+        {
+          text: "Be verbose to let the AI know you're smart",
+          feedback:
+            "Length is not the signal. A long prediction that commits to nothing cannot be checked against the output.",
+        },
+        {
+          text: "Be critical in your interpretation",
+          feedback:
+            "Reconciling a wrong prediction with the real output is where the learning happens.",
+        },
+        {
+          text: "Be careful when reading the AI's feedback",
+          feedback:
+            "The feedback is a starting point to check, not an answer key to accept.",
+        },
       ],
       correctAnswers: [0, 2, 3],
       feedback: {

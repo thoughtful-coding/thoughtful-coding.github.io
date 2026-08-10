@@ -32,7 +32,7 @@ const mockMcqSection: MultipleChoiceSectionData = {
   kind: "MultipleChoice",
   id: "mcq-1",
   title: "MCQ Test",
-  options: ["A", "B", "C"],
+  options: [{ text: "A" }, { text: "B" }, { text: "C" }],
   correctAnswer: 1, // "B" is correct
   content: [],
 };
@@ -41,7 +41,7 @@ const mockMsqSection: MultipleSelectionSectionData = {
   kind: "MultipleSelection",
   id: "msq-1",
   title: "MSQ Test",
-  options: ["A", "B", "C", "D"],
+  options: [{ text: "A" }, { text: "B" }, { text: "C" }, { text: "D" }],
   correctAnswers: [0, 2], // "A" and "C" are correct
   content: [],
 };

@@ -9,6 +9,11 @@ import type {
   CourseId,
 } from "../../types/data";
 import styles from "./Section.module.css";
+import OptionFeedback from "./OptionFeedback";
+import {
+  collectOptionFeedback,
+  findUnreachableOptionFeedback,
+} from "../../lib/quizFeedback";
 import { useQuizLogic } from "../../hooks/useQuizLogic";
 import ContentRenderer from "../content_blocks/ContentRenderer";
 
@@ -57,6 +62,28 @@ const MultipleChoiceSection: React.FC<MultipleChoiceSectionProps> = ({
   }, [isLocallyDisabled, remainingPenaltyTime]);
 
   const selectedOption = selectedIndices.length > 0 ? selectedIndices[0] : null;
+
+  const optionFeedbackEntries = collectOptionFeedback(
+    section.options,
+    selectedIndices,
+    [section.correctAnswer],
+    false
+  );
+
+  // A one-best-answer question never shows its correct option's feedback.
+  useEffect(() => {
+    const unreachable = findUnreachableOptionFeedback(
+      section.options,
+      section.correctAnswer
+    );
+    if (unreachable.length > 0) {
+      console.warn(
+        `MultipleChoiceSection "${section.id}": option ${unreachable.join(", ")} ` +
+          `is the correct answer, so its feedback will never be shown. Put it in ` +
+          `feedback.correct instead.`
+      );
+    }
+  }, [section.options, section.correctAnswer, section.id]);
 
   // Click handler for the div/label to toggle the radio input
   const handleQuizOptionClick = useCallback(
@@ -142,7 +169,7 @@ const MultipleChoiceSection: React.FC<MultipleChoiceSectionProps> = ({
                 disallowedElements={["p"]}
                 unwrapDisallowed={true}
               >
-                {option}
+                {option.text}
               </ReactMarkdown>
             </label>
           </div>
@@ -179,6 +206,12 @@ const MultipleChoiceSection: React.FC<MultipleChoiceSectionProps> = ({
                 ? section.feedback.incorrect || "Incorrect!"
                 : "Incorrect!"}
           </ReactMarkdown>
+          {!isCorrect && (
+            <OptionFeedback
+              entries={optionFeedbackEntries}
+              testId={`quiz-option-feedback-${section.id}`}
+            />
+          )}
         </div>
       )}
 

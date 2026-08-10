@@ -22,10 +22,24 @@ const lessonData: Lesson = {
         },
       ],
       options: [
-        { text: "It proves to the teacher that you did the work." },
-        { text: "It forces you to retrieve information and organize it in your own words." },
-        { text: "It's the fastest way to get through a lesson." },
-        { text: "It allows you to skip the parts of the code you don't understand." },
+        {
+          text: "It proves to the teacher that you did the work.",
+          feedback:
+            "Reflection is for you, not the teacher — its value is in the retrieval, not the record of it.",
+        },
+        {
+          text: "It forces you to retrieve information and organize it in your own words.",
+        },
+        {
+          text: "It's the fastest way to get through a lesson.",
+          feedback:
+            "It is deliberately slower than reading. The effort is the point: easy review feels productive but sticks poorly.",
+        },
+        {
+          text: "It allows you to skip the parts of the code you don't understand.",
+          feedback:
+            "The opposite — reflection surfaces the parts you cannot yet explain, which is what makes the gaps visible.",
+        },
       ],
       correctAnswer: 1,
       feedback: {

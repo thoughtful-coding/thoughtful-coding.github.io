@@ -9,6 +9,8 @@ import type {
   CourseId,
 } from "../../types/data";
 import styles from "./Section.module.css";
+import OptionFeedback from "./OptionFeedback";
+import { collectOptionFeedback } from "../../lib/quizFeedback";
 import { useQuizLogic } from "../../hooks/useQuizLogic";
 import ContentRenderer from "../content_blocks/ContentRenderer";
 
@@ -56,6 +58,15 @@ const MultipleSelectionSection: React.FC<MultipleSelectionSectionProps> = ({
       return () => clearInterval(interval);
     }
   }, [isLocallyDisabled, remainingPenaltyTime]);
+
+  // Both directions count here: picking a wrong option and leaving a right one
+  // unpicked are each a mistake the learner can learn from.
+  const optionFeedbackEntries = collectOptionFeedback(
+    section.options,
+    [...selectedOptionsSet],
+    section.correctAnswers,
+    true
+  );
 
   // Click handler for the div/label to toggle the checkbox
   const handleQuizOptionClick = useCallback(
@@ -148,7 +159,7 @@ const MultipleSelectionSection: React.FC<MultipleSelectionSectionProps> = ({
                 tabIndex={-1}
               />
               <ReactMarkdown
-                children={option}
+                children={option.text}
                 remarkPlugins={[remarkGfm]}
                 // These two props are the solution
                 disallowedElements={["p"]}
@@ -189,6 +200,12 @@ const MultipleSelectionSection: React.FC<MultipleSelectionSectionProps> = ({
                 ? section.feedback.incorrect || "Incorrect!"
                 : "Incorrect!"}
           </ReactMarkdown>
+          {!isCorrect && (
+            <OptionFeedback
+              entries={optionFeedbackEntries}
+              testId={`quiz-option-feedback-${section.id}`}
+            />
+          )}
         </div>
       )}
 
