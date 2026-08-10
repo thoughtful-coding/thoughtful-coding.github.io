@@ -16,6 +16,12 @@
     "ref": "main"
   },
   {
+    "type": "git",
+    "directory": "thoughtful-pulm-crit",
+    "repo": "https://github.com/thoughtful-coding/thoughtful-pulm-crit.git",
+    "ref": "main"
+  },
+  {
     "type": "local",
     "directory": "end-to-end-tests",
     "devOnly": true
