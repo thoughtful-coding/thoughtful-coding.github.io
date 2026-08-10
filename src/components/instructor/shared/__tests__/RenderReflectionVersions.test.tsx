@@ -131,4 +131,36 @@ describe("RenderReflectionVersions", () => {
       screen.getByText(/no ai feedback was requested for this draft version/i)
     ).toBeInTheDocument();
   });
+
+  describe("reflectionKind", () => {
+    const renderKind = (kind: ReflectionVersionItem["reflectionKind"]) =>
+      render(
+        <RenderReflectionVersions
+          versions={[
+            { ...mockVersions[0], userCode: "", reflectionKind: kind },
+          ]}
+          lessonGuid={"lesson-1" as LessonId}
+          sectionId={"sec-1" as SectionId}
+        />
+      );
+
+    it("omits the code block entirely for a prose reflection", () => {
+      renderKind("prose");
+      expect(screen.queryByText("Code:")).toBeNull();
+      expect(screen.queryByText(/no code provided/i)).toBeNull();
+    });
+
+    it("still says code is missing when a code reflection has none", () => {
+      // The distinction the stored kind buys: "this exercise has no code" is not
+      // the same as "the student submitted no code".
+      renderKind("code");
+      expect(screen.getByText("Code:")).toBeInTheDocument();
+      expect(screen.getByText(/no code provided/i)).toBeInTheDocument();
+    });
+
+    it("treats an entry predating the field as a code reflection", () => {
+      renderKind(undefined);
+      expect(screen.getByText("Code:")).toBeInTheDocument();
+    });
+  });
 });

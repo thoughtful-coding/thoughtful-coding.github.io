@@ -95,12 +95,14 @@ const RenderReflectionVersions: React.FC<RenderReflectionVersionsProps> = ({
                     <strong>Topic for this version:</strong> {version.userTopic}
                   </p>
                 )}
-              <div>
-                <strong>Code:</strong>
-                <pre>
-                  <code>{version.userCode || "(No code provided)"}</code>
-                </pre>
-              </div>
+              {version.reflectionKind !== "prose" && (
+                <div>
+                  <strong>Code:</strong>
+                  <pre>
+                    <code>{version.userCode || "(No code provided)"}</code>
+                  </pre>
+                </div>
+              )}
               <div>
                 <strong>Explanation:</strong>
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>

@@ -92,6 +92,7 @@ export interface ReflectionVersionItem {
   userTopic: string; // Content submitted by the user for this version
   userCode: string; // Content submitted by the user for this version
   userExplanation: string; // Content submitted by the user for this version
+  reflectionKind?: ReflectionKind; // Absent on entries written before the field existed
   createdAt: IsoTimestamp; // ISO 8601 date-time string
   isFinal: boolean; // True if this is a finalized learning entry
 
