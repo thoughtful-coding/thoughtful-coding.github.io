@@ -25,10 +25,4 @@ npm install
 npm run dev
 ```
 
-### Step 5: Push Your Changes
-
-```bash
-git add .
-git commit -m "Configure GitHub Pages deployment"
-git push
-```
+Running the test suites: see [e2e/README.md](e2e/README.md).

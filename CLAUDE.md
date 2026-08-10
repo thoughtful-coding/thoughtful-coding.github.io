@@ -42,6 +42,7 @@ npm test             # Run Vitest unit tests in watch mode
 npm run coverage     # Generate test coverage report
 npm run e2e-test     # Run Playwright e2e tests (requires dev server)
 npm run e2e-test:ci  # Run e2e tests excluding @flaky tests
+npm run e2e-test:auth # Authenticated project; needs .env.test (see e2e/README.md)
 ```
 
 ### Linting
@@ -268,10 +269,11 @@ Routes defined in `src/App.tsx`:
 ### E2E Tests (Playwright)
 
 - Organized into `e2e/authenticated/` and `e2e/public/` directories
-- Auth setup in `e2e/authenticated/setup/auth.setup.ts`
+- Auth setup in `e2e/authenticated/auth/auth.setup.ts`
 - Tests for each section type in `e2e/public/student/sections/`
 - Navigation flow tests for student and instructor views
 - Run against local dev server (auto-started by Playwright config)
+- **See `e2e/README.md`** for how to run each project, `.env.test` setup, and debugging
 
 ## Key Development Notes
 
