@@ -51,9 +51,7 @@ test.describe("PrimmSection tests with turtles", () => {
 
     await expectSectionNotCompleted(page, "Drawing A Shape");
 
-    await expect(
-      page.locator("#square-primm #defaultCanvas0").first()
-    ).toBeVisible();
+    await expect(page.locator("#square-primm canvas").first()).toBeVisible();
     await page
       .getByRole("textbox", {
         name: "Look at the pattern of forward() and right() function calls. What shape do you",
@@ -70,9 +68,7 @@ test.describe("PrimmSection tests with turtles", () => {
       .click();
     // Turtles take a while
     await page.waitForTimeout(2000);
-    await expect(
-      page.locator("#square-primm #defaultCanvas0").first()
-    ).toBeVisible();
+    await expect(page.locator("#square-primm canvas").first()).toBeVisible();
     await page
       .getByRole("textbox", { name: "Your Reflection/Explanation:" })
       .click();
@@ -99,7 +95,7 @@ test.describe("PrimmSection tests with turtles", () => {
     await expectSectionNotCompleted(page, "PRIMM Turtle Library Works");
 
     await expect(
-      page.locator("#primm-turtle-library-works #defaultCanvas0").first()
+      page.locator("#primm-turtle-library-works canvas").first()
     ).toBeVisible();
     await page
       .getByRole("textbox", {
@@ -118,7 +114,7 @@ test.describe("PrimmSection tests with turtles", () => {
     // Turtles take a while
     await page.waitForTimeout(2000);
     await expect(
-      page.locator("#primm-turtle-library-works #defaultCanvas0").first()
+      page.locator("#primm-turtle-library-works canvas").first()
     ).toBeVisible();
     await page
       .getByRole("textbox", { name: "Your Reflection/Explanation:" })
@@ -146,7 +142,7 @@ test.describe("PrimmSection tests with turtles", () => {
     await expectSectionNotCompleted(page, "PRIMM Turtle Library Broken");
 
     await expect(
-      page.locator("#primm-turtle-library-broken #defaultCanvas0").first()
+      page.locator("#primm-turtle-library-broken canvas").first()
     ).toBeVisible();
     await page
       .getByRole("textbox", {

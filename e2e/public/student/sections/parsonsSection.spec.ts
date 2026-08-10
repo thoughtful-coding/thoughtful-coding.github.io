@@ -520,7 +520,12 @@ test.describe("Parsons `function` / `test_me()` output tests", () => {
       .getByTestId("parsons-run-tests-button")
       .click();
 
-    await expect(page.getByText("14")).toBeVisible();
+    await expect(
+      page
+        .locator("section")
+        .filter({ hasText: "Indentation MattersYour" })
+        .getByText("14")
+    ).toBeVisible();
     await expect(page.getByText("Test 1 failed. Fix the issue")).toBeVisible();
   });
 

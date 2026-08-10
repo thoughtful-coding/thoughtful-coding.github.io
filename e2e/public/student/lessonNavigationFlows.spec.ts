@@ -116,7 +116,7 @@ test.describe("Check can navigate into and out of lessons", () => {
       .locator("div")
       .filter({
         hasText:
-          /^MultipleSelectionSection Testing← PreviousLesson 5 of 12Next →$/,
+          /^MultipleSelectionSection Testing← PreviousLesson 5 of 14Next →$/,
       })
       .getByLabel("Previous Lesson")
       .click();
@@ -124,7 +124,7 @@ test.describe("Check can navigate into and out of lessons", () => {
       .locator("div")
       .filter({
         hasText:
-          /^MultipleChoiceSection Testing← PreviousLesson 4 of 12Next →$/,
+          /^MultipleChoiceSection Testing← PreviousLesson 4 of 14Next →$/,
       })
       .getByLabel("Previous Lesson")
       .click();
@@ -157,7 +157,7 @@ test.describe("Check can navigate into and out of lessons", () => {
     await page
       .locator("div")
       .filter({
-        hasText: /^CoverageSection Testing← PreviousLesson 1 of 12Next →$/,
+        hasText: /^CoverageSection Testing← PreviousLesson 1 of 14Next →$/,
       })
       .getByLabel("Next Lesson")
       .click();
@@ -184,7 +184,7 @@ test.describe("Check can navigate into and out of lessons", () => {
     await page
       .locator("div")
       .filter({
-        hasText: /^DebuggerSection Testing← PreviousLesson 2 of 12Next →$/,
+        hasText: /^DebuggerSection Testing← PreviousLesson 2 of 14Next →$/,
       })
       .getByLabel("Previous Lesson")
       .click();
