@@ -253,6 +253,39 @@ describe("FillInSection", () => {
       expect(incrementAttemptCounterMock).toHaveBeenCalledTimes(1);
     });
 
+    it("penalises a wrong blank even when another holds an unreadable number", async () => {
+      const user = userEvent.setup();
+      renderSection({
+        ...numericSection,
+        body: "NNT is {{nnt}} and ARR is {{arr}}.",
+        blanks: {
+          nnt: {
+            match: "numeric",
+            answer: 9.09,
+            tolerance: 0.1,
+            hintMode: "highLow",
+          },
+          arr: {
+            match: "numeric",
+            answer: 11,
+            tolerance: 0.5,
+            hintMode: "highLow",
+          },
+        },
+      });
+
+      // First blank unreadable (a typo), second genuinely wrong.
+      await user.type(input("fill-2", 0), "9,09");
+      await user.type(input("fill-2", 1), "50");
+      await user.click(checkButton("fill-2"));
+
+      expect(
+        screen.getByTestId("fill-in-input-fill-2-unparseable-0")
+      ).toHaveTextContent("enter a number");
+      expect(startPenaltyMock).toHaveBeenCalledTimes(1);
+      expect(incrementAttemptCounterMock).toHaveBeenCalledTimes(1);
+    });
+
     it("renders the unit as static text the learner never types", async () => {
       const user = userEvent.setup();
       renderSection(numericSection);
@@ -324,6 +357,62 @@ describe("FillInSection", () => {
       await user.type(input("fill-3", 2), "9");
       await user.click(checkButton("fill-3"));
       expect(screen.getByText(SUCCESS)).toBeInTheDocument();
+    });
+  });
+
+  describe("unanswered blanks", () => {
+    const twoBlanks: FillInSectionData = {
+      ...textSection,
+      body: "The {{kw}} keyword defines a {{fn}}.",
+      blanks: {
+        kw: {
+          match: "text",
+          answers: ["def"],
+          caseSensitive: false,
+          hintMode: "coloring",
+        },
+        fn: {
+          match: "text",
+          answers: ["function"],
+          caseSensitive: false,
+          hintMode: "coloring",
+        },
+      },
+    };
+
+    it("says so, rather than leaving the blank silently unmarked", async () => {
+      const user = userEvent.setup();
+      renderSection(twoBlanks);
+
+      await user.type(input("fill-1", 0), "def");
+      await user.click(checkButton("fill-1"));
+
+      expect(
+        screen.getByTestId("fill-in-input-fill-1-unanswered-1")
+      ).toHaveTextContent("no answer");
+      expect(screen.getByText(/1 \/ 2 correct/i)).toBeInTheDocument();
+    });
+
+    it("treats a never-touched blank and a cleared one identically", async () => {
+      const user = userEvent.setup();
+      renderSection(twoBlanks);
+
+      // Touch the second blank and clear it again; the first is never touched.
+      await user.type(input("fill-1", 0), "def");
+      await user.type(input("fill-1", 1), "x");
+      await user.clear(input("fill-1", 1));
+      await user.click(checkButton("fill-1"));
+
+      const cleared = screen.getByTestId("fill-in-input-fill-1-unanswered-1");
+      expect(cleared).toHaveTextContent("no answer");
+
+      // And the same on a fresh render where it was never touched at all.
+      await user.clear(input("fill-1", 0));
+      await user.type(input("fill-1", 0), "def");
+      await user.click(checkButton("fill-1"));
+      expect(
+        screen.getByTestId("fill-in-input-fill-1-unanswered-1")
+      ).toHaveTextContent("no answer");
     });
   });
 

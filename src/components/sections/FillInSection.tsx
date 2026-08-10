@@ -40,10 +40,10 @@ interface FillInState {
   checkedAnswers: Record<string, string>;
 }
 
-const TILE_COLOR: Record<LetterStatus, string> = {
-  correct: "#6aaa64",
-  present: "#c9b458",
-  absent: "#787c7e",
+const TILE_CLASS: Record<LetterStatus, string> = {
+  correct: styles.hintTileCorrect,
+  present: styles.hintTilePresent,
+  absent: styles.hintTileAbsent,
 };
 const STATUS_LABEL: Record<LetterStatus, string> = {
   correct: "correct",
@@ -69,7 +69,7 @@ const LetterFeedback: React.FC<{
       aria-label={`Hint: ${scored
         .map((s) => `${s.char} ${STATUS_LABEL[s.status]}`)
         .join(", ")}`}
-      style={{ display: "inline-flex", gap: 2, marginTop: 4 }}
+      className={styles.hintTileRow}
       data-testid={testId}
     >
       {scored.map((s, i) => (
@@ -77,20 +77,8 @@ const LetterFeedback: React.FC<{
           key={i}
           aria-hidden="true"
           title={STATUS_LABEL[s.status]}
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            minWidth: "1.4em",
-            height: "1.4em",
-            padding: "0 0.15em",
-            background: TILE_COLOR[s.status],
-            color: "#fff",
-            fontWeight: 700,
-            borderRadius: 3,
-            textTransform: "uppercase",
-            fontSize: "0.85em",
-          }}
+          className={`${styles.hintTile} ${TILE_CLASS[s.status]}`}
+          data-status={s.status}
         >
           {s.char}
         </span>
@@ -141,10 +129,20 @@ const FillInBlank: React.FC<FillInBlankProps> = ({
   const widthCh = Math.max(6, value.length + 1);
 
   const guess = checkedGuess ?? "";
-  const wrongWithGuess = hasChecked && !isCorrect && guess.trim().length > 0;
+  const unanswered = hasChecked && guess.trim().length === 0;
+  const wrongWithGuess = hasChecked && !isCorrect && !unanswered;
 
   let hint: React.ReactNode = null;
-  if (unparseable) {
+  if (unanswered) {
+    hint = (
+      <span
+        className={styles.fillInBlankNote}
+        data-testid={`${testIdBase}-unanswered-${position}`}
+      >
+        no answer
+      </span>
+    );
+  } else if (unparseable) {
     hint = (
       <span
         className={styles.fillInBlankNote}
@@ -306,16 +304,25 @@ const FillInSection: React.FC<FillInSectionProps> = ({
   const handleCheck = () => {
     if (!canCheck) return;
     setShowFeedback(true);
-    setState((prev) => ({ ...prev, checkedAnswers: { ...prev.answers } }));
+    setState((prev) => ({
+      ...prev,
+      checkedAnswers: Object.fromEntries(
+        blankNames.map((n) => [n, prev.answers[n] ?? ""])
+      ),
+    }));
 
-    // A number the parser cannot read is a typo, not a wrong answer: show the
-    // learner what to fix without spending an attempt or locking them out.
-    const hasTypo = blankNames.some((n) =>
-      isUnparseableNumber(section.blanks[n], state.answers[n] ?? "")
-    );
+    // A number the parser cannot read is a typo, not a wrong answer, so it never
+    // costs an attempt — but a different blank being genuinely wrong still does.
     // Evaluate the live answers (what was just submitted); state.checkedAnswers
     // won't reflect this click until the setState above commits.
-    if (!hasTypo && !areAnswersComplete(state.answers)) {
+    const hasWrongAnswer = blankNames.some((n) => {
+      const answer = state.answers[n] ?? "";
+      return (
+        !isBlankCorrect(section.blanks[n], answer) &&
+        !isUnparseableNumber(section.blanks[n], answer)
+      );
+    });
+    if (hasWrongAnswer) {
       startPenalty();
       incrementAttemptCounter(unitId, lessonId, section.id);
     }

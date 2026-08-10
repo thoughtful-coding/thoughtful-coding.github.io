@@ -605,6 +605,47 @@ input.fillInInputIncorrect {
   color: var(--error-text);
 }
 
+/* Per-letter hint tiles. Border style and text decoration carry the status as
+   well as hue, so the three states stay distinguishable without colour. */
+.hintTileRow {
+  display: inline-flex;
+  gap: 2px;
+  margin-top: 4px;
+}
+
+.hintTile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.4em;
+  height: 1.4em;
+  padding: 0 0.15em;
+  border-radius: 3px;
+  font-weight: 700;
+  font-size: 0.85em;
+  text-transform: uppercase;
+}
+
+.hintTileCorrect {
+  border: 2px solid var(--success);
+  background-color: var(--success-light);
+  color: var(--success-text);
+}
+
+.hintTilePresent {
+  border: 2px dashed var(--warning);
+  background-color: var(--warning-light);
+  color: var(--warning-text);
+  text-decoration: underline;
+}
+
+.hintTileAbsent {
+  border: 2px dotted var(--border-tertiary);
+  background-color: var(--bg-elevated);
+  color: var(--text-secondary);
+  text-decoration: line-through;
+}
+
 /* Unit label sitting next to a numeric blank; static text, never typed. */
 .fillInUnit {
   color: var(--text-secondary);
