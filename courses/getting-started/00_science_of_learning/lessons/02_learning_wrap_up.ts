@@ -36,11 +36,11 @@ const lessonData: Lesson = {
         },
       ],
       options: [
-        "Elaboration",
-        "Spaced Practice",
-        "Timed Focus",
-        "Interleaving",
-        "Concrete Examples",
+        { text: "Elaboration" },
+        { text: "Spaced Practice" },
+        { text: "Timed Focus" },
+        { text: "Interleaving" },
+        { text: "Concrete Examples" },
       ],
       correctAnswer: 2,
       feedback: {
@@ -71,10 +71,10 @@ const lessonData: Lesson = {
         },
       ],
       options: [
-        "Do one large block of coding every Sunday to maintain deep focus",
-        "Wait until the last minute to do anything so it's fresh",
-        "Do a few things a day so you practice recalling information",
-        "Change strategies over time to keep yourself on your toes",
+        { text: "Do one large block of coding every Sunday to maintain deep focus" },
+        { text: "Wait until the last minute to do anything so it's fresh" },
+        { text: "Do a few things a day so you practice recalling information" },
+        { text: "Change strategies over time to keep yourself on your toes" },
       ],
       correctAnswer: 2,
       feedback: {

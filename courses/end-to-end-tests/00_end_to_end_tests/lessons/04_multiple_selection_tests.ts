@@ -22,10 +22,10 @@ const lessonData: Lesson = {
         },
       ],
       options: [
-        "Be specific in your prediction",
-        "Be verbose to let the AI know you're smart",
-        "Be critical in your interpretation",
-        "Be careful when reading the AI's feedback",
+        { text: "Be specific in your prediction" },
+        { text: "Be verbose to let the AI know you're smart" },
+        { text: "Be critical in your interpretation" },
+        { text: "Be careful when reading the AI's feedback" },
       ],
       correctAnswers: [0, 2, 3],
       feedback: {

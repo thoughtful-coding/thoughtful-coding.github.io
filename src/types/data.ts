@@ -83,16 +83,25 @@ export interface FeedbackText {
   incorrect?: string;
 }
 
+export interface QuizOption {
+  text: string;
+  /**
+   * Shown when the learner gets this option wrong — chose it when it is not part
+   * of the answer, or missed it when it is. Falls back to `feedback.incorrect`.
+   */
+  feedback?: string;
+}
+
 export interface MultipleChoiceSectionData extends LessonSection {
   kind: "MultipleChoice";
-  options: string[];
+  options: QuizOption[];
   correctAnswer: number;
   feedback?: FeedbackText;
 }
 
 export interface MultipleSelectionSectionData extends LessonSection {
   kind: "MultipleSelection";
-  options: string[];
+  options: QuizOption[];
   correctAnswers: number[];
   feedback?: FeedbackText;
 }

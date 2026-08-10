@@ -37,10 +37,10 @@ const lessonData: Lesson = {
         },
       ],
       options: [
-        "It proves to the teacher that you did the work.",
-        "It forces you to retrieve information and organize it in your own words.",
-        "It's the fastest way to get through a lesson.",
-        "It allows you to skip the parts of the code you don't understand.",
+        { text: "It proves to the teacher that you did the work." },
+        { text: "It forces you to retrieve information and organize it in your own words." },
+        { text: "It's the fastest way to get through a lesson." },
+        { text: "It allows you to skip the parts of the code you don't understand." },
       ],
       correctAnswer: 1,
       feedback: {
@@ -104,11 +104,11 @@ const lessonData: Lesson = {
         },
       ],
       options: [
-        "Being hasty so you can get to the next lesson quickly",
-        "Being honest in identifying things you don't understand",
-        "Being careful in constructing the simplest example possible",
-        "Being specific as you discuss important parts of the example",
-        "Being open to feedback from the AI",
+        { text: "Being hasty so you can get to the next lesson quickly" },
+        { text: "Being honest in identifying things you don't understand" },
+        { text: "Being careful in constructing the simplest example possible" },
+        { text: "Being specific as you discuss important parts of the example" },
+        { text: "Being open to feedback from the AI" },
       ],
       correctAnswers: [1, 2, 3, 4],
       feedback: {

@@ -22,10 +22,10 @@ const lessonData: Lesson = {
         },
       ],
       options: [
-        "It proves to the teacher that you did the work.",
-        "It forces you to retrieve information and organize it in your own words.",
-        "It's the fastest way to get through a lesson.",
-        "It allows you to skip the parts of the code you don't understand.",
+        { text: "It proves to the teacher that you did the work." },
+        { text: "It forces you to retrieve information and organize it in your own words." },
+        { text: "It's the fastest way to get through a lesson." },
+        { text: "It allows you to skip the parts of the code you don't understand." },
       ],
       correctAnswer: 1,
       feedback: {
