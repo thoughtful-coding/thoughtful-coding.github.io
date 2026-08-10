@@ -510,12 +510,14 @@ export function getRequiredSectionsForLesson(lesson: Lesson): SectionId[] {
     "MultipleChoice",
     "MultipleSelection",
     "Matching",
+    "Parsons",
     "FillIn",
     "Reflection",
     "NonCodingReflection",
     "Coverage",
     "PRIMM",
     "Debugger",
+    "Refactor",
   ];
 
   return lesson.sections

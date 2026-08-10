@@ -1,4 +1,4 @@
-import type { Lesson, LessonId } from "../../types/data";
+import type { AnyLessonSectionData, Lesson, LessonId } from "../../types/data";
 
 // --- Mock Data ---
 const mockLesson1: Lesson = {
@@ -56,33 +56,46 @@ describe("dataLoader - Pure Logic Functions", () => {
       expect(result).toEqual(["test-1", "pred-1", "primm-1"]);
     });
 
-    it("should include all required section kinds", () => {
-      const lessonWithAllRequired: Lesson = {
+    it("requires every graded section kind", () => {
+      // Listing the kinds by hand is the point: adding one to SectionKind should
+      // fail here until someone decides whether it counts toward completion.
+      // Parsons and Refactor were silently absent, so lessons built on them
+      // reported progress that ignored the only work in them.
+      const ALL_KINDS: AnyLessonSectionData["kind"][] = [
+        "Information",
+        "MultipleChoice",
+        "MultipleSelection",
+        "Matching",
+        "Parsons",
+        "FillIn",
+        "Reflection",
+        "NonCodingReflection",
+        "Observation",
+        "Coverage",
+        "Prediction",
+        "PRIMM",
+        "Testing",
+        "Debugger",
+        "Refactor",
+      ];
+      // Information is the only kind that asks nothing of the learner.
+      const UNGRADED: AnyLessonSectionData["kind"][] = ["Information"];
+
+      const lesson: Lesson = {
         guid: "lesson-all" as LessonId,
-        title: "All Required",
-        sections: [
-          { kind: "Observation", id: "obs-1" },
-          { kind: "Testing", id: "test-1" },
-          { kind: "Prediction", id: "pred-1" },
-          { kind: "MultipleChoice", id: "mc-1" },
-          { kind: "MultipleSelection", id: "ms-1" },
-          { kind: "Reflection", id: "refl-1" },
-          { kind: "Coverage", id: "cov-1" },
-          { kind: "PRIMM", id: "primm-1" },
-          { kind: "Debugger", id: "debug-1" },
-        ],
+        title: "All Kinds",
+        sections: ALL_KINDS.map((kind) => ({
+          kind,
+          id: `${kind}-1`,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        })) as any,
       };
-      const result = getRequiredSectionsForLesson(lessonWithAllRequired);
-      expect(result.length).toBe(9);
-      expect(result).toContain("obs-1");
-      expect(result).toContain("test-1");
-      expect(result).toContain("pred-1");
-      expect(result).toContain("mc-1");
-      expect(result).toContain("ms-1");
-      expect(result).toContain("refl-1");
-      expect(result).toContain("cov-1");
-      expect(result).toContain("primm-1");
-      expect(result).toContain("debug-1");
+
+      const result = getRequiredSectionsForLesson(lesson);
+      const expected = ALL_KINDS.filter((k) => !UNGRADED.includes(k));
+
+      expect(result).toEqual(expected.map((k) => `${k}-1`));
+      expect(result).not.toContain("Information-1");
     });
   });
 
